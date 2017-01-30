@@ -1,34 +1,31 @@
 package com.netcracker.smarthome.model.keys;
 
-import com.netcracker.smarthome.model.entities.SocialService;
-import com.netcracker.smarthome.model.entities.User;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 public class SocialProfilePK implements Serializable {
-    private User user;
-    private SocialService service;
+    private long userId;
+    private long serviceId;
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public User getUser() {
-        return user;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     @Column(name = "service_id", nullable = false)
     @Id
-    public SocialService getService() {
-        return service;
+    public long getServiceId() {
+        return serviceId;
     }
 
-    public void setService(SocialService service) {
-        this.service = service;
+    public void setServiceId(long serviceId) {
+        this.serviceId = serviceId;
     }
 
     @Override
@@ -38,14 +35,14 @@ public class SocialProfilePK implements Serializable {
 
         SocialProfilePK that = (SocialProfilePK) o;
 
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
-        return service != null ? service.equals(that.service) : that.service == null;
+        if (userId != that.userId) return false;
+        return serviceId == that.serviceId;
     }
 
     @Override
     public int hashCode() {
-        int result = user != null ? user.hashCode() : 0;
-        result = 31 * result + (service != null ? service.hashCode() : 0);
+        int result = (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (serviceId ^ (serviceId >>> 32));
         return result;
     }
 }

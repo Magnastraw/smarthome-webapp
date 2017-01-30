@@ -1,12 +1,11 @@
 package com.netcracker.smarthome.model.entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "users", schema = "public", catalog = "smarthome_db")
-public class User implements Serializable {
+public class User {
     private long userId;
     private String firstName;
     private String lastName;

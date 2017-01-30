@@ -9,8 +9,30 @@ import javax.persistence.*;
 @IdClass(SocialProfilePK.class)
 public class SocialProfile {
     private String userSocialId;
+    private long userId;
+    private long serviceId;
     private User user;
     private SocialService service;
+
+    @Column(name = "user_id", nullable = false)
+    @Id
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    @Column(name = "service_id", nullable = false)
+    @Id
+    public long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(long serviceId) {
+        this.serviceId = serviceId;
+    }
 
     @Basic
     @Column(name = "user_social_id", nullable = false, length = -1)
@@ -39,9 +61,8 @@ public class SocialProfile {
         return userSocialId != null ? userSocialId.hashCode() : 0;
     }
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     public User getUser() {
         return user;
     }
@@ -50,9 +71,8 @@ public class SocialProfile {
         this.user = user;
     }
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "service_id", referencedColumnName = "service_id", nullable = false)
+    @JoinColumn(name = "service_id", referencedColumnName = "service_id", nullable = false, insertable = false, updatable = false)
     public SocialService getService() {
         return service;
     }

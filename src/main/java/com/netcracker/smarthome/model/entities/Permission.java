@@ -1,12 +1,11 @@
 package com.netcracker.smarthome.model.entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "permissions", schema = "public", catalog = "smarthome_db")
-public class Permission implements Serializable {
+public class Permission {
     private long permissionId;
     private Collection<GroupPermission> groups;
     private AbstractObject abstractObject;

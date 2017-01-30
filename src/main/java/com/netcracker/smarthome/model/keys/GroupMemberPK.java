@@ -9,27 +9,27 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 public class GroupMemberPK implements Serializable {
-    private Group group;
-    private User user;
+    private long groupId;
+    private long userId;
 
     @Column(name = "group_id", nullable = false)
     @Id
-    public Group getGroup() {
-        return group;
+    public long getGroupId() {
+        return groupId;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
     @Column(name = "user_id", nullable = false)
     @Id
-    public User getUser() {
-        return user;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -39,14 +39,14 @@ public class GroupMemberPK implements Serializable {
 
         GroupMemberPK that = (GroupMemberPK) o;
 
-        if (group != null ? !group.equals(that.group) : that.group != null) return false;
-        return user != null ? user.equals(that.user) : that.user == null;
+        if (groupId != that.groupId) return false;
+        return userId == that.userId;
     }
 
     @Override
     public int hashCode() {
-        int result = group != null ? group.hashCode() : 0;
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+        int result = (int) (groupId ^ (groupId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
         return result;
     }
 }

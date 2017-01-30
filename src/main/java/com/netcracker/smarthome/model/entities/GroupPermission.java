@@ -3,15 +3,25 @@ package com.netcracker.smarthome.model.entities;
 import com.netcracker.smarthome.model.keys.GroupPermissionPK;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "groups_permissions", schema = "public", catalog = "smarthome_db")
 @IdClass(GroupPermissionPK.class)
-public class GroupPermission implements Serializable {
+public class GroupPermission {
     private String action;
+    private long permissionId;
     private Permission permission;
     private Group group;
+
+    @Id
+    @Column(name = "permission_id", nullable = false, length = -1)
+    public long getPermissionId() {
+        return permissionId;
+    }
+
+    public void setPermissionId(long permissionId) {
+        this.permissionId = permissionId;
+    }
 
     @Id
     @Column(name = "action", nullable = false, length = -1)
@@ -40,9 +50,8 @@ public class GroupPermission implements Serializable {
         return action != null ? action.hashCode() : 0;
     }
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false)
+    @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false, insertable = false, updatable = false)
     public Permission getPermission() {
         return permission;
     }

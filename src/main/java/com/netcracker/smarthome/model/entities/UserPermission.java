@@ -9,9 +9,20 @@ import javax.persistence.*;
 @IdClass(UserPermissionPK.class)
 public class UserPermission {
     private String action;
+    private long permissionId;
     private Permission permission;
     private User admin;
     private User user;
+
+    @Id
+    @Column(name = "permission_id", nullable = false)
+    public long getPermissionId() {
+        return permissionId;
+    }
+
+    public void setPermissionId(long permissionId) {
+        this.permissionId = permissionId;
+    }
 
     @Id
     @Column(name = "action", nullable = false, length = -1)
@@ -40,9 +51,9 @@ public class UserPermission {
         return action != null ? action.hashCode() : 0;
     }
 
-    @Id
+
     @ManyToOne
-    @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false)
+    @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false, insertable = false, updatable = false)
     public Permission getPermission() {
         return permission;
     }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class GroupPermissionPK implements Serializable {
     private String action;
-    private Permission permission;
+    private long permissionId;
 
     @Column(name = "action", nullable = false)
     @Id
@@ -22,12 +22,12 @@ public class GroupPermissionPK implements Serializable {
 
     @Column(name = "permission_id", nullable = false)
     @Id
-    public Permission getPermission() {
-        return permission;
+    public long getPermissionId() {
+        return permissionId;
     }
 
-    public void setPermission(Permission permission) {
-        this.permission = permission;
+    public void setPermissionId(long permission) {
+        this.permissionId = permissionId;
     }
 
     @Override
@@ -37,14 +37,14 @@ public class GroupPermissionPK implements Serializable {
 
         GroupPermissionPK that = (GroupPermissionPK) o;
 
-        if (action != null ? !action.equals(that.action) : that.action != null) return false;
-        return permission != null ? permission.equals(that.permission) : that.permission == null;
+        if (permissionId != that.permissionId) return false;
+        return action != null ? action.equals(that.action) : that.action == null;
     }
 
     @Override
     public int hashCode() {
         int result = action != null ? action.hashCode() : 0;
-        result = 31 * result + (permission != null ? permission.hashCode() : 0);
+        result = 31 * result + (int) (permissionId ^ (permissionId >>> 32));
         return result;
     }
 }
