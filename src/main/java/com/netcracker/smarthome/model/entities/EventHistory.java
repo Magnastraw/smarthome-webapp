@@ -26,6 +26,8 @@ public class EventHistory {
 
     @Id
     @Column(name = "history_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_histiory_seq")
+    @SequenceGenerator(name = "ev_histiory_seq", sequenceName = "events_history_id_seq")
     public long getHistoryId() {
         return historyId;
     }

@@ -90,4 +90,9 @@ public class SocialProfile {
     public void setService(SocialService service) {
         this.service = service;
     }
+
+    @Override
+    public String toString() {
+        return String.format("user: %s, service: %s, id: %s", user, service, userSocialId);
+    }
 }

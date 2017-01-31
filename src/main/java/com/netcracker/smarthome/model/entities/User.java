@@ -28,13 +28,15 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.email = email;
+        this.email = email.toLowerCase();
         this.encrPassword = encrPassword;
         this.isTwoFactorAuth = isTwoFactorAuth;
     }
 
     @Id
     @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "users_user_id_seq")
     public long getUserId() {
         return userId;
     }
@@ -80,7 +82,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     @Basic
@@ -194,5 +196,10 @@ public class User {
 
     public void setUserPermissions(Collection<UserPermission> userPermissions) {
         this.userPermissions = userPermissions;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d %s %s %s", userId, firstName, lastName, email);
     }
 }

@@ -23,6 +23,8 @@ public class Policy {
 
     @Id
     @Column(name = "policy_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "policy_seq")
+    @SequenceGenerator(name = "policy_seq", sequenceName = "policies_policy_id_seq")
     public long getPolicyId() {
         return policyId;
     }

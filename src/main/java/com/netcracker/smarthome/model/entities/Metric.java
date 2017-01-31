@@ -26,6 +26,8 @@ public class Metric {
 
     @Id
     @Column(name = "metric_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_seq")
+    @SequenceGenerator(name = "metric_seq", sequenceName = "metrics_metric_id_seq")
     public long getMetricId() {
         return metricId;
     }

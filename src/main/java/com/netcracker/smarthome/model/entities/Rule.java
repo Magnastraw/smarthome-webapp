@@ -19,6 +19,8 @@ public class Rule {
 
     @Id
     @Column(name = "rule_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rule_seq")
+    @SequenceGenerator(name = "rule_seq", sequenceName = "rules_rule_id_seq")
     public long getRuleId() {
         return ruleId;
     }

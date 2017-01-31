@@ -27,6 +27,8 @@ public class Unit {
 
     @Id
     @Column(name = "unit_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_seq")
+    @SequenceGenerator(name = "unit_seq", sequenceName = "units_unit_id_seq")
     public long getUnitId() {
         return unitId;
     }

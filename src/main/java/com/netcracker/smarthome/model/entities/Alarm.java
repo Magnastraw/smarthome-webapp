@@ -39,6 +39,8 @@ public class Alarm {
 
     @Id
     @Column(name = "alarm_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "alarm_seq")
+    @SequenceGenerator(name = "alarm_seq", sequenceName = "alarms_alarm_id_seq")
     public long getAlarmId() {
         return alarmId;
     }

@@ -20,6 +20,8 @@ public class Group {
 
     @Id
     @Column(name = "group_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_seq")
+    @SequenceGenerator(name = "group_seq", sequenceName = "groups_group_id_seq")
     public long getGroupId() {
         return groupId;
     }
@@ -74,5 +76,10 @@ public class Group {
 
     public void setGroupPermissions(Collection<GroupPermission> groupPermissions) {
         this.groupPermissions = groupPermissions;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d %s", groupId, groupName);
     }
 }

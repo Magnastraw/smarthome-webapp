@@ -16,14 +16,15 @@ public class Catalog {
     public Catalog() {
     }
 
-    public Catalog(String catalogName, Collection<AlarmSpec> alarmSpecs, Catalog parentCatalog) {
+    public Catalog(String catalogName, Catalog parentCatalog) {
         this.catalogName = catalogName;
-        this.alarmSpecs = alarmSpecs;
         this.parentCatalog = parentCatalog;
     }
 
     @Id
     @Column(name = "catalog_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "catalog_seq")
+    @SequenceGenerator(name = "catalog_seq", sequenceName = "catalogs_catalog_id_seq")
     public long getCatalogId() {
         return catalogId;
     }
@@ -97,5 +98,10 @@ public class Catalog {
 
     public void setPolicies(Collection<Policy> policies) {
         this.policies = policies;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s/%s", parentCatalog == null ? "" : parentCatalog, catalogName);
     }
 }

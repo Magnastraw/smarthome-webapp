@@ -27,6 +27,8 @@ public class Notification {
 
     @Id
     @Column(name = "notification_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notif_seq")
+    @SequenceGenerator(name = "notif_seq", sequenceName = "notifications_notification_id_seq")
     public long getNotificationId() {
         return notificationId;
     }

@@ -23,6 +23,8 @@ public class SocialService {
 
     @Id
     @Column(name = "service_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ss_seq")
+    @SequenceGenerator(name = "ss_seq", sequenceName = "social_servicies_service_id_seq")
     public long getServiceId() {
         return serviceId;
     }
@@ -92,5 +94,10 @@ public class SocialService {
 
     public void setSocialProfiles(Collection<SocialProfile> socialProfiles) {
         this.socialProfiles = socialProfiles;
+    }
+
+    @Override
+    public String toString() {
+        return serviceName;
     }
 }

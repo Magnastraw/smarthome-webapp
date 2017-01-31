@@ -30,6 +30,8 @@ public class MetricSpec {
 
     @Id
     @Column(name = "spec_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "m_spec_seq")
+    @SequenceGenerator(name = "m_spec_seq", sequenceName = "metric_spec_id_seq")
     public long getSpecId() {
         return specId;
     }

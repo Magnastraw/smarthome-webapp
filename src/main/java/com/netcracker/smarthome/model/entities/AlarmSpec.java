@@ -19,11 +19,12 @@ public class AlarmSpec {
     }
 
     public AlarmSpec() {
-
     }
 
     @Id
     @Column(name = "spec_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "spec_seq")
+    @SequenceGenerator(name = "spec_seq", sequenceName = "alarm_spec_id_seq")
     public long getSpecId() {
         return specId;
     }

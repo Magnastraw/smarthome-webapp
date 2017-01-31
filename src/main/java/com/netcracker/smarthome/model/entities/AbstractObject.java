@@ -21,6 +21,8 @@ public class AbstractObject {
 
     @Id
     @Column(name = "object_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "abstract_object_seq")
+    @SequenceGenerator(name = "abstract_object_seq", sequenceName = "abstract_objects_object_id_seq")
     public long getObjectId() {
         return objectId;
     }

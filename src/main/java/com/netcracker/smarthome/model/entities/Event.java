@@ -30,6 +30,8 @@ public class Event {
 
     @Id
     @Column(name = "event_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq")
+    @SequenceGenerator(name = "event_seq", sequenceName = "events_event_id_seq")
     public long getEventId() {
         return eventId;
     }

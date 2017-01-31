@@ -23,6 +23,8 @@ public class MetricHistory {
 
     @Id
     @Column(name = "history_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "m_history_seq")
+    @SequenceGenerator(name = "m_history_seq", sequenceName = "metrics_history_id_seq")
     public long getHistoryId() {
         return historyId;
     }

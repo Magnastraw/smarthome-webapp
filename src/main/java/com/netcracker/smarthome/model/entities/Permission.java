@@ -20,6 +20,8 @@ public class Permission {
 
     @Id
     @Column(name = "permission_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perm_seq")
+    @SequenceGenerator(name = "perm_seq", sequenceName = "permissions_permission_id_seq")
     public long getPermissionId() {
         return permissionId;
     }
