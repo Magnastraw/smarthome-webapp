@@ -19,12 +19,17 @@
         <property name="password" value="${jdbc.password}" />
     </bean>
     <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-          p:packagesToScan="com.netcracker.smarthome.model"
-          p:dataSource-ref="dataSource">
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.netcracker.smarthome.model</value>
+            </list>
+        </property>
+        <property name="persistenceUnitName" value="shPersistenceUnit" />
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQL9Dialect" />
                 <property name="generateDdl" value="false" />
                 <property name="showSql" value="true" />
             </bean>
