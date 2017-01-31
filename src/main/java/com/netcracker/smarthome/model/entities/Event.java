@@ -18,6 +18,16 @@ public class Event {
     private Collection<EventHistory> eventHistories;
     private Collection<Notification> notifications;
 
+    public Event() {
+    }
+
+    public Event(long objectId, String eventType, Long subobjectId, User user) {
+        this.objectId = objectId;
+        this.eventType = eventType;
+        this.subobjectId = subobjectId;
+        this.user = user;
+    }
+
     @Id
     @Column(name = "event_id", nullable = false)
     public long getEventId() {

@@ -12,6 +12,15 @@ public class MetricHistory {
     private BigInteger value;
     private Metric metric;
 
+    public MetricHistory() {
+    }
+
+    public MetricHistory(Timestamp readDate, BigInteger value, Metric metric) {
+        this.readDate = readDate;
+        this.value = value;
+        this.metric = metric;
+    }
+
     @Id
     @Column(name = "history_id", nullable = false)
     public long getHistoryId() {

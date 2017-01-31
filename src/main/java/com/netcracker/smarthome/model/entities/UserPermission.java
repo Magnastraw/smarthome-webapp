@@ -14,6 +14,16 @@ public class UserPermission {
     private User admin;
     private User user;
 
+    public UserPermission() {
+    }
+
+    public UserPermission(String action, long permissionId, User admin, User user) {
+        this.action = action;
+        this.permissionId = permissionId;
+        this.admin = admin;
+        this.user = user;
+    }
+
     @Id
     @Column(name = "permission_id", nullable = false)
     public long getPermissionId() {
@@ -41,16 +51,16 @@ public class UserPermission {
 
         UserPermission that = (UserPermission) o;
 
-        if (action != null ? !action.equals(that.action) : that.action != null) return false;
-
-        return true;
+        if (permissionId != that.permissionId) return false;
+        return action != null ? action.equals(that.action) : that.action == null;
     }
 
     @Override
     public int hashCode() {
-        return action != null ? action.hashCode() : 0;
+        int result = action != null ? action.hashCode() : 0;
+        result = 31 * result + (int) (permissionId ^ (permissionId >>> 32));
+        return result;
     }
-
 
     @ManyToOne
     @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false, insertable = false, updatable = false)

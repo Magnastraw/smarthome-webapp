@@ -13,6 +13,15 @@ public class Catalog {
     private Collection<Catalog> catalogs;
     private Collection<Policy> policies;
 
+    public Catalog() {
+    }
+
+    public Catalog(String catalogName, Collection<AlarmSpec> alarmSpecs, Catalog parentCatalog) {
+        this.catalogName = catalogName;
+        this.alarmSpecs = alarmSpecs;
+        this.parentCatalog = parentCatalog;
+    }
+
     @Id
     @Column(name = "catalog_id", nullable = false)
     public long getCatalogId() {

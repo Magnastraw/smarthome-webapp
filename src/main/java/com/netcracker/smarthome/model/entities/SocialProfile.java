@@ -14,6 +14,15 @@ public class SocialProfile {
     private User user;
     private SocialService service;
 
+    public SocialProfile() {
+    }
+
+    public SocialProfile(String userSocialId, long userId, long serviceId) {
+        this.userSocialId = userSocialId;
+        this.userId = userId;
+        this.serviceId = serviceId;
+    }
+
     @Column(name = "user_id", nullable = false)
     @Id
     public long getUserId() {
@@ -51,14 +60,15 @@ public class SocialProfile {
 
         SocialProfile that = (SocialProfile) o;
 
-        if (userSocialId != null ? !userSocialId.equals(that.userSocialId) : that.userSocialId != null) return false;
-
-        return true;
+        if (userId != that.userId) return false;
+        return serviceId == that.serviceId;
     }
 
     @Override
     public int hashCode() {
-        return userSocialId != null ? userSocialId.hashCode() : 0;
+        int result = (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (serviceId ^ (serviceId >>> 32));
+        return result;
     }
 
     @ManyToOne

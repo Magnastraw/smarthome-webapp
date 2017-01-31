@@ -21,6 +21,18 @@ public class User {
     private Collection<UserPermission> adminPermissions;
     private Collection<UserPermission> userPermissions;
 
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String phoneNumber, String email, String encrPassword, boolean isTwoFactorAuth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.encrPassword = encrPassword;
+        this.isTwoFactorAuth = isTwoFactorAuth;
+    }
+
     @Id
     @Column(name = "user_id", nullable = false)
     public long getUserId() {

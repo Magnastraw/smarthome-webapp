@@ -11,6 +11,13 @@ public class Permission {
     private AbstractObject abstractObject;
     private Collection<UserPermission> users;
 
+    public Permission() {
+    }
+
+    public Permission(AbstractObject abstractObject) {
+        this.abstractObject = abstractObject;
+    }
+
     @Id
     @Column(name = "permission_id", nullable = false)
     public long getPermissionId() {

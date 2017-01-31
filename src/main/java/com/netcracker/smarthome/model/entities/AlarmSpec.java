@@ -12,6 +12,16 @@ public class AlarmSpec {
     private Catalog catalog;
     private Collection<Alarm> alarms;
 
+    public AlarmSpec(String specName, String objectType, Catalog catalog) {
+        this.specName = specName;
+        this.objectType = objectType;
+        this.catalog = catalog;
+    }
+
+    public AlarmSpec() {
+
+    }
+
     @Id
     @Column(name = "spec_id", nullable = false)
     public long getSpecId() {

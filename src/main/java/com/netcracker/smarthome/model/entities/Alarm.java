@@ -21,6 +21,22 @@ public class Alarm {
     private Collection<Alarm> subAlarms;
     private Collection<Notification> notificationssByAlarmId;
 
+    public Alarm() {
+    }
+
+    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, int severity, Timestamp severityChangeTime, Event event, AlarmSpec alarmSpec, Alarm parentAlarm) {
+        this.clearedUserId = clearedUserId;
+        this.alarmName = alarmName;
+        this.alarmDescription = alarmDescription;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.severity = severity;
+        this.severityChangeTime = severityChangeTime;
+        this.event = event;
+        this.alarmSpec = alarmSpec;
+        this.parentAlarm = parentAlarm;
+    }
+
     @Id
     @Column(name = "alarm_id", nullable = false)
     public long getAlarmId() {

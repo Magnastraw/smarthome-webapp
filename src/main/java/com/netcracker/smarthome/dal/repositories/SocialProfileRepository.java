@@ -1,12 +1,11 @@
-package com.netcracker.smarthome.dal;
+package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.SocialProfile;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class SocialProfileRepository extends EntityRepository<SocialProfile> {
-    @Override
-    public void setEntityClass() {
-        entityClass = SocialProfile.class;
+    public SocialProfileRepository() {
+        super(SocialProfile.class);
     }
 }

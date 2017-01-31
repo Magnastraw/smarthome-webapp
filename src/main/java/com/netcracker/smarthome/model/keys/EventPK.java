@@ -9,6 +9,14 @@ public class EventPK implements Serializable {
     private long objectId;
     private String eventType;
 
+    public EventPK() {}
+
+    public EventPK(long eventId, long objectId, String eventType) {
+        this.eventId = eventId;
+        this.objectId = objectId;
+        this.eventType = eventType;
+    }
+
     @Column(name = "event_id", nullable = false)
     @Id
     public long getEventId() {

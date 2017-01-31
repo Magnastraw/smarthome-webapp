@@ -13,6 +13,17 @@ public class EventHistory {
     private String eventParameters;
     private Event event;
 
+    public EventHistory() {
+    }
+
+    public EventHistory(Timestamp readDate, String eventDescription, int severity, String eventParameters, Event event) {
+        this.readDate = readDate;
+        this.eventDescription = eventDescription;
+        this.severity = severity;
+        this.eventParameters = eventParameters;
+        this.event = event;
+    }
+
     @Id
     @Column(name = "history_id", nullable = false)
     public long getHistoryId() {

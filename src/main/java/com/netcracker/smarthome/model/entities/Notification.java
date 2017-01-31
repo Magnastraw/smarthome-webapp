@@ -13,6 +13,18 @@ public class Notification {
     private Event event;
     private Metric metric;
 
+    public Notification() {
+    }
+
+    public Notification(int notificationStatus, String notificationName, User user, Alarm alarm, Event event, Metric metric) {
+        this.notificationStatus = notificationStatus;
+        this.notificationName = notificationName;
+        this.user = user;
+        this.alarm = alarm;
+        this.event = event;
+        this.metric = metric;
+    }
+
     @Id
     @Column(name = "notification_id", nullable = false)
     public long getNotificationId() {

@@ -16,6 +16,18 @@ public class MetricSpec {
     private Unit unit;
     private Collection<Metric> metrics;
 
+    public MetricSpec() {
+    }
+
+    public MetricSpec(String specName, BigInteger maxValue, BigInteger minValue, String metricType, String assignedToObject, Unit unit) {
+        this.specName = specName;
+        this.maxValue = maxValue;
+        this.minValue = minValue;
+        this.metricType = metricType;
+        this.assignedToObject = assignedToObject;
+        this.unit = unit;
+    }
+
     @Id
     @Column(name = "spec_id", nullable = false)
     public long getSpecId() {

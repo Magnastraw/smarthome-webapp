@@ -15,6 +15,16 @@ public class Unit {
     private Unit parentUnit;
     private Collection<Unit> subUnits;
 
+    public Unit() {
+    }
+
+    public Unit(String unitName, BigInteger baseFactor, String label, Unit parentUnit) {
+        this.unitName = unitName;
+        this.baseFactor = baseFactor;
+        this.label = label;
+        this.parentUnit = parentUnit;
+    }
+
     @Id
     @Column(name = "unit_id", nullable = false)
     public long getUnitId() {

@@ -13,6 +13,14 @@ public class GroupPermission {
     private Permission permission;
     private Group group;
 
+    public GroupPermission() {
+    }
+
+    public GroupPermission(String action, long permissionId) {
+        this.action = action;
+        this.permissionId = permissionId;
+    }
+
     @Id
     @Column(name = "permission_id", nullable = false, length = -1)
     public long getPermissionId() {
@@ -40,14 +48,15 @@ public class GroupPermission {
 
         GroupPermission that = (GroupPermission) o;
 
-        if (action != null ? !action.equals(that.action) : that.action != null) return false;
-
-        return true;
+        if (permissionId != that.permissionId) return false;
+        return action != null ? action.equals(that.action) : that.action == null;
     }
 
     @Override
     public int hashCode() {
-        return action != null ? action.hashCode() : 0;
+        int result = action != null ? action.hashCode() : 0;
+        result = 31 * result + (int) (permissionId ^ (permissionId >>> 32));
+        return result;
     }
 
     @ManyToOne

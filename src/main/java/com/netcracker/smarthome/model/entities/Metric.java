@@ -14,6 +14,16 @@ public class Metric {
     private Collection<MetricHistory> metricHistories;
     private Collection<Notification> notifications;
 
+    public Metric() {
+    }
+
+    public Metric(long objectId, Long subobjectId, User user, MetricSpec metricSpec) {
+        this.objectId = objectId;
+        this.subobjectId = subobjectId;
+        this.user = user;
+        this.metricSpec = metricSpec;
+    }
+
     @Id
     @Column(name = "metric_id", nullable = false)
     public long getMetricId() {

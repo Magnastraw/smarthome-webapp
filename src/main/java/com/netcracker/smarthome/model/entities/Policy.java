@@ -12,6 +12,15 @@ public class Policy {
     private Catalog catalog;
     private Collection<Rule> rules;
 
+    public Policy() {
+    }
+
+    public Policy(String name, String description, Catalog catalog) {
+        this.name = name;
+        this.description = description;
+        this.catalog = catalog;
+    }
+
     @Id
     @Column(name = "policy_id", nullable = false)
     public long getPolicyId() {

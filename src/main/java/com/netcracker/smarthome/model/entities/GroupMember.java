@@ -14,6 +14,15 @@ public class GroupMember {
     private Group group;
     private User user;
 
+    public GroupMember() {
+    }
+
+    public GroupMember(boolean isAdmin, long groupId, long userId) {
+        this.isAdmin = isAdmin;
+        this.groupId = groupId;
+        this.userId = userId;
+    }
+
     @Id
     @Column(name = "group_id", nullable = false)
     public long getGroupId() {
@@ -40,8 +49,8 @@ public class GroupMember {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(boolean isAdmin) {
+        isAdmin = isAdmin;
     }
 
     @Override
@@ -51,14 +60,15 @@ public class GroupMember {
 
         GroupMember that = (GroupMember) o;
 
-        if (isAdmin != that.isAdmin) return false;
-
-        return true;
+        if (groupId != that.groupId) return false;
+        return userId == that.userId;
     }
 
     @Override
     public int hashCode() {
-        return (isAdmin ? 1 : 0);
+        int result = (int) (groupId ^ (groupId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        return result;
     }
 
     @ManyToOne

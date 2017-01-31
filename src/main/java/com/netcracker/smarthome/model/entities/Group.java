@@ -11,6 +11,13 @@ public class Group {
     private Collection<GroupMember> groupMembers;
     private Collection<GroupPermission> groupPermissions;
 
+    public Group() {
+    }
+
+    public Group(String groupName) {
+        this.groupName = groupName;
+    }
+
     @Id
     @Column(name = "group_id", nullable = false)
     public long getGroupId() {

@@ -8,6 +8,14 @@ public class UserPermissionPK implements Serializable {
     private String action;
     private long permissionId;
 
+    public UserPermissionPK() {
+    }
+
+    public UserPermissionPK(String action, long permissionId) {
+        this.action = action;
+        this.permissionId = permissionId;
+    }
+
     @Column(name = "action", nullable = false)
     @Id
     public String getAction() {

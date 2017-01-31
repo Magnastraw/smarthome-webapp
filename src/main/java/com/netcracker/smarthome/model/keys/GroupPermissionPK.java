@@ -1,7 +1,5 @@
 package com.netcracker.smarthome.model.keys;
 
-import com.netcracker.smarthome.model.entities.Permission;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -9,6 +7,14 @@ import java.io.Serializable;
 public class GroupPermissionPK implements Serializable {
     private String action;
     private long permissionId;
+
+    public GroupPermissionPK() {
+    }
+
+    public GroupPermissionPK(String action, long permissionId) {
+        this.action = action;
+        this.permissionId = permissionId;
+    }
 
     @Column(name = "action", nullable = false)
     @Id

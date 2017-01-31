@@ -12,6 +12,15 @@ public class SocialService {
     private String secretKey;
     private Collection<SocialProfile> socialProfiles;
 
+    public SocialService() {
+    }
+
+    public SocialService(String serviceName, String clientId, String secretKey) {
+        this.serviceName = serviceName;
+        this.clientId = clientId;
+        this.secretKey = secretKey;
+    }
+
     @Id
     @Column(name = "service_id", nullable = false)
     public long getServiceId() {

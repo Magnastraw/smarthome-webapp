@@ -11,6 +11,14 @@ public class AbstractObject {
     private String description;
     private Collection<Permission> permissions;
 
+    public AbstractObject() {
+    }
+
+    public AbstractObject(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     @Id
     @Column(name = "object_id", nullable = false)
     public long getObjectId() {

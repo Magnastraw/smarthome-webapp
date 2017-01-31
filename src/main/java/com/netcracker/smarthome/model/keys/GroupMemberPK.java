@@ -1,9 +1,6 @@
 package com.netcracker.smarthome.model.keys;
 
 
-import com.netcracker.smarthome.model.entities.Group;
-import com.netcracker.smarthome.model.entities.User;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -11,6 +8,14 @@ import java.io.Serializable;
 public class GroupMemberPK implements Serializable {
     private long groupId;
     private long userId;
+
+    public GroupMemberPK() {
+    }
+
+    public GroupMemberPK(long groupId, long userId) {
+        this.groupId = groupId;
+        this.userId = userId;
+    }
 
     @Column(name = "group_id", nullable = false)
     @Id

@@ -9,6 +9,14 @@ public class Rule {
     private String name;
     private Policy policy;
 
+    public Rule() {
+    }
+
+    public Rule(String name, Policy policy) {
+        this.name = name;
+        this.policy = policy;
+    }
+
     @Id
     @Column(name = "rule_id", nullable = false)
     public long getRuleId() {

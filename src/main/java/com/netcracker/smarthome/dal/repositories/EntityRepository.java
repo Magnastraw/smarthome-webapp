@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.dal;
+package com.netcracker.smarthome.dal.repositories;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -6,13 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-public abstract class EntityRepository<T> {
+public class EntityRepository<T> {
     @PersistenceContext
     protected EntityManager manager;
-    protected Class<T> entityClass;
+    private Class<T> entityClass;
 
-    public EntityRepository() {
-        setEntityClass();
+    public EntityRepository(Class<T> entityClass) {
+        this.entityClass = entityClass;
     }
 
     @Transactional
@@ -26,7 +26,7 @@ public abstract class EntityRepository<T> {
     }
 
     @Transactional
-    public void create(T entity) {
+    public void save(T entity) {
         manager.persist(entity);
     }
 
@@ -39,6 +39,4 @@ public abstract class EntityRepository<T> {
     public void delete(Object primaryKey) {
         manager.remove(get(primaryKey));
     }
-
-    public abstract void setEntityClass();
 }
