@@ -22,7 +22,7 @@ public class UsersService {
      * @param user User
      */
     @Transactional(readOnly = false)
-    public void addUser(Users user){
+    public void addUser(Users user) {
         getUserDAO().addUser(user);
     }
 

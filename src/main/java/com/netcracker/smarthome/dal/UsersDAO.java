@@ -18,7 +18,7 @@ public class UsersDAO {
      *
      * @param user user
      */
-    public void addUser(Users user){
+    public void addUser(Users user) {
         entityManager.persist(user);
     }
 

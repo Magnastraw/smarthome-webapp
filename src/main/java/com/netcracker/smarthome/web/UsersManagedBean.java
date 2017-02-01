@@ -13,7 +13,7 @@ import java.util.List;
 
 @ManagedBean(name = "userMB")
 @RequestScoped
-public class UsersManagedBean implements Serializable{
+public class UsersManagedBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final String TABLE = "table";
@@ -37,9 +37,9 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - Response Message
      */
-    public String addUser(){
+    public String addUser() {
 
-        try{
+        try {
             Users user = new Users();
             user.setUserId(0);
             user.setFirstName(getFirst_name());
@@ -50,7 +50,7 @@ public class UsersManagedBean implements Serializable{
             user.setTwoFactorAuth(getIs_two_factor_auth());
             getUsersService().addUser(user);///////////////////////////////
             return TABLE;
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
         return ERROR;
@@ -58,7 +58,6 @@ public class UsersManagedBean implements Serializable{
 
     /**
      * Reset Fields
-     *
      */
     public void reset() {
         this.setFirst_name("");
@@ -114,7 +113,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - User First Name
      */
-    public String getFirst_name(){
+    public String getFirst_name() {
         return first_name;
     }
 
@@ -123,8 +122,8 @@ public class UsersManagedBean implements Serializable{
      *
      * @param first_name String - User First Name
      */
-    public void setFirst_name(String first_name){
-        this.first_name=first_name;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
     /**
@@ -132,7 +131,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - User Last Name
      */
-    public String getLast_name(){
+    public String getLast_name() {
         return last_name;
     }
 
@@ -141,8 +140,8 @@ public class UsersManagedBean implements Serializable{
      *
      * @param last_name String - User Last Name
      */
-    public void setLast_name(String last_name){
-        this.last_name=last_name;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     /**
@@ -150,7 +149,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - phone number
      */
-    public String getPhone_number(){
+    public String getPhone_number() {
         return phone_number;
     }
 
@@ -159,8 +158,8 @@ public class UsersManagedBean implements Serializable{
      *
      * @param phone_number String - User Phone Number
      */
-    public void setPhone_number(String phone_number){
-        this.phone_number=phone_number;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     /**
@@ -168,7 +167,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - email
      */
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
@@ -177,8 +176,8 @@ public class UsersManagedBean implements Serializable{
      *
      * @param email String - User email
      */
-    public void setEmail(String email){
-        this.email=email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
@@ -186,7 +185,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return String - password
      */
-    public String getEncr_password(){
+    public String getEncr_password() {
         return encr_password;
     }
 
@@ -195,8 +194,8 @@ public class UsersManagedBean implements Serializable{
      *
      * @param encr_password String - User password
      */
-    public void setEncr_password(String encr_password){
-        this.encr_password=encr_password;
+    public void setEncr_password(String encr_password) {
+        this.encr_password = encr_password;
     }
 
     /**
@@ -204,7 +203,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @return boolean - two_factor_auth
      */
-    public boolean getIs_two_factor_auth(){
+    public boolean getIs_two_factor_auth() {
         return is_two_factor_auth;
     }
 
@@ -213,7 +212,7 @@ public class UsersManagedBean implements Serializable{
      *
      * @param is_two_factor_auth boolean - User is_two_factor_auth
      */
-    public void setIs_two_factor_auth(boolean is_two_factor_auth){
-        this.is_two_factor_auth=is_two_factor_auth;
+    public void setIs_two_factor_auth(boolean is_two_factor_auth) {
+        this.is_two_factor_auth = is_two_factor_auth;
     }
 }
