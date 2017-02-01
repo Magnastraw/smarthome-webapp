@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -41,26 +46,6 @@ public class Group implements Serializable {
         this.groupName = groupName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Group group = (Group) o;
-
-        if (groupId != group.groupId) return false;
-        if (groupName != null ? !groupName.equals(group.groupName) : group.groupName != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (groupId ^ (groupId >>> 32));
-        result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
-        return result;
-    }
-
     @OneToMany(mappedBy = "group")
     public Collection<GroupMember> getGroupMembers() {
         return groupMembers;
@@ -80,7 +65,30 @@ public class Group implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Group)) return false;
+
+        Group group = (Group) o;
+
+        return new EqualsBuilder()
+                .append(getGroupId(), group.getGroupId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getGroupId())
+                .toHashCode();
+    }
+
+    @Override
     public String toString() {
-        return String.format("%d %s", groupId, groupName);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("groupId", getGroupId())
+                .append("groupName", getGroupName())
+                .toString();
     }
 }

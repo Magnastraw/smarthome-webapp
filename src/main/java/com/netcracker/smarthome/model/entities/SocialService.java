@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,30 +69,6 @@ public class SocialService implements Serializable {
         this.secretKey = secretKey;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SocialService that = (SocialService) o;
-
-        if (serviceId != that.serviceId) return false;
-        if (serviceName != null ? !serviceName.equals(that.serviceName) : that.serviceName != null) return false;
-        if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) return false;
-        if (secretKey != null ? !secretKey.equals(that.secretKey) : that.secretKey != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (serviceId ^ (serviceId >>> 32));
-        result = 31 * result + (serviceName != null ? serviceName.hashCode() : 0);
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
-        result = 31 * result + (secretKey != null ? secretKey.hashCode() : 0);
-        return result;
-    }
-
     @OneToMany(mappedBy = "service")
     public Collection<SocialProfile> getSocialProfiles() {
         return socialProfiles;
@@ -98,7 +79,32 @@ public class SocialService implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SocialService)) return false;
+
+        SocialService service = (SocialService) o;
+
+        return new EqualsBuilder()
+                .append(getServiceId(), service.getServiceId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getServiceId())
+                .toHashCode();
+    }
+
+    @Override
     public String toString() {
-        return serviceName;
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("serviceId", getServiceId())
+                .append("serviceName", getServiceName())
+                .append("clientId", getClientId())
+                .append("secretKey", getSecretKey())
+                .toString();
     }
 }

@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,23 +36,6 @@ public class Permission implements Serializable {
         this.permissionId = permissionId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Permission that = (Permission) o;
-
-        if (permissionId != that.permissionId) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (permissionId ^ (permissionId >>> 32));
-    }
-
     @OneToMany(mappedBy = "permission")
     public Collection<GroupPermission> getGroups() {
         return groups;
@@ -74,5 +62,33 @@ public class Permission implements Serializable {
 
     public void setUsers(Collection<UserPermission> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Permission)) return false;
+
+        Permission that = (Permission) o;
+
+        return new EqualsBuilder()
+                .append(getPermissionId(), that.getPermissionId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getPermissionId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("permissionId", getPermissionId())
+                .append("abstractObject", getAbstractObject())
+                .toString();
     }
 }

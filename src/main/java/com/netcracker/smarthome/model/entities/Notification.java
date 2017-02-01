@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
@@ -83,33 +88,6 @@ public class Notification implements Serializable {
         this.confirm = confirm;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Notification that = (Notification) o;
-
-        if (notificationId != that.notificationId) return false;
-        if (notificationStatus != that.notificationStatus) return false;
-        if (confirm != that.confirm) return false;
-        if (notificationName != null ? !notificationName.equals(that.notificationName) : that.notificationName != null)
-            return false;
-        if (time != null ? !time.equals(that.time) : that.time != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (notificationId ^ (notificationId >>> 32));
-        result = 31 * result + (notificationName != null ? notificationName.hashCode() : 0);
-        result = 31 * result + notificationStatus;
-        result = 31 * result + (time != null ? time.hashCode() : 0);
-        result = 31 * result + confirm;
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     public User getUser() {
@@ -148,5 +126,40 @@ public class Notification implements Serializable {
 
     public void setMetric(Metric metric) {
         this.metric = metric;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Notification)) return false;
+
+        Notification that = (Notification) o;
+
+        return new EqualsBuilder()
+                .append(getNotificationId(), that.getNotificationId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getNotificationId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("notificationId", getNotificationId())
+                .append("notificationName", getNotificationName())
+                .append("notificationStatus", getNotificationStatus())
+                .append("time", getTime())
+                .append("confirm", getConfirm())
+                .append("user", getUser())
+                .append("alarm", getAlarm())
+                .append("event", getEvent())
+                .append("metric", getMetric())
+                .toString();
     }
 }

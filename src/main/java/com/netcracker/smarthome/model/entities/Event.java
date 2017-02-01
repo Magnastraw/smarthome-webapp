@@ -1,6 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
 import com.netcracker.smarthome.model.keys.EventPK;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -71,30 +75,6 @@ public class Event implements Serializable {
         this.subobjectId = subobjectId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Event event = (Event) o;
-
-        if (eventId != event.eventId) return false;
-        if (objectId != event.objectId) return false;
-        if (eventType != null ? !eventType.equals(event.eventType) : event.eventType != null) return false;
-        if (subobjectId != null ? !subobjectId.equals(event.subobjectId) : event.subobjectId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (eventId ^ (eventId >>> 32));
-        result = 31 * result + (int) (objectId ^ (objectId >>> 32));
-        result = 31 * result + (eventType != null ? eventType.hashCode() : 0);
-        result = 31 * result + (subobjectId != null ? subobjectId.hashCode() : 0);
-        return result;
-    }
-
     @OneToMany(mappedBy = "event")
     public Collection<Alarm> getAlarms() {
         return alarms;
@@ -130,5 +110,40 @@ public class Event implements Serializable {
 
     public void setNotifications(Collection<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Event)) return false;
+
+        Event event = (Event) o;
+
+        return new EqualsBuilder()
+                .append(getEventId(), event.getEventId())
+                .append(getObjectId(), event.getObjectId())
+                .append(getEventType(), event.getEventType())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getEventId())
+                .append(getObjectId())
+                .append(getEventType())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("eventId", getEventId())
+                .append("objectId", getObjectId())
+                .append("eventType", getEventType())
+                .append("subobjectId", getSubobjectId())
+                .append("user", getUser())
+                .toString();
     }
 }

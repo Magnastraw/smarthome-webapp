@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -120,40 +125,6 @@ public class Alarm implements Serializable {
         this.severityChangeTime = severityChangeTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Alarm alarm = (Alarm) o;
-
-        if (alarmId != alarm.alarmId) return false;
-        if (clearedUserId != alarm.clearedUserId) return false;
-        if (severity != alarm.severity) return false;
-        if (alarmName != null ? !alarmName.equals(alarm.alarmName) : alarm.alarmName != null) return false;
-        if (alarmDescription != null ? !alarmDescription.equals(alarm.alarmDescription) : alarm.alarmDescription != null)
-            return false;
-        if (startTime != null ? !startTime.equals(alarm.startTime) : alarm.startTime != null) return false;
-        if (endTime != null ? !endTime.equals(alarm.endTime) : alarm.endTime != null) return false;
-        if (severityChangeTime != null ? !severityChangeTime.equals(alarm.severityChangeTime) : alarm.severityChangeTime != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (alarmId ^ (alarmId >>> 32));
-        result = 31 * result + (int) (clearedUserId ^ (clearedUserId >>> 32));
-        result = 31 * result + (alarmName != null ? alarmName.hashCode() : 0);
-        result = 31 * result + (alarmDescription != null ? alarmDescription.hashCode() : 0);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + severity;
-        result = 31 * result + (severityChangeTime != null ? severityChangeTime.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumns({@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false), @JoinColumn(name = "object_id", referencedColumnName = "object_id", nullable = false), @JoinColumn(name = "event_type", referencedColumnName = "event_type", nullable = false)})
     public Event getEvent() {
@@ -200,5 +171,36 @@ public class Alarm implements Serializable {
 
     public void setNotificationssByAlarmId(Collection<Notification> notificationssByAlarmId) {
         this.notificationssByAlarmId = notificationssByAlarmId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Alarm)) return false;
+
+        Alarm alarm = (Alarm) o;
+
+        return new EqualsBuilder()
+                .append(getAlarmId(), alarm.getAlarmId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getAlarmId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("alarmId", getAlarmId())
+                .append("alarmName", getAlarmName())
+                .append("alarmDescription", getAlarmDescription())
+                .append("severity", getSeverity())
+                .append("parentAlarm", getParentAlarm())
+                .toString();
     }
 }

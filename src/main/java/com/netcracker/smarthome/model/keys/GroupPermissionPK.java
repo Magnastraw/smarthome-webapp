@@ -1,5 +1,8 @@
 package com.netcracker.smarthome.model.keys;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -39,18 +42,22 @@ public class GroupPermissionPK implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (!(o instanceof GroupPermissionPK)) return false;
 
         GroupPermissionPK that = (GroupPermissionPK) o;
 
-        if (permissionId != that.permissionId) return false;
-        return action != null ? action.equals(that.action) : that.action == null;
+        return new EqualsBuilder()
+                .append(getPermissionId(), that.getPermissionId())
+                .append(getAction(), that.getAction())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = action != null ? action.hashCode() : 0;
-        result = 31 * result + (int) (permissionId ^ (permissionId >>> 32));
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(getAction())
+                .append(getPermissionId())
+                .toHashCode();
     }
 }

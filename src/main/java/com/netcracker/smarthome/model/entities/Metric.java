@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -57,28 +62,6 @@ public class Metric implements Serializable {
         this.subobjectId = subobjectId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Metric metric = (Metric) o;
-
-        if (metricId != metric.metricId) return false;
-        if (objectId != metric.objectId) return false;
-        if (subobjectId != null ? !subobjectId.equals(metric.subobjectId) : metric.subobjectId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (metricId ^ (metricId >>> 32));
-        result = 31 * result + (int) (objectId ^ (objectId >>> 32));
-        result = 31 * result + (subobjectId != null ? subobjectId.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     public User getUser() {
@@ -116,4 +99,36 @@ public class Metric implements Serializable {
     public void setNotifications(Collection<Notification> notifications) {
         this.notifications = notifications;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Metric)) return false;
+
+        Metric metric = (Metric) o;
+
+        return new EqualsBuilder()
+                .append(getMetricId(), metric.getMetricId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getMetricId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("metricId", getMetricId())
+                .append("objectId", getObjectId())
+                .append("subobjectId", getSubobjectId())
+                .append("user", getUser())
+                .append("metricSpec", getMetricSpec())
+                .toString();
+    }
+
 }

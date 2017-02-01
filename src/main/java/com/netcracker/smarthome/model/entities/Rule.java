@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -40,26 +45,6 @@ public class Rule implements Serializable {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Rule rule = (Rule) o;
-
-        if (ruleId != rule.ruleId) return false;
-        if (name != null ? !name.equals(rule.name) : rule.name != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (ruleId ^ (ruleId >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "policy_id", referencedColumnName = "policy_id", nullable = false)
     public Policy getPolicy() {
@@ -68,5 +53,34 @@ public class Rule implements Serializable {
 
     public void setPolicy(Policy policy) {
         this.policy = policy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Rule)) return false;
+
+        Rule rule = (Rule) o;
+
+        return new EqualsBuilder()
+                .append(getRuleId(), rule.getRuleId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getRuleId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("ruleId", getRuleId())
+                .append("name", getName())
+                .append("policy", getPolicy())
+                .toString();
     }
 }

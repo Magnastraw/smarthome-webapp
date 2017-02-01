@@ -1,5 +1,8 @@
 package com.netcracker.smarthome.model.keys;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -50,22 +53,24 @@ public class EventPK implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (!(o instanceof EventPK)) return false;
 
         EventPK eventPK = (EventPK) o;
 
-        if (eventId != eventPK.eventId) return false;
-        if (objectId != eventPK.objectId) return false;
-        if (eventType != null ? !eventType.equals(eventPK.eventType) : eventPK.eventType != null) return false;
-
-        return true;
+        return new EqualsBuilder()
+                .append(getEventId(), eventPK.getEventId())
+                .append(getObjectId(), eventPK.getObjectId())
+                .append(getEventType(), eventPK.getEventType())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (eventId ^ (eventId >>> 32));
-        result = 31 * result + (int) (objectId ^ (objectId >>> 32));
-        result = 31 * result + (eventType != null ? eventType.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(getEventId())
+                .append(getObjectId())
+                .append(getEventType())
+                .toHashCode();
     }
 }

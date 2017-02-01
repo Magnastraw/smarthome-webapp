@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -54,28 +59,6 @@ public class Policy implements Serializable {
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Policy policy = (Policy) o;
-
-        if (policyId != policy.policyId) return false;
-        if (name != null ? !name.equals(policy.name) : policy.name != null) return false;
-        if (description != null ? !description.equals(policy.description) : policy.description != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (policyId ^ (policyId >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "catalog_id", referencedColumnName = "catalog_id", nullable = false)
     public Catalog getCatalog() {
@@ -93,5 +76,35 @@ public class Policy implements Serializable {
 
     public void setRules(Collection<Rule> rules) {
         this.rules = rules;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Policy)) return false;
+
+        Policy policy = (Policy) o;
+
+        return new EqualsBuilder()
+                .append(getPolicyId(), policy.getPolicyId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getPolicyId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("policyId", getPolicyId())
+                .append("name", getName())
+                .append("description", getDescription())
+                .append("catalog", getCatalog())
+                .toString();
     }
 }

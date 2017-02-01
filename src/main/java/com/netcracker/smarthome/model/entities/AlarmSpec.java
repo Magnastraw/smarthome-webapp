@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -54,28 +59,6 @@ public class AlarmSpec implements Serializable {
         this.objectType = objectType;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AlarmSpec alarmSpec = (AlarmSpec) o;
-
-        if (specId != alarmSpec.specId) return false;
-        if (specName != null ? !specName.equals(alarmSpec.specName) : alarmSpec.specName != null) return false;
-        if (objectType != null ? !objectType.equals(alarmSpec.objectType) : alarmSpec.objectType != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (specId ^ (specId >>> 32));
-        result = 31 * result + (specName != null ? specName.hashCode() : 0);
-        result = 31 * result + (objectType != null ? objectType.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "catalog_id", referencedColumnName = "catalog_id", nullable = false)
     public Catalog getCatalog() {
@@ -93,5 +76,35 @@ public class AlarmSpec implements Serializable {
 
     public void setAlarms(Collection<Alarm> alarms) {
         this.alarms = alarms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof AlarmSpec)) return false;
+
+        AlarmSpec alarmSpec = (AlarmSpec) o;
+
+        return new EqualsBuilder()
+                .append(getSpecId(), alarmSpec.getSpecId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getSpecId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("specId", getSpecId())
+                .append("specName", getSpecName())
+                .append("objectType", getObjectType())
+                .append("catalog", getCatalog())
+                .toString();
     }
 }

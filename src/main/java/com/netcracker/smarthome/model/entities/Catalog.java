@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -44,26 +49,6 @@ public class Catalog implements Serializable {
         this.catalogName = catalogName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Catalog catalog = (Catalog) o;
-
-        if (catalogId != catalog.catalogId) return false;
-        if (catalogName != null ? !catalogName.equals(catalog.catalogName) : catalog.catalogName != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (catalogId ^ (catalogId >>> 32));
-        result = 31 * result + (catalogName != null ? catalogName.hashCode() : 0);
-        return result;
-    }
-
     @OneToMany(mappedBy = "catalog")
     public Collection<AlarmSpec> getAlarmSpecs() {
         return alarmSpecs;
@@ -102,7 +87,32 @@ public class Catalog implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return String.format("%s/%s", parentCatalog == null ? "" : parentCatalog, catalogName);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Catalog)) return false;
+
+        Catalog catalog = (Catalog) o;
+
+        return new EqualsBuilder()
+                .append(getCatalogId(), catalog.getCatalogId())
+                .isEquals();
     }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getCatalogId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("catalogId", getCatalogId())
+                .append("catalogName", getCatalogName())
+                .append("parentCatalog", getParentCatalog())
+                .toString();
+    }
+
 }

@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -68,30 +73,6 @@ public class Unit implements Serializable {
         this.label = label;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Unit unit = (Unit) o;
-
-        if (unitId != unit.unitId) return false;
-        if (unitName != null ? !unitName.equals(unit.unitName) : unit.unitName != null) return false;
-        if (baseFactor != null ? !baseFactor.equals(unit.baseFactor) : unit.baseFactor != null) return false;
-        if (label != null ? !label.equals(unit.label) : unit.label != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (unitId ^ (unitId >>> 32));
-        result = 31 * result + (unitName != null ? unitName.hashCode() : 0);
-        result = 31 * result + (baseFactor != null ? baseFactor.hashCode() : 0);
-        result = 31 * result + (label != null ? label.hashCode() : 0);
-        return result;
-    }
-
     @OneToMany(mappedBy = "unit")
     public Collection<MetricSpec> getMetricSpecs() {
         return metricSpecs;
@@ -118,5 +99,36 @@ public class Unit implements Serializable {
 
     public void setSubUnits(Collection<Unit> subUnits) {
         this.subUnits = subUnits;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Unit)) return false;
+
+        Unit unit = (Unit) o;
+
+        return new EqualsBuilder()
+                .append(getUnitId(), unit.getUnitId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getUnitId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("unitId", getUnitId())
+                .append("unitName", getUnitName())
+                .append("baseFactor", getUnitName())
+                .append("label", getLabel())
+                .append("parentUnit", getParentUnit())
+                .toString();
     }
 }

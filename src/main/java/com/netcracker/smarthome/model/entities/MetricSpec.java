@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -91,35 +96,6 @@ public class MetricSpec implements Serializable {
         this.assignedToObject = assignedToObject;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MetricSpec that = (MetricSpec) o;
-
-        if (specId != that.specId) return false;
-        if (specName != null ? !specName.equals(that.specName) : that.specName != null) return false;
-        if (maxValue != null ? !maxValue.equals(that.maxValue) : that.maxValue != null) return false;
-        if (minValue != null ? !minValue.equals(that.minValue) : that.minValue != null) return false;
-        if (metricType != null ? !metricType.equals(that.metricType) : that.metricType != null) return false;
-        if (assignedToObject != null ? !assignedToObject.equals(that.assignedToObject) : that.assignedToObject != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (specId ^ (specId >>> 32));
-        result = 31 * result + (specName != null ? specName.hashCode() : 0);
-        result = 31 * result + (maxValue != null ? maxValue.hashCode() : 0);
-        result = 31 * result + (minValue != null ? minValue.hashCode() : 0);
-        result = 31 * result + (metricType != null ? metricType.hashCode() : 0);
-        result = 31 * result + (assignedToObject != null ? assignedToObject.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "unit_id", referencedColumnName = "unit_id", nullable = false)
     public Unit getUnit() {
@@ -137,5 +113,38 @@ public class MetricSpec implements Serializable {
 
     public void setMetrics(Collection<Metric> metrics) {
         this.metrics = metrics;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof MetricSpec)) return false;
+
+        MetricSpec that = (MetricSpec) o;
+
+        return new EqualsBuilder()
+                .append(getSpecId(), that.getSpecId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getSpecId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("specId", getSpecId())
+                .append("specName", getSpecName())
+                .append("maxValue", getMaxValue())
+                .append("minValue", getMinValue())
+                .append("metricType", getMetricType())
+                .append("assignedToObject", getAssignedToObject())
+                .append("unit", getUnit())
+                .toString();
     }
 }

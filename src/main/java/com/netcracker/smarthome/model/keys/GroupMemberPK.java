@@ -1,6 +1,9 @@
 package com.netcracker.smarthome.model.keys;
 
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -40,18 +43,22 @@ public class GroupMemberPK implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (!(o instanceof GroupMemberPK)) return false;
 
         GroupMemberPK that = (GroupMemberPK) o;
 
-        if (groupId != that.groupId) return false;
-        return userId == that.userId;
+        return new EqualsBuilder()
+                .append(getGroupId(), that.getGroupId())
+                .append(getUserId(), that.getUserId())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (groupId ^ (groupId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(getGroupId())
+                .append(getUserId())
+                .toHashCode();
     }
 }

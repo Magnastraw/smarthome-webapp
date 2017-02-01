@@ -1,5 +1,8 @@
 package com.netcracker.smarthome.model.keys;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -38,18 +41,22 @@ public class SocialProfilePK implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (!(o instanceof SocialProfilePK)) return false;
 
         SocialProfilePK that = (SocialProfilePK) o;
 
-        if (userId != that.userId) return false;
-        return serviceId == that.serviceId;
+        return new EqualsBuilder()
+                .append(getUserId(), that.getUserId())
+                .append(getServiceId(), that.getServiceId())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (int) (serviceId ^ (serviceId >>> 32));
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(getUserId())
+                .append(getServiceId())
+                .toHashCode();
     }
 }

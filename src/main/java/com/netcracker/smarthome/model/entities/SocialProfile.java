@@ -1,6 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
 import com.netcracker.smarthome.model.keys.SocialProfilePK;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,24 +58,6 @@ public class SocialProfile implements Serializable {
         this.userSocialId = userSocialId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SocialProfile that = (SocialProfile) o;
-
-        if (userId != that.userId) return false;
-        return serviceId == that.serviceId;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (int) (serviceId ^ (serviceId >>> 32));
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, insertable = false, updatable = false)
     public User getUser() {
@@ -93,7 +79,33 @@ public class SocialProfile implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof SocialProfile)) return false;
+
+        SocialProfile that = (SocialProfile) o;
+
+        return new EqualsBuilder()
+                .append(getUserId(), that.getUserId())
+                .append(getServiceId(), that.getServiceId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getUserId())
+                .append(getServiceId())
+                .toHashCode();
+    }
+
+    @Override
     public String toString() {
-        return String.format("user: %s, service: %s, id: %s", user, service, userSocialId);
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("userSocialId", getUserSocialId())
+                .append("user", getUser())
+                .append("service", getService())
+                .toString();
     }
 }

@@ -1,6 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
 import com.netcracker.smarthome.model.keys.GroupPermissionPK;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,24 +46,6 @@ public class GroupPermission implements Serializable {
         this.action = action;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GroupPermission that = (GroupPermission) o;
-
-        if (permissionId != that.permissionId) return false;
-        return action != null ? action.equals(that.action) : that.action == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = action != null ? action.hashCode() : 0;
-        result = 31 * result + (int) (permissionId ^ (permissionId >>> 32));
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "permission_id", referencedColumnName = "permission_id", nullable = false, insertable = false, updatable = false)
     public Permission getPermission() {
@@ -78,5 +64,36 @@ public class GroupPermission implements Serializable {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof GroupPermission)) return false;
+
+        GroupPermission that = (GroupPermission) o;
+
+        return new EqualsBuilder()
+                .append(getPermissionId(), that.getPermissionId())
+                .append(getAction(), that.getAction())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getAction())
+                .append(getPermissionId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("action", getAction())
+                .append("permission", getPermission())
+                .append("group", getGroup())
+                .toString();
     }
 }

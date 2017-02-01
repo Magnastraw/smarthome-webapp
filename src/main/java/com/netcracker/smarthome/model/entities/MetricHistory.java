@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -54,28 +59,6 @@ public class MetricHistory implements Serializable {
         this.value = value;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MetricHistory that = (MetricHistory) o;
-
-        if (historyId != that.historyId) return false;
-        if (readDate != null ? !readDate.equals(that.readDate) : that.readDate != null) return false;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (historyId ^ (historyId >>> 32));
-        result = 31 * result + (readDate != null ? readDate.hashCode() : 0);
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "metric_id", referencedColumnName = "metric_id", nullable = false)
     public Metric getMetric() {
@@ -84,5 +67,35 @@ public class MetricHistory implements Serializable {
 
     public void setMetric(Metric metric) {
         this.metric = metric;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof MetricHistory)) return false;
+
+        MetricHistory that = (MetricHistory) o;
+
+        return new EqualsBuilder()
+                .append(getHistoryId(), that.getHistoryId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getHistoryId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("historyId", getHistoryId())
+                .append("readDate", getReadDate())
+                .append("value", getValue())
+                .append("metric", getMetric())
+                .toString();
     }
 }

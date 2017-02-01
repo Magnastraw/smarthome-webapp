@@ -28,7 +28,7 @@ public class TestApp {
         else {
             for (T obj : list
                     ) {
-                System.out.println("\t" + obj);
+                System.out.println(obj);
             }
         }
     }

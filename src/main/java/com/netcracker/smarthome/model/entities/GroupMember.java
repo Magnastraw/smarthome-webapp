@@ -1,6 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
 import com.netcracker.smarthome.model.keys.GroupMemberPK;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,24 +58,6 @@ public class GroupMember implements Serializable {
         isAdmin = isAdmin;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GroupMember that = (GroupMember) o;
-
-        if (groupId != that.groupId) return false;
-        return userId == that.userId;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (groupId ^ (groupId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        return result;
-    }
-
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "group_id", nullable = false, insertable = false, updatable = false)
     public Group getGroup() {
@@ -91,4 +77,36 @@ public class GroupMember implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof GroupMember)) return false;
+
+        GroupMember that = (GroupMember) o;
+
+        return new EqualsBuilder()
+                .append(getGroupId(), that.getGroupId())
+                .append(getUserId(), that.getUserId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getGroupId())
+                .append(getUserId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("isAdmin", isAdmin())
+                .append("group", getGroup())
+                .append("user", getUser())
+                .toString();
+    }
+
 }

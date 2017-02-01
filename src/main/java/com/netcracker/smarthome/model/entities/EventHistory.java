@@ -1,5 +1,10 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -77,34 +82,6 @@ public class EventHistory implements Serializable {
         this.eventParameters = eventParameters;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EventHistory that = (EventHistory) o;
-
-        if (historyId != that.historyId) return false;
-        if (severity != that.severity) return false;
-        if (readDate != null ? !readDate.equals(that.readDate) : that.readDate != null) return false;
-        if (eventDescription != null ? !eventDescription.equals(that.eventDescription) : that.eventDescription != null)
-            return false;
-        if (eventParameters != null ? !eventParameters.equals(that.eventParameters) : that.eventParameters != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (historyId ^ (historyId >>> 32));
-        result = 31 * result + (readDate != null ? readDate.hashCode() : 0);
-        result = 31 * result + (eventDescription != null ? eventDescription.hashCode() : 0);
-        result = 31 * result + severity;
-        result = 31 * result + (eventParameters != null ? eventParameters.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
     @JoinColumns({@JoinColumn(name = "object_id", referencedColumnName = "event_id", nullable = false), @JoinColumn(name = "event_id", referencedColumnName = "object_id", nullable = false), @JoinColumn(name = "event_type", referencedColumnName = "event_type", nullable = false)})
     public Event getEvent() {
@@ -114,4 +91,37 @@ public class EventHistory implements Serializable {
     public void setEvent(Event event) {
         this.event = event;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof EventHistory)) return false;
+
+        EventHistory that = (EventHistory) o;
+
+        return new EqualsBuilder()
+                .append(getHistoryId(), that.getHistoryId())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getHistoryId())
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("historyId", getHistoryId())
+                .append("readDate", getReadDate())
+                .append("eventDescription", getEventDescription())
+                .append("severity", getSeverity())
+                .append("eventParameters", getEventParameters())
+                .append("event", getEvent())
+                .toString();
+    }
+
 }
