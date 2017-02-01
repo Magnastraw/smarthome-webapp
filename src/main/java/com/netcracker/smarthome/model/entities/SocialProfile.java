@@ -3,11 +3,12 @@ package com.netcracker.smarthome.model.entities;
 import com.netcracker.smarthome.model.keys.SocialProfilePK;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "social_profiles", schema = "public", catalog = "smarthome_db")
 @IdClass(SocialProfilePK.class)
-public class SocialProfile {
+public class SocialProfile implements Serializable {
     private String userSocialId;
     private long userId;
     private long serviceId;

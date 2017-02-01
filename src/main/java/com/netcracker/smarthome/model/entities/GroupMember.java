@@ -3,11 +3,12 @@ package com.netcracker.smarthome.model.entities;
 import com.netcracker.smarthome.model.keys.GroupMemberPK;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "groups_members", schema = "public", catalog = "smarthome_db")
 @IdClass(GroupMemberPK.class)
-public class GroupMember {
+public class GroupMember implements Serializable {
     private boolean isAdmin;
     private long groupId;
     private long userId;

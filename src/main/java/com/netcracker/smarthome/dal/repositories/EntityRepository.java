@@ -15,12 +15,10 @@ public class EntityRepository<T> {
         this.entityClass = entityClass;
     }
 
-    @Transactional
     public T get(Object primaryKey) {
         return manager.find(entityClass, primaryKey);
     }
 
-    @Transactional
     public List<T> getAll() {
         return manager.createQuery(String.format("select e from %s e", entityClass.getSimpleName())).getResultList();
     }

@@ -1,11 +1,12 @@
 package com.netcracker.smarthome.model.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "permissions", schema = "public", catalog = "smarthome_db")
-public class Permission {
+public class Permission implements Serializable {
     private long permissionId;
     private Collection<GroupPermission> groups;
     private AbstractObject abstractObject;
@@ -21,7 +22,7 @@ public class Permission {
     @Id
     @Column(name = "permission_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perm_seq")
-    @SequenceGenerator(name = "perm_seq", sequenceName = "permissions_permission_id_seq")
+    @SequenceGenerator(name = "perm_seq", sequenceName = "permissions_permission_id_seq", allocationSize = 1)
     public long getPermissionId() {
         return permissionId;
     }

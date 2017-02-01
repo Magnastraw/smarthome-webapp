@@ -1,11 +1,12 @@
 package com.netcracker.smarthome.model.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @Table(name = "metrics", schema = "public", catalog = "smarthome_db")
-public class Metric {
+public class Metric implements Serializable {
     private long metricId;
     private long objectId;
     private Long subobjectId;
@@ -27,7 +28,7 @@ public class Metric {
     @Id
     @Column(name = "metric_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_seq")
-    @SequenceGenerator(name = "metric_seq", sequenceName = "metrics_metric_id_seq")
+    @SequenceGenerator(name = "metric_seq", sequenceName = "metrics_metric_id_seq", allocationSize = 1)
     public long getMetricId() {
         return metricId;
     }
