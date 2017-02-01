@@ -61,7 +61,6 @@ public class UsersManagedBean implements Serializable{
      *
      */
     public void reset() {
-        this.setUser_id(0);
         this.setFirst_name("");
         this.setLast_name("");
         this.setEmail("");
@@ -108,21 +107,6 @@ public class UsersManagedBean implements Serializable{
      */
     public void setUsersList(List<Users> usersList) {
         this.usersList = usersList;
-    }
-
-
-    public int getUser_id(){
-        return user_id;
-    }
-
-    /**
-     * Set User Id
-     *
-     * @param user_id int - User Id
-     *
-     */
-    public void setUser_id(int user_id){
-        this.user_id=user_id;
     }
 
     /**
