@@ -1,0 +1,32 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <h:form>
+        <p:menubar style="border: none">
+            <p:submenu label="Smarthome" icon="fa fa-home">
+                <p:menuitem value="Home 1" url="#"/>
+                <p:menuitem value="Home 2" url="#"/>
+                <p:separator />
+                <p:menuitem value="Add home..." url="#" icon="fa fa-plus"/>
+            </p:submenu>
+
+            <p:submenu label="Help" icon="fa fa-question">
+                <p:menuitem value="Contents" url="#"/>
+            </p:submenu>
+
+            <p:submenu label="Settings" icon="fa fa-gears">
+                <p:menuitem value="User profile" url="#" icon="fa fa-user"/>
+                <p:menuitem value="Home profile" url="#" icon="fa fa-gear"/>
+            </p:submenu>
+
+            <f:facet name="options">
+                <p:inputText style="margin-right:10px" placeholder="Search"/>
+                <p:commandButton type="button" value="Logout" icon="ui-icon-extlink"/>
+            </f:facet>
+        </p:menubar>
+    </h:form>
+</ui:composition>
