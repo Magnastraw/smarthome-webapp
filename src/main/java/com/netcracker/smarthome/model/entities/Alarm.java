@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "alarms", schema = "public", catalog = "smarthome_db")
@@ -22,15 +22,17 @@ public class Alarm implements Serializable {
     private int severity;
     private Timestamp severityChangeTime;
     private Event event;
+    private SmartObject object;
+    private SmartObject subobject;
     private AlarmSpec alarmSpec;
     private Alarm parentAlarm;
-    private Collection<Alarm> subAlarms;
-    private Collection<Notification> notificationssByAlarmId;
+    private List<Alarm> subAlarms;
+    private List<Notification> notifications;
 
     public Alarm() {
     }
 
-    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, int severity, Timestamp severityChangeTime, Event event, AlarmSpec alarmSpec, Alarm parentAlarm) {
+    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, int severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
         this.clearedUserId = clearedUserId;
         this.alarmName = alarmName;
         this.alarmDescription = alarmDescription;
@@ -39,6 +41,8 @@ public class Alarm implements Serializable {
         this.severity = severity;
         this.severityChangeTime = severityChangeTime;
         this.event = event;
+        this.object = object;
+        this.subobject = subobject;
         this.alarmSpec = alarmSpec;
         this.parentAlarm = parentAlarm;
     }
@@ -66,7 +70,7 @@ public class Alarm implements Serializable {
     }
 
     @Basic
-    @Column(name = "alarm_name", nullable = false, length = -1)
+    @Column(name = "alarm_name", nullable = false)
     public String getAlarmName() {
         return alarmName;
     }
@@ -76,7 +80,7 @@ public class Alarm implements Serializable {
     }
 
     @Basic
-    @Column(name = "alarm_description", nullable = false, length = -1)
+    @Column(name = "alarm_description", nullable = false)
     public String getAlarmDescription() {
         return alarmDescription;
     }
@@ -126,13 +130,33 @@ public class Alarm implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumns({@JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false), @JoinColumn(name = "object_id", referencedColumnName = "object_id", nullable = false), @JoinColumn(name = "event_type", referencedColumnName = "event_type", nullable = false)})
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false)
     public Event getEvent() {
         return event;
     }
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "object_id", referencedColumnName = "smart_object_id", nullable = false)
+    public SmartObject getObject() {
+        return object;
+    }
+
+    public void setObject(SmartObject object) {
+        this.object = object;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "subobject_id", referencedColumnName = "smart_object_id")
+    public SmartObject getSubobject() {
+        return subobject;
+    }
+
+    public void setSubobject(SmartObject subobject) {
+        this.subobject = subobject;
     }
 
     @ManyToOne
@@ -156,21 +180,21 @@ public class Alarm implements Serializable {
     }
 
     @OneToMany(mappedBy = "parentAlarm")
-    public Collection<Alarm> getSubAlarms() {
+    public List<Alarm> getSubAlarms() {
         return subAlarms;
     }
 
-    public void setSubAlarms(Collection<Alarm> subAlarms) {
+    public void setSubAlarms(List<Alarm> subAlarms) {
         this.subAlarms = subAlarms;
     }
 
     @OneToMany(mappedBy = "alarm")
-    public Collection<Notification> getNotificationssByAlarmId() {
-        return notificationssByAlarmId;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setNotificationssByAlarmId(Collection<Notification> notificationssByAlarmId) {
-        this.notificationssByAlarmId = notificationssByAlarmId;
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     @Override
@@ -197,9 +221,17 @@ public class Alarm implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("alarmId", getAlarmId())
+                .append("clearedUserId", getClearedUserId())
                 .append("alarmName", getAlarmName())
                 .append("alarmDescription", getAlarmDescription())
+                .append("startTime", getStartTime())
+                .append("endTime", getEndTime())
                 .append("severity", getSeverity())
+                .append("severityChangeTime", getSeverityChangeTime())
+                .append("event", getEvent())
+                .append("object", getObject())
+                .append("subobject", getSubobject())
+                .append("alarmSpec", getAlarmSpec())
                 .append("parentAlarm", getParentAlarm())
                 .toString();
     }

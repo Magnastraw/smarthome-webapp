@@ -7,16 +7,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "alarm_spec", schema = "public", catalog = "smarthome_db")
+@Table(name = "alarm_specs", schema = "public", catalog = "smarthome_db")
 public class AlarmSpec implements Serializable {
     private long specId;
     private String specName;
     private String objectType;
     private Catalog catalog;
-    private Collection<Alarm> alarms;
+    private List<Alarm> alarms;
+
+    public AlarmSpec() {
+    }
 
     public AlarmSpec(String specName, String objectType, Catalog catalog) {
         this.specName = specName;
@@ -24,13 +27,10 @@ public class AlarmSpec implements Serializable {
         this.catalog = catalog;
     }
 
-    public AlarmSpec() {
-    }
-
     @Id
     @Column(name = "spec_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "spec_seq")
-    @SequenceGenerator(name = "spec_seq", sequenceName = "alarm_spec_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "a_spec_seq")
+    @SequenceGenerator(name = "a_spec_seq", sequenceName = "alarm_specs_spec_id_seq", allocationSize = 1)
     public long getSpecId() {
         return specId;
     }
@@ -40,7 +40,7 @@ public class AlarmSpec implements Serializable {
     }
 
     @Basic
-    @Column(name = "spec_name", nullable = false, length = -1)
+    @Column(name = "spec_name", nullable = false)
     public String getSpecName() {
         return specName;
     }
@@ -50,7 +50,7 @@ public class AlarmSpec implements Serializable {
     }
 
     @Basic
-    @Column(name = "object_type", nullable = false, length = -1)
+    @Column(name = "object_type", nullable = false)
     public String getObjectType() {
         return objectType;
     }
@@ -70,11 +70,11 @@ public class AlarmSpec implements Serializable {
     }
 
     @OneToMany(mappedBy = "alarmSpec")
-    public Collection<Alarm> getAlarms() {
+    public List<Alarm> getAlarms() {
         return alarms;
     }
 
-    public void setAlarms(Collection<Alarm> alarms) {
+    public void setAlarms(List<Alarm> alarms) {
         this.alarms = alarms;
     }
 

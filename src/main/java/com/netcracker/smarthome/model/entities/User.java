@@ -7,35 +7,33 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public", catalog = "smarthome_db")
 public class User implements Serializable {
     private long userId;
+    private String email;
+    private String encrPassword;
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String email;
-    private String encrPassword;
     private boolean isTwoFactorAuth;
-    private Collection<Event> events;
-    private Collection<GroupMember> groupsMembers;
-    private Collection<Metric> metrics;
-    private Collection<Notification> notifications;
-    private Collection<SocialProfile> socialProfiles;
-    private Collection<UserPermission> adminPermissions;
-    private Collection<UserPermission> userPermissions;
+    private List<GroupMember> groupsMembers;
+    private List<Permission> managedPermissions;
+    private List<Permission> permissions;
+    private List<SmartHome> smartHome;
+    private List<SocialProfile> socialProfile;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String phoneNumber, String email, String encrPassword, boolean isTwoFactorAuth) {
+    public User(String email, String encrPassword, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth) {
+        this.email = email;
+        this.encrPassword = encrPassword;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.email = email.toLowerCase();
-        this.encrPassword = encrPassword;
         this.isTwoFactorAuth = isTwoFactorAuth;
     }
 
@@ -52,7 +50,27 @@ public class User implements Serializable {
     }
 
     @Basic
-    @Column(name = "first_name", nullable = false, length = -1)
+    @Column(name = "email", nullable = false)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
+    @Column(name = "encr_password", nullable = false)
+    public String getEncrPassword() {
+        return encrPassword;
+    }
+
+    public void setEncrPassword(String encrPassword) {
+        this.encrPassword = encrPassword;
+    }
+
+    @Basic
+    @Column(name = "first_name", nullable = true)
     public String getFirstName() {
         return firstName;
     }
@@ -62,7 +80,7 @@ public class User implements Serializable {
     }
 
     @Basic
-    @Column(name = "last_name", nullable = false, length = -1)
+    @Column(name = "last_name", nullable = true)
     public String getLastName() {
         return lastName;
     }
@@ -82,26 +100,6 @@ public class User implements Serializable {
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = -1)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email.toLowerCase();
-    }
-
-    @Basic
-    @Column(name = "encr_password", nullable = false, length = -1)
-    public String getEncrPassword() {
-        return encrPassword;
-    }
-
-    public void setEncrPassword(String encrPassword) {
-        this.encrPassword = encrPassword;
-    }
-
-    @Basic
     @Column(name = "is_two_factor_auth", nullable = false)
     public boolean isTwoFactorAuth() {
         return isTwoFactorAuth;
@@ -112,66 +110,48 @@ public class User implements Serializable {
     }
 
     @OneToMany(mappedBy = "user")
-    public Collection<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Collection<Event> events) {
-        this.events = events;
-    }
-
-    @OneToMany(mappedBy = "user")
-    public Collection<GroupMember> getGroupsMembers() {
+    public List<GroupMember> getGroupsMembers() {
         return groupsMembers;
     }
 
-    public void setGroupsMembers(Collection<GroupMember> groupsMembers) {
+    public void setGroupsMembers(List<GroupMember> groupsMembers) {
         this.groupsMembers = groupsMembers;
     }
 
-    @OneToMany(mappedBy = "user")
-    public Collection<Metric> getMetrics() {
-        return metrics;
-    }
-
-    public void setMetrics(Collection<Metric> metrics) {
-        this.metrics = metrics;
-    }
-
-    @OneToMany(mappedBy = "user")
-    public Collection<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(Collection<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    @OneToMany(mappedBy = "user")
-    public Collection<SocialProfile> getSocialProfiles() {
-        return socialProfiles;
-    }
-
-    public void setSocialProfiles(Collection<SocialProfile> socialProfiles) {
-        this.socialProfiles = socialProfiles;
-    }
-
     @OneToMany(mappedBy = "admin")
-    public Collection<UserPermission> getAdminPermissions() {
-        return adminPermissions;
+    public List<Permission> getManagedPermissions() {
+        return managedPermissions;
     }
 
-    public void setAdminPermissions(Collection<UserPermission> adminPermissions) {
-        this.adminPermissions = adminPermissions;
+    public void setManagedPermissions(List<Permission> managedPermissions) {
+        this.managedPermissions = managedPermissions;
     }
 
     @OneToMany(mappedBy = "user")
-    public Collection<UserPermission> getUserPermissions() {
-        return userPermissions;
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setUserPermissions(Collection<UserPermission> userPermissions) {
-        this.userPermissions = userPermissions;
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<SmartHome> getSmartHome() {
+        return smartHome;
+    }
+
+    public void setSmartHome(List<SmartHome> smartHome) {
+        this.smartHome = smartHome;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<SocialProfile> getSocialProfile() {
+        return socialProfile;
+    }
+
+    public void setSocialProfile(List<SocialProfile> socialProfile) {
+        this.socialProfile = socialProfile;
     }
 
     @Override

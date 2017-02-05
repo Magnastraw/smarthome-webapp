@@ -7,21 +7,26 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 @Entity
 @Table(name = "permissions", schema = "public", catalog = "smarthome_db")
 public class Permission implements Serializable {
     private long permissionId;
-    private Collection<GroupPermission> groups;
-    private AbstractObject abstractObject;
-    private Collection<UserPermission> users;
+    private int actionsMask;
+    private long permObject;
+    private User admin;
+    private User user;
+    private Group group;
 
     public Permission() {
     }
 
-    public Permission(AbstractObject abstractObject) {
-        this.abstractObject = abstractObject;
+    public Permission(int actionsMask, long permObject, User admin, User user, Group group) {
+        this.actionsMask = actionsMask;
+        this.permObject = permObject;
+        this.admin = admin;
+        this.user = user;
+        this.group = group;
     }
 
     @Id
@@ -36,32 +41,54 @@ public class Permission implements Serializable {
         this.permissionId = permissionId;
     }
 
-    @OneToMany(mappedBy = "permission")
-    public Collection<GroupPermission> getGroups() {
-        return groups;
+    @Basic
+    @Column(name = "actions_mask", nullable = false)
+    public int getActionsMask() {
+        return actionsMask;
     }
 
-    public void setGroups(Collection<GroupPermission> groups) {
-        this.groups = groups;
+    public void setActionsMask(int actionsMask) {
+        this.actionsMask = actionsMask;
+    }
+
+    @Basic
+    @Column(name = "perm_object", nullable = false)
+    public long getPermObject() {
+        return permObject;
+    }
+
+    public void setPermObject(long permObject) {
+        this.permObject = permObject;
     }
 
     @ManyToOne
-    @JoinColumn(name = "object_id", referencedColumnName = "object_id", nullable = false)
-    public AbstractObject getAbstractObject() {
-        return abstractObject;
+    @JoinColumn(name = "admin_id", referencedColumnName = "user_id", nullable = false)
+    public User getAdmin() {
+        return admin;
     }
 
-    public void setAbstractObject(AbstractObject abstractObject) {
-        this.abstractObject = abstractObject;
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 
-    @OneToMany(mappedBy = "permission")
-    public Collection<UserPermission> getUsers() {
-        return users;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(Collection<UserPermission> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     @Override
@@ -88,7 +115,11 @@ public class Permission implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("permissionId", getPermissionId())
-                .append("abstractObject", getAbstractObject())
+                .append("actionsMask", getActionsMask())
+                .append("permObject", getPermObject())
+                .append("admin", getAdmin())
+                .append("user", getUser())
+                .append("group",getGroup())
                 .toString();
     }
 }

@@ -19,17 +19,6 @@ public class EventHistory implements Serializable {
     private String eventParameters;
     private Event event;
 
-    public EventHistory() {
-    }
-
-    public EventHistory(Timestamp readDate, String eventDescription, int severity, String eventParameters, Event event) {
-        this.readDate = readDate;
-        this.eventDescription = eventDescription;
-        this.severity = severity;
-        this.eventParameters = eventParameters;
-        this.event = event;
-    }
-
     @Id
     @Column(name = "history_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_histiory_seq")
@@ -53,7 +42,7 @@ public class EventHistory implements Serializable {
     }
 
     @Basic
-    @Column(name = "event_description", nullable = false, length = -1)
+    @Column(name = "event_description", nullable = false)
     public String getEventDescription() {
         return eventDescription;
     }
@@ -73,7 +62,7 @@ public class EventHistory implements Serializable {
     }
 
     @Basic
-    @Column(name = "event_parameters", nullable = true, length = -1)
+    @Column(name = "event_parameters", nullable = true)
     public String getEventParameters() {
         return eventParameters;
     }
@@ -83,7 +72,7 @@ public class EventHistory implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumns({@JoinColumn(name = "object_id", referencedColumnName = "event_id", nullable = false), @JoinColumn(name = "event_id", referencedColumnName = "object_id", nullable = false), @JoinColumn(name = "event_type", referencedColumnName = "event_type", nullable = false)})
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id", nullable = false)
     public Event getEvent() {
         return event;
     }
@@ -123,5 +112,4 @@ public class EventHistory implements Serializable {
                 .append("event", getEvent())
                 .toString();
     }
-
 }

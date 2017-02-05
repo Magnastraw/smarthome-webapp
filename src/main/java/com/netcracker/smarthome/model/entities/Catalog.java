@@ -7,24 +7,28 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "catalogs", schema = "public", catalog = "smarthome_db")
 public class Catalog implements Serializable {
     private long catalogId;
     private String catalogName;
-    private Collection<AlarmSpec> alarmSpecs;
+    private List<AlarmSpec> alarmSpecs;
     private Catalog parentCatalog;
-    private Collection<Catalog> catalogs;
-    private Collection<Policy> policies;
+    private List<Catalog> subcatalogs;
+    private SmartHome smartHome;
+    private List<MetricSpec> metricSpecs;
+    private List<SmartObject> objects;
+    private List<Policy> policies;
 
     public Catalog() {
     }
 
-    public Catalog(String catalogName, Catalog parentCatalog) {
+    public Catalog(String catalogName, Catalog parentCatalog, SmartHome smartHome) {
         this.catalogName = catalogName;
         this.parentCatalog = parentCatalog;
+        this.smartHome = smartHome;
     }
 
     @Id
@@ -40,7 +44,7 @@ public class Catalog implements Serializable {
     }
 
     @Basic
-    @Column(name = "catalog_name", nullable = false, length = -1)
+    @Column(name = "catalog_name", nullable = false)
     public String getCatalogName() {
         return catalogName;
     }
@@ -50,11 +54,11 @@ public class Catalog implements Serializable {
     }
 
     @OneToMany(mappedBy = "catalog")
-    public Collection<AlarmSpec> getAlarmSpecs() {
+    public List<AlarmSpec> getAlarmSpecs() {
         return alarmSpecs;
     }
 
-    public void setAlarmSpecs(Collection<AlarmSpec> alarmSpecs) {
+    public void setAlarmSpecs(List<AlarmSpec> alarmSpecs) {
         this.alarmSpecs = alarmSpecs;
     }
 
@@ -69,20 +73,48 @@ public class Catalog implements Serializable {
     }
 
     @OneToMany(mappedBy = "parentCatalog")
-    public Collection<Catalog> getCatalogs() {
-        return catalogs;
+    public List<Catalog> getSubcatalogs() {
+        return subcatalogs;
     }
 
-    public void setCatalogs(Collection<Catalog> catalogs) {
-        this.catalogs = catalogs;
+    public void setSubcatalogs(List<Catalog> subcatalogs) {
+        this.subcatalogs = subcatalogs;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "smart_home_id", referencedColumnName = "smart_home_id", nullable = false)
+    public SmartHome getSmartHome() {
+        return smartHome;
+    }
+
+    public void setSmartHome(SmartHome smartHome) {
+        this.smartHome = smartHome;
     }
 
     @OneToMany(mappedBy = "catalog")
-    public Collection<Policy> getPolicies() {
+    public List<MetricSpec> getMetricSpecs() {
+        return metricSpecs;
+    }
+
+    public void setMetricSpecs(List<MetricSpec> metricSpecs) {
+        this.metricSpecs = metricSpecs;
+    }
+
+    @OneToMany(mappedBy = "catalog")
+    public List<SmartObject> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(List<SmartObject> objects) {
+        this.objects = objects;
+    }
+
+    @OneToMany(mappedBy = "catalog")
+    public List<Policy> getPolicies() {
         return policies;
     }
 
-    public void setPolicies(Collection<Policy> policies) {
+    public void setPolicies(List<Policy> policies) {
         this.policies = policies;
     }
 
@@ -112,7 +144,7 @@ public class Catalog implements Serializable {
                 .append("catalogId", getCatalogId())
                 .append("catalogName", getCatalogName())
                 .append("parentCatalog", getParentCatalog())
+                .append("smartHome", getSmartHome())
                 .toString();
     }
-
 }

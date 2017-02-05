@@ -7,21 +7,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "rules", schema = "public", catalog = "smarthome_db")
 public class Rule implements Serializable {
     private long ruleId;
     private String name;
+    private List<Action> actions;
+    private List<Condition> conditions;
     private Policy policy;
-
-    public Rule() {
-    }
-
-    public Rule(String name, Policy policy) {
-        this.name = name;
-        this.policy = policy;
-    }
 
     @Id
     @Column(name = "rule_id", nullable = false)
@@ -36,13 +31,31 @@ public class Rule implements Serializable {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = -1)
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @OneToMany(mappedBy = "rule")
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }
+
+    @OneToMany(mappedBy = "rule")
+    public List<Condition> getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(List<Condition> conditions) {
+        this.conditions = conditions;
     }
 
     @ManyToOne

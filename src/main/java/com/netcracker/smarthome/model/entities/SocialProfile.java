@@ -13,23 +13,23 @@ import java.io.Serializable;
 @Table(name = "social_profiles", schema = "public", catalog = "smarthome_db")
 @IdClass(SocialProfilePK.class)
 public class SocialProfile implements Serializable {
-    private String userSocialId;
     private long userId;
     private long serviceId;
+    private String userSocialId;
     private User user;
-    private SocialService service;
+    private SocialService socialService;
 
     public SocialProfile() {
     }
 
-    public SocialProfile(String userSocialId, long userId, long serviceId) {
-        this.userSocialId = userSocialId;
+    public SocialProfile(long userId, long serviceId, String userSocialId) {
         this.userId = userId;
         this.serviceId = serviceId;
+        this.userSocialId = userSocialId;
     }
 
-    @Column(name = "user_id", nullable = false)
     @Id
+    @Column(name = "user_id", nullable = false)
     public long getUserId() {
         return userId;
     }
@@ -38,8 +38,8 @@ public class SocialProfile implements Serializable {
         this.userId = userId;
     }
 
-    @Column(name = "service_id", nullable = false)
     @Id
+    @Column(name = "service_id", nullable = false)
     public long getServiceId() {
         return serviceId;
     }
@@ -49,7 +49,7 @@ public class SocialProfile implements Serializable {
     }
 
     @Basic
-    @Column(name = "user_social_id", nullable = false, length = -1)
+    @Column(name = "user_social_id", nullable = false)
     public String getUserSocialId() {
         return userSocialId;
     }
@@ -70,12 +70,12 @@ public class SocialProfile implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "service_id", referencedColumnName = "service_id", nullable = false, insertable = false, updatable = false)
-    public SocialService getService() {
-        return service;
+    public SocialService getSocialService() {
+        return socialService;
     }
 
-    public void setService(SocialService service) {
-        this.service = service;
+    public void setSocialService(SocialService socialService) {
+        this.socialService = socialService;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class SocialProfile implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("userSocialId", getUserSocialId())
                 .append("user", getUser())
-                .append("service", getService())
+                .append("service", getSocialService())
                 .toString();
     }
 }

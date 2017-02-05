@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -7,22 +8,24 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "policies", schema = "public", catalog = "smarthome_db")
 public class Policy implements Serializable {
     private long policyId;
     private String name;
+    private PolicyStatus status;
     private String description;
     private Catalog catalog;
-    private Collection<Rule> rules;
+    private List<Rule> rule;
 
     public Policy() {
     }
 
-    public Policy(String name, String description, Catalog catalog) {
+    public Policy(String name, PolicyStatus status, String description, Catalog catalog) {
         this.name = name;
+        this.status = status;
         this.description = description;
         this.catalog = catalog;
     }
@@ -40,7 +43,7 @@ public class Policy implements Serializable {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = -1)
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -49,8 +52,18 @@ public class Policy implements Serializable {
         this.name = name;
     }
 
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    public PolicyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PolicyStatus status) {
+        this.status = status;
+    }
+
     @Basic
-    @Column(name = "description", nullable = true, length = -1)
+    @Column(name = "description", nullable = true)
     public String getDescription() {
         return description;
     }
@@ -70,12 +83,12 @@ public class Policy implements Serializable {
     }
 
     @OneToMany(mappedBy = "policy")
-    public Collection<Rule> getRules() {
-        return rules;
+    public List<Rule> getRule() {
+        return rule;
     }
 
-    public void setRules(Collection<Rule> rules) {
-        this.rules = rules;
+    public void setRule(List<Rule> rule) {
+        this.rule = rule;
     }
 
     @Override
@@ -103,6 +116,7 @@ public class Policy implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("policyId", getPolicyId())
                 .append("name", getName())
+                .append("status", getStatus())
                 .append("description", getDescription())
                 .append("catalog", getCatalog())
                 .toString();

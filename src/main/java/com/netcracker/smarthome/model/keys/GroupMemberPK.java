@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.model.keys;
 
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -11,14 +10,6 @@ import java.io.Serializable;
 public class GroupMemberPK implements Serializable {
     private long groupId;
     private long userId;
-
-    public GroupMemberPK() {
-    }
-
-    public GroupMemberPK(long groupId, long userId) {
-        this.groupId = groupId;
-        this.userId = userId;
-    }
 
     @Column(name = "group_id", nullable = false)
     @Id

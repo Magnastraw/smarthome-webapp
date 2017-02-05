@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Table(name = "groups_members", schema = "public", catalog = "smarthome_db")
 @IdClass(GroupMemberPK.class)
 public class GroupMember implements Serializable {
-    private boolean isAdmin;
     private long groupId;
     private long userId;
     private Group group;
@@ -22,8 +21,7 @@ public class GroupMember implements Serializable {
     public GroupMember() {
     }
 
-    public GroupMember(boolean isAdmin, long groupId, long userId) {
-        this.isAdmin = isAdmin;
+    public GroupMember(long groupId, long userId) {
         this.groupId = groupId;
         this.userId = userId;
     }
@@ -46,16 +44,6 @@ public class GroupMember implements Serializable {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "is_admin", nullable = false)
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean isAdmin) {
-        isAdmin = isAdmin;
     }
 
     @ManyToOne
@@ -103,10 +91,8 @@ public class GroupMember implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("isAdmin", isAdmin())
                 .append("group", getGroup())
                 .append("user", getUser())
                 .toString();
     }
-
 }

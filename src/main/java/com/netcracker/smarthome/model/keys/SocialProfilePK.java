@@ -11,7 +11,8 @@ public class SocialProfilePK implements Serializable {
     private long userId;
     private long serviceId;
 
-    public SocialProfilePK() {}
+    public SocialProfilePK() {
+    }
 
     public SocialProfilePK(long userId, long serviceId) {
         this.userId = userId;

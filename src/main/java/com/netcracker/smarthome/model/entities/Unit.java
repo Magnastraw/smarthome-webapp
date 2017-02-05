@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "units", schema = "public", catalog = "smarthome_db")
@@ -17,9 +17,9 @@ public class Unit implements Serializable {
     private String unitName;
     private BigInteger baseFactor;
     private String label;
-    private Collection<MetricSpec> metricSpecs;
+    private List<MetricSpec> metricSpecs;
     private Unit parentUnit;
-    private Collection<Unit> subUnits;
+    private List<Unit> subunits;
 
     public Unit() {
     }
@@ -44,7 +44,7 @@ public class Unit implements Serializable {
     }
 
     @Basic
-    @Column(name = "unit_name", nullable = false, length = -1)
+    @Column(name = "unit_name", nullable = false)
     public String getUnitName() {
         return unitName;
     }
@@ -64,7 +64,7 @@ public class Unit implements Serializable {
     }
 
     @Basic
-    @Column(name = "label", nullable = false, length = -1)
+    @Column(name = "label", nullable = false)
     public String getLabel() {
         return label;
     }
@@ -74,11 +74,11 @@ public class Unit implements Serializable {
     }
 
     @OneToMany(mappedBy = "unit")
-    public Collection<MetricSpec> getMetricSpecs() {
+    public List<MetricSpec> getMetricSpecs() {
         return metricSpecs;
     }
 
-    public void setMetricSpecs(Collection<MetricSpec> metricSpecs) {
+    public void setMetricSpecs(List<MetricSpec> metricSpecs) {
         this.metricSpecs = metricSpecs;
     }
 
@@ -93,12 +93,12 @@ public class Unit implements Serializable {
     }
 
     @OneToMany(mappedBy = "parentUnit")
-    public Collection<Unit> getSubUnits() {
-        return subUnits;
+    public List<Unit> getSubunits() {
+        return subunits;
     }
 
-    public void setSubUnits(Collection<Unit> subUnits) {
-        this.subUnits = subUnits;
+    public void setSubunits(List<Unit> subunits) {
+        this.subunits = subunits;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class Unit implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("unitId", getUnitId())
                 .append("unitName", getUnitName())
-                .append("baseFactor", getUnitName())
+                .append("baseFactor", getBaseFactor())
                 .append("label", getLabel())
                 .append("parentUnit", getParentUnit())
                 .toString();

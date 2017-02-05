@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "social_servicies", schema = "public", catalog = "smarthome_db")
@@ -16,7 +16,7 @@ public class SocialService implements Serializable {
     private String serviceName;
     private String clientId;
     private String secretKey;
-    private Collection<SocialProfile> socialProfiles;
+    private List<SocialProfile> socialProfiles;
 
     public SocialService() {
     }
@@ -26,7 +26,6 @@ public class SocialService implements Serializable {
         this.clientId = clientId;
         this.secretKey = secretKey;
     }
-
     @Id
     @Column(name = "service_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ss_seq")
@@ -40,7 +39,7 @@ public class SocialService implements Serializable {
     }
 
     @Basic
-    @Column(name = "service_name", nullable = false, length = -1)
+    @Column(name = "service_name", nullable = false)
     public String getServiceName() {
         return serviceName;
     }
@@ -50,7 +49,7 @@ public class SocialService implements Serializable {
     }
 
     @Basic
-    @Column(name = "client_id", nullable = false, length = -1)
+    @Column(name = "client_id", nullable = false)
     public String getClientId() {
         return clientId;
     }
@@ -60,7 +59,7 @@ public class SocialService implements Serializable {
     }
 
     @Basic
-    @Column(name = "secret_key", nullable = false, length = -1)
+    @Column(name = "secret_key", nullable = false)
     public String getSecretKey() {
         return secretKey;
     }
@@ -69,12 +68,12 @@ public class SocialService implements Serializable {
         this.secretKey = secretKey;
     }
 
-    @OneToMany(mappedBy = "service")
-    public Collection<SocialProfile> getSocialProfiles() {
+    @OneToMany(mappedBy = "socialService")
+    public List<SocialProfile> getSocialProfiles() {
         return socialProfiles;
     }
 
-    public void setSocialProfiles(Collection<SocialProfile> socialProfiles) {
+    public void setSocialProfiles(List<SocialProfile> socialProfiles) {
         this.socialProfiles = socialProfiles;
     }
 
@@ -84,10 +83,10 @@ public class SocialService implements Serializable {
 
         if (!(o instanceof SocialService)) return false;
 
-        SocialService service = (SocialService) o;
+        SocialService that = (SocialService) o;
 
         return new EqualsBuilder()
-                .append(getServiceId(), service.getServiceId())
+                .append(getServiceId(), that.getServiceId())
                 .isEquals();
     }
 

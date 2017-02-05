@@ -1,11 +1,14 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.Channel;
+import com.netcracker.smarthome.model.enums.NotificationStatus;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.CharArrayReader;
 import java.io.Serializable;
 import java.sql.Time;
 
@@ -14,10 +17,11 @@ import java.sql.Time;
 public class Notification implements Serializable {
     private long notificationId;
     private String notificationName;
-    private int notificationStatus;
+    private NotificationStatus notificationStatus;
     private Time time;
-    private int confirm;
-    private User user;
+    private boolean requireConfirm;
+    private Channel channel;
+    private SmartHome smartHome;
     private Alarm alarm;
     private Event event;
     private Metric metric;
@@ -25,12 +29,13 @@ public class Notification implements Serializable {
     public Notification() {
     }
 
-    public Notification(String notificationName, int notificationStatus, Time time, int confirm, User user, Alarm alarm, Event event, Metric metric) {
+    public Notification(String notificationName, NotificationStatus notificationStatus, Time time, boolean requireConfirm, Channel channel, SmartHome smartHome, Alarm alarm, Event event, Metric metric) {
         this.notificationName = notificationName;
         this.notificationStatus = notificationStatus;
         this.time = time;
-        this.confirm = confirm;
-        this.user = user;
+        this.requireConfirm = requireConfirm;
+        this.channel = channel;
+        this.smartHome = smartHome;
         this.alarm = alarm;
         this.event = event;
         this.metric = metric;
@@ -49,7 +54,7 @@ public class Notification implements Serializable {
     }
 
     @Basic
-    @Column(name = "notification_name", nullable = false, length = -1)
+    @Column(name = "notification_name", nullable = false)
     public String getNotificationName() {
         return notificationName;
     }
@@ -58,13 +63,13 @@ public class Notification implements Serializable {
         this.notificationName = notificationName;
     }
 
-    @Basic
     @Column(name = "notification_status", nullable = false)
-    public int getNotificationStatus() {
+    @Enumerated(EnumType.ORDINAL)
+    public NotificationStatus getNotificationStatus() {
         return notificationStatus;
     }
 
-    public void setNotificationStatus(int notificationStatus) {
+    public void setNotificationStatus(NotificationStatus notificationStatus) {
         this.notificationStatus = notificationStatus;
     }
 
@@ -79,23 +84,33 @@ public class Notification implements Serializable {
     }
 
     @Basic
-    @Column(name = "confirm", nullable = false)
-    public int getConfirm() {
-        return confirm;
+    @Column(name = "require_confirm", nullable = false)
+    public boolean isRequireConfirm() {
+        return requireConfirm;
     }
 
-    public void setConfirm(int confirm) {
-        this.confirm = confirm;
+    public void setRequireConfirm(boolean requireConfirm) {
+        this.requireConfirm = requireConfirm;
+    }
+
+    @Column(name = "channel", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
-    public User getUser() {
-        return user;
+    @JoinColumn(name = "smart_home_id", referencedColumnName = "smart_home_id", nullable = false)
+    public SmartHome getSmartHome() {
+        return smartHome;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSmartHome(SmartHome smartHome) {
+        this.smartHome = smartHome;
     }
 
     @ManyToOne
@@ -109,7 +124,7 @@ public class Notification implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumns({@JoinColumn(name = "event_id", referencedColumnName = "event_id"), @JoinColumn(name = "object_id", referencedColumnName = "object_id"), @JoinColumn(name = "event_type", referencedColumnName = "event_type")})
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     public Event getEvent() {
         return event;
     }
@@ -119,7 +134,7 @@ public class Notification implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "metric_id", referencedColumnName = "metric_id", nullable = false)
+    @JoinColumn(name = "metric_id", referencedColumnName = "metric_id")
     public Metric getMetric() {
         return metric;
     }
@@ -155,11 +170,12 @@ public class Notification implements Serializable {
                 .append("notificationName", getNotificationName())
                 .append("notificationStatus", getNotificationStatus())
                 .append("time", getTime())
-                .append("confirm", getConfirm())
-                .append("user", getUser())
+                .append("confirm", isRequireConfirm())
+                .append("user", getSmartHome())
                 .append("alarm", getAlarm())
                 .append("event", getEvent())
                 .append("metric", getMetric())
+                .append("channel", getChannel())
                 .toString();
     }
 }

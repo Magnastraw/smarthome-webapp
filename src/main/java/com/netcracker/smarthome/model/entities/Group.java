@@ -7,15 +7,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "groups", schema = "public", catalog = "smarthome_db")
 public class Group implements Serializable {
     private long groupId;
     private String groupName;
-    private Collection<GroupMember> groupMembers;
-    private Collection<GroupPermission> groupPermissions;
+    private List<GroupMember> groupMembers;
+    private List<Permission> permissions;
 
     public Group() {
     }
@@ -37,7 +37,7 @@ public class Group implements Serializable {
     }
 
     @Basic
-    @Column(name = "group_name", nullable = false, length = -1)
+    @Column(name = "group_name", nullable = false)
     public String getGroupName() {
         return groupName;
     }
@@ -47,21 +47,21 @@ public class Group implements Serializable {
     }
 
     @OneToMany(mappedBy = "group")
-    public Collection<GroupMember> getGroupMembers() {
+    public List<GroupMember> getGroupMembers() {
         return groupMembers;
     }
 
-    public void setGroupMembers(Collection<GroupMember> groupMembers) {
+    public void setGroupMembers(List<GroupMember> groupMembers) {
         this.groupMembers = groupMembers;
     }
 
     @OneToMany(mappedBy = "group")
-    public Collection<GroupPermission> getGroupPermissions() {
-        return groupPermissions;
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setGroupPermissions(Collection<GroupPermission> groupPermissions) {
-        this.groupPermissions = groupPermissions;
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     @Override

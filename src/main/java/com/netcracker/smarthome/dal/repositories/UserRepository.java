@@ -28,13 +28,7 @@ public class UserRepository extends EntityRepository<User> {
     }
 
     public List<Group> getGroups(User user) {
-        Query query = manager.createQuery("select g from Group g join GroupMember gm on g.groupId=gm.groupId where gm.userId = :userId and not gm.admin");
-        query.setParameter("userId", user.getUserId());
-        return query.getResultList();
-    }
-
-    public List<Group> getManagedGroups(User user) {
-        Query query = manager.createQuery("select g from Group g join GroupMember gm on g.groupId=gm.groupId where gm.userId = :userId and gm.admin");
+        Query query = manager.createQuery("select g from Group g join GroupMember gm on g.groupId=gm.groupId where gm.userId = :userId");
         query.setParameter("userId", user.getUserId());
         return query.getResultList();
     }
