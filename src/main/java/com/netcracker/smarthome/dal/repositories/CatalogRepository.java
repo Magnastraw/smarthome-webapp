@@ -15,7 +15,7 @@ public class CatalogRepository extends EntityRepository<Catalog> {
     }
 
     public List<Catalog> getSubcatalogs(Catalog catalog) {
-        Query query = manager.createQuery("select subc from Catalog subc join Catalog c on subc.parentCatalog.catalogId=c.catalogId where c.catalogId=:parentId");
+        Query query = getManager().createQuery("select subc from Catalog subc join Catalog c on subc.parentCatalog.catalogId=c.catalogId where c.catalogId=:parentId");
         query.setParameter("parentId", catalog.getCatalogId());
         return query.getResultList();
     }

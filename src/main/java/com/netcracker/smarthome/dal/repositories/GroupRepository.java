@@ -14,7 +14,7 @@ public class GroupRepository extends EntityRepository<Group> {
     }
 
     public List<User> getMembers(Group group) {
-        Query query = manager.createQuery("select u from User u join GroupMember gm on u.userId=gm.userId where gm.groupId = :groupId");
+        Query query = getManager().createQuery("select u from User u join GroupMember gm on u.userId=gm.userId where gm.groupId = :groupId");
         query.setParameter("groupId", group.getGroupId());
         return query.getResultList();
     }

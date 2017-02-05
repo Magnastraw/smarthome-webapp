@@ -15,20 +15,19 @@ public class UserRepository extends EntityRepository<User> {
     }
 
     public User getByEmail(String email) {
-        Query query = manager.createQuery("select u from User u where u.email = :email");
+        Query query = getManager().createQuery("select u from User u where u.email = :email");
         query.setParameter("email", email);
-        List<User> result = query.getResultList();
-        return result.isEmpty() ? null : result.get(0);
+        return (User)query.getSingleResult();
     }
 
     public List<SocialProfile> getProfiles(User user) {
-        Query query = manager.createQuery("select sp from SocialProfile sp where sp.userId = :userId");
+        Query query = getManager().createQuery("select sp from SocialProfile sp where sp.userId = :userId");
         query.setParameter("userId", user.getUserId());
         return query.getResultList();
     }
 
     public List<Group> getGroups(User user) {
-        Query query = manager.createQuery("select g from Group g join GroupMember gm on g.groupId=gm.groupId where gm.userId = :userId");
+        Query query = getManager().createQuery("select g from Group g join GroupMember gm on g.groupId=gm.groupId where gm.userId = :userId");
         query.setParameter("userId", user.getUserId());
         return query.getResultList();
     }

@@ -14,7 +14,7 @@ public class SocialServiceRepository extends EntityRepository<SocialService> {
     }
 
     public List<SocialProfile> getProfiles(SocialService service) {
-        Query query = manager.createQuery("select sp from SocialProfile sp where sp.serviceId = :serviceId");
+        Query query = getManager().createQuery("select sp from SocialProfile sp where sp.serviceId = :serviceId");
         query.setParameter("serviceId", service.getServiceId());
         return query.getResultList();
     }

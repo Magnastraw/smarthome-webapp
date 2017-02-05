@@ -8,33 +8,37 @@ import java.util.List;
 
 public class EntityRepository<T> {
     @PersistenceContext
-    protected EntityManager manager;
+    private EntityManager manager;
     private Class<T> entityClass;
 
     public EntityRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
+    public EntityManager getManager() {
+        return manager;
+    }
+
     public T get(Object primaryKey) {
-        return manager.find(entityClass, primaryKey);
+        return getManager().find(entityClass, primaryKey);
     }
 
     public List<T> getAll() {
-        return manager.createQuery(String.format("select e from %s e", entityClass.getSimpleName())).getResultList();
+        return getManager().createQuery(String.format("select e from %s e", entityClass.getSimpleName())).getResultList();
     }
 
     @Transactional
     public void save(T entity) {
-        manager.persist(entity);
+        getManager().persist(entity);
     }
 
     @Transactional
     public void update(T entity) {
-        manager.merge(entity);
+        getManager().merge(entity);
     }
 
     @Transactional
     public void delete(Object primaryKey) {
-        manager.remove(get(primaryKey));
+        getManager().remove(get(primaryKey));
     }
 }
