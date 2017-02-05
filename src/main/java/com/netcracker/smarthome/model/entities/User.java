@@ -109,7 +109,7 @@ public class User implements Serializable {
         isTwoFactorAuth = twoFactorAuth;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<GroupMember> getGroupsMembers() {
         return groupsMembers;
     }
@@ -127,7 +127,7 @@ public class User implements Serializable {
         this.managedPermissions = managedPermissions;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Permission> getPermissions() {
         return permissions;
     }
@@ -136,7 +136,7 @@ public class User implements Serializable {
         this.permissions = permissions;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<SmartHome> getSmartHome() {
         return smartHome;
     }
@@ -145,7 +145,7 @@ public class User implements Serializable {
         this.smartHome = smartHome;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<SocialProfile> getSocialProfile() {
         return socialProfile;
     }

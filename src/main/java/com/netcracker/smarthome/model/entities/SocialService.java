@@ -68,7 +68,7 @@ public class SocialService implements Serializable {
         this.secretKey = secretKey;
     }
 
-    @OneToMany(mappedBy = "socialService")
+    @OneToMany(mappedBy = "socialService", cascade = CascadeType.ALL)
     public List<SocialProfile> getSocialProfiles() {
         return socialProfiles;
     }

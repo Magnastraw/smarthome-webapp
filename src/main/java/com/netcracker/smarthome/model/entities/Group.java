@@ -46,7 +46,7 @@ public class Group implements Serializable {
         this.groupName = groupName;
     }
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public List<GroupMember> getGroupMembers() {
         return groupMembers;
     }
@@ -55,7 +55,7 @@ public class Group implements Serializable {
         this.groupMembers = groupMembers;
     }
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     public List<Permission> getPermissions() {
         return permissions;
     }

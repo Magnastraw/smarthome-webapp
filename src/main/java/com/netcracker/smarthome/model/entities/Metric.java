@@ -82,7 +82,7 @@ public class Metric implements Serializable {
         this.smartHome = smartHome;
     }
 
-    @OneToMany(mappedBy = "metric")
+    @OneToMany(mappedBy = "metric", cascade = CascadeType.ALL)
     public List<MetricHistory> getMetricHistory() {
         return metricHistory;
     }
@@ -91,7 +91,7 @@ public class Metric implements Serializable {
         this.metricHistory = metricHistory;
     }
 
-    @OneToMany(mappedBy = "metric")
+    @OneToMany(mappedBy = "metric", cascade = CascadeType.ALL)
     public List<Notification> getNotifications() {
         return notifications;
     }

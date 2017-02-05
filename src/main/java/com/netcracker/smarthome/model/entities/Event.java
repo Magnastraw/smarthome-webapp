@@ -53,7 +53,7 @@ public class Event implements Serializable {
         this.eventType = eventType;
     }
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     public List<Alarm> getAlarms() {
         return alarms;
     }
@@ -92,7 +92,7 @@ public class Event implements Serializable {
         this.smartHome = smartHome;
     }
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     public List<EventHistory> getEventHistory() {
         return eventHistory;
     }
@@ -101,7 +101,7 @@ public class Event implements Serializable {
         this.eventHistory = eventHistory;
     }
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     public List<Notification> getNotifications() {
         return notifications;
     }

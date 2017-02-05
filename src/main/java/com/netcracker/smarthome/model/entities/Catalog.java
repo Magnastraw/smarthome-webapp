@@ -72,7 +72,7 @@ public class Catalog implements Serializable {
         this.parentCatalog = parentCatalog;
     }
 
-    @OneToMany(mappedBy = "parentCatalog")
+    @OneToMany(mappedBy = "parentCatalog", cascade = CascadeType.ALL)
     public List<Catalog> getSubcatalogs() {
         return subcatalogs;
     }
@@ -100,7 +100,7 @@ public class Catalog implements Serializable {
         this.metricSpecs = metricSpecs;
     }
 
-    @OneToMany(mappedBy = "catalog")
+    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
     public List<SmartObject> getObjects() {
         return objects;
     }
@@ -109,7 +109,7 @@ public class Catalog implements Serializable {
         this.objects = objects;
     }
 
-    @OneToMany(mappedBy = "catalog")
+    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
     public List<Policy> getPolicies() {
         return policies;
     }

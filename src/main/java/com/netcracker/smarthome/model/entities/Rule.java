@@ -40,7 +40,7 @@ public class Rule implements Serializable {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "rule")
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     public List<Action> getActions() {
         return actions;
     }
@@ -49,7 +49,7 @@ public class Rule implements Serializable {
         this.actions = actions;
     }
 
-    @OneToMany(mappedBy = "rule")
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
     public List<Condition> getConditions() {
         return conditions;
     }

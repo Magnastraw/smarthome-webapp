@@ -72,7 +72,7 @@ public class SmartObject implements Serializable {
         this.description = description;
     }
 
-    @OneToMany(mappedBy = "object")
+    @OneToMany(mappedBy = "object", cascade = CascadeType.ALL)
     public List<Alarm> getObjectAlarms() {
         return objectAlarms;
     }
@@ -81,7 +81,7 @@ public class SmartObject implements Serializable {
         this.objectAlarms = objectAlarms;
     }
 
-    @OneToMany(mappedBy = "subobject")
+    @OneToMany(mappedBy = "subobject", cascade = CascadeType.ALL)
     public List<Alarm> getSubobjectAlarms() {
         return subobjectAlarms;
     }
@@ -90,7 +90,7 @@ public class SmartObject implements Serializable {
         this.subobjectAlarms = subobjectAlarms;
     }
 
-    @OneToMany(mappedBy = "object")
+    @OneToMany(mappedBy = "object", cascade = CascadeType.ALL)
     public List<Event> getObjectEvents() {
         return objectEvents;
     }
@@ -99,7 +99,7 @@ public class SmartObject implements Serializable {
         this.objectEvents = objectEvents;
     }
 
-    @OneToMany(mappedBy = "subobject")
+    @OneToMany(mappedBy = "subobject", cascade = CascadeType.ALL)
     public List<Event> getSubobjectEvents() {
         return subobjectEvents;
     }
@@ -108,7 +108,7 @@ public class SmartObject implements Serializable {
         this.subobjectEvents = subobjectEvents;
     }
 
-    @OneToMany(mappedBy = "object")
+    @OneToMany(mappedBy = "object", cascade = CascadeType.ALL)
     public List<Metric> getObjectMetrics() {
         return objectMetrics;
     }
@@ -117,7 +117,7 @@ public class SmartObject implements Serializable {
         this.objectMetrics = objectMetrics;
     }
 
-    @OneToMany(mappedBy = "subobject")
+    @OneToMany(mappedBy = "subobject", cascade = CascadeType.ALL)
     public List<Metric> getSubobjectMetrics() {
         return subobjectMetrics;
     }
@@ -126,7 +126,7 @@ public class SmartObject implements Serializable {
         this.subobjectMetrics = subobjectMetrics;
     }
 
-    @OneToMany(mappedBy = "object")
+    @OneToMany(mappedBy = "object", cascade = CascadeType.ALL)
     public List<ObjectParam> getObjectParams() {
         return objectParams;
     }
@@ -155,7 +155,7 @@ public class SmartObject implements Serializable {
         this.parentObject = parentObject;
     }
 
-    @OneToMany(mappedBy = "parentObject")
+    @OneToMany(mappedBy = "parentObject", cascade = CascadeType.ALL)
     public List<SmartObject> getSubobjects() {
         return subobjects;
     }

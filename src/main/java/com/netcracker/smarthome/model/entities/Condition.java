@@ -54,7 +54,7 @@ public class Condition implements Serializable {
         this.operator = operator;
     }
 
-    @OneToMany(mappedBy = "condition")
+    @OneToMany(mappedBy = "condition", cascade = CascadeType.ALL)
     public List<ConditionParam> getConditionParams() {
         return conditionParams;
     }

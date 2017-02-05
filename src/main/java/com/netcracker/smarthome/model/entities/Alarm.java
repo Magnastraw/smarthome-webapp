@@ -179,7 +179,7 @@ public class Alarm implements Serializable {
         this.parentAlarm = parentAlarm;
     }
 
-    @OneToMany(mappedBy = "parentAlarm")
+    @OneToMany(mappedBy = "parentAlarm", cascade = CascadeType.ALL)
     public List<Alarm> getSubAlarms() {
         return subAlarms;
     }
@@ -188,7 +188,7 @@ public class Alarm implements Serializable {
         this.subAlarms = subAlarms;
     }
 
-    @OneToMany(mappedBy = "alarm")
+    @OneToMany(mappedBy = "alarm", cascade = CascadeType.ALL)
     public List<Notification> getNotifications() {
         return notifications;
     }
