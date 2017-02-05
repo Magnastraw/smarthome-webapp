@@ -1,18 +1,17 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:form>
 
         <p:outputPanel id="menuPanel" style="border:none;font-size:small;padding:0;" >
-            <p:panelMenu stateful="false"
-                         ajax="true" type="sliding" backLabel="Back">
+            <p:panelMenu ajax="true" type="sliding" backLabel="Back">
                 <p:submenu label="Configure">
                     <p:submenu label="Configure1">
-                        <p:menuitem value="Something"
-                                    url="#"/>
+                        <p:menuitem value="Registration"
+                                    url="index.xhtml"/>
                     </p:submenu>
                     <p:menuitem value="Policy"
                                 url="#"/>
@@ -22,10 +21,10 @@
                                 url="#"/>
                 </p:submenu>
                 <p:submenu label="Catalog 2">
-                    <p:menuitem value="Welcome Page"
-                                url="/"/>
+                    <p:menuitem value="Graph"
+                                url="graph.xhtml"/>
                     <p:menuitem value="User table"
-                                url="faces/table.xhtml"/>
+                                url="table.xhtml"/>
                 </p:submenu>
 
             </p:panelMenu>

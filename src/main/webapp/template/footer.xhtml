@@ -1,11 +1,22 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
-    <div style='margin-right: auto; margin-left: auto;text-align: center'>
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <div style="margin-right: auto; margin-left: auto;text-align: center">
         <h:outputText value="Footer"/>
+        <!--<h:form id="form2">-->
+            <!--<f:ajax render=":centerContentPanel" execute="@this">-->
+                <!--<h:commandLink value="page1" action="#{navigationBean.doNav}" >-->
+                    <!--<f:param name="test" value="faces/graph" />-->
+                <!--</h:commandLink>-->
+                <!---->
+                <!--<h:commandLink value="page2" action="#{navigationBean.doNav}" >-->
+                    <!--<f:param name="test" value="faces/table" />-->
+                <!--</h:commandLink>-->
+            <!--</f:ajax>-->
+        <!--</h:form>-->
     </div>
 </ui:composition>

@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<!--Define component's attribute-->
+<cc:interface>
+    <cc:attribute name="width"/>
+    <cc:attribute name="heigth"/>
+    <cc:attribute name="title"/>
+    <cc:attribute name="subTitle"/>
+    <cc:attribute name="yLabel"/>
+    <cc:attribute name="xLabel"/>
+    <cc:attribute name="xMinTickInterval"/>
+</cc:interface>
+
+<!--Define component-->
+<cc:implementation>
+    <div id="#{cc.id}_chartDiv" style="width:#{cc.attrs.width}; height: #{cc.attrs.heigth}">
+
+        <!--Google highchart example-->
+        <script type="text/javascript">
+            $(function () {
+                var options = {
+                    credits: {
+                        enabled: false
+                    },
+                    chart: {
+                        renderTo: '#{cc.id}_chartDiv',
+                        zoomType: 'x',
+                        width: 720
+                        //margin: [50, 50, 100, 80]
+                    },
+                    title: {
+                        text: '#{cc.attrs.title}'
+                    },
+                    subtitle: {
+                        text: '#{cc.attrs.subTitle}'
+                    },
+                    xAxis: {
+                        title: {
+                            enabled: true,
+                            text: '#{cc.attrs.xLabel}'
+                        },
+                        minTickInterval: '#{cc.attrs.xMinTickInterval}'
+                    },
+                    yAxis: {
+                        title: {
+                            text: '#{cc.attrs.yLabel}'
+                        }
+                    },
+                    series: [{
+                        name: 'Jane',
+                        data: [1, 0, 4]
+                    }, {
+                        name: 'John',
+                        data: [5, 7, 3]
+                    }],
+                    legend: {
+                        enabled: false
+                    }
+                };
+                if (typeof options.series !== "undefined") {
+                    if (options.series.length > 1) {
+                        options.legend.enabled = true;
+                    }
+                    var chart = new Highcharts.Chart(options);
+                }
+            });
+        </script>
+    </div>
+</cc:implementation>
+</html>

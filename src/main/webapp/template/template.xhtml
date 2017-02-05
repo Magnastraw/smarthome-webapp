@@ -1,19 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <f:view contentType="text/html" id="fview">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
     <title>Template example</title>
     <ui:debug/>
+
     <f:metadata>
         <ui:insert name="metadata"/>
     </f:metadata>
+
+    <h:outputScript name="/javascript/jquery-3.1.1.min.js"/>
+    <h:outputScript name="/javascript/highcharts.js"/>
 
     <h:head>
 
@@ -25,10 +30,6 @@
 
             .ui-layout-north .ui-layout-unit-content {
                 overflow: visible !important;
-            }
-
-            body {
-                background-color: #FFFFFF;
             }
 
         </style>
@@ -44,14 +45,19 @@
             </p:layoutUnit>
 
             <p:layoutUnit styleClass="layoutUnitCenter" position="center">
+                <h:panelGroup id="centerContentPanel" layout="block">
+                    <h:form id="registerForm">
+                        <ui:insert name="regContent"/>
+                    </h:form>
 
-                <h:form id="registerForm">
-                    <ui:insert name="regContent"/>
-                </h:form>
+                    <h:form id="tableForm">
+                        <ui:insert name="tableContent"/>
+                    </h:form>
 
-                <h:form id="tableForm">
-                    <ui:insert name="tableContent"/>
-                </h:form>
+                    <h:form id="chartForm">
+                        <ui:insert name="chartContent"/>
+                    </h:form>
+                </h:panelGroup>
             </p:layoutUnit>
 
             <p:layoutUnit position="south" resizable="true" id="south">

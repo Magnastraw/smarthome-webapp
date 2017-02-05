@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="../template/template.xhtml"
+                xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/mycharts">
+    <ui:define name="chartContent">
+        <mycharts:mychart id="component" heigth="600" width="600" title="Magic Title" subTitle="Sub title" yLabel="y" xLabel="x" xMinTickInterval="0.5"/>
+    </ui:define>
+</ui:composition>
