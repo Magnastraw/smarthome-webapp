@@ -3,51 +3,50 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="../template/template.xhtml">
-    <ui:define name="tableContent">
-        <p:dataTable id="users" var="user" value="#{userMB.usersList}" style="width: 50%">
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="ID"/>
-                </f:facet>
-                <h:outputText value="#{user.userId}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="First name"/>
-                </f:facet>
-                <h:outputText value="#{user.firstName}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="Last name"/>
-                </f:facet>
-                <h:outputText value="#{user.lastName}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="Phone number"/>
-                </f:facet>
-                <h:outputText value="#{user.phoneNumber}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="Email"/>
-                </f:facet>
-                <h:outputText value="#{user.email}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="Pass"/>
-                </f:facet>
-                <h:outputText value="#{user.encrPassword}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="TwoFactor"/>
-                </f:facet>
-                <h:outputText value="#{user.twoFactorAuth}"/>
-            </p:column>
-        </p:dataTable>
-    </ui:define>
+>
+    <p:dataTable id="users" var="user" value="#{userMB.usersList}" style="width: 50%">
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="ID"/>
+            </f:facet>
+            <h:outputText value="#{user.userId}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="First name"/>
+            </f:facet>
+            <h:outputText value="#{user.firstName}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Last name"/>
+            </f:facet>
+            <h:outputText value="#{user.lastName}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Phone number"/>
+            </f:facet>
+            <h:outputText value="#{user.phoneNumber}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Email"/>
+            </f:facet>
+            <h:outputText value="#{user.email}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Pass"/>
+            </f:facet>
+            <h:outputText value="#{user.encrPassword}"/>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="TwoFactor"/>
+            </f:facet>
+            <h:outputText value="#{user.twoFactorAuth}"/>
+        </p:column>
+    </p:dataTable>
+
 </ui:composition>

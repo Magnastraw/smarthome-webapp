@@ -6,66 +6,59 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<f:view contentType="text/html" id="fview">
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<h:head>
 
-    <title>Template example</title>
+    <meta http-equiv="Content-Type" content="text/html/js; charset=utf-8"/>
+    <title>Template</title>
+
+
     <ui:debug/>
 
     <f:metadata>
         <ui:insert name="metadata"/>
     </f:metadata>
 
-    <h:outputScript name="/javascript/jquery-3.1.1.min.js"/>
-    <h:outputScript name="/javascript/highcharts.js"/>
+    <style type="text/css">
+        .ui-layout-north {
+            z-index: 20 !important;
+            overflow: visible !important;;
+        }
 
-    <h:head>
+        .ui-layout-north .ui-layout-unit-content {
+            overflow: visible !important;
+        }
 
-        <style type="text/css">
-            .ui-layout-north {
-                z-index: 20 !important;
-                overflow: visible !important;;
-            }
+    </style>
+</h:head>
 
-            .ui-layout-north .ui-layout-unit-content {
-                overflow: visible !important;
-            }
-
-        </style>
-
-        <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
-            <p:layoutUnit position="north" id="north">
+<h:body>
+    <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
+        <p:layoutUnit position="north" id="north">
+            <h:form>
                 <ui:include src="header.xhtml"/>
-            </p:layoutUnit>
+            </h:form>
+        </p:layoutUnit>
 
-            <p:layoutUnit position="west" id="west" header="My Home" minSize="250">
-
+        <p:layoutUnit position="west" id="west" header="My Home" minSize="250">
+            <h:form>
                 <ui:include src="menu.xhtml"/>
-            </p:layoutUnit>
+            </h:form>
+        </p:layoutUnit>
 
-            <p:layoutUnit styleClass="layoutUnitCenter" position="center">
-                <h:panelGroup id="centerContentPanel" layout="block">
-                    <h:form id="registerForm">
-                        <ui:insert name="regContent"/>
-                    </h:form>
+        <p:layoutUnit id="center" styleClass="layoutUnitCenter" position="center">
+            <h:form id="centerForm">
+                <ui:include src="/faces/#{navigationBean.pageName}.xhtml"/>
+            </h:form>
+        </p:layoutUnit>
 
-                    <h:form id="tableForm">
-                        <ui:insert name="tableContent"/>
-                    </h:form>
-
-                    <h:form id="chartForm">
-                        <ui:insert name="chartContent"/>
-                    </h:form>
-                </h:panelGroup>
-            </p:layoutUnit>
-
-            <p:layoutUnit position="south" resizable="true" id="south">
+        <p:layoutUnit position="south" resizable="true" id="south">
+            <h:form>
                 <ui:include src="footer.xhtml"/>
-            </p:layoutUnit>
-        </p:layout>
+            </h:form>
+        </p:layoutUnit>
+    </p:layout>
+    <h:outputScript name="javascript/highcharts.js"/>
+</h:body>
 
-    </h:head>
-
-</f:view>
 </html>
