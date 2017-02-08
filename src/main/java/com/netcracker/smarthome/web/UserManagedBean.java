@@ -2,6 +2,7 @@ package com.netcracker.smarthome.web;
 
 
 import com.netcracker.smarthome.model.User;
+import org.primefaces.json.JSONArray;
 import org.springframework.dao.DataAccessException;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +24,8 @@ public class UserManagedBean implements Serializable {
     @ManagedProperty(value = "#{UserService}")
     UserService userService;
 
-    List<User> usersList;
+    private List<User> usersList;
+    private String jsonData;
 
     private User user = new User();
 
@@ -35,12 +37,11 @@ public class UserManagedBean implements Serializable {
     /**
      * Add User
      *
-     * @return String - Response Message
+     *
      */
-    public String addUser() {
+    public void addUser() {
             user.setUserId(0);
             getUserService().addUser(user);
-            return TABLE;
     }
 
     /**
@@ -65,6 +66,32 @@ public class UserManagedBean implements Serializable {
         usersList = new ArrayList<User>();
         usersList.addAll(getUserService().getUsers());
         return usersList;
+    }
+
+    public String getJsonData() {
+        //id from users
+        JSONArray usersArray = new JSONArray();
+        for(User user :getUserService().getUsers()){
+            JSONArray userArray = new JSONArray();
+            userArray.put(user.getUserId());
+            userArray.put(user.getUserId());
+            usersArray.put(userArray);
+        }
+        System.out.println(usersArray);
+        //test data
+        String s = "[\n" +
+                "[1,12],\n" +
+                "[2,5],\n" +
+                "[3,18],\n" +
+                "[4,13],\n" +
+                "[5,7],\n" +
+                "[6,4],\n" +
+                "[7,9],\n" +
+                "[8,10],\n" +
+                "[9,15],\n" +
+                "[10,22]\n" +
+                "]";
+        return usersArray.toString();
     }
 
     /**

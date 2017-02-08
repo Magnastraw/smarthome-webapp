@@ -10,7 +10,8 @@
             <p:submenu label="Configure">
                 <p:submenu label="Configure1">
                     <p:menuitem value="Registration"
-                                url="index.xhtml"/>
+                                action="#{navigationBean.setPageName('index')}"
+                                update=":centerForm"/>
                 </p:submenu>
                 <p:menuitem value="Policy"
                             url="#"/>
