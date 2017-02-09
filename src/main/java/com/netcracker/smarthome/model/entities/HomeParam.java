@@ -11,21 +11,31 @@ import java.io.Serializable;
 @Entity
 @Table(name = "home_params", schema = "public", catalog = "smarthome_db")
 public class HomeParam implements Serializable {
-    private String paramId;
+    private long paramId;
     private String name;
     private String value;
     private SmartHome smartHome;
     private DataType dataType;
 
+    public HomeParam() {
+    }
+
+    public HomeParam(String name, String value, SmartHome smartHome, DataType dataType) {
+        this.name = name;
+        this.value = value;
+        this.smartHome = smartHome;
+        this.dataType = dataType;
+    }
+
     @Id
     @Column(name = "param_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "h_param_seq")
     @SequenceGenerator(name = "h_param_seq", sequenceName = "home_params_param_id_seq", allocationSize = 1)
-    public String getParamId() {
+    public long getParamId() {
         return paramId;
     }
 
-    public void setParamId(String paramId) {
+    public void setParamId(long paramId) {
         this.paramId = paramId;
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "condition_types", schema = "public", catalog = "smarthome_db")
 public class ConditionType implements Serializable {
-    private String typeId;
+    private long typeId;
     private String name;
     private String description;
     private String conditionClass;
@@ -31,11 +31,11 @@ public class ConditionType implements Serializable {
     @Column(name = "type_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "c_type_seq")
     @SequenceGenerator(name = "c_type_seq", sequenceName = "condition_types_type_id_seq", allocationSize = 1)
-    public String getTypeId() {
+    public long getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(String typeId) {
+    public void setTypeId(long typeId) {
         this.typeId = typeId;
     }
 

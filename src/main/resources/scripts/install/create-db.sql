@@ -2,7 +2,7 @@
 CREATE SEQUENCE public.condition_types_type_id_seq;
 
 CREATE TABLE public.condition_types (
-  type_id VARCHAR NOT NULL DEFAULT nextval('public.condition_types_type_id_seq'),
+  type_id BIGINT NOT NULL DEFAULT nextval('public.condition_types_type_id_seq'),
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
   condition_class VARCHAR NOT NULL,
@@ -214,7 +214,7 @@ CREATE SEQUENCE public.conditions_condition_id_seq;
 CREATE TABLE public.conditions (
   condition_id BIGINT NOT NULL DEFAULT nextval('public.conditions_condition_id_seq'),
   rule_id BIGINT NOT NULL,
-  type_id VARCHAR NOT NULL,
+  type_id BIGINT NOT NULL,
   next_condition_id BIGINT,
   operator INTEGER,
   CONSTRAINT conditions_pk PRIMARY KEY (condition_id)
@@ -226,7 +226,7 @@ ALTER SEQUENCE public.conditions_condition_id_seq OWNED BY public.conditions.con
 CREATE SEQUENCE public.condition_params_param_id_seq;
 
 CREATE TABLE public.condition_params (
-  param_id VARCHAR NOT NULL DEFAULT nextval('public.condition_params_param_id_seq'),
+  param_id BIGINT NOT NULL DEFAULT nextval('public.condition_params_param_id_seq'),
   name VARCHAR NOT NULL,
   value VARCHAR NOT NULL,
   condition_id BIGINT NOT NULL,
@@ -379,7 +379,7 @@ ALTER SEQUENCE public.metrics_history_id_seq OWNED BY public.metrics_history.his
 CREATE SEQUENCE public.home_params_param_id_seq;
 
 CREATE TABLE public.home_params (
-  param_id VARCHAR NOT NULL DEFAULT nextval('public.home_params_param_id_seq'),
+  param_id BIGINT NOT NULL DEFAULT nextval('public.home_params_param_id_seq'),
   smart_home_id BIGINT NOT NULL,
   name VARCHAR NOT NULL,
   value VARCHAR NOT NULL,

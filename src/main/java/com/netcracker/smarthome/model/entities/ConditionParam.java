@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "condition_params", schema = "public", catalog = "smarthome_db")
 public class ConditionParam implements Serializable {
-    private String paramId;
+    private long paramId;
     private String name;
     private String value;
     private Condition condition;
@@ -29,11 +29,11 @@ public class ConditionParam implements Serializable {
     @Column(name = "param_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "c_param_seq")
     @SequenceGenerator(name = "c_param_seq", sequenceName = "condition_params_param_id_seq", allocationSize = 1)
-    public String getParamId() {
+    public long getParamId() {
         return paramId;
     }
 
-    public void setParamId(String paramId) {
+    public void setParamId(long paramId) {
         this.paramId = paramId;
     }
 
