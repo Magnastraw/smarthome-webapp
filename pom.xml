@@ -13,6 +13,7 @@
     <spring.version>4.3.4.RELEASE</spring.version>
     <hibernate.version>5.2.5.Final</hibernate.version>
     <jsf.version>2.2.4</jsf.version>
+    <catalina.home>${env.CATALINA_HOME}</catalina.home>
   </properties>
   <dependencies>
     <dependency>
@@ -64,6 +65,11 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.22</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
