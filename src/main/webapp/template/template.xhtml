@@ -21,9 +21,8 @@
     <style type="text/css">
         .ui-layout-north {
             z-index: 20 !important;
-            overflow: visible !important;;
+            overflow: visible !important;
         }
-
         .ui-layout-north .ui-layout-unit-content {
             overflow: visible !important;
         }
@@ -32,7 +31,7 @@
 </h:head>
 
 <h:body>
-    <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
+    <p:layout id="mainPage" fullPage="true" style="background-color:#FFFFFF;">
         <p:layoutUnit position="north" id="north">
             <h:form>
                 <ui:include src="header.xhtml"/>
@@ -51,13 +50,14 @@
             </h:form>
         </p:layoutUnit>
 
-        <p:layoutUnit position="south" resizable="true" id="south">
-            <h:form>
+        <p:layoutUnit position="south" id="south">
+            <h:form id="contentNorth">
                 <ui:include src="footer.xhtml"/>
             </h:form>
         </p:layoutUnit>
     </p:layout>
     <h:outputScript name="javascript/highcharts.js"/>
+    <h:outputScript name="javascript/exporting.js"/>
 </h:body>
 
 </html>

@@ -3,7 +3,6 @@ package com.netcracker.smarthome.web;
 
 import com.netcracker.smarthome.model.User;
 import org.primefaces.json.JSONArray;
-import org.springframework.dao.DataAccessException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

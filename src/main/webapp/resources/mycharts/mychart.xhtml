@@ -3,7 +3,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://java.sun.com/jsf/html">
 
 <!--Define component's attribute-->
 <cc:interface>
@@ -18,52 +18,124 @@
 
 <!--Define component-->
 <cc:implementation>
-    <h:inputHidden id="chart_input_data" value="#{cc.attrs.data}" />
 
-    <div id="#{cc.id}_chartDiv" style="width:#{cc.attrs.width}; height: #{cc.attrs.heigth}">
+    <style type="text/css">
+        .modal {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.7);
+            overflow: visible;
+        }
 
-        <!--Google highchart example-->
-        <script type="text/javascript">
-            var data_for_chart = $.parseJSON($('input[id$="chart_input_data"]').val());
+        .modal .chart {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            -ms-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 90% !important;
+            height: 90% !important;
+            padding: 10px;
+            background-color: #FFF;
+            border: 5px solid #CCC;
+            box-shadow: #000 0 2px 18px;
+        }
 
-            $(function () {
+        .ui-layout-center-visible {
+            z-index: 21 !important;
+            overflow: visible !important;
+        }
 
-                var options = {
-                    credits: {
-                        enabled: false
-                    },
-                    chart: {
-                        renderTo: '#{cc.id}_chartDiv',
-                        zoomType: 'x',
-                        type : 'spline'
-                    },
-                    title: {
-                        text: '#{cc.attrs.title}'
-                    },
-                    subtitle: {
-                        text: '#{cc.attrs.subTitle}'
-                    },
-                    xAxis: {
+        .ui-layout-unit-content-visible {
+            overflow: visible !important;
+        }
+    </style>
+
+    <h:inputHidden id="chart_input_data" value="#{cc.attrs.data}"/>
+    <div class="chart-container">
+
+        <div id="#{cc.id}_chartDiv" class="chart" style="width: #{cc.attrs.width}; height: #{cc.attrs.heigth};  margin-right: auto; margin-left: auto;">
+
+            <!--Google highchart example-->
+            <script type="text/javascript">
+                var data_for_chart = $.parseJSON($('input[id$="chart_input_data"]').val());
+
+                $.extend(Highcharts.Renderer.prototype.symbols, {
+                    symbolFullscreen: function (x,y,w,h){return[
+                                                    'M',x,y+(3*h)/5,
+                                                    'L',x,y+h,
+                                                    'L',x+2*w/5,y+h,
+                                                    'M',x,y+h,
+                                                    'L',x+w,y,
+                                                    'M',x+(3*w)/5,y,
+                                                    'L',x+w,y,
+                                                    'L',x+w,y+(2*h/5)
+                                                            ]}
+                });
+
+                $(function () {
+                    var options = {
+                        credits: {
+                            enabled: false
+                        },
+                        chart: {
+                            renderTo: '#{cc.id}_chartDiv',
+                            zoomType: 'x',
+                            type: 'spline'
+                        },
                         title: {
-                            text: '#{cc.attrs.xLabel}'
+                            text: '#{cc.attrs.title}'
+                        },
+                        subtitle: {
+                            text: '#{cc.attrs.subTitle}'
+                        },
+                        xAxis: {
+                            title: {
+                                text: '#{cc.attrs.xLabel}'
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: '#{cc.attrs.yLabel}'
+                            }
+                        },
+                        lang: {
+                            fullscreenTooltip: "Fullscreen"
+                        },
+                        exporting: {
+                            buttons: {
+                                customButton: {
+                                    _titleKey : "fullscreenTooltip",
+                                    x: -40,
+                                    onclick: function () {
+                                        $('.ui-layout-center').toggleClass('ui-layout-center-visible');
+                                        $('.ui-layout-center .ui-layout-unit-content').toggleClass('ui-layout-unit-content-visible');
+                                        $('.chart-container').toggleClass('modal');
+                                        chart.reflow();
+                                    },
+                                    symbol: 'symbolFullscreen'
+                                }
+                            }
+                        },
+                        series: [{}]
+                    };
+
+
+                    if (typeof options.series !== "undefined") {
+                        if (options.series.length > 1) {
+                            options.legend.enabled = true;
                         }
-                    },
-                    yAxis: {
-                        title: {
-                            text: '#{cc.attrs.yLabel}'
-                        }
-                    },
-                    series: [{}]
-                };
-                if (typeof options.series !== "undefined") {
-                    if (options.series.length > 1) {
-                        options.legend.enabled = true;
+                        options.series[0].data = data_for_chart;
+                        var chart = new Highcharts.Chart(options);
                     }
-                    options.series[0].data = data_for_chart;
-                    var chart = new Highcharts.Chart(options);
-                }
-            });
-        </script>
+                });
+            </script>
+        </div>
     </div>
 </cc:implementation>
 </html>
