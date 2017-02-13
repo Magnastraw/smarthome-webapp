@@ -1,0 +1,70 @@
+.center-block {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.login {
+    width: 400px;
+}
+
+.reg {
+    width: 450px;
+}
+
+.center-block.login {
+    height: 300px;
+}
+
+.center-block.reg {
+    top: 25%;
+    height: 500px;
+}
+
+.center-block table {
+    text-align: left;
+    width: 100%;
+}
+
+.center-block table input {
+    width: 100%;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+.link {
+    /*text-decoration: none;*/
+    margin-top: 10px;
+    display: block;
+}
+
+.alert-block {
+    margin: 0 auto;
+}
+
+.alert {
+    margin: 10px auto !important;
+}
+
+.social-btns-block {
+    margin: 10px auto 0;
+}
+
+.social-btn {
+    display: inline-block;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.tip {
+    font-size: small;
+    font-style: italic;
+    margin: 0px 0px 5px;
+    display: block;
+}

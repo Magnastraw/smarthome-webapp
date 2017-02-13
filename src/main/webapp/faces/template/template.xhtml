@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html/js; charset=utf-8"/>
+    <title>Template</title>
+    <f:metadata>
+        <ui:insert name="metadata"/>
+    </f:metadata>
+    <style type="text/css">
+        .ui-layout-north {
+            z-index: 20 !important;
+            overflow: visible !important;;
+        }
+
+        .ui-layout-north .ui-layout-unit-content {
+            overflow: visible !important;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
+        <p:layoutUnit position="north" id="north">
+            <h:form>
+                <ui:include src="header.xhtml"/>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" id="west" header="My Home" minSize="250">
+            <h:form>
+                <ui:include src="menu.xhtml"/>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit id="center" styleClass="layoutUnitCenter" position="center">
+            <h:form id="centerForm">
+                <ui:include src="#{navigationBean.pageName}.xhtml"/>
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="south" resizable="true" id="south">
+            <h:form>
+                <ui:include src="footer.xhtml"/>
+            </h:form>
+        </p:layoutUnit>
+    </p:layout>
+</h:body>
+
+</html>

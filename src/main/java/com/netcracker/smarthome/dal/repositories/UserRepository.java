@@ -17,7 +17,8 @@ public class UserRepository extends EntityRepository<User> {
     public User getByEmail(String email) {
         Query query = getManager().createQuery("select u from User u where u.email = :email");
         query.setParameter("email", email);
-        return (User)query.getSingleResult();
+        List<User> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public List<SocialProfile> getProfiles(User user) {

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Smarthome</title>
+    <h:outputStylesheet name="css/style.css"/>
+</h:head>
+<h:body>
+    <h:form>
+        <div class="alert-block reg">
+            <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true" globalOnly="true"
+                        showIcon="false"
+                        styleClass="alert"/>
+            <p:message for="email" display="text" styleClass="alert"/>
+            <p:message for="password" display="text" styleClass="alert"/>
+        </div>
+        <div class="center-block reg">
+            <p:panel header="Registration">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="email" value="Email:"/>
+                    <p:inputText id="email" value="#{registrationBean.user.email}" required="true"
+                                 requiredMessage="The email is required!"
+                                 validatorMessage="Incorrect email format!">
+                        <f:validateRegex
+                                pattern="^[a-zA-Z0-9]+[_.-]*[a-zA-Z0-9]+@[a-zA-Z]+-*[a-zA-Z0-9]\.[a-zA-Z]{2,}$"/>
+                        <p:clientValidator/>
+                    </p:inputText>
+                    <p:outputLabel for="password" value="Password:"/>
+                    <p:password id="password" value="#{registrationBean.user.encrPassword}" required="true"
+                                requiredMessage="The password is required!"
+                                validatorMessage="The password must be at least 6 characters!">
+                        <f:validateLength minimum="6"/>
+                        <p:clientValidator/>
+                    </p:password>
+                    <h:outputText/>
+                    <h:outputText styleClass="tip" value="at least 6 characters"/>
+                    <p:outputLabel for="firstname" value="First name:"/>
+                    <p:inputText id="firstname" value="#{registrationBean.user.firstName}"/>
+                    <p:outputLabel for="lastname" value="Last name:"/>
+                    <p:inputText id="lastname" value="#{registrationBean.user.lastName}"/>
+                    <p:outputLabel for="phone" value="Phone:"/>
+                    <p:inputMask id="phone" value="#{registrationBean.user.phoneNumber}" mask="+79999999999"/>
+                    <p:outputLabel for="auth" value="Two factor authentication: "/>
+                    <p:selectBooleanCheckbox id="auth" value="#{registrationBean.user.twoFactorAuth}"/>
+                </h:panelGrid>
+                <p:commandButton value="Submit" action="#{registrationBean.save}" ajax="false" icon="ui-icon-check"
+                                 styleClass="btn" validateClient="true"/>
+            </p:panel>
+        </div>
+    </h:form>
+</h:body>
+</html>

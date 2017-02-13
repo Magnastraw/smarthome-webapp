@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,14 +23,14 @@ public class User implements Serializable {
     private List<GroupMember> groupsMembers;
     private List<Permission> managedPermissions;
     private List<Permission> permissions;
-    private List<SmartHome> smartHome;
-    private List<SocialProfile> socialProfile;
+    private List<SmartHome> smartHomes;
+    private List<SocialProfile> socialProfiles;
 
     public User() {
     }
 
     public User(String email, String encrPassword, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth) {
-        this.email = email;
+        this.email = email.toLowerCase();
         this.encrPassword = encrPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -56,7 +57,7 @@ public class User implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     @Basic
@@ -137,21 +138,21 @@ public class User implements Serializable {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public List<SmartHome> getSmartHome() {
-        return smartHome;
+    public List<SmartHome> getSmartHomes() {
+        return smartHomes;
     }
 
-    public void setSmartHome(List<SmartHome> smartHome) {
-        this.smartHome = smartHome;
+    public void setSmartHomes(List<SmartHome> smartHome) {
+        this.smartHomes = smartHome;
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    public List<SocialProfile> getSocialProfile() {
-        return socialProfile;
+    public List<SocialProfile> getSocialProfiles() {
+        return socialProfiles;
     }
 
-    public void setSocialProfile(List<SocialProfile> socialProfile) {
-        this.socialProfile = socialProfile;
+    public void setSocialProfiles(List<SocialProfile> socialProfile) {
+        this.socialProfiles = socialProfile;
     }
 
     @Override

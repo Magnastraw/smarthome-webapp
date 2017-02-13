@@ -1,0 +1,29 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:outputPanel id="menuPanel" style="border:none;font-size:small;padding:0;">
+        <p:panelMenu ajax="true" type="sliding" backLabel="Back">
+            <p:submenu label="Configure">
+                <p:menuitem value="Policy"
+                            url="#"/>
+                <p:menuitem value="Specification"
+                            url="#"/>
+                <p:menuitem value="Houses"
+                            url="#"/>
+            </p:submenu>
+            <p:submenu label="Catalog 2">
+                <p:menuitem value="Graph"
+                            action="#{navigationBean.setPageName('graph')}"
+                            update=":centerForm"/>
+                <p:menuitem value="User table"
+                            action="#{navigationBean.setPageName('table')}"
+                            update=":centerForm"/>
+            </p:submenu>
+        </p:panelMenu>
+    </p:outputPanel>
+
+</ui:composition>
+
+

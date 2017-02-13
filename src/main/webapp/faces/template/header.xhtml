@@ -1,0 +1,31 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:menubar style="border: none">
+        <p:submenu label="Smarthome" icon="fa fa-home">
+            <p:menuitem value="Home 1" action="#{navigationBean.setPageName('table')}" update=":centerForm"/>
+            <p:menuitem value="Home 2" url="#"/>
+            <p:separator/>
+            <p:menuitem value="Add home..." url="#" icon="fa fa-plus"/>
+        </p:submenu>
+
+        <p:submenu label="Help" icon="fa fa-question">
+            <p:menuitem value="Contents" url="#"/>
+        </p:submenu>
+
+        <p:submenu label="Settings" icon="fa fa-gears">
+            <p:menuitem value="User profile" url="#" icon="fa fa-user"/>
+            <p:menuitem value="Home profile" url="#" icon="fa fa-gear"/>
+        </p:submenu>
+
+        <f:facet name="options">
+            <p:inputText style="margin-right:10px" placeholder="Search"/>
+            <p:commandButton value="Logout" action="#{userAccountBean.logout}" icon="ui-icon-extlink" ajax="false"/>
+        </f:facet>
+    </p:menubar>
+
+</ui:composition>

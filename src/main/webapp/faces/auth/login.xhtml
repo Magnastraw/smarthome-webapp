@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Smarthome</title>
+    <h:outputStylesheet name="css/style.css"/>
+</h:head>
+<h:body>
+    <h:form>
+        <div class="alert-block login">
+            <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true" globalOnly="true" showIcon="false" styleClass="alert"/>
+            <p:message for="email" display="text" styleClass="alert"/>
+            <p:message for="password" display="text" styleClass="alert"/>
+        </div>
+        <div class="center-block login">
+            <p:panel header="Login">
+                <h:panelGrid columns="1" width="100%">
+                    <p:inputText id="email" value="#{userAccountBean.email}" placeholder="Email" required="true"
+                                 requiredMessage="The email is required!">
+                        <p:clientValidator/>
+                    </p:inputText>
+                    <p:password id="password" value="#{userAccountBean.password}" placeholder="Password" required="true"
+                                requiredMessage="The password is required!">
+                        <p:clientValidator/>
+                    </p:password>
+                </h:panelGrid>
+                <div class="social-btns-block">
+                    <p:commandLink action="#" styleClass="social-btn">
+                        <h:graphicImage name="images/google.png"/>
+                    </p:commandLink>
+                    <p:commandLink action="#" styleClass="social-btn">
+                        <h:graphicImage name="images/facebook.png"/>
+                    </p:commandLink>
+                    <p:commandLink action="#" styleClass="social-btn">
+                        <h:graphicImage name="images/vk.png"/>
+                    </p:commandLink>
+                </div>
+                <p:commandButton value="Sign in" action="#{userAccountBean.login}" update="messages" validateClient="true" styleClass="btn"/>
+                <p:link outcome="registration" value="Sign up" styleClass="link"/>
+            </p:panel>
+        </div>
+    </h:form>
+</h:body>
+</html>
