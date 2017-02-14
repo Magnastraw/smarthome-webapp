@@ -12,14 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HomeService {
-    @Autowired
-    private SmartHomeRepository homeRepository;
+    private final SmartHomeRepository homeRepository;
+    private final HomeParamRepository paramRepository;
+    private final DataTypeRepository dataTypeRepository;
 
     @Autowired
-    private HomeParamRepository paramRepository;
-
-    @Autowired
-    private DataTypeRepository dataTypeRepository;
+    public HomeService(SmartHomeRepository homeRepository, HomeParamRepository paramRepository, DataTypeRepository dataTypeRepository) {
+        this.homeRepository = homeRepository;
+        this.paramRepository = paramRepository;
+        this.dataTypeRepository = dataTypeRepository;
+    }
 
     @Transactional
     public void createDefaultHome(User user) {

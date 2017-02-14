@@ -5,23 +5,22 @@ import com.netcracker.smarthome.model.entities.User;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AuthService {
-    @Autowired
-    UserRepository repository;
+public class RegisterService {
+    private final UserRepository repository;
 
-    public User authenticateByCredentials(String email, String password) {
-        User user = repository.getByEmail(email.toLowerCase());
-        String pass=DigestUtils.md5Hex(password);
-        return user != null && user.getEncrPassword().equals(pass) ? user : null;
+    @Autowired
+    public RegisterService(UserRepository repository) {
+        this.repository = repository;
     }
 
-    public boolean register(User user) {
+    @Transactional
+    public void simpleRegister(User user) throws UserExistsException {
         if (repository.getByEmail(user.getEmail()) != null)
-            return false;
+            throw new UserExistsException("User with such email already exists!");
         user.setEncrPassword(DigestUtils.md5Hex(user.getEncrPassword()));
         repository.save(user);
-        return true;
     }
 }

@@ -11,6 +11,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <spring.version>4.3.4.RELEASE</spring.version>
+    <spring-security.version>4.2.1.RELEASE</spring-security.version>
     <hibernate.version>5.2.5.Final</hibernate.version>
     <jsf.version>2.2.4</jsf.version>
     <catalina.home>${env.CATALINA_HOME}</catalina.home>
@@ -80,6 +81,21 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${spring-security.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${spring-security.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>${spring-security.version}</version>
     </dependency>
   </dependencies>
   <build>

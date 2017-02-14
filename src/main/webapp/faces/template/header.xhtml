@@ -3,7 +3,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 
     <p:menubar style="border: none">
         <p:submenu label="Smarthome" icon="fa fa-home">
@@ -24,7 +24,7 @@
 
         <f:facet name="options">
             <p:inputText style="margin-right:10px" placeholder="Search"/>
-            <p:commandButton value="Logout" action="#{userAccountBean.logout}" icon="ui-icon-extlink" ajax="false"/>
+            <h:outputLink value="#{request.contextPath}/logout">Logout</h:outputLink>
         </f:facet>
     </p:menubar>
 
