@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.Type;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,14 +15,14 @@ import java.util.List;
 public class DataType implements Serializable {
     private long typeId;
     private String name;
-    private long type;
+    private Type type;
     private List<HomeParam> homeParam;
     private List<ObjectParam> objectParam;
 
     public DataType() {
     }
 
-    public DataType(String name, long type) {
+    public DataType(String name, Type type) {
         this.name = name;
         this.type = type;
     }
@@ -48,13 +49,14 @@ public class DataType implements Serializable {
         this.name = name;
     }
 
-    @Basic
+
     @Column(name = "type", nullable = false)
-    public long getType() {
+    @Enumerated(EnumType.ORDINAL)
+    public Type getType() {
         return type;
     }
 
-    public void setType(long type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
