@@ -76,7 +76,7 @@ public class RegistrationBean implements Serializable {
     private void loginAfterSuccessRegistration(String username, String password) throws AuthenticationException {
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext());
         AuthenticationManager manager = (AuthenticationManager) context.getBean("authenticationManager");
-        CustomUserDetailsService service = (CustomUserDetailsService) context.getBean("myUserDetailsService");
+        CustomUserDetailsService service = (CustomUserDetailsService) context.getBean("shUserDetailsService");
         Authentication auth = manager.authenticate(new UsernamePasswordAuthenticationToken(username, password, service.buildAuthorities()));
         SecurityContextHolder.getContext().setAuthentication(auth);
     }

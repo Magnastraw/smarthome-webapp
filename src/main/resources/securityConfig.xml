@@ -7,7 +7,7 @@
                 http://www.springframework.org/schema/beans/spring-beans.xsd
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
-    <sec:http auto-config="true" use-expressions="true">
+    <sec:http use-expressions="true">
         <sec:intercept-url pattern="/faces/auth/*" access="permitAll"/>
         <sec:intercept-url pattern="/faces/**" access="hasRole('ROLE_USER')" />
         <sec:form-login
@@ -20,14 +20,15 @@
         <sec:logout
                 logout-url="/logout"
                 invalidate-session="true"
-                delete-cookies="JSESSIONID"
+                delete-cookies="JSESSIONID,shTokenCookie"
                 logout-success-url="/"/>
         <sec:csrf disabled="true"/>
+        <sec:remember-me key="shKey" remember-me-parameter="remember_input" user-service-ref="shUserDetailsService" remember-me-cookie="shTokenCookie"/>
     </sec:http>
-    <bean id="myUserDetailsService"
+    <bean id="shUserDetailsService"
                 class="com.netcracker.smarthome.business.auth.security.CustomUserDetailsService"/>
     <sec:authentication-manager alias="authenticationManager">
-        <sec:authentication-provider user-service-ref="myUserDetailsService">
+        <sec:authentication-provider user-service-ref="shUserDetailsService">
             <sec:password-encoder hash="md5"/>
         </sec:authentication-provider>
     </sec:authentication-manager>

@@ -3,29 +3,27 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <p:menubar style="border: none">
-        <p:submenu label="Smarthome" icon="fa fa-home">
-            <p:menuitem value="Home 1" action="#{navigationBean.setPageName('table')}" update=":centerForm"/>
+        <p:submenu label="Smarthome" icon="ui-icon-home">
+            <p:menuitem value="Home 1" url="#"/>
             <p:menuitem value="Home 2" url="#"/>
             <p:separator/>
-            <p:menuitem value="Add home..." url="#" icon="fa fa-plus"/>
+            <p:menuitem value="Add home..." url="#" icon="ui-icon-plus"/>
         </p:submenu>
 
-        <p:submenu label="Help" icon="fa fa-question">
+        <p:submenu label="Help" icon="ui-icon-help">
             <p:menuitem value="Contents" url="#"/>
-        </p:submenu>
-
-        <p:submenu label="Settings" icon="fa fa-gears">
-            <p:menuitem value="User profile" url="#" icon="fa fa-user"/>
-            <p:menuitem value="Home profile" url="#" icon="fa fa-gear"/>
         </p:submenu>
 
         <f:facet name="options">
             <p:inputText style="margin-right:10px" placeholder="Search"/>
-            <h:outputLink value="#{request.contextPath}/logout">Logout</h:outputLink>
         </f:facet>
+        <p:submenu label="Profile" style="float: right">
+            <p:menuitem value="Settings" url="#" icon="ui-icon-gear"/>
+            <p:menuitem value="Logout" url="/logout" icon="ui-icon-extlink"/>
+        </p:submenu>
     </p:menubar>
 
 </ui:composition>

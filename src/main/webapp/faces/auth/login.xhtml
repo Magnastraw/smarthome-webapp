@@ -31,6 +31,10 @@
                         <p:clientValidator/>
                     </p:password>
                 </h:panelGrid>
+                <h:panelGrid columns="2" style="width: auto" cellspacing="5">
+                    <p:outputLabel for="remember" value="Remember me:" />
+                    <p:selectBooleanCheckbox id="remember" value="true" />
+                </h:panelGrid>
                 <div class="social-btns-block">
                     <p:commandLink action="#" styleClass="social-btn">
                         <h:graphicImage name="images/google.png"/>
