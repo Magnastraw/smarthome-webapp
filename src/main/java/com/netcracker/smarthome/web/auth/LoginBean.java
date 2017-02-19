@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web;
+package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.springframework.security.authentication.BadCredentialsException;

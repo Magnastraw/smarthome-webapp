@@ -2,31 +2,25 @@ package com.netcracker.smarthome.web;
 
 import com.netcracker.smarthome.business.chart.ChartService;
 import com.netcracker.smarthome.model.entities.MetricHistory;
-import org.primefaces.context.RequestContext;
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONObject;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Random;
 
 @ManagedBean(name = "chartBean")
 @SessionScoped
 public class ChartBean {
-
+    @ManagedProperty(value = "#{ChartService}")
+    ChartService chartService;
     private String chartConfig;
     private String dataSourceConfig;
     private double refreshInterval;
-
-    @ManagedProperty(value = "#{ChartService}")
-    ChartService chartService;
-
     private MetricHistory metricHistory;
 
     public ChartBean() {
@@ -83,7 +77,7 @@ public class ChartBean {
     }
 
     public double getRefreshInterval() {
-        return 2000;
+        return 0;
     }
 
     public void setRefreshInterval(double refreshInterval) {

@@ -1,8 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/mycharts">
-    <mycharts:mychart id="component" heigth="600px" width="600px" configuration="#{chartBean.chartConfig}" dataSourceConfig="#{chartBean.dataSourceConfig}" refreshInterval="#{chartBean.refreshInterval}"/>
+    <mycharts:mychart id="component" heigth="600px" width="600px" configuration="#{chartBean.chartConfig}"
+                      dataSourceConfig="#{chartBean.dataSourceConfig}" refreshInterval="#{chartBean.refreshInterval}"/>
 </ui:composition>

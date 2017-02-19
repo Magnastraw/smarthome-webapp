@@ -2,7 +2,7 @@ package com.netcracker.smarthome.web.common;
 
 import com.netcracker.smarthome.model.entities.User;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -18,5 +18,10 @@ public class ContextUtils {
         if (!(principal instanceof User))
             return null;
         return (User) principal;
+    }
+
+    public static Object getBean(String beanName) {
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        return elContext.getELResolver().getValue(elContext, null, beanName);
     }
 }

@@ -1,7 +1,6 @@
 package com.netcracker.smarthome.web;
 
 import com.netcracker.smarthome.business.chart.ChartService;
-import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import org.primefaces.json.JSONArray;
@@ -16,10 +15,8 @@ import java.text.SimpleDateFormat;
 
 @Controller
 public class ChartController {
-
     @Autowired
     ChartService chartService;
-
 
     @RequestMapping({"/jsonData/{to}/{id}"})
     @ResponseBody
@@ -31,7 +28,7 @@ public class ChartController {
                 JSONArray dataArray = new JSONArray();
                 for (MetricHistory metricHistory : chartService.getMetricsHistoryBySpecIdObjectID(id, smartObject.getSmartObjectId())) {
                     dataArray.put(new JSONObject().put("x", new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(metricHistory.getReadDate()))
-                                                  .put("y", metricHistory.getValue()));
+                            .put("y", metricHistory.getValue()));
                 }
                 dataObject.put("data", dataArray);
                 dataObject.put("name", smartObject.getName());
