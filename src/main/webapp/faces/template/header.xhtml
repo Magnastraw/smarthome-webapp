@@ -3,27 +3,25 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
     <p:menubar style="border: none">
-        <p:submenu label="Smarthome" icon="ui-icon-home">
-            <p:menuitem value="Home 1" url="#"/>
-            <p:menuitem value="Home 2" url="#"/>
-            <p:separator/>
-            <p:menuitem value="Add home..." url="#" icon="ui-icon-plus"/>
+        <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
+            <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
+                <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true">
+                    <f:setPropertyActionListener value="#{home}" target="#{currentUserHomesBean.currentHome}"/>
+                </p:menuitem>
+            </c:forEach>
         </p:submenu>
-
-        <p:submenu label="Help" icon="ui-icon-help">
+        <p:submenu label="Help">
             <p:menuitem value="Contents" url="#"/>
         </p:submenu>
-
         <f:facet name="options">
             <p:inputText style="margin-right:10px" placeholder="Search"/>
         </f:facet>
-        <p:submenu label="Profile" style="float: right">
-            <p:menuitem value="Settings" url="#" icon="ui-icon-gear"/>
-            <p:menuitem value="Logout" url="/logout" icon="ui-icon-extlink"/>
+        <p:submenu label="Profile" style="float: right" icon="fa fa-user">
+            <p:menuitem value="Settings" url="#" icon="fa fa-gear"/>
+            <p:menuitem value="Logout" url="/logout" icon="fa fa-sign-out"/>
         </p:submenu>
     </p:menubar>
-
 </ui:composition>

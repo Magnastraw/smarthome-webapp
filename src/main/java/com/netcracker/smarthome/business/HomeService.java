@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class HomeService {
     private final SmartHomeRepository homeRepository;
@@ -26,8 +28,7 @@ public class HomeService {
     }
 
     @Transactional
-    public void createDefaultHome(User user) {
-        SmartHome home = new SmartHome("Default home", "", user);
+    public void createHome(SmartHome home) {
         homeRepository.save(home);
         createDataTypesIfNotExists();
         setDefaultParams(home);
@@ -35,8 +36,8 @@ public class HomeService {
 
     @Transactional
     private void setDefaultParams(SmartHome home) {
-        paramRepository.save(new HomeParam("Address", "", home, dataTypeRepository.getByType(Type.STRING)));
-        paramRepository.save(new HomeParam("Link", "", home, dataTypeRepository.getByType(Type.LINK)));
+        paramRepository.save(new HomeParam("Address", "address", home, dataTypeRepository.getByType(Type.STRING)));
+        paramRepository.save(new HomeParam("Link", "http://www.outlink.com", home, dataTypeRepository.getByType(Type.LINK)));
     }
 
     @Transactional
@@ -45,5 +46,39 @@ public class HomeService {
             dataTypeRepository.save(new DataType("String", Type.STRING));
         if (dataTypeRepository.getByType(Type.LINK) == null)
             dataTypeRepository.save(new DataType("Link", Type.LINK));
+    }
+
+    @Transactional(readOnly = true)
+    public List<SmartHome> getHomesList(User user) {
+        List<SmartHome> homes = homeRepository.getHomesByUser(user);
+        for (SmartHome home : homes) {
+            home.setHomeParams(getHomeParams(home));
+        }
+        return homes;
+    }
+
+    @Transactional(readOnly = true)
+    public List<HomeParam> getHomeParams(SmartHome home) {
+        return homeRepository.getParams(home);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DataType> getDataTypes() {
+        return dataTypeRepository.getAll();
+    }
+
+    @Transactional
+    public HomeParam updateParam(HomeParam param) {
+        return paramRepository.update(param);
+    }
+
+    @Transactional
+    public void deleteParam(HomeParam param) {
+        paramRepository.delete(param.getParamId());
+    }
+
+    @Transactional
+    public SmartHome updateHome(SmartHome home) {
+        return homeRepository.update(home);
     }
 }

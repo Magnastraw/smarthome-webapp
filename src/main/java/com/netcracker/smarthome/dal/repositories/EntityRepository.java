@@ -33,8 +33,8 @@ public class EntityRepository<T> {
     }
 
     @Transactional
-    public void update(T entity) {
-        getManager().merge(entity);
+    public T update(T entity) {
+        return getManager().merge(entity);
     }
 
     @Transactional

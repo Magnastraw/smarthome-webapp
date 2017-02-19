@@ -1,9 +1,10 @@
-package com.netcracker.smarthome.web;
+package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.auth.RegisterService;
 import com.netcracker.smarthome.business.auth.UserExistsException;
 import com.netcracker.smarthome.business.auth.security.CustomUserDetailsService;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.User;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,14 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import java.io.Serializable;
 
 @ManagedBean
@@ -63,7 +60,7 @@ public class RegistrationBean implements Serializable {
             ContextUtils.addErrorMessageToContext(e.getMessage());
             return null;
         }
-        homeService.createDefaultHome(user);
+        homeService.createHome(new SmartHome("Default home", " ", user));
         try {
             loginAfterSuccessRegistration(user.getEmail(), password);
         } catch (AuthenticationException e) {
@@ -74,9 +71,8 @@ public class RegistrationBean implements Serializable {
     }
 
     private void loginAfterSuccessRegistration(String username, String password) throws AuthenticationException {
-        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext());
-        AuthenticationManager manager = (AuthenticationManager) context.getBean("authenticationManager");
-        CustomUserDetailsService service = (CustomUserDetailsService) context.getBean("shUserDetailsService");
+        AuthenticationManager manager = (AuthenticationManager) ContextUtils.getBean("authenticationManager");
+        CustomUserDetailsService service = (CustomUserDetailsService) ContextUtils.getBean("shUserDetailsService");
         Authentication auth = manager.authenticate(new UsernamePasswordAuthenticationToken(username, password, service.buildAuthorities()));
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
