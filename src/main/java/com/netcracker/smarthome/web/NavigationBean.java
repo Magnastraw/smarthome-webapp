@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class NavigationBean {
 
-    private String pageName = "table";
+    private String pageName = "graph";
 
     public String getPageName() {
         return pageName;

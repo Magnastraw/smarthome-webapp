@@ -8,10 +8,11 @@
 
     <p:menubar style="border: none">
         <p:submenu label="Smarthome" icon="fa fa-home">
-            <p:menuitem value="Home 1" action="#{navigationBean.setPageName('table')}" update=":centerForm"/>
-            <p:menuitem value="Home 2" url="#"/>
+            <p:menuitem value="Home 1" action="/" update=":centerForm"/>
+            <p:menuitem value="Home 2" action="/" update=":centerForm" />
             <p:separator/>
             <p:menuitem value="Add home..." url="#" icon="fa fa-plus"/>
+            <p:menuitem value="Add metric..." action="#{chartBean.addMetricHistory}" />
         </p:submenu>
 
         <p:submenu label="Help" icon="fa fa-question">

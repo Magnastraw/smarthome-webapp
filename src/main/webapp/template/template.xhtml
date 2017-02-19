@@ -6,7 +6,6 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-
 <h:head>
 
     <meta http-equiv="Content-Type" content="text/html/js; charset=utf-8"/>
@@ -18,16 +17,8 @@
         <ui:insert name="metadata"/>
     </f:metadata>
 
-    <style type="text/css">
-        .ui-layout-north {
-            z-index: 20 !important;
-            overflow: visible !important;
-        }
-        .ui-layout-north .ui-layout-unit-content {
-            overflow: visible !important;
-        }
+    <h:outputStylesheet library="css" name="template.css"  />
 
-    </style>
 </h:head>
 
 <h:body>
@@ -58,6 +49,7 @@
     </p:layout>
     <h:outputScript name="javascript/highcharts.js"/>
     <h:outputScript name="javascript/exporting.js"/>
+    <h:outputScript name="javascript/custom_chart.js"/>
 </h:body>
 
 </html>

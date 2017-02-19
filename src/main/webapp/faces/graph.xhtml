@@ -4,6 +4,5 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/mycharts">
-    <mycharts:mychart id="component" heigth="600px" width="600px" title="Magic Title" subTitle="Sub title" yLabel="y"
-                      xLabel="x" data="#{userMB.jsonData}"/>
+    <mycharts:mychart id="component" heigth="600px" width="600px" configuration="#{chartBean.chartConfig}" dataSourceConfig="#{chartBean.dataSourceConfig}" refreshInterval="#{chartBean.refreshInterval}"/>
 </ui:composition>
