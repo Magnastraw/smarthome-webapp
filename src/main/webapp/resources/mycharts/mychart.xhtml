@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+
+<!--Define component's attribute-->
+<cc:interface>
+    <cc:attribute name="width"/>
+    <cc:attribute name="heigth"/>
+    <cc:attribute name="configuration"/>
+    <cc:attribute name="dataSourceConfig"/>
+    <cc:attribute name="refreshInterval"/>
+</cc:interface>
+
+<!--Define component-->
+<cc:implementation>
+
+    <h:outputStylesheet library="css" name="charts.css"  />
+
+    <h:inputHidden id="refresh_interval" value="#{cc.attrs.refreshInterval}"/>
+    <h:inputHidden id="configuration_json" value="#{cc.attrs.configuration}"/>
+    <h:inputHidden id="dataSourceConfig_json" value="#{cc.attrs.dataSourceConfig}"/>
+
+    <div class="chart-container">
+        <div id="#{cc.id}_chartDiv" class="chart" style="width: #{cc.attrs.width}; height: #{cc.attrs.heigth};  margin-right: auto; margin-left: auto;">
+            <script type="text/javascript">
+                $(function () {
+                    createNewChart($('input[id$="configuration_json"]').val(),$('input[id$="dataSourceConfig_json"]').val(), $('input[id$="refresh_interval"]').val());
+                });
+            </script>
+        </div>
+    </div>
+</cc:implementation>
+</html>
