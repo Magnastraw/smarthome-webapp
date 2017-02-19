@@ -66,8 +66,10 @@ public class ChartBean {
 
     public String getDataSourceConfig() {
         JSONObject jsonConfig = new JSONObject();
-        jsonConfig.put("to", "metric"); // object or subobject
-        jsonConfig.put("id", "1");
+        jsonConfig.put("homeId","1");
+        jsonConfig.put("objectId", "1");
+        jsonConfig.put("subObjectId", "1");
+        jsonConfig.put("metricSpecId","1");
         dataSourceConfig = jsonConfig.toString();
         return dataSourceConfig;
     }
@@ -84,14 +86,14 @@ public class ChartBean {
         this.refreshInterval = refreshInterval;
     }
 
-    /*test*/
-    public void addMetricHistory() throws ParseException {
-        metricHistory.setHistoryId(0);
-        metricHistory.setReadDate(new Timestamp(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse("2017/02/14 21:45:11").getTime()));
-        metricHistory.setValue(new BigInteger("28"));
-        metricHistory.setMetric(chartService.getMetricById(11));
-        chartService.addMetricHistory(metricHistory);
-    }
+//    /*test*/
+//    public void addMetricHistory() throws ParseException {
+//        metricHistory.setHistoryId(0);
+//        metricHistory.setReadDate(new Timestamp(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse("2017/02/14 21:45:11").getTime()));
+//        metricHistory.setValue(new BigInteger("28"));
+//        metricHistory.setMetric(chartService.getMetricById(11));
+//        chartService.addMetricHistory(metricHistory);
+//    }
 
 
 }

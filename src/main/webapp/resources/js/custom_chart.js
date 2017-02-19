@@ -12,10 +12,12 @@ function createNewChart(configurationJson, dataSourceConfigJson, refreshInterval
     } else {
         setInterval( requestData, refreshInterval);
     }
+    console.log(dataSource);
 
+// series[{}{}{}{}{}{}]!!!
     function requestData() {
         $.ajax({
-            url: 'http://localhost:8083/jsonData/' + dataSource.to + '/' + dataSource.id,
+            url: 'http://localhost:8083/jsonData/'+dataSource.homeId+'/obj/' + dataSource.objectId + '/subObj/' + dataSource.subObjectId + '/metric/' + dataSource.metricSpecId,
             dataType: 'json',
             success: function (data) {
                 $.each(data, function (pos, series) {

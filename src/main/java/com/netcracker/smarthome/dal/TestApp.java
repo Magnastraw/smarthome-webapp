@@ -1,8 +1,7 @@
 package com.netcracker.smarthome.dal;
 
-import com.netcracker.smarthome.dal.repositories.SocialProfileRepository;
-import com.netcracker.smarthome.dal.repositories.SocialServiceRepository;
-import com.netcracker.smarthome.dal.repositories.UserRepository;
+import com.netcracker.smarthome.dal.repositories.*;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.SocialProfile;
 import com.netcracker.smarthome.model.entities.SocialService;
 import com.netcracker.smarthome.model.entities.User;

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
@@ -15,13 +16,13 @@ import java.sql.Timestamp;
 public class MetricHistory implements Serializable {
     private long historyId;
     private Timestamp readDate;
-    private BigInteger value;
+    private BigDecimal value;
     private Metric metric;
 
     public MetricHistory() {
     }
 
-    public MetricHistory(Timestamp readDate, BigInteger value, Metric metric) {
+    public MetricHistory(Timestamp readDate, BigDecimal value, Metric metric) {
         this.readDate = readDate;
         this.value = value;
         this.metric = metric;
@@ -51,11 +52,11 @@ public class MetricHistory implements Serializable {
 
     @Basic
     @Column(name = "value", nullable = false, precision = 0)
-    public BigInteger getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(BigInteger value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
