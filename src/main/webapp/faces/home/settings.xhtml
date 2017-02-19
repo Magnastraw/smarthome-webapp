@@ -50,12 +50,19 @@
                                update=":centerForm:homeParams"
                                title="Delete"
                                styleClass="fa fa-remove param-item">
+                    <p:confirm header="Confirmation" message="Are you sure want to delete parameter?"/>
                     <f:setPropertyActionListener value="#{param}" target="#{homeSettingsBean.selectedParam}"/>
                 </p:commandLink>
             </c:forEach>
         </h:panelGrid>
     </p:fieldset>
 </p:outputPanel>
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+    <div style="text-align: center">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </div>
+</p:confirmDialog>
 <p:dialog header="Parameter properties" widgetVar="saveParamDialog"
           resizable="false" position="center" id="paramSave">
     <p:panel styleClass="dialog">
