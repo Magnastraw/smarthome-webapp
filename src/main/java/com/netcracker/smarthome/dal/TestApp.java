@@ -1,10 +1,7 @@
 package com.netcracker.smarthome.dal;
 
 import com.netcracker.smarthome.dal.repositories.*;
-import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.model.entities.SocialProfile;
-import com.netcracker.smarthome.model.entities.SocialService;
-import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.entities.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

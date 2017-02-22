@@ -1,0 +1,6 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/mycharts">
+    <mycharts:mychart id="component" heigth="600px" width="600px" configuration="#{chartBean.chartConfig}"
+                      dataSourceConfig="#{chartBean.dataSourceConfig}" refreshInterval="2000"/>
+</ui:composition>

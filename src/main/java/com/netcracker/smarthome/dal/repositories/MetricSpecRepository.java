@@ -12,10 +12,18 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         super(MetricSpec.class);
     }
 
-    public List<MetricSpec> getSpecByObjectId(long userId, long objectId) {
-        Query query = getManager().createQuery("select ms from MetricSpec ms left join Metric m on ms.specId = m.metricSpec.specId left join SmartHome sh on m.smartHome.smartHomeId=sh.smartHomeId where m.object.smartObjectId = :objectId and sh.user.userId = :userId");
+    public List<MetricSpec> getSpecByObjectId(long userId, long homeId, long objectId) {
+        Query query = getManager().createQuery("select ms from MetricSpec ms inner join Metric m on m.metricSpec.specId  = ms.specId inner join SmartHome sh on m.smartHome.smartHomeId=sh.smartHomeId inner join SmartObject so on m.object.smartObjectId = so.smartObjectId where (so.smartObjectId = :objectId and sh.user.userId = :userId and so.smartHome.smartHomeId = :homeId) group by ms.specId");
         query.setParameter("userId", userId);
+        query.setParameter("homeId", homeId);
         query.setParameter("objectId", objectId);
         return query.getResultList();
+    }
+
+    public MetricSpec getMetricSpecById(long specId) {
+        Query query = getManager().createQuery("select ms from MetricSpec ms where ms.specId = :specId");
+        query.setParameter("specId", specId);
+        List<MetricSpec> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 }

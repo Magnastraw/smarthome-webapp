@@ -32,8 +32,10 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
         return query.getResultList();
     }
 
-    public List<Object[]> getMetricHistoryBySpecIdObjectId( long userId,long homeId, long specId, long objectId){
+    public List<Object[]> getMetricsHistoryBySpecIdObjectId( long userId,long homeId, long specId, long objectId,int rownum){
         Query query = getManager().createQuery("select mh.historyId,mh.readDate,mh.value ,mh.metric.metricId from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId inner join SmartHome sh on m.smartHome.smartHomeId = sh.smartHomeId inner join SmartObject sm on m.object.smartObjectId = sm.smartObjectId where (m.metricSpec.specId = :specId and sm.smartObjectId = :objectId and sh.user.userId = :userId and m.smartHome.smartHomeId = :homeId)");
+        query.setFirstResult(rownum);
+        query.setMaxResults(200);
         query.setParameter("specId", specId);
         query.setParameter("objectId", objectId);
         query.setParameter("userId", userId);
@@ -41,6 +43,17 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
         return (List<Object[]>)query.getResultList();
     }
 
+    public Object[] getMetricHistoryBySpecIdObjectId( long userId,long homeId, long specId, long objectId,int rownum ){
+        Query query = getManager().createQuery("select mh.historyId,mh.readDate,mh.value ,mh.metric.metricId from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId inner join SmartHome sh on m.smartHome.smartHomeId = sh.smartHomeId inner join SmartObject sm on m.object.smartObjectId = sm.smartObjectId where (m.metricSpec.specId = :specId and sm.smartObjectId = :objectId and sh.user.userId = :userId and m.smartHome.smartHomeId = :homeId) order by mh.readDate");
+        query.setFirstResult(rownum);
+        query.setMaxResults(1);
+        query.setParameter("specId", specId);
+        query.setParameter("objectId", objectId);
+        query.setParameter("userId", userId);
+        query.setParameter("homeId", homeId);
+        List<Object[]> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
 
 
     public Metric getMetricById(long id){

@@ -256,7 +256,7 @@ CREATE TABLE public.objects (
   name VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
   object_type_id BIGINT NOT NULL,
-  parent_smart_object_id BIGINT NOT NULL,
+  parent_smart_object_id BIGINT,
   catalog_id BIGINT NOT NULL,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT objects_pk PRIMARY KEY (smart_object_id)
@@ -336,7 +336,7 @@ CREATE TABLE public.metrics (
   metric_id BIGINT NOT NULL DEFAULT nextval('public.metrics_metric_id_seq'),
   object_id BIGINT NOT NULL,
   subobject_id BIGINT,
-  spec_id BIGINT NOT NULL,
+  spec_id BIGINT,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT metrics_pk PRIMARY KEY (metric_id)
 );

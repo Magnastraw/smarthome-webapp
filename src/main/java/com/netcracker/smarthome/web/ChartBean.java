@@ -40,20 +40,16 @@ public class ChartBean {
         jsonConfig.put("credits", new JSONObject().put("enabled", false));
         jsonConfig.put("chart", new JSONObject().put("renderTo", "component_chartDiv")
                 .put("zoomType", "x")
-                .put("type", "spline"));
+                .put("type", "line"));
         jsonConfig.put("title", new JSONObject().put("text", "Magic title"));
-        jsonConfig.put("subtitle", new JSONObject().put("text", "Sub title"));
-        jsonConfig.put("xAxis", new JSONObject().put("title", new JSONObject()
-                .put("text", "x")).put("type", "datetime"));
-        jsonConfig.put("yAxis", new JSONObject().put("title", new JSONObject()
-                .put("text", "y")));
+        jsonConfig.put("xAxis", new JSONObject().put("title", new JSONObject())
+                                                .put("type", "datetime"));
         jsonConfig.put("lang", new JSONObject().put("fullscreenTooltip", "Fullscreen"));
         jsonConfig.put("exporting", new JSONObject().put("buttons", new JSONObject()
                 .put("customButton", new JSONObject()
                         .put("_titleKey", "fullscreenTooltip")
                         .put("x", -40)
                         .put("symbol", "symbolFullscreen"))));
-        jsonConfig.put("series", new JSONArray().put(new JSONObject()).put(new JSONObject()));
 
         chartConfig = jsonConfig.toString();
 
@@ -66,15 +62,31 @@ public class ChartBean {
 
     public String getDataSourceConfig() {
         JSONObject jsonConfig = new JSONObject();
-        jsonConfig.put("homeId","1");
-        jsonConfig.put("objectId", "1");
+        jsonConfig.put("homeId", "1");
+        jsonConfig.put("type", "m");
+        jsonConfig.put("objectId", "2");
         jsonConfig.put("subObjectId", "1");
-        jsonConfig.put("metricSpecId","1");
+        jsonConfig.put("metricSpecId", "2");
         dataSourceConfig = jsonConfig.toString();
         return dataSourceConfig;
     }
 
     public void setDataSourceConfig() {
+
+    }
+
+    public String getDataSourceConfigTwo() {
+        JSONObject jsonConfig = new JSONObject();
+        jsonConfig.put("homeId", "1");
+        jsonConfig.put("type", "o");
+        jsonConfig.put("objectId", "1");
+        jsonConfig.put("subObjectId", "1");
+        jsonConfig.put("metricSpecId", "2");
+        dataSourceConfig = jsonConfig.toString();
+        return dataSourceConfig;
+    }
+
+    public void setDataSourceConfigTwo() {
 
     }
 
@@ -85,15 +97,6 @@ public class ChartBean {
     public void setRefreshInterval(double refreshInterval) {
         this.refreshInterval = refreshInterval;
     }
-
-//    /*test*/
-//    public void addMetricHistory() throws ParseException {
-//        metricHistory.setHistoryId(0);
-//        metricHistory.setReadDate(new Timestamp(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse("2017/02/14 21:45:11").getTime()));
-//        metricHistory.setValue(new BigInteger("28"));
-//        metricHistory.setMetric(chartService.getMetricById(11));
-//        chartService.addMetricHistory(metricHistory);
-//    }
 
 
 }

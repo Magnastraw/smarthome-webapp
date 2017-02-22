@@ -1,35 +1,115 @@
 function createNewChart(configurationJson, dataSourceConfigJson, refreshInterval) {
-    var chart;
-    var options = $.parseJSON(configurationJson);
-    var dataSource = $.parseJSON(dataSourceConfigJson);
+    var chart,
+        intervalId,
+        rownum = 1,
+        options = $.parseJSON(configurationJson),
+        dataSource = $.parseJSON(dataSourceConfigJson);
 
-    fullscreenMode();
+    //stop setInterval!! ?
+    createEmptyChart(function () {
+        if (refreshInterval == 0) {
+                requestData();
+        } else if (refreshInterval >= 3600000) {
+            intervalId=setInterval(function () {
+                requestData(function () {
+                    rownum+=100;
+                });
+            }, 5000);
+        } else {
+            intervalId = setInterval(function () {
+                requestLiveData(function () {
+                    rownum++;
+                });
+            }, refreshInterval);
+        }
+    });
 
-    chart = new Highcharts.Chart(options);
-
-    if(refreshInterval==0){
-        requestData();
-    } else {
-        setInterval( requestData, refreshInterval);
-    }
-    console.log(dataSource);
-
-// series[{}{}{}{}{}{}]!!!
-    function requestData() {
+    function requestLiveData(callback) {
         $.ajax({
-            url: 'http://localhost:8083/jsonData/'+dataSource.homeId+'/obj/' + dataSource.objectId + '/subObj/' + dataSource.subObjectId + '/metric/' + dataSource.metricSpecId,
+            url: 'http://localhost:8083/jsonDataLive/' + dataSource.homeId + '/' + dataSource.type + '/obj/' + dataSource.objectId + '/subObj/' + dataSource.subObjectId + '/metric/' + dataSource.metricSpecId + '/rownum/' + rownum,
+            dataType: 'json',
+            type: 'POST',
+            success: function (data) {
+                $.each(data, function (pos, series) {
+                    $.each(series.data, function (pos, data) {
+                        data.x = Date.parse(data.x);
+                    });
+                    var shift = chart.series[pos].data.length > 15;
+                    chart.series[pos].addPoint({x: series.data[0].x, y: series.data[0].y}, false, shift);
+                    console.log(chart.series[pos].data);
+                });
+                chart.redraw();
+                callback();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+                alert("no new data");
+                clearInterval(intervalId);
+            },
+            cache: false
+        });
+    }
+
+    function requestData(callback) {
+        $.ajax({
+            url: 'http://localhost:8083/jsonData/' + dataSource.homeId + '/' + dataSource.type + '/obj/' + dataSource.objectId + '/subObj/' + dataSource.subObjectId + '/metric/' + dataSource.metricSpecId+'/rownum/'+ rownum,
             dataType: 'json',
             success: function (data) {
                 $.each(data, function (pos, series) {
                     $.each(series.data, function (pos, data) {
                         data.x = Date.parse(data.x);
-
                     });
-                    chart.series[pos].setData(series.data) ;
-                    console.log(series);
-                    chart.redraw();
+                    switch (dataSource.type) {
+                        case 'm':
+                            chart.series[pos].setData(series.data);
+                            break;
+                        case 'o':
+                            chart.series[pos].setData(series.data);
+
+                            break;
+                    }
+                });
+                chart.redraw();
+                callback();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+                alert("no new data");
+                clearInterval(intervalId);
+            },
+            cache: false
+        });
+    }
+
+    function createEmptyChart(callback) {
+        $.ajax({
+            url: 'http://localhost:8083/jsonDataConfig/' + dataSource.homeId + '/' + dataSource.type + '/obj/' + dataSource.objectId + '/subObj/' + dataSource.subObjectId + '/metric/' + dataSource.metricSpecId,
+            dataType: 'json',
+            type: 'POST',
+            success: function (data) {
+                var yAxis = [];
+                var series = [];
+                $.each(data, function (pos, dataObj) {
+                    series.push(dataObj.series);
+                    options.title = dataObj.title.title;
+                    yAxis.push(dataObj.yAxis);
 
                 });
+                switch (dataSource.type) {
+                    case 'm':
+                        options.yAxis = yAxis[0];
+                        break;
+                    case 'o':
+                        options.yAxis = yAxis;
+                        break;
+                }
+                options.series = series;
+                fullscreenMode();
+                console.log(options);
+                chart = new Highcharts.Chart(options);
+                callback();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);
@@ -37,7 +117,9 @@ function createNewChart(configurationJson, dataSourceConfigJson, refreshInterval
             },
             cache: false
         });
+
     }
+
 
     function fullscreenMode() {
         /*custom fullscreen button*/

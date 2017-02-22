@@ -16,7 +16,4 @@
         <property name="defaultContentType" value="application/json">
         </property>
     </bean>
-
-    <!-- Declare a view resolver -->
-    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"/>
 </beans>

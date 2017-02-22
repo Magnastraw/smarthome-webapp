@@ -3,10 +3,8 @@ package com.netcracker.smarthome.business.chart;
 import com.netcracker.smarthome.dal.repositories.MetricHistoryRepository;
 import com.netcracker.smarthome.dal.repositories.MetricSpecRepository;
 import com.netcracker.smarthome.dal.repositories.SmartObjectRepository;
-import com.netcracker.smarthome.model.entities.Metric;
-import com.netcracker.smarthome.model.entities.MetricHistory;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import com.netcracker.smarthome.dal.repositories.UnitRepository;
+import com.netcracker.smarthome.model.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +28,9 @@ public class ChartService {
     @Autowired
     private MetricSpecRepository metricSpecRepository;
 
+    @Autowired
+    private UnitRepository unitRepository;
+
     public List<MetricHistory> getMetricsHistory(){
         return metricHistoryRepository.getMetricsHistory();
     }
@@ -46,21 +47,32 @@ public class ChartService {
         return metricHistoryRepository.getMetricById(id);
     }
 
-    public List<Object[]>  getMetricsHistoryBySpecIdObjectId(long userId,long homeId, long specId, long objectId){
-        return metricHistoryRepository.getMetricHistoryBySpecIdObjectId(userId,homeId, specId, objectId);
+    public MetricSpec getMetricSpecById(long id){
+        return metricSpecRepository.getMetricSpecById(id);
     }
 
-    public List<MetricSpec> getMetricsSpecByObjectId(long userId,long objectId){
-        return metricSpecRepository.getSpecByObjectId(userId,objectId);
+    public List<Object[]>  getMetricsHistoryBySpecIdObjectId(long userId,long homeId, long specId, long objectId, int rownum){
+        return metricHistoryRepository.getMetricsHistoryBySpecIdObjectId(userId,homeId, specId, objectId, rownum);
+    }
+
+    public List<MetricSpec> getMetricsSpecByObjectId(long userId,long smartHomeId, long objectId){
+        return metricSpecRepository.getSpecByObjectId(userId,smartHomeId,objectId);
     }
 
     public List<SmartObject> getSmartObjectBySpecId(long userId,long smartHomeId,long specId){
         return smartObjectRepository.getObjectBySpecId(userId,smartHomeId,specId);
     }
 
-//    @Transactional(readOnly = false)
-//    public void addMetricHistory(MetricHistory metricHistory) throws ParseException {
-//        metricHistoryRepository.save(metricHistory);
-//    }
+    public Unit getUnitBySpecId(long userId, long homeId, long specId){
+        return unitRepository.getUnitByMetricSpecId(userId,homeId,specId);
+    }
+
+    public SmartObject getObjectById(long objectId){
+        return smartObjectRepository.getObjectById(objectId);
+    }
+
+    public Object[] getMetricHistoryBySpecIdObjectId(long userId,long homeId, long specId, long objectId, int ronwum){
+        return metricHistoryRepository.getMetricHistoryBySpecIdObjectId(userId, homeId, specId, objectId, ronwum);
+    }
 
 }
