@@ -6,6 +6,7 @@
     left: 0;
     background: rgba(0, 0, 0, 0.7);
     overflow: visible;
+    z-index: 999;
 }
 
 .modal .chart {
@@ -22,6 +23,8 @@
     background-color: #FFF;
     border: 5px solid #CCC;
     box-shadow: #000 0 2px 18px;
+    overflow: visible;
+    z-index: 999;
 }
 
 .ui-layout-center-visible {

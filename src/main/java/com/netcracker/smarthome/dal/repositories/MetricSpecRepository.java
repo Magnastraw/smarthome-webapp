@@ -20,6 +20,12 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         return query.getResultList();
     }
 
+    public List<MetricSpec> getMetricSpecByHomeId(long homeId){
+        Query query = getManager().createQuery("select metricSpec from MetricSpec metricSpec inner join Metric metric on metric.metricSpec.specId=metricSpec.specId where ( metric.smartHome.smartHomeId = :homeId) group by metricSpec.specId ");
+        query.setParameter("homeId", homeId);
+        return query.getResultList();
+    }
+
     public MetricSpec getMetricSpecById(long specId) {
         Query query = getManager().createQuery("select ms from MetricSpec ms where ms.specId = :specId");
         query.setParameter("specId", specId);

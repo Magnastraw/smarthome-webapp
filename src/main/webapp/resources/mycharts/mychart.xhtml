@@ -9,9 +9,10 @@
 <cc:interface>
     <cc:attribute name="width"/>
     <cc:attribute name="heigth"/>
-    <cc:attribute name="configuration"/>
-    <cc:attribute name="dataSourceConfig"/>
+    <cc:attribute name="chartOptions"/>
+    <cc:attribute name="requestDataOptions"/>
     <cc:attribute name="refreshInterval"/>
+
 </cc:interface>
 
 <!--Define component-->
@@ -19,16 +20,18 @@
 
     <h:outputStylesheet library="css" name="charts.css"  />
 
-    <h:inputHidden id="refresh_interval" value="#{cc.attrs.refreshInterval}"/>
-    <h:inputHidden id="configuration_json" value="#{cc.attrs.configuration}"/>
-    <h:inputHidden id="dataSourceConfig_json" value="#{cc.attrs.dataSourceConfig}"/>
+    <h:inputHidden id="chartOptions_#{cc.id}" value="#{cc.attrs.chartOptions}"/>
+    <h:inputHidden id="requestDataOptions_#{cc.id}" value="#{cc.attrs.requestDataOptions}"/>
+    <h:inputHidden id="refreshInterval_#{cc.id}" value="#{cc.attrs.refreshInterval}"/>
 
-    <div class="chart-container">
-        <div id="#{cc.id}_chartDiv" class="chart" style="width: #{cc.attrs.width}; height: #{cc.attrs.heigth};  margin-right: auto; margin-left: auto;">
+
+    <div id="#{cc.id}_chartContainer" class="chart-container">
+        <div id="#{cc.id}_chartDiv"  class="chart" style="width: #{cc.attrs.width}; height: #{cc.attrs.heigth}; margin-right: auto; margin-left: auto;">
             <script type="text/javascript">
-                $(function () {
-                    createNewChart($('input[id$="configuration_json"]').val(),$('input[id$="dataSourceConfig_json"]').val(), $('input[id$="refresh_interval"]').val());
-                });
+                   $(function () {
+                       var newChart=createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(),$('input[id$="requestDataOptions_#{cc.id}"]').val(),$('input[id$="refreshInterval_#{cc.id}"]').val(),"#{cc.id}_chartContainer");
+                       document.getElementById("#{cc.id}_chartDiv").innerHTML=newChart;
+                   })
             </script>
         </div>
     </div>

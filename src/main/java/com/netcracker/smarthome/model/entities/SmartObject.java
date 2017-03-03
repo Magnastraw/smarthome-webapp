@@ -146,7 +146,7 @@ public class SmartObject implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "parent_smart_object_id", referencedColumnName = "smart_object_id", nullable = false)
+    @JoinColumn(name = "parent_smart_object_id", referencedColumnName = "smart_object_id")
     public SmartObject getParentObject() {
         return parentObject;
     }
