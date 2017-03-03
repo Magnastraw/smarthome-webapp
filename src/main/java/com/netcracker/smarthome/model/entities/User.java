@@ -5,6 +5,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -139,6 +143,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<SmartHome> getSmartHomes() {
+        for (SmartHome smartHome : smartHomes) {
+            Hibernate.initialize(smartHome);
+        }
         return smartHomes;
     }
 
