@@ -20,6 +20,8 @@ import java.util.List;
 public class HomeSettingsBean implements Serializable {
     @ManagedProperty(value = "#{homeService}")
     private HomeService homeService;
+    @ManagedProperty(value = "#{currentUserHomesBean}")
+    private CurrentUserHomesBean userHomesBean;
     private HomeParam selectedParam;
     private List<DataType> types;
 
@@ -37,6 +39,10 @@ public class HomeSettingsBean implements Serializable {
         this.homeService = homeService;
     }
 
+    public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
+        this.userHomesBean = userHomesBean;
+    }
+
     public List<DataType> getTypes() {
         return types;
     }
@@ -46,7 +52,7 @@ public class HomeSettingsBean implements Serializable {
     }
 
     public SmartHome getHome() {
-        return ((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).getCurrentHome();
+        return userHomesBean.getCurrentHome();
     }
 
     public HomeParam getSelectedParam() {

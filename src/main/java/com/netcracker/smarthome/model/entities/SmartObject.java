@@ -63,7 +63,7 @@ public class SmartObject implements Serializable {
     }
 
     @Basic
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     public String getDescription() {
         return description;
     }
@@ -146,7 +146,7 @@ public class SmartObject implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "parent_smart_object_id", referencedColumnName = "smart_object_id", nullable = false)
+    @JoinColumn(name = "parent_smart_object_id", referencedColumnName = "smart_object_id", nullable = true)
     public SmartObject getParentObject() {
         return parentObject;
     }

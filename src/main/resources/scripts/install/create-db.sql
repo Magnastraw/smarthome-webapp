@@ -88,6 +88,8 @@ CREATE TABLE public.users (
 );
 COMMENT ON COLUMN public.users.email IS 'unique';
 
+CREATE UNIQUE INDEX users_uk
+  ON public.users (email);
 
 ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
@@ -254,9 +256,9 @@ CREATE SEQUENCE public.objects_object_id_seq;
 CREATE TABLE public.objects (
   smart_object_id BIGINT NOT NULL DEFAULT nextval('public.objects_object_id_seq'),
   name VARCHAR NOT NULL,
-  description VARCHAR NOT NULL,
+  description VARCHAR,
   object_type_id BIGINT NOT NULL,
-  parent_smart_object_id BIGINT NOT NULL,
+  parent_smart_object_id BIGINT,
   catalog_id BIGINT NOT NULL,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT objects_pk PRIMARY KEY (smart_object_id)

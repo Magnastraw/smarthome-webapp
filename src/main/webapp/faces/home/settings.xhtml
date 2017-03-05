@@ -75,19 +75,17 @@
         </div>
         <p:panelGrid columns="2" style="border: none">
             <h:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{homeSettingsBean.selectedParam.name}" required="true"
-                         requiredMessage="The name is required!"
-                         validatorMessage="The name must be not empty!"
+            <p:inputText id="name" value="#{homeSettingsBean.selectedParam.name}"
+                         validatorMessage="The name must not be empty!"
                          styleClass="dialog-input">
-                <f:validateRegex pattern=".*^\S.*$"/>
+                <f:validateRegex pattern="^.*\S.*$"/>
                 <p:clientValidator/>
             </p:inputText>
             <h:outputLabel for="value" value="Value:"/>
-            <p:inputText id="value" value="#{homeSettingsBean.selectedParam.value}" required="true"
-                         requiredMessage="The value is required!"
-                         validatorMessage="The value must be not empty!"
+            <p:inputText id="value" value="#{homeSettingsBean.selectedParam.value}"
+                         validatorMessage="The value must not be empty!"
                          styleClass="dialog-input">
-                <f:validateRegex pattern=".*^\S.*$"/>
+                <f:validateRegex pattern="^.*\S.*$"/>
                 <p:clientValidator/>
             </p:inputText>
             <h:outputLabel for="type" value="Type:"/>

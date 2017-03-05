@@ -12,15 +12,17 @@
     <h:outputStylesheet name="css/style.css"/>
 </h:head>
 <h:body>
-    <h:form id="loginForm" prependId="false">
+    <h:form id="messagesForm">
         <div class="alert-block login">
             <p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"
                         styleClass="alert"/>
             <p:message for="email" display="text" styleClass="alert"/>
             <p:message for="password" display="text" styleClass="alert"/>
         </div>
-        <div class="center-block login">
-            <p:panel header="Login">
+    </h:form>
+    <div class="center-block login">
+        <p:panel header="Login">
+            <h:form id="loginForm" prependId="false">
                 <h:panelGrid columns="1" width="100%">
                     <p:inputText id="email" placeholder="Email" required="true"
                                  requiredMessage="The email is required!">
@@ -32,25 +34,30 @@
                     </p:password>
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="width: auto" cellspacing="5">
-                    <p:outputLabel for="remember" value="Remember me:" />
-                    <p:selectBooleanCheckbox id="remember" value="true" />
+                    <p:outputLabel for="remember" value="Remember me:"/>
+                    <p:selectBooleanCheckbox id="remember" value="#{loginBean.remember}">
+                        <f:ajax/>
+                    </p:selectBooleanCheckbox>
                 </h:panelGrid>
-                <div class="social-btns-block">
-                    <p:commandLink action="#" styleClass="social-btn">
+                <p:commandButton value="Sign in" action="#{loginBean.login}"
+                                 update=":messagesForm:messages" validateClient="true"
+                                 styleClass="btn" ajax="false" icon="fa fa-sign-in" form="loginForm"/>
+            </h:form>
+            <div class="social-btns-block">
+                <h:form id="socialLoginForm">
+                    <p:commandLink action="#{loginBean.redirect('google')}" styleClass="social-btn">
                         <h:graphicImage name="images/google.png"/>
                     </p:commandLink>
-                    <p:commandLink action="#" styleClass="social-btn">
+                    <p:commandLink action="#{loginBean.redirect('facebook')}" styleClass="social-btn">
                         <h:graphicImage name="images/facebook.png"/>
                     </p:commandLink>
-                    <p:commandLink action="#" styleClass="social-btn">
+                    <p:commandLink action="#{loginBean.redirect('vk')}" styleClass="social-btn">
                         <h:graphicImage name="images/vk.png"/>
                     </p:commandLink>
-                </div>
-                <p:commandButton value="Sign in" action="#{loginBean.login}" update="messages" validateClient="true"
-                                 styleClass="btn" ajax="false" icon="fa fa-sign-in"/>
-                <p:link outcome="registration" value="Sign up" styleClass="link"/>
-            </p:panel>
-        </div>
-    </h:form>
+                </h:form>
+            </div>
+            <p:link outcome="registration" value="Sign up" styleClass="link"/>
+        </p:panel>
+    </div>
 </h:body>
 </html>

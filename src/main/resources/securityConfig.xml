@@ -8,8 +8,8 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd">
     <sec:http use-expressions="true">
-        <sec:intercept-url pattern="/faces/auth/*" access="permitAll"/>
-        <sec:intercept-url pattern="/faces/**" access="hasRole('ROLE_USER')" />
+        <sec:intercept-url pattern="/faces/auth/*" access="hasRole('ROLE_ANONYMOUS')"/>
+        <sec:intercept-url pattern="/faces/**" access="hasRole('ROLE_USER')"/>
         <sec:form-login
                 login-page="/faces/auth/login.xhtml"
                 login-processing-url="/login"
@@ -23,10 +23,18 @@
                 delete-cookies="JSESSIONID,shTokenCookie"
                 logout-success-url="/"/>
         <sec:csrf disabled="true"/>
-        <sec:remember-me key="shKey" remember-me-parameter="remember_input" user-service-ref="shUserDetailsService" remember-me-cookie="shTokenCookie"/>
+        <sec:remember-me key="shKey" remember-me-parameter="remember_input" user-service-ref="shUserDetailsService"
+                         remember-me-cookie="shTokenCookie" services-alias="shRememberMeServices"/>
     </sec:http>
+    <bean id="rememberMeServices"
+          class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+        <constructor-arg index="0" value="shKey"/>
+        <constructor-arg index="1" ref="shUserDetailsService"/>
+        <property name="alwaysRemember" value="true"/>
+        <property name="cookieName" value="shTokenCookie"/>
+    </bean>
     <bean id="shUserDetailsService"
-                class="com.netcracker.smarthome.business.auth.security.CustomUserDetailsService"/>
+          class="com.netcracker.smarthome.business.auth.principal.SimpleUserDetailsService"/>
     <sec:authentication-manager alias="authenticationManager">
         <sec:authentication-provider user-service-ref="shUserDetailsService">
             <sec:password-encoder hash="md5"/>

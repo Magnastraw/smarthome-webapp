@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.AuthService;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "social_servicies", schema = "public", catalog = "smarthome_db")
 public class SocialService implements Serializable {
     private long serviceId;
+    private AuthService serviceType;
     private String serviceName;
     private String clientId;
     private String secretKey;
@@ -21,11 +23,13 @@ public class SocialService implements Serializable {
     public SocialService() {
     }
 
-    public SocialService(String serviceName, String clientId, String secretKey) {
+    public SocialService(AuthService serviceType, String serviceName, String clientId, String secretKey) {
+        this.serviceType = serviceType;
         this.serviceName = serviceName;
         this.clientId = clientId;
         this.secretKey = secretKey;
     }
+
     @Id
     @Column(name = "service_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ss_seq")
@@ -36,6 +40,16 @@ public class SocialService implements Serializable {
 
     public void setServiceId(long serviceId) {
         this.serviceId = serviceId;
+    }
+
+    @Column(name = "service_type", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    public AuthService getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(AuthService serviceType) {
+        this.serviceType = serviceType;
     }
 
     @Basic

@@ -20,16 +20,15 @@
     </div>
     <p:outputLabel for="name" value="Name:" style=""/>
     <p:inputText id="name" value="#{homeFormBean.home.name}" required="true"
-                 requiredMessage="The name is required!"
-                 validatorMessage="The name must be not empty!">
-        <f:validateRegex pattern=".*^\S.*$"/>
+                 validatorMessage="The name must not be empty!">
+        <f:validateRegex pattern="^.*\S.*$"/>
         <p:clientValidator/>
     </p:inputText>
     <p:outputLabel for="description" value="Description:"/>
     <p:inputTextarea id="description" value="#{homeFormBean.home.description}" autoResize="false" rows="10" required="true"
                      requiredMessage="The description is required!"/>
-    <p:commandButton value="Submit" action="#{navigationBean.setPageName('home/settings')}"
-                     actionListener="#{homeFormBean.save}" ajax="true" icon="ui-icon-check"
+    <p:commandButton value="Save" action="#{navigationBean.setPageName('home/settings')}"
+                     actionListener="#{homeFormBean.save}" ajax="true" icon="fa fa-save"
                      styleClass="btn" validateClient="true" update="centerForm,header,menu">
     </p:commandButton>
 </div>

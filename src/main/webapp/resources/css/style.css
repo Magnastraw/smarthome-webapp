@@ -41,15 +41,16 @@
 
 .dialog td, .dialog tr {
     border: none !important;
+    text-align: left;
 }
 
 .btn {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .link {
     /*text-decoration: none;*/
-    margin-top: 10px;
+    margin-top: 7px;
     display: block;
 }
 
@@ -62,7 +63,7 @@
 }
 
 .social-btns-block {
-    margin: 5px auto 0;
+    margin: 15px auto 0;
 }
 
 .social-btn {
@@ -151,3 +152,12 @@ h3 {
     margin-right: 7px;
 }
 
+.reg table td {
+    vertical-align: top;
+}
+
+.ui-password-panel {
+    padding: 4px !important;
+    width: 100% !important;
+    font-size: smaller !important;
+}

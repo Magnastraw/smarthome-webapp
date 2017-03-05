@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.model.entities;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,7 +29,7 @@ public class User implements Serializable {
     }
 
     public User(String email, String encrPassword, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth) {
-        this.email = email.toLowerCase();
+        this.email = email == null ? email : email.toLowerCase();
         this.encrPassword = encrPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,7 +56,7 @@ public class User implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email.toLowerCase();
+        this.email = email == null ? email : email.toLowerCase();
     }
 
     @Basic

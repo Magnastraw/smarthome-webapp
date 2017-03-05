@@ -6,6 +6,7 @@ import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.SocialProfile;
 import com.netcracker.smarthome.model.entities.SocialService;
 import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.enums.AuthService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -62,8 +63,8 @@ public class TestApp {
         urepo.save(user);
         printList(urepo.getAll());
         System.out.println("Create new services");
-        SocialService facebook = new SocialService("facebook", "dfdfgdf", "dfgdgdgggg"),
-                google = new SocialService("google", "jhkjhkjhkh", "jhkjhkhk");
+        SocialService facebook = new SocialService(AuthService.FACEBOOK, "facebook", "dfdfgdf", "dfgdgdgggg"),
+                google = new SocialService(AuthService.GOOGLE,"google", "jhkjhkjhkh", "jhkjhkhk");
         srepo.save(facebook);
         srepo.save(google);
         printList(srepo.getAll());

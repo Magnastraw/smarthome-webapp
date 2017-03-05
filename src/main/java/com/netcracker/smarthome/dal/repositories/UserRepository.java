@@ -3,6 +3,7 @@ package com.netcracker.smarthome.dal.repositories;
 import com.netcracker.smarthome.model.entities.Group;
 import com.netcracker.smarthome.model.entities.SocialProfile;
 import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.enums.AuthService;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -17,6 +18,14 @@ public class UserRepository extends EntityRepository<User> {
     public User getByEmail(String email) {
         Query query = getManager().createQuery("select u from User u where u.email = :email");
         query.setParameter("email", email);
+        List<User> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public User getBySocialId(String socialId, AuthService service) {
+        Query query = getManager().createQuery("select u from User u join SocialProfile sp on u.userId=sp.userId join SocialService s on s.serviceId=sp.serviceId where sp.userSocialId=:socialId and s.serviceType=:service");
+        query.setParameter("socialId", socialId);
+        query.setParameter("service", service);
         List<User> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }

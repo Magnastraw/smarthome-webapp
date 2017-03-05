@@ -15,7 +15,7 @@ public class EntityRepository<T> {
         this.entityClass = entityClass;
     }
 
-    public EntityManager getManager() {
+    protected EntityManager getManager() {
         return manager;
     }
 
