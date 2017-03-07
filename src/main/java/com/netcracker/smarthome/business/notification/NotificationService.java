@@ -26,10 +26,6 @@ public class NotificationService {
         return notification;
     }
 
-    public void sendNotificationStatus() {
-
-    }
-
     public void sendSMS(Notification notification) {
         notificationType = new SMS();
         notificationType.sendNotification(notification);
