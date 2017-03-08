@@ -338,7 +338,7 @@ CREATE TABLE public.metrics (
   metric_id BIGINT NOT NULL DEFAULT nextval('public.metrics_metric_id_seq'),
   object_id BIGINT NOT NULL,
   subobject_id BIGINT,
-  spec_id BIGINT NOT NULL,
+  spec_id BIGINT,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT metrics_pk PRIMARY KEY (metric_id)
 );
