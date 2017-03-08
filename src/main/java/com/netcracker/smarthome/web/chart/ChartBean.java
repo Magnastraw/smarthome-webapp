@@ -78,6 +78,7 @@ public class ChartBean {
         this.selectedSmartObjects = new ArrayList<SmartObject>();
         this.selectedMetricSpecs = new ArrayList<MetricSpec>();
         this.subObjects = new ArrayList<SmartObject>();
+        this.refreshInterval = 0.0;
         this.chartTitle = "";
     }
 

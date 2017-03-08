@@ -37,6 +37,7 @@ VALUES
 INSERT INTO metrics
 VALUES
   (DEFAULT ,1,NULL,1,1),
+  (DEFAULT ,1,NULL,2,1),
   (DEFAULT ,2,NULL,1,1),
   (DEFAULT ,3,NULL,2,1),
   (DEFAULT ,4,NULL,2,1),
@@ -54,19 +55,16 @@ VALUES
   (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,1);
 INSERT INTO metrics_history
 VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,1);
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,2);
 INSERT INTO metrics_history
 VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,2);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,3);
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,3);
 INSERT INTO metrics_history
 VALUES
   (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,4);
 INSERT INTO metrics_history
 VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,5);
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,5);
 INSERT INTO metrics_history
 VALUES
   (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,6);
@@ -78,7 +76,10 @@ VALUES
   (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,8);
 INSERT INTO metrics_history
 VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,10);
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,9);
 INSERT INTO metrics_history
 VALUES
-  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,11);
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),15+(random() * 10) :: DECIMAL,11);
+INSERT INTO metrics_history
+VALUES
+  (DEFAULT,generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),50+(random() * 35) :: DECIMAL,12);
