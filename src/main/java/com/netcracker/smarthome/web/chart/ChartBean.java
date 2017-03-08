@@ -31,14 +31,14 @@ public class ChartBean {
     private List<SmartObject> subObjects;
     private List<MetricSpec> selectedMetricSpecs;
     private List<MetricSpec> metricSpecs;
-    private List<ChartConfig> chartConfigs;
+    private List<Chart> chartConfigs;
     private ChartOptionsConfigurator chartOptionsConfigurator;
 
     @PostConstruct
     public void init() {
 
         chartOptionsConfigurator = new ChartOptionsConfigurator();
-        chartConfigs = new ArrayList<ChartConfig>();
+        chartConfigs = new ArrayList<Chart>();
         selectedSubObjects = new ArrayList<SmartObject>();
         selectedMetricSpecs = new ArrayList<MetricSpec>();
         selectedSubObjects = new ArrayList<SmartObject>();
@@ -139,11 +139,11 @@ public class ChartBean {
     }
 
 
-    public List<ChartConfig> getChartConfigs() {
+    public List<Chart> getChartConfigs() {
         return chartConfigs;
     }
 
-    public void setChartConfigs(List<ChartConfig> chartConfigs) {
+    public void setChartConfigs(List<Chart> chartConfigs) {
         this.chartConfigs = chartConfigs;
     }
 

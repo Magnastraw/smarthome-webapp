@@ -6,5 +6,5 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import java.util.List;
 
 public interface ChartConfigInterface {
-    ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject);
+    Chart configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject);
 }

@@ -8,8 +8,8 @@ import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChartConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultChartConfig.class);
+public class ChartConfig implements Chart{
+    private static final Logger LOG = LoggerFactory.getLogger(ChartConfig.class);
 
     private String chartConfig;
     private String requestDataConfig;

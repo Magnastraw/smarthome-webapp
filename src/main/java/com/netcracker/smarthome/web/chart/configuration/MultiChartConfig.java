@@ -28,7 +28,7 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigI
         this.title = title;
     }
 
-    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
+    public Chart configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
 
         super.getChartConfig().getChartOptions().getTitle().put("text", getTitle());
 

@@ -18,7 +18,7 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
         this.chartService = chartService;
     }
 
-    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
+    public Chart configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
 
         super.getChartConfig().getChartOptions().getTitle().put("text", selectedSmartObjects.get(0).getName());
 
