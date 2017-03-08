@@ -1,4 +1,7 @@
-package com.netcracker.smarthome.web.chart.highchartConfigurations;
+package com.netcracker.smarthome.web.chart.options;
+
+import com.netcracker.smarthome.web.chart.options.jsonfields.AxisConfig;
+import com.netcracker.smarthome.web.chart.options.jsonfields.SeriesConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +15,12 @@ public class ChartOptions {
     private ArrayList<AxisConfig> yAxis;
     private HashMap<String, HashMap<String, HashMap<String, String>>> exporting;
     private ArrayList<SeriesConfig> series;
+
+    public ChartOptions(HashMap<String, String> title, ArrayList<AxisConfig> yAxis, ArrayList<SeriesConfig> series) {
+        this.title = title;
+        this.yAxis = yAxis;
+        this.series = series;
+    }
 
     public HashMap<String, Boolean> getCredits() {
         return credits;
@@ -76,4 +85,5 @@ public class ChartOptions {
     public void setSeries(ArrayList<SeriesConfig> series) {
         this.series = series;
     }
+
 }

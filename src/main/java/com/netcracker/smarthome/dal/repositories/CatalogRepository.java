@@ -31,4 +31,10 @@ public class CatalogRepository extends EntityRepository<Catalog> {
         }
         return listCatalogs;
     }
+
+    public List<Catalog> getObjectsCatalogs(long homeId){
+        Query query = getManager().createQuery("select catalog from Catalog catalog inner join SmartObject smartObject on catalog.catalogId=smartObject.catalog.catalogId where smartObject.smartHome.smartHomeId=:homeId group by catalog.catalogId");
+        query.setParameter("homeId", homeId);
+        return query.getResultList();
+    }
 }

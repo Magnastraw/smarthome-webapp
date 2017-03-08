@@ -1,13 +1,12 @@
-package com.netcracker.smarthome.web.chart.jsfbean;
+package com.netcracker.smarthome.web.chart.configuration;
 
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.web.chart.highchartConfigurations.ChartConfig;
 
 import java.util.List;
 
 
-public class ChartOptionConfiguration {
+public class ChartOptionsConfigurator {
     private ChartConfigInterface chartConfigInterface;
 
     public ChartConfigInterface getChartConfigInterface() {
@@ -18,7 +17,7 @@ public class ChartOptionConfiguration {
         this.chartConfigInterface = chartConfigInterface;
     }
 
-    public ChartConfig getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects){
-        return chartConfigInterface.configure(selectedMetricSpecs, selectedSmartObjects);
+    public ChartConfig getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects,List<SmartObject> selectedSubObject){
+        return chartConfigInterface.configure(selectedMetricSpecs, selectedSmartObjects, selectedSubObject);
     }
 }

@@ -1,27 +1,31 @@
 function createNewChart(configurationJson, requestDataOptions, refreshInterval, inputDiv) {
     var chart,
         intervalId,
-        rownum = 1,
         options = $.parseJSON(configurationJson),
-        dataSource =  $.parseJSON(requestDataOptions);
+        dataSource = $.parseJSON(requestDataOptions);
 
     //stop setInterval
     createEmptyChart(function () {
-        console.log(options.chart.renderTo);
+        console.log(options);
         if (refreshInterval == 0) {
             requestData(function () {
-                
             });
-        } else if (refreshInterval >= 3600000) {
+        } else if (refreshInterval >= 10000) {
+            requestData(function () {
+                dataSource.rownum += 100;
+            });
             intervalId = setInterval(function () {
                 requestData(function () {
-                    rownum += 100;
+                    dataSource.rownum += 100;
                 });
-            }, 5000);
+            }, refreshInterval);
         } else {
+            requestLiveData(function () {
+                dataSource.rownum++;
+            });
             intervalId = setInterval(function () {
                 requestLiveData(function () {
-                    rownum++;
+                    dataSource.rownum++;
                 });
             }, refreshInterval);
         }
@@ -29,16 +33,10 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     function requestLiveData(callback) {
         $.ajax({
-            url: 'http://localhost:8083/jsonDataLive',
-            data: {
-                type: dataSource.type,
-                homeId: dataSource.homeId,
-                objectId: dataSource.objectId,
-                subObjectId: dataSource.subObjectId,
-                metricSpecId: dataSource.metricSpecId,
-                rownum: rownum
-            },
-            dataType: 'json',
+            url: 'http://localhost:8083/jsonData',
+            data: JSON.stringify(dataSource),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             type: 'POST',
             success: function (data) {
                 $.each(data, function (pos, series) {
@@ -46,8 +44,10 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                         data.x = Date.parse(data.x);
                     });
                     var shift = chart.series[pos].data.length > 15;
-                    chart.series[pos].addPoint({x: series.data[0].x, y: series.data[0].y}, false, shift);
-                    console.log(chart.series[pos].data);
+                    chart.series[pos].addPoint({
+                        x: series.data[0].x,
+                        y: series.data[0].y
+                    }, false, shift);
                 });
                 chart.redraw();
                 callback();
@@ -55,7 +55,6 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);
                 alert(thrownError);
-                alert("no new data");
                 clearInterval(intervalId);
             },
             cache: false
@@ -74,7 +73,15 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                     $.each(series.data, function (pos, data) {
                         data.x = Date.parse(data.x);
                     });
-                    chart.series[pos].setData(series.data);
+                    if(dataSource.rownum==1){
+                        var shift = chart.series[pos].data.length > 15;
+                        chart.series[pos].addPoint({
+                            x: series.data[0].x,
+                            y: series.data[0].y
+                        }, false, shift);
+                    } else {
+                        chart.series[pos].setData(series.data);
+                    }
                 });
                 chart.redraw();
                 callback();
@@ -98,12 +105,12 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
     }
 
     function fullscreenMode() {
-        options.exporting={
-            buttons:{
-                customButton:{
-                    _titleKey:'fullscreenTooltip',
-                    x : -40,
-                    symbol:'symbolFullscreen'
+        options.exporting = {
+            buttons: {
+                customButton: {
+                    _titleKey: 'fullscreenTooltip',
+                    x: -40,
+                    symbol: 'symbolFullscreen'
                 }
             }
         };
@@ -111,7 +118,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
         options.exporting.buttons.customButton.onclick = function () {
             $('.ui-layout-center').toggleClass('ui-layout-center-visible');
             $('.ui-layout-center .ui-layout-unit-content').toggleClass('ui-layout-unit-content-visible');
-            $('#'+inputDiv).toggleClass('modal');
+            $('#' + inputDiv).toggleClass('modal');
             chart.reflow();
         };
 

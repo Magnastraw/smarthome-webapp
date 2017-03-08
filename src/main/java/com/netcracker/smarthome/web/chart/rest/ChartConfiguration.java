@@ -1,8 +1,8 @@
 package com.netcracker.smarthome.web.chart.rest;
 
 
-import com.netcracker.smarthome.web.chart.highchartConfigurations.DataSeries;
-import com.netcracker.smarthome.web.chart.highchartConfigurations.RequestDataOptions;
+import com.netcracker.smarthome.web.chart.options.jsonfields.DataSeries;
+import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

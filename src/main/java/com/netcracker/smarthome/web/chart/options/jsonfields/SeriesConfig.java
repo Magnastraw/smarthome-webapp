@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.chart.highchartConfigurations;
+package com.netcracker.smarthome.web.chart.options.jsonfields;
 
 public class SeriesConfig {
     private String data;

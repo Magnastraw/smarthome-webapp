@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.chart.highchartConfigurations;
+package com.netcracker.smarthome.web.chart.options;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,15 @@ public class RequestDataOptions {
     private char type;
     private ArrayList<Long> objectId;
     private ArrayList<Long> metricSpecId;
-    private ArrayList<Long> subObjectId;
+    private int rownum;
+    private int seriesSize;
+
+    public RequestDataOptions() {}
+
+    public RequestDataOptions(ArrayList<Long> objectId, ArrayList<Long> metricSpecId) {
+        this.objectId = objectId;
+        this.metricSpecId = metricSpecId;
+    }
 
     public Long getSmartHomeId() {
         return smartHomeId;
@@ -41,13 +49,19 @@ public class RequestDataOptions {
         this.metricSpecId = metricSpecId;
     }
 
-    public ArrayList<Long> getSubObjectId() {
-        return subObjectId;
+    public int getRownum() {
+        return rownum;
     }
 
-    public void setSubObjectId(ArrayList<Long> subObjectId) {
-        this.subObjectId = subObjectId;
+    public void setRownum(int rownum) {
+        this.rownum = rownum;
     }
 
+    public int getSeriesSize() {
+        return seriesSize;
+    }
 
+    public void setSeriesSize(int seriesSize) {
+        this.seriesSize = seriesSize;
+    }
 }

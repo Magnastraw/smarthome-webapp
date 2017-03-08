@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.chart.ChartConverters;
+package com.netcracker.smarthome.web.chart.converters;
 
 import com.netcracker.smarthome.dal.repositories.*;
 import com.netcracker.smarthome.model.entities.*;
@@ -30,7 +30,6 @@ public class SmartObjectConverter implements Converter {
 
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object object) {
         if (object != null) {
-            System.out.println(String.valueOf(((SmartObject) object).getSmartObjectId()));
             return String.valueOf(((SmartObject) object).getSmartObjectId());
         } else {
             return null;

@@ -32,26 +32,24 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
         return query.getResultList();
     }
 
-    public List<Object[]> getMetricsHistoryBySpecIdObjectId( long homeId, long specId, long objectId){
+    public List<Object[]> getMetricsHistoryBySpecIdObjectId( long homeId, long specId, long objectId,int rownum,int seriesSize){
         Query query = getManager().createQuery("select mh.historyId,mh.readDate,mh.value ,mh.metric.metricId from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId inner join SmartObject sm on m.object.smartObjectId = sm.smartObjectId where (m.metricSpec.specId = :specId and sm.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId)");
-        query.setFirstResult(1);
-        query.setMaxResults(500);
+        query.setFirstResult(rownum);
+        query.setMaxResults(seriesSize);
         query.setParameter("specId", specId);
         query.setParameter("objectId", objectId);
         query.setParameter("homeId", homeId);
         return (List<Object[]>)query.getResultList();
     }
 
-    public Object[] getMetricHistoryBySpecIdObjectId( long userId,long homeId, long specId, long objectId,int rownum ){
-        Query query = getManager().createQuery("select mh.historyId,mh.readDate,mh.value ,mh.metric.metricId from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId inner join SmartHome sh on m.smartHome.smartHomeId = sh.smartHomeId inner join SmartObject sm on m.object.smartObjectId = sm.smartObjectId where (m.metricSpec.specId = :specId and sm.smartObjectId = :objectId and sh.user.userId = :userId and m.smartHome.smartHomeId = :homeId) order by mh.readDate");
+    public List<Object[]>  getMetricHistoryBySpecIdObjectId(long homeId, long specId, long objectId,int rownum){
+        Query query = getManager().createQuery("select mh.historyId,mh.readDate,mh.value ,mh.metric.metricId from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId inner join SmartObject sm on m.object.smartObjectId = sm.smartObjectId where (m.metricSpec.specId = :specId and sm.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId) order by mh.readDate");
         query.setFirstResult(rownum);
         query.setMaxResults(1);
         query.setParameter("specId", specId);
         query.setParameter("objectId", objectId);
-        query.setParameter("userId", userId);
         query.setParameter("homeId", homeId);
-        List<Object[]> result = query.getResultList();
-        return result.isEmpty() ? null : result.get(0);
+        return (List<Object[]>)query.getResultList();
     }
 
     public Metric getMetricById(long id){
@@ -61,7 +59,7 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
     }
 
     public List<Object[]> getMetricsHistoryBySpecId(long smartHomeId, long metricSpecId){
-        Query query = getManager().createQuery("select metricHistory from MetricHistory metricHistory inner join Metric metric on metricHistory.metric.metrricId=metric.metricId where (metric.metricSpec.specId= :metricSpecId and metric.smartHome.smartHomeId = :smartHomeId)");
+        Query query = getManager().createQuery("select metricHistory from MetricHistory metricHistory inner join Metric metric on metricHistory.metric.metricId=metric.metricId where (metric.metricSpec.specId= :metricSpecId and metric.smartHome.smartHomeId = :smartHomeId)");
         query.setParameter("smartHomeId",smartHomeId);
         query.setParameter("metricSpecId",metricSpecId);
         return (List<Object[]>)query.getResultList();

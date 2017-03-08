@@ -7,8 +7,6 @@
 
 <!--Define component's attribute-->
 <cc:interface>
-    <cc:attribute name="width"/>
-    <cc:attribute name="heigth"/>
     <cc:attribute name="chartOptions"/>
     <cc:attribute name="requestDataOptions"/>
     <cc:attribute name="refreshInterval"/>
@@ -26,11 +24,10 @@
 
 
     <div id="#{cc.id}_chartContainer" class="chart-container">
-        <div id="#{cc.id}_chartDiv"  class="chart" style="width: #{cc.attrs.width}; height: #{cc.attrs.heigth}; margin-right: auto; margin-left: auto;">
+        <div id="#{cc.id}_chartDiv"  class="chart" style="width: 600px; height: 400px; margin-right: auto; margin-left: auto;"><!--ширина-высота-->
             <script type="text/javascript">
                    $(function () {
-                       var newChart=createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(),$('input[id$="requestDataOptions_#{cc.id}"]').val(),$('input[id$="refreshInterval_#{cc.id}"]').val(),"#{cc.id}_chartContainer");
-                       document.getElementById("#{cc.id}_chartDiv").innerHTML=newChart;
+                       createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(), $('input[id$="requestDataOptions_#{cc.id}"]').val(), $('input[id$="refreshInterval_#{cc.id}"]').val(), "#{cc.id}_chartContainer");
                    })
             </script>
         </div>

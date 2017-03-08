@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.chart.ChartConverters;
+package com.netcracker.smarthome.web.chart.converters;
 
 
 import com.netcracker.smarthome.dal.repositories.MetricSpecRepository;
