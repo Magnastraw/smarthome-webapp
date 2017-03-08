@@ -73,7 +73,7 @@ public class ChartBean {
         setDefaultCheckbox();
     }
 
-    private void setDefaultCheckbox() {
+    public void setDefaultCheckbox() {
         this.selectedSubObjects = new ArrayList<SmartObject>();
         this.selectedSmartObjects = new ArrayList<SmartObject>();
         this.selectedMetricSpecs = new ArrayList<MetricSpec>();

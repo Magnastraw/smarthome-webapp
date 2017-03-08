@@ -3,7 +3,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <!--Define component's attribute-->
 <cc:interface>
@@ -21,7 +22,6 @@
     <h:inputHidden id="chartOptions_#{cc.id}" value="#{cc.attrs.chartOptions}"/>
     <h:inputHidden id="requestDataOptions_#{cc.id}" value="#{cc.attrs.requestDataOptions}"/>
     <h:inputHidden id="refreshInterval_#{cc.id}" value="#{cc.attrs.refreshInterval}"/>
-
 
     <div id="#{cc.id}_chartContainer" class="chart-container">
         <div id="#{cc.id}_chartDiv"  class="chart" style="width: 600px; height: 400px; margin-right: auto; margin-left: auto;"><!--ширина-высота-->

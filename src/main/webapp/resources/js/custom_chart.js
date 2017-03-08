@@ -33,7 +33,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     function requestLiveData(callback) {
         $.ajax({
-            url: 'http://localhost:8083/jsonData',
+            url: window.location+'jsonData',
             data: JSON.stringify(dataSource),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -63,7 +63,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     function requestData(callback) {
         $.ajax({
-            url: 'http://localhost:8083/jsonData',
+            url: window.location+'jsonData',
             data: JSON.stringify(dataSource),
             contentType: "application/json; charset=utf-8",
             dataType: "json",

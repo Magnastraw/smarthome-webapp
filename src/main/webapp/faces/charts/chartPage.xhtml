@@ -19,16 +19,15 @@
     </h:panelGrid>
 
     <p:dialog header="Chart settings" widgetVar="chartSettingDialog">
-
         <!--<h:panelGroup layout="block" id="alertBlock" class="alert-block">-->
-            <!--<p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"-->
-                        <!--styleClass="alert"/>-->
-            <!--<p:message for="object" display="text" styleClass="alert"/>-->
-            <!--<p:message for="subObject" display="text" styleClass="alert"/>-->
-            <!--<p:message for="metric" display="text" styleClass="alert"/>-->
+        <!--<p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"-->
+        <!--styleClass="alert"/>-->
+        <!--<p:message for="object" display="text" styleClass="alert"/>-->
+        <!--<p:message for="subObject" display="text" styleClass="alert"/>-->
+        <!--<p:message for="metric" display="text" styleClass="alert"/>-->
         <!--</h:panelGroup>-->
 
-        <h:panelGrid id="sub" columns="2" cellpadding="5">
+        <h:panelGrid id="sub" columns="2" cellpadding="0">
             <h:outputLabel for="refreshInterval" value="Refresh interval(minutes):"/>
             <p:inputText id="refreshInterval" value="#{chartBean.refreshInterval}"/>
             <h:outputLabel for="object" value="Object:"/>
@@ -39,31 +38,35 @@
                                   filter="true"
                                   filterMatchMode="startsWith"
                                   onHide="executeOnOnhide()">
-                                  <!--required="true"-->
-                                  <!--requiredMessage="The object is required!">-->
+                <!--required="true"-->
+                <!--requiredMessage="The object is required!">-->
                 <f:selectItems value="#{chartBean.smartObjects}"
                                var="smartObject"
                                itemValue="#{smartObject}"
                                itemLabel="#{smartObject.name}"/>
                 <!--<p:clientValidator/>-->
             </p:selectCheckboxMenu>
-            <h:outputLabel for="subObject" value="Sub object:" rendered="#{not empty chartBean.subObjects}"  />
-            <p:selectCheckboxMenu id="subObject"
-                                  value="#{chartBean.selectedSubObjects}"
-                                  converter="smartObjectConverter"
-                                  label="Select subobject"
-                                  filter="true"
-                                  filterMatchMode="startsWith"
-                                  onHide="showTitle()"
-                                  rendered="#{not empty chartBean.subObjects}">
-                                  <!--required="#{not empty chartBean.subObjects}"-->
-                                  <!--requiredMessage="The subobject is required!">-->
-                <!--<p:clientValidator/>-->
-                <f:selectItems value="#{chartBean.subObjects}"
-                               var="smartObject"
-                               itemValue="#{smartObject}"
-                               itemLabel="#{smartObject.name}"/>
-            </p:selectCheckboxMenu>
+            <h:panelGroup id="subObjectLabel">
+                <h:outputLabel for="subObject" value="Sub object:" rendered="#{not empty chartBean.subObjects}"/>
+            </h:panelGroup>
+            <h:panelGroup id="subObjectSelect">
+                <p:selectCheckboxMenu id="subObject"
+                                      value="#{chartBean.selectedSubObjects}"
+                                      converter="smartObjectConverter"
+                                      label="Select subobject"
+                                      filter="true"
+                                      filterMatchMode="startsWith"
+                                      onHide="showTitle()"
+                                      rendered="#{not empty chartBean.subObjects}">
+                    <!--required="#{not empty chartBean.subObjects}"-->
+                    <!--requiredMessage="The subobject is required!">-->
+                    <!--<p:clientValidator/>-->
+                    <f:selectItems value="#{chartBean.subObjects}"
+                                   var="smartObject"
+                                   itemValue="#{smartObject}"
+                                   itemLabel="#{smartObject.name}"/>
+                </p:selectCheckboxMenu>
+            </h:panelGroup>
             <h:outputLabel for="metric" value="Metric spec:"/>
             <p:selectCheckboxMenu id="metric"
                                   value="#{chartBean.selectedMetricSpecs}"
@@ -72,34 +75,39 @@
                                   filter="true"
                                   filterMatchMode="startsWith"
                                   onHide="showTitle()">
-                                  <!--required="true"-->
-                                  <!--requiredMessage="The metric is required!">-->
+                <!--required="true"-->
+                <!--requiredMessage="The metric is required!">-->
                 <f:selectItems value="#{chartBean.metricSpecs}"
                                var="metricSpec"
                                itemValue="#{metricSpec}"
                                itemLabel="#{metricSpec.specName}"/>
                 <!--<p:clientValidator/>-->
             </p:selectCheckboxMenu>
-            <h:outputLabel for="chartName"
-                           value="Chart title:"
-                           rendered="#{chartBean.isRendered()}"/>
-            <p:inputText id="chartName"
-                         value="#{chartBean.chartTitle}"
-                         rendered="#{chartBean.isRendered()}"/>
-            <p:commandButton value="Submit"
-                             action="#{chartBean.addChart()}"
-                             update="centerForm"
-                             style="margin-top:10px;">
-                             <!--validateClient="true"-->
-                             <!--immediate="true"-->
+            <h:panelGroup id="titleLabel">
+                <h:outputLabel for="chartName"
+                               value="Chart title:"
+                               rendered="#{chartBean.isRendered()}"/>
+            </h:panelGroup>
+            <h:panelGroup id="titleInput">
+                <p:inputText id="chartName"
+                             value="#{chartBean.chartTitle}"
+                             rendered="#{chartBean.isRendered()}"/>
 
-            </p:commandButton>
+            </h:panelGroup>
         </h:panelGrid>
+        <p:commandButton value="Submit"
+                         action="#{chartBean.addChart()}"
+                         update="centerForm"
+                         style="margin-top:10px;">
+            <!--validateClient="true"-->
+            <!--immediate="true"-->
+
+        </p:commandButton>
     </p:dialog>
-    <p:remoteCommand  name="executeOnOnhide"
-                      update="sub"
-                      action="#{chartBean.changeSelectObject}"/>
+    <p:remoteCommand name="executeOnOnhide"
+                     update="subObjectLabel subObjectSelect titleLabel titleInput"
+                     action="#{chartBean.changeSelectObject}"/>
     <p:remoteCommand name="showTitle"
-                     update="sub"/>
+                     update="subObjectLabel subObjectSelect titleLabel titleInput"/>
 
 </ui:composition>
