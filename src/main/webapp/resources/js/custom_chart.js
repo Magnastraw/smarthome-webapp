@@ -44,6 +44,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                         data.x = Date.parse(data.x);
                     });
                     var shift = chart.series[pos].data.length > 15;
+                    console.log(chart.series[pos].data);
                     chart.series[pos].addPoint({
                         x: series.data[0].x,
                         y: series.data[0].y
@@ -73,15 +74,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                     $.each(series.data, function (pos, data) {
                         data.x = Date.parse(data.x);
                     });
-                    if(dataSource.rownum==1){
-                        var shift = chart.series[pos].data.length > 15;
-                        chart.series[pos].addPoint({
-                            x: series.data[0].x,
-                            y: series.data[0].y
-                        }, false, shift);
-                    } else {
                         chart.series[pos].setData(series.data);
-                    }
                 });
                 chart.redraw();
                 callback();

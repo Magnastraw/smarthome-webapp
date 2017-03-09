@@ -1,4 +1,3 @@
--- first reg 3 new users
 INSERT INTO object_types
 VALUES
   (DEFAULT, 'Temperature', 'Temperature'),
