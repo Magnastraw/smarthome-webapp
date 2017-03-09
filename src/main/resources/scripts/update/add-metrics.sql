@@ -4,22 +4,6 @@ VALUES
   (DEFAULT, 'Temperature', 'Temperature'),
   (DEFAULT, 'Humidity', 'Humidity');
 
-INSERT INTO catalogs
-VALUES
-  (DEFAULT, 'Metric Catalog 1', NULL, 1),
-  (DEFAULT, 'Metric Catalog 2', NULL, 2),
-  (DEFAULT, 'Metric Catalog 3', NULL, 3);
-
-INSERT INTO units
-VALUES
-  (DEFAULT, 'Temperature', 1, '°C', NULL),
-  (DEFAULT, 'Humidity', 1, '%', NULL);
-
-INSERT INTO metric_specs
-VALUES
-  (DEFAULT, 'Temperature ', 1, NULL, NULL, 'common', NULL, 1),
-  (DEFAULT, 'Humidity', 2, NULL, NULL, 'common', NULL, 2);
-
 INSERT INTO objects
 VALUES
   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),

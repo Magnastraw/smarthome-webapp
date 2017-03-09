@@ -67,7 +67,6 @@ public class DefaultChartConfig {
 
     public void setInterval() {
         if (chartConfig.getRefreshInterval() == 0 || chartConfig.getRefreshInterval() > 5000) {
-            System.out.println("Size:"+chartConfig.getRefreshInterval());
             chartConfig.getRequestDataOptions().setSeriesSize(100);
         } else {
             chartConfig.getRequestDataOptions().setSeriesSize(1);

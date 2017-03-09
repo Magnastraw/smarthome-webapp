@@ -33,20 +33,26 @@ insert into public.catalogs (catalog_name,parent_catalog_id,smart_home_id)
 		('alarmSubcatalog2_2',14,1),
 		('alarmSubcatalog3_1',15,1);
 
-insert into public.metric_specs (spec_name,metric_type,catalog_id)
+insert into public.units (unit_name,base_factor,label)
 	values
-		('metricSpec1','temperature',8),
-		('metricSpec2','temperature',8),
-		('metricSpec3','temperature',9),
-		('metricSpec4','temperature',9),
-		('metricSpec5','temperature',9),
-		('metricSpec6','temperature',10),
-		('metricSpec7','temperature',10),
-		('metricSpec8','temperature',11),
-		('metricSpec9','temperature',11),
-		('metricSpec10','temperature',12),
-		('metricSpec11','temperature',12),
-		('metricSpec12','temperature',12);
+	('Temperature',10,'°C'),
+	('Humidity',10,'%'),
+	('kW',1000,'label');
+
+insert into public.metric_specs (spec_name,unit_id,metric_type,catalog_id)
+	values
+		('Temperature',1,'common',8),
+		('Humidity',2,'common',8),
+		('metricSpec3',1,'temperature',9),
+		('metricSpec4',1,'temperature',9),
+		('metricSpec5',1,'temperature',9),
+		('metricSpec6',1,'temperature',10),
+		('metricSpec7',1,'temperature',10),
+		('metricSpec8',1,'temperature',11),
+		('metricSpec9',1,'temperature',11),
+		('metricSpec10',1,'temperature',12),
+		('metricSpec11',1,'temperature',12),
+		('metricSpec12',1,'temperature',12);
 
 insert into public.alarm_specs (spec_name,object_type,catalog_id)
 	values
@@ -63,8 +69,5 @@ insert into public.alarm_specs (spec_name,object_type,catalog_id)
 		('alarmSpec11','type3',19),
 		('alarmSpec12','type3',20);
 
-insert into public.units (unit_name,base_factor,label)
-	values
-	('Celsius',10,'label'),
-	('mm Hg',10,'label'),
-	('kW',1000,'label');
+
+
