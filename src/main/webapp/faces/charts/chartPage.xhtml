@@ -18,7 +18,7 @@
         </c:forEach>
     </h:panelGrid>
 
-    <p:dialog header="Chart settings" widgetVar="chartSettingDialog">
+    <p:dialog header="Chart settings"  widgetVar="chartSettingDialog" resizable="false">
         <!--<h:panelGroup layout="block" id="alertBlock" class="alert-block">-->
         <!--<p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"-->
         <!--styleClass="alert"/>-->
@@ -27,17 +27,18 @@
         <!--<p:message for="metric" display="text" styleClass="alert"/>-->
         <!--</h:panelGroup>-->
 
-        <h:panelGrid id="sub" columns="2" cellpadding="0">
+        <h:panelGrid id="sub" columns="2" cellpadding="0" >
             <h:outputLabel for="refreshInterval" value="Refresh interval(minutes):"/>
-            <p:inputText id="refreshInterval" value="#{chartBean.refreshInterval}"/>
-            <h:outputLabel for="object" value="Object:"/>
+            <p:inputText id="refreshInterval" value="#{chartBean.refreshInterval}" styleClass="dialog-input-chart"/>
+            <h:outputLabel for="object" value="Object:" />
             <p:selectCheckboxMenu id="object"
                                   value="#{chartBean.selectedSmartObjects}"
                                   converter="smartObjectConverter"
                                   label="Select object"
                                   filter="true"
                                   filterMatchMode="startsWith"
-                                  onHide="executeOnOnhide()">
+                                  onHide="executeOnOnhide()"
+                                  styleClass="dialog-select">
                 <!--required="true"-->
                 <!--requiredMessage="The object is required!">-->
                 <f:selectItems value="#{chartBean.smartObjects}"
@@ -57,7 +58,8 @@
                                       filter="true"
                                       filterMatchMode="startsWith"
                                       onHide="showTitle()"
-                                      rendered="#{not empty chartBean.subObjects}">
+                                      rendered="#{not empty chartBean.subObjects}"
+                                      styleClass="dialog-select">
                     <!--required="#{not empty chartBean.subObjects}"-->
                     <!--requiredMessage="The subobject is required!">-->
                     <!--<p:clientValidator/>-->
@@ -74,7 +76,8 @@
                                   label="Select metric"
                                   filter="true"
                                   filterMatchMode="startsWith"
-                                  onHide="showTitle()">
+                                  onHide="showTitle()"
+                                  styleClass="dialog-select">
                 <!--required="true"-->
                 <!--requiredMessage="The metric is required!">-->
                 <f:selectItems value="#{chartBean.metricSpecs}"
@@ -91,7 +94,8 @@
             <h:panelGroup id="titleInput">
                 <p:inputText id="chartName"
                              value="#{chartBean.chartTitle}"
-                             rendered="#{chartBean.isRendered()}"/>
+                             rendered="#{chartBean.isRendered()}"
+                             styleClass="dialog-input-chart"/>
 
             </h:panelGroup>
         </h:panelGrid>
@@ -103,6 +107,7 @@
             <!--immediate="true"-->
 
         </p:commandButton>
+
     </p:dialog>
     <p:remoteCommand name="executeOnOnhide"
                      update="subObjectLabel subObjectSelect titleLabel titleInput"

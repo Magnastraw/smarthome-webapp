@@ -1,11 +1,15 @@
 package com.netcracker.smarthome.web.chart.options.jsonfields;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class DataSeries {
+public class DataSeries implements Series {
+
     private ArrayList<Data> data;
 
     public DataSeries(ArrayList<Data> data) {
@@ -24,7 +28,7 @@ public class DataSeries {
         Timestamp readDate = (Timestamp) metricHistory[1];
         BigDecimal value = (BigDecimal) metricHistory[2];
         Data data = new Data();
-        data.setX(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(readDate));
+        data.setX(readDate.getTime());
         data.setY(value);
         this.data.add(data);
     }

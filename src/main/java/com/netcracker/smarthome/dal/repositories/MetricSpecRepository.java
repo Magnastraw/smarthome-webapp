@@ -13,7 +13,6 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         super(MetricSpec.class);
     }
 
-
     public List<MetricSpec> getSpecByObjectId(long objectId) {
         Query query = getManager().createQuery("select ms from MetricSpec ms inner join Metric m on m.metricSpec.specId  = ms.specId inner join SmartObject so on m.object.smartObjectId = so.smartObjectId where (so.smartObjectId = :objectId ) group by ms.specId");
         query.setParameter("objectId", objectId);
@@ -25,13 +24,6 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         query.setParameter("homeId", homeId);
         return query.getResultList();
     }
-
-    public MetricSpec getMetricSpecById(long specId) {
-        Query query = getManager().createQuery("select ms from MetricSpec ms where ms.specId = :specId");
-        query.setParameter("specId", specId);
-        List<MetricSpec> result = query.getResultList();
-        return result.isEmpty() ? null : result.get(0);
-	}
 	
     public List<MetricSpec> getMetricSpecs(Catalog catalog) {
         Query query = getManager().createQuery("select ms from MetricSpec ms where ms.catalog.catalogId = :catalogId order by ms.specName");

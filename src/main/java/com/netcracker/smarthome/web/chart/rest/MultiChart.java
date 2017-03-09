@@ -6,6 +6,7 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.web.chart.options.jsonfields.Data;
 import com.netcracker.smarthome.web.chart.options.jsonfields.DataSeries;
 import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
+import com.netcracker.smarthome.web.chart.options.jsonfields.Series;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 @Component
 public class MultiChart implements Chart {
-    private ArrayList<DataSeries> dataSerieses;
+    private ArrayList<Series> dataSerieses;
 
     private final ChartService chartService;
 
@@ -26,16 +27,16 @@ public class MultiChart implements Chart {
         return chartService;
     }
 
-    public ArrayList<DataSeries> getDataSeries() {
+    public ArrayList<Series> getDataSeries() {
         return dataSerieses;
     }
 
-    public void setDataSeries(ArrayList<DataSeries> dataSerieses) {
+    public void setDataSeries(ArrayList<Series> dataSerieses) {
         this.dataSerieses = dataSerieses;
     }
 
-    public ArrayList<DataSeries> configure(RequestDataOptions requestDataOptions) {
-        dataSerieses = new ArrayList<DataSeries>();
+    public ArrayList<Series> configure(RequestDataOptions requestDataOptions) {
+        dataSerieses = new ArrayList<Series>();
         for (SmartObject smartObject : chartService.getSmartObjectByIds(requestDataOptions.getObjectId())) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {
                 if(isSelectedMetric(requestDataOptions.getMetricSpecId(),metricSpec.getSpecId())){

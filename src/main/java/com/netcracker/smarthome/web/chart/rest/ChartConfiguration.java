@@ -3,6 +3,7 @@ package com.netcracker.smarthome.web.chart.rest;
 
 import com.netcracker.smarthome.web.chart.options.jsonfields.DataSeries;
 import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
+import com.netcracker.smarthome.web.chart.options.jsonfields.Series;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class ChartConfiguration {
         this.chart = chart;
     }
 
-    public ArrayList<DataSeries> getData(RequestDataOptions requestDataOptions){
+    public ArrayList<Series> getData(RequestDataOptions requestDataOptions){
         return chart.configure(requestDataOptions);
     }
 }

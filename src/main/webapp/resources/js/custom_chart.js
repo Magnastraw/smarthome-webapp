@@ -40,9 +40,6 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             type: 'POST',
             success: function (data) {
                 $.each(data, function (pos, series) {
-                    $.each(series.data, function (pos, data) {
-                        data.x = Date.parse(data.x);
-                    });
                     var shift = chart.series[pos].data.length > 15;
                     console.log(chart.series[pos].data);
                     chart.series[pos].addPoint({
@@ -71,9 +68,6 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             type: 'POST',
             success: function (data) {
                 $.each(data, function (pos, series) {
-                    $.each(series.data, function (pos, data) {
-                        data.x = Date.parse(data.x);
-                    });
                         chart.series[pos].setData(series.data);
                 });
                 chart.redraw();
