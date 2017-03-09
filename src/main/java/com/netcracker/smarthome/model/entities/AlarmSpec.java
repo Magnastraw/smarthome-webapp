@@ -21,6 +21,10 @@ public class AlarmSpec implements Serializable {
     public AlarmSpec() {
     }
 
+    public AlarmSpec(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
     public AlarmSpec(String specName, String objectType, Catalog catalog) {
         this.specName = specName;
         this.objectType = objectType;

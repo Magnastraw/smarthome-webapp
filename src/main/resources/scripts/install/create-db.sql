@@ -1,4 +1,3 @@
-
 CREATE SEQUENCE public.condition_types_type_id_seq;
 
 CREATE TABLE public.condition_types (

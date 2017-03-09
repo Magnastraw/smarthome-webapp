@@ -62,6 +62,11 @@
     margin: 10px auto !important;
 }
 
+.alert-block-specs {
+    margin: 0 auto;
+    width: 350px;
+}
+
 .social-btns-block {
     margin: 15px auto 0;
 }
@@ -81,7 +86,7 @@
 
 .ui-layout-north {
     z-index: 20 !important;
-    overflow: visible !important;;
+    overflow: visible !important;
 }
 
 .ui-layout-north .ui-layout-unit-content {
@@ -93,16 +98,85 @@
     text-align: center;
 }
 
+.dialog-output {
+    width: 223px !important;
+    margin: 0px !important;
+}
+
 .dialog-input {
-    width: 200px;
+    width: 200px; !important;
+    margin: 0px !important;
+}
+
+.dialog-input-catalog {
+    width: 200px; !important;
+    margin-left: 26px !important;
 }
 
 .dialog-select {
     width: 177px !important;
+    margin: 0px !important;
+}
+
+.dialog-select-catalog {
+    width: 177px !important;
+    margin-left: 26px !important;
+}
+
+.dialog-input-alarm {
+    width: 200px; !important;
+    margin-left: 13px !important;
+}
+
+.table-name {
+    font-family: "latoregular", "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+.icon:before {
+    content: url('/resources/images/folder.png') !important;
+    padding-right: 3px;
+}
+
+.panel {
+    width: 400px;
+    margin: 0px;
+}
+
+.filter {
+    width: 90% !important;
+}
+
+.filter-alarm {
+    width: 50% !important;;
+}
+
+.ui-datatable th.ui-state-active {
+    background-color: #ebedf0;
+    color: #555;
+}
+
+.ui-datatable th.ui-state-active .ui-icon-carat-2-n-s {
+    background-image: url("/javax.faces.resource/images/ui-icons_454545_256x240.png.xhtml?ln=primefaces-omega");
+}
+
+.column-delete {
+    width: 40px;
+    text-align: center;
+}
+
+.column-name {
+    width: 170px;
+}
+.column {
+    text-align: center;
+}
+
+.margin {
+    margin-left: 7px !important;
 }
 
 .fa {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 .home-form {

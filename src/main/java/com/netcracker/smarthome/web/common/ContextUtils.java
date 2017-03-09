@@ -13,6 +13,11 @@ public class ContextUtils {
                 message));
     }
 
+    public static void addErrorSummaryToContext(String summary) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, ""));
+    }
+
     public static User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof User))
