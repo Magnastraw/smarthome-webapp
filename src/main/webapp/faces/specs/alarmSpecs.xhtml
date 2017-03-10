@@ -7,8 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <h2>Alarm specifications</h2>
-    <p:outputPanel>
+    <p:outputPanel id="alarmSpecs">
+        <h2>"#{homeSettingsBean.home.name}": alarm specifications</h2>
         <p:breadCrumb id="catalogsMenu" homeDisplay="text">
             <p:menuitem icon="fa fa-home" actionListener="#{alarmSpecsBean.getRootCatalogs}" update=":centerForm"/>
             <c:forEach items="#{alarmSpecsBean.menuCatalogs}" var="catalog">

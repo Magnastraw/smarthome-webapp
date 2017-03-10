@@ -137,7 +137,7 @@
 }
 
 .icon:before {
-    content: url('/resources/images/folder.png') !important;
+    content: url("http://iconizer.net/files/Essen/thumb/16/folder.png") !important;
     padding-right: 3px;
 }
 

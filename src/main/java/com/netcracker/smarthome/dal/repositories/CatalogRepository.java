@@ -1,6 +1,8 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Catalog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.util.LinkedList;
@@ -9,6 +11,7 @@ import java.util.Queue;
 
 @Repository
 public class CatalogRepository extends EntityRepository<Catalog> {
+    private static final Logger LOG = LoggerFactory.getLogger(CatalogRepository.class);
     public CatalogRepository() {
         super(Catalog.class);
     }
@@ -37,33 +40,20 @@ public class CatalogRepository extends EntityRepository<Catalog> {
         return query.getResultList();
     }
 
-    public List<Catalog> getRootMetricSpecsCatalogs(long smartHomeId) {
-        Query query = getManager().createQuery("select c from Catalog c where c.parentCatalog.catalogId=:catalogId order by c.catalogName");
-        query.setParameter("catalogId", getRootCatalogId("metricSpecsRootCatalog", smartHomeId));
-        return query.getResultList();
-    }
-
-    public long getRootCatalogId(String catalogName, long smartHomeId) {
-        Query query = getManager().createQuery("select c.catalogId from Catalog c where c.parentCatalog.catalogId is null and c.smartHome.smartHomeId = :smartHomeId and c.catalogName=:catalogName ");
+    public Catalog getRootCatalog(String catalogName, long smartHomeId) {
+        Query query = getManager().createQuery("select c from Catalog c where c.parentCatalog.catalogId is null and c.smartHome.smartHomeId = :smartHomeId and c.catalogName=:catalogName ");
         query.setParameter("smartHomeId", smartHomeId);
         query.setParameter("catalogName", catalogName);
-        return Long.parseLong(query.getResultList().get(0).toString());
-    }
-
-    public List<Catalog> getRootAlarmSpecsCatalogs(long smartHomeId) {
-        Query query = getManager().createQuery("select c from Catalog c where c.parentCatalog.catalogId=:catalogId order by c.catalogName");
-        query.setParameter("catalogId", getRootCatalogId("alarmSpecsRootCatalog", smartHomeId));
-        return query.getResultList();
+        List<Catalog> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public boolean checkCatalogName(String catalogName, long parentCatalogId) {
         Query query = getManager().createQuery("select c from Catalog c where c.parentCatalog.catalogId=:catalogId and c.catalogName = :catalogName");
         query.setParameter("catalogId", parentCatalogId);
         query.setParameter("catalogName", catalogName);
-        if (query.getResultList().size() != 0)
-            return false;
-        else
-            return true;
+        List<Catalog> result = query.getResultList();
+        return result.isEmpty() ? true : false;
     }
 
     public List<Catalog> getPathToCatalog(Catalog catalog) {
