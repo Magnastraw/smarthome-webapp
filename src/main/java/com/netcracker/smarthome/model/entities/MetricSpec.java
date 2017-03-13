@@ -11,55 +11,46 @@ import java.util.List;
 
 @Entity
 @Table(name = "metric_specs", schema = "public", catalog = "smarthome_db")
-public class MetricSpec implements Serializable {
-    private long specId;
-    private String specName;
+public class MetricSpec extends Spec {
     private Double maxValue;
     private Double minValue;
     private String metricType;
     private String assignedToObject;
     private Unit unit;
-    private Catalog catalog;
     private List<Metric> metrics;
 
     public MetricSpec() {
     }
 
     public MetricSpec(Catalog catalog, Unit unit) {
-        this.catalog = catalog;
+        super(catalog);
         this.unit = unit;
     }
 
     public MetricSpec(String specName, Double maxValue, Double minValue, String metricType, String assignedToObject, Unit unit, Catalog catalog) {
-        this.specName = specName;
+        super(specName, catalog);
         this.maxValue = maxValue;
         this.minValue = minValue;
         this.metricType = metricType;
         this.assignedToObject = assignedToObject;
         this.unit = unit;
-        this.catalog = catalog;
     }
 
     @Id
     @Column(name = "spec_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "m_spec_seq")
     @SequenceGenerator(name = "m_spec_seq", sequenceName = "metric_specs_spec_id_seq", allocationSize = 1)
+    @Override
     public long getSpecId() {
-        return specId;
+        return super.getSpecId();
     }
 
-    public void setSpecId(long specId) {
-        this.specId = specId;
-    }
 
     @Basic
     @Column(name = "spec_name", nullable = false)
+    @Override
     public String getSpecName() {
-        return specName;
-    }
-
-    public void setSpecName(String specName) {
-        this.specName = specName;
+        return super.getSpecName();
     }
 
     @Basic
@@ -114,12 +105,9 @@ public class MetricSpec implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "catalog_id", referencedColumnName = "catalog_id", nullable = false)
+    @Override
     public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
+        return super.getCatalog();
     }
 
     @OneToMany(mappedBy = "metricSpec")
