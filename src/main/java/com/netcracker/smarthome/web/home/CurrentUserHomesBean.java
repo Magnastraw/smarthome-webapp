@@ -28,7 +28,6 @@ public class CurrentUserHomesBean {
 
     public void setCurrentHome(SmartHome currentHome) {
         this.currentHome = currentHome;
-        currentHome.setHomeParams(homeService.getHomeParams(currentHome));
     }
 
     public void setHomeService(HomeService homeService) {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,32 +30,20 @@ public class HomeService {
 
     @Transactional
     public void createHome(SmartHome home) {
-        homeRepository.save(home);
-        createDataTypesIfNotExists();
         setDefaultParams(home);
+        homeRepository.save(home);
     }
 
-    @Transactional
     private void setDefaultParams(SmartHome home) {
-        paramRepository.save(new HomeParam("Address", "address", home, dataTypeRepository.getByType(Type.STRING)));
-        paramRepository.save(new HomeParam("Link", "http://www.outlink.com", home, dataTypeRepository.getByType(Type.LINK)));
-    }
-
-    @Transactional
-    private void createDataTypesIfNotExists() {
-        if (dataTypeRepository.getByType(Type.STRING) == null)
-            dataTypeRepository.save(new DataType("String", Type.STRING));
-        if (dataTypeRepository.getByType(Type.LINK) == null)
-            dataTypeRepository.save(new DataType("Link", Type.LINK));
+        ArrayList<HomeParam> params = new ArrayList<HomeParam>();
+        params.add(new HomeParam("Address", "address", home, dataTypeRepository.getByType(Type.STRING)));
+        params.add(new HomeParam("Link", "http://www.outlink.com", home, dataTypeRepository.getByType(Type.LINK)));
+        home.setHomeParams(params);
     }
 
     @Transactional(readOnly = true)
     public List<SmartHome> getHomesList(User user) {
-        List<SmartHome> homes = homeRepository.getHomesByUser(user);
-        for (SmartHome home : homes) {
-            home.setHomeParams(getHomeParams(home));
-        }
-        return homes;
+        return homeRepository.getHomesByUser(user);
     }
 
     @Transactional(readOnly = true)

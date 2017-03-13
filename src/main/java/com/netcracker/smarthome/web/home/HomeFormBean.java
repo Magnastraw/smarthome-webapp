@@ -13,6 +13,8 @@ import javax.faces.bean.ViewScoped;
 public class HomeFormBean {
     @ManagedProperty(value = "#{homeService}")
     private HomeService homeService;
+    @ManagedProperty(value = "#{currentUserHomesBean}")
+    private CurrentUserHomesBean userHomesBean;
     private SmartHome home;
     private boolean creatingMode;
 
@@ -26,6 +28,10 @@ public class HomeFormBean {
 
     public void setHomeService(HomeService homeService) {
         this.homeService = homeService;
+    }
+
+    public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
+        this.userHomesBean = userHomesBean;
     }
 
     public SmartHome getHome() {
@@ -47,7 +53,7 @@ public class HomeFormBean {
             home.setDescription(" ");
         if (creatingMode) {
             homeService.createHome(home);
-            ((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).setCurrentHome(home);
+            userHomesBean.setCurrentHome(home);
         } else
             homeService.updateHome(home);
         return null;

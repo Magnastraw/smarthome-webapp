@@ -15,7 +15,7 @@ public class SmartHomeRepository extends EntityRepository<SmartHome> {
     }
 
     public List<SmartHome> getHomesByUser(User user) {
-        Query query = getManager().createQuery("select sh from SmartHome sh where sh.user=:user");
+        Query query = getManager().createQuery("select distinct sh from SmartHome sh left join fetch sh.homeParams where sh.user=:user");
         query.setParameter("user", user);
         return query.getResultList();
     }

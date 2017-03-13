@@ -73,14 +73,14 @@ public class HomeSettingsBean implements Serializable {
             return;
         }
         SmartHome home = getHome();
-        getHome().setHomeParams(homeService.getHomeParams(home));
+        home.setHomeParams(homeService.getHomeParams(home));
         context.addCallbackParam("correct", true);
     }
 
     public String deleteParam() {
         homeService.deleteParam(selectedParam);
         SmartHome home = getHome();
-        getHome().setHomeParams(homeService.getHomeParams(home));
+        home.setHomeParams(homeService.getHomeParams(home));
         return null;
     }
 }

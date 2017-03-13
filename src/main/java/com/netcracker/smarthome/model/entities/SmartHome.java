@@ -82,7 +82,7 @@ public class SmartHome implements Serializable {
         this.events = events;
     }
 
-    @OneToMany(mappedBy = "smartHome")
+    @OneToMany(mappedBy = "smartHome", cascade = {CascadeType.PERSIST})
     public List<HomeParam> getHomeParams() {
         return homeParams;
     }
