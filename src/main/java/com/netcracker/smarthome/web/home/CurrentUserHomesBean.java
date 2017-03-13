@@ -3,7 +3,8 @@ package com.netcracker.smarthome.web.home;
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.common.ContextUtils;
-
+import com.netcracker.smarthome.web.specs.AlarmSpecsBean;
+import com.netcracker.smarthome.web.specs.MetricSpecsBean;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -36,5 +37,11 @@ public class CurrentUserHomesBean {
 
     public List<SmartHome> getUserHomes() {
         return homeService.getHomesList(ContextUtils.getCurrentUser());
+    }
+
+    public void setCurrentCatalogs(SmartHome home) {
+        setCurrentHome(home);
+        ((MetricSpecsBean)ContextUtils.getBean("metricSpecsBean")).initialise();
+        ((AlarmSpecsBean)ContextUtils.getBean("alarmSpecsBean")).initialise();
     }
 }

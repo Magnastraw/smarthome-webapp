@@ -8,9 +8,7 @@
     <p:menubar style="border: none">
         <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
             <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
-                <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true">
-                    <f:setPropertyActionListener value="#{home}" target="#{currentUserHomesBean.currentHome}"/>
-                </p:menuitem>
+                <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.setCurrentCatalogs(home)}"/>
             </c:forEach>
         </p:submenu>
         <p:submenu label="Help" icon="fa fa-question">

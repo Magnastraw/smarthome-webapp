@@ -35,16 +35,21 @@ public class AlarmSpecsBean implements Serializable {
 
     @ManagedProperty(value = "#{catalogService}")
     private CatalogService catalogService;
-    
     @ManagedProperty(value = "#{alarmSpecService}")
     private AlarmSpecService alarmSpecService;
+    @ManagedProperty(value = "#{currentUserHomesBean}")
+    private CurrentUserHomesBean userHomesBean;
 
     @PostConstruct
     public void init() {
+        initialise();
+    }
+
+    public void initialise() {
+        root = catalogService.getRootCatalog("alarmSpecsRootCatalog", getHome().getSmartHomeId());
         tableEntities = new ArrayList<TableEntity>();
         menuCatalogs = new ArrayList<Catalog>();
-        getRootCatalogs();
-        List<Catalog> rootCatalogs = catalogService.getRootAlarmSpecsCatalogs(((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId());
+        List<Catalog> rootCatalogs = catalogService.getSubcatalogs(root);
         allCatalogs = new ArrayList<Catalog>();
         allCatalogs.addAll(rootCatalogs);
         for (Catalog root : rootCatalogs) {
@@ -57,12 +62,12 @@ public class AlarmSpecsBean implements Serializable {
         });
         creatingMode = true;
         editedTableEntity = getDefaultTableEntity();
-        root = catalogService.getCatalogById(catalogService.getRootCatalogId("alarmSpecsRootCatalog", ((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId()));
+        getRootCatalogs();
     }
 
     public void getRootCatalogs() {
         clearMenuCatalogs();
-        currentCatalogs = catalogService.getRootAlarmSpecsCatalogs(((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId());
+        currentCatalogs = catalogService.getSubcatalogs(root);
         tableEntities.clear();
         for (Catalog c : currentCatalogs) {
             tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
@@ -142,7 +147,7 @@ public class AlarmSpecsBean implements Serializable {
                 try {
                     Catalog catalog = editedTableEntity.getCatalog();
                     catalog.setCatalogName(editedTableEntity.getName());
-                    catalog.setSmartHome(((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).getCurrentHome());
+                    catalog.setSmartHome(getHome());
                     check = false;
                     if (catalog.getCatalogName().equals(currentName)) {
                         check = true;
@@ -230,7 +235,7 @@ public class AlarmSpecsBean implements Serializable {
     }
 
     private SmartHome getHome() {
-        return ((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome();
+        return userHomesBean.getCurrentHome();
     }
 
     private Catalog getCurrentCatalog() {
@@ -364,5 +369,9 @@ public class AlarmSpecsBean implements Serializable {
 
     public void setCurrentName(String currentName) {
         this.currentName = currentName;
+    }
+
+    public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
+        this.userHomesBean = userHomesBean;
     }
 }

@@ -6,8 +6,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <h2>Units</h2>
-    <p:outputPanel>
+    <p:outputPanel id="units">
+        <h2>Units</h2>
         <p:dataTable id="unitsDT" value="#{unitsBean.units}" var="unit" sortBy="#{unit.unitName}"
                      rowKey="#{unit}" widgetVar="unitsDataTable"
                      paginator="true" rows="10" filteredValue="#{unitsBean.filteredUnits}"

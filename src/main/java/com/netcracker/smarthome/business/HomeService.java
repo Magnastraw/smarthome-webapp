@@ -1,12 +1,10 @@
 package com.netcracker.smarthome.business;
 
+import com.netcracker.smarthome.dal.repositories.CatalogRepository;
 import com.netcracker.smarthome.dal.repositories.DataTypeRepository;
 import com.netcracker.smarthome.dal.repositories.HomeParamRepository;
 import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
-import com.netcracker.smarthome.model.entities.DataType;
-import com.netcracker.smarthome.model.entities.HomeParam;
-import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,18 +18,21 @@ public class HomeService {
     private final SmartHomeRepository homeRepository;
     private final HomeParamRepository paramRepository;
     private final DataTypeRepository dataTypeRepository;
+    private final CatalogRepository catalogRepository;
 
     @Autowired
-    public HomeService(SmartHomeRepository homeRepository, HomeParamRepository paramRepository, DataTypeRepository dataTypeRepository) {
+    public HomeService(SmartHomeRepository homeRepository, HomeParamRepository paramRepository, DataTypeRepository dataTypeRepository, CatalogRepository catalogRepository) {
         this.homeRepository = homeRepository;
         this.paramRepository = paramRepository;
         this.dataTypeRepository = dataTypeRepository;
+        this.catalogRepository = catalogRepository;
     }
 
     @Transactional
     public void createHome(SmartHome home) {
         setDefaultParams(home);
         homeRepository.save(home);
+        createRootCatalogs(home);
     }
 
     private void setDefaultParams(SmartHome home) {
@@ -69,5 +70,13 @@ public class HomeService {
     @Transactional
     public SmartHome updateHome(SmartHome home) {
         return homeRepository.update(home);
+    }
+
+    @Transactional
+    public void createRootCatalogs(SmartHome home) {
+        catalogRepository.save(new Catalog("metricSpecsRootCatalog", null, home));
+        catalogRepository.save(new Catalog("alarmSpecsRootCatalog", null, home));
+        catalogRepository.save(new Catalog("policiesRootCatalog", null, home));
+        catalogRepository.save(new Catalog("objectsRootCatalog", null, home));
     }
 }

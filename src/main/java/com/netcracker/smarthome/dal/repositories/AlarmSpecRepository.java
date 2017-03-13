@@ -22,9 +22,7 @@ public class AlarmSpecRepository extends EntityRepository<AlarmSpec> {
         Query query = getManager().createQuery("select al from AlarmSpec al where al.catalog.catalogId=:catalogId and al.specName = :specName");
         query.setParameter("catalogId", catalogId);
         query.setParameter("specName", specName);
-        if (query.getResultList().size() != 0)
-            return false;
-        else
-            return true;
+        List<AlarmSpec> result = query.getResultList();
+        return result.isEmpty() ? true : false;
     }
 }

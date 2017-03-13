@@ -38,20 +38,24 @@ public class MetricSpecsBean implements Serializable {
     
     @ManagedProperty(value = "#{catalogService}")
     private CatalogService catalogService;
-    
     @ManagedProperty(value = "#{metricSpecService}")
     private MetricSpecService metricSpecService;
-
     @ManagedProperty(value = "#{unitService}")
     private UnitService unitService;
+    @ManagedProperty(value = "#{currentUserHomesBean}")
+    private CurrentUserHomesBean userHomesBean;
 
     @PostConstruct
     public void init() {
+        initialise();
+    }
+
+    public void initialise() {
+        root = catalogService.getRootCatalog("metricSpecsRootCatalog", getHome().getSmartHomeId());
         tableEntities = new ArrayList<TableEntity>();
         menuCatalogs = new ArrayList<Catalog>();
-        getRootCatalogs();
         units = unitService.getUnits();
-        List<Catalog> rootCatalogs = catalogService.getRootMetricSpecsCatalogs(((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId());
+        List<Catalog> rootCatalogs = catalogService.getSubcatalogs(root);
         allCatalogs = new ArrayList<Catalog>();
         allCatalogs.addAll(rootCatalogs);
         for (Catalog root : rootCatalogs) {
@@ -64,12 +68,12 @@ public class MetricSpecsBean implements Serializable {
         });
         creatingMode = true;
         editedTableEntity = getDefaultTableEntity();
-        root = catalogService.getCatalogById(catalogService.getRootCatalogId("metricSpecsRootCatalog", ((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId()));
+        getRootCatalogs();
     }
 
     public void getRootCatalogs() {
         clearMenuCatalogs();
-        currentCatalogs = catalogService.getRootMetricSpecsCatalogs(((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome().getSmartHomeId());
+        currentCatalogs = catalogService.getSubcatalogs(root);
         tableEntities.clear();
         for (Catalog c : currentCatalogs) {
             tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
@@ -148,7 +152,7 @@ public class MetricSpecsBean implements Serializable {
             if (editedTableEntity.isTypeCatalog()) {
                 try {
                     editedTableEntity.getCatalog().setCatalogName(editedTableEntity.getName());
-                    editedTableEntity.getCatalog().setSmartHome(((CurrentUserHomesBean) ContextUtils.getBean("currentUserHomesBean")).getCurrentHome());
+                    editedTableEntity.getCatalog().setSmartHome(getHome());
                     Catalog catalog = editedTableEntity.getCatalog();
                     check = false;
                     if (catalog.getCatalogName().equals(currentName)) {
@@ -239,7 +243,7 @@ public class MetricSpecsBean implements Serializable {
     }
 
     private SmartHome getHome() {
-        return ((CurrentUserHomesBean)ContextUtils.getBean("currentUserHomesBean")).getCurrentHome();
+        return userHomesBean.getCurrentHome();
     }
 
     private Catalog getCurrentCatalog() {
@@ -422,5 +426,13 @@ public class MetricSpecsBean implements Serializable {
 
     public void setValue() {
         editedTableEntity.setName(currentName);
+    }
+
+    public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
+        this.userHomesBean = userHomesBean;
+    }
+
+    public void destroy() {
+        System.out.println("MetricsBean will destroy now");
     }
 }

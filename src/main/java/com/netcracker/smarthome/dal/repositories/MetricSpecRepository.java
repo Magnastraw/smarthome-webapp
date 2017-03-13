@@ -3,7 +3,6 @@ package com.netcracker.smarthome.dal.repositories;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.Query;
 import java.util.List;
 
@@ -35,9 +34,7 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         Query query = getManager().createQuery("select ms from MetricSpec ms where ms.catalog.catalogId=:catalogId and ms.specName = :specName");
         query.setParameter("catalogId", catalogId);
         query.setParameter("specName", specName);
-        if (query.getResultList().size() != 0)
-            return false;
-        else
-            return true;
+        List<MetricSpec> result = query.getResultList();
+        return result.isEmpty() ? true : false;
     }
 }

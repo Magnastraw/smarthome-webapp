@@ -30,7 +30,7 @@ public class UnitsBean implements Serializable {
 
     @ManagedProperty(value = "#{unitService}")
     private UnitService unitService;
-    
+
     @PostConstruct
     public void init() {
         units = unitService.getUnits();

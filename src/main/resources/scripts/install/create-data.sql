@@ -62,63 +62,63 @@ VALUES
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('metricCatalog1', 1, 1),
-  ('metricCatalog2', 1, 1),
-  ('metricCatalog3', 1, 1),
-  ('metricCatalog1', 5, 2),
-  ('metricCatalog2', 5, 2),
-  ('metricCatalog3', 5, 2),
-  ('metricCatalog1', 9, 3),
-  ('metricCatalog2', 9, 3),
-  ('metricCatalog3', 9, 3);
+  ('d_metricCat1', 1, 1),
+  ('d_metricCat2', 1, 1),
+  ('d_metricCat3', 1, 1),
+  ('h1_metricCat1', 5, 2),
+  ('h1_metricCat2', 5, 2),
+  ('h1_metricCat3', 5, 2),
+  ('h2_metricCat1', 9, 3),
+  ('h2_metricCat2', 9, 3),
+  ('h2_metricCat3', 9, 3);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('metricSubcatalog1_1', 13, 1),
-  ('metricSubcatalog2_1', 14, 1),
-  ('metricSubcatalog2_2', 14, 1),
-  ('metricSubcatalog2_3', 14, 1),
-  ('metricSubcatalog3_1', 15, 1),
-  ('metricSubcatalog1_1', 16, 2),
-  ('metricSubcatalog2_1', 17, 2),
-  ('metricSubcatalog2_2', 17, 2),
-  ('metricSubcatalog2_3', 17, 2),
-  ('metricSubcatalog3_1', 18, 2),
-  ('metricSubcatalog1_1', 19, 3),
-  ('metricSubcatalog2_1', 20, 3),
-  ('metricSubcatalog2_2', 20, 3),
-  ('metricSubcatalog2_3', 20, 3),
-  ('metricSubcatalog3_1', 21, 3);
+  ('d_metricSubcat1_1', 13, 1),
+  ('d_metricSubcat2_1', 14, 1),
+  ('d_metricSubcat2_2', 14, 1),
+  ('d_metricSubcat2_3', 14, 1),
+  ('d_metricSubcat3_1', 15, 1),
+  ('h1_metricSubcat1_1', 16, 2),
+  ('h1_metricSubcat2_1', 17, 2),
+  ('h1_metricSubcat2_2', 17, 2),
+  ('h1_metricSubcat2_3', 17, 2),
+  ('h1_metricSubcat3_1', 18, 2),
+  ('h2_metricSubcat1_1', 19, 3),
+  ('h2_metricSubcat2_1', 20, 3),
+  ('h2_metricSubcat2_2', 20, 3),
+  ('h2_metricSubcat2_3', 20, 3),
+  ('h2_metricSubcat3_1', 21, 3);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('alarmCatalog1', 2, 1),
-  ('alarmCatalog2', 2, 1),
-  ('alarmCatalog3', 2, 1),
-  ('alarmCatalog1', 6, 2),
-  ('alarmCatalog2', 6, 2),
-  ('alarmCatalog3', 6, 2),
-  ('alarmCatalog1', 10, 3),
-  ('alarmCatalog2', 10, 3),
-  ('alarmCatalog3', 10, 3);
+  ('d_alarmCat1', 2, 1),
+  ('d_alarmCat2', 2, 1),
+  ('d_alarmCat3', 2, 1),
+  ('h1_alarmCat1', 6, 2),
+  ('h1_alarmCat2', 6, 2),
+  ('h1_alarmCat3', 6, 2),
+  ('h2_alarmCat1', 10, 3),
+  ('h2_alarmCat2', 10, 3),
+  ('h2_alarmCat3', 10, 3);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('alarmSubcatalog1_1', 37, 1),
-  ('alarmSubcatalog1_2', 37, 1),
-  ('alarmSubcatalog2_1', 38, 1),
-  ('alarmSubcatalog2_2', 38, 1),
-  ('alarmSubcatalog3_1', 39, 1),
-  ('alarmSubcatalog1_1', 40, 1),
-  ('alarmSubcatalog1_2', 40, 1),
-  ('alarmSubcatalog2_1', 41, 1),
-  ('alarmSubcatalog2_2', 41, 1),
-  ('alarmSubcatalog3_1', 42, 1),
-  ('alarmSubcatalog1_1', 43, 1),
-  ('alarmSubcatalog1_2', 43, 1),
-  ('alarmSubcatalog2_1', 44, 1),
-  ('alarmSubcatalog2_2', 44, 1),
-  ('alarmSubcatalog3_1', 45, 1);
+  ('d_alarmSubcat1_1', 37, 1),
+  ('d_alarmSubcat1_2', 37, 1),
+  ('d_alarmSubcat2_1', 38, 1),
+  ('d_alarmSubcat2_2', 38, 1),
+  ('d_alarmSubcat3_1', 39, 1),
+  ('h1_alarmSubcat1_1', 40, 2),
+  ('h1_alarmSubcat1_2', 40, 2),
+  ('h1_alarmSubcat2_1', 41, 2),
+  ('h1_alarmSubcat2_2', 41, 2),
+  ('h1_alarmSubcat3_1', 42, 2),
+  ('h2_alarmSubcat1_1', 43, 3),
+  ('h2_alarmSubcat1_2', 43, 3),
+  ('h2_alarmSubcat2_1', 44, 3),
+  ('h2_alarmSubcat2_2', 44, 3),
+  ('h2_alarmSubcat3_1', 45, 3);
 
 
 INSERT INTO public.units (unit_name, base_factor, label)

@@ -17,17 +17,7 @@ public class CatalogService {
     public  CatalogService (CatalogRepository catalogRepository) {
         this.catalogRepository = catalogRepository;
     }
-    
-    @Transactional
-    public List<Catalog> getRootAlarmSpecsCatalogs(long smartHomeId) {
-        return this.catalogRepository.getRootAlarmSpecsCatalogs(smartHomeId);
-    }
-    
-    @Transactional
-    public List<Catalog> getRootMetricSpecsCatalogs(long smartHomeId) {
-        return this.catalogRepository.getRootMetricSpecsCatalogs(smartHomeId);
-    }
-    
+
     @Transactional
     public List<Catalog> getSubcatalogs(Catalog catalog) {
         return this.catalogRepository.getSubcatalogs(catalog);
@@ -69,7 +59,7 @@ public class CatalogService {
     }
 
     @Transactional
-    public long getRootCatalogId(String catalogName, long smartHomeId) {
-        return catalogRepository.getRootCatalogId(catalogName, smartHomeId);
+    public Catalog getRootCatalog(String catalogName, long smartHomeId) {
+        return catalogRepository.getRootCatalog(catalogName, smartHomeId);
     }
 }
