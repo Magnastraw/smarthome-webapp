@@ -68,39 +68,40 @@ public class MetricSpecsBean implements Serializable {
         });
         creatingMode = true;
         editedTableEntity = getDefaultTableEntity();
-        getRootCatalogs();
+        expandCatalog(root);
     }
 
-    public void getRootCatalogs() {
+   /* public void getRootCatalogs() {
         clearMenuCatalogs();
         currentCatalogs = catalogService.getSubcatalogs(root);
         tableEntities.clear();
         for (Catalog c : currentCatalogs) {
             tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
         }
-    }
-
-    public void expandCatalog(Catalog catalog) {
-        if (catalog != null) {
-            LOG.info("expandCatalog: " + catalog.getCatalogName());
-            tableEntities.clear();
-            clearMenuCatalogs();
-            menuCatalogs = catalogService.getPathToCatalog(catalog);
-            currentCatalogs = catalogService.getSubcatalogs(catalog);
-            if (currentCatalogs.size() != 0) {
-                for (Catalog c : currentCatalogs) {
-                    tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
-                }
-            }
-            metricSpecs = metricSpecService.getMetricSpecs(catalog);
-            if (metricSpecs.size() != 0) {
-                for (MetricSpec ms : metricSpecs) {
-                    tableEntities.add(new TableEntity(ms, ms.getSpecName(), false));
-                }
+        metricSpecs = metricSpecService.getMetricSpecs(root);
+        if (metricSpecs.size() != 0) {
+            for (MetricSpec ms : metricSpecs) {
+                tableEntities.add(new TableEntity(ms, ms.getSpecName(), false));
             }
         }
-        else {
-            getRootCatalogs();
+    }*/
+
+    public void expandCatalog(Catalog catalog) {
+        LOG.info("expandCatalog: " + catalog.getCatalogName());
+        tableEntities.clear();
+        clearMenuCatalogs();
+        menuCatalogs = catalogService.getPathToCatalog(catalog);
+        currentCatalogs = catalogService.getSubcatalogs(catalog);
+        if (currentCatalogs.size() != 0) {
+            for (Catalog c : currentCatalogs) {
+                tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
+            }
+        }
+        metricSpecs = metricSpecService.getMetricSpecs(catalog);
+        if (metricSpecs.size() != 0) {
+            for (MetricSpec ms : metricSpecs) {
+                tableEntities.add(new TableEntity(ms, ms.getSpecName(), false));
+            }
         }
     }
 
@@ -152,7 +153,8 @@ public class MetricSpecsBean implements Serializable {
             if (editedTableEntity.isTypeCatalog()) {
                 try {
                     editedTableEntity.getCatalog().setCatalogName(editedTableEntity.getName());
-                    editedTableEntity.getCatalog().setSmartHome(getHome());
+                    editedTableEntity.getCatalog().setParentCatalog(getCurrentCatalog());
+                    //editedTableEntity.getCatalog().setSmartHome(getHome());
                     Catalog catalog = editedTableEntity.getCatalog();
                     check = false;
                     if (catalog.getCatalogName().equals(currentName)) {
@@ -201,6 +203,7 @@ public class MetricSpecsBean implements Serializable {
                 try {
                     MetricSpec metricSpec = editedTableEntity.getMetricSpec();
                     metricSpec.setSpecName(editedTableEntity.getName());
+                    metricSpec.setCatalog(getCurrentCatalog());
                     check = false;
                     if (metricSpec.getSpecName().equals(currentName)) {
                         check = true;
@@ -233,6 +236,21 @@ public class MetricSpecsBean implements Serializable {
                     context.addCallbackParam("correct", false);
                 }
             }
+        }
+    }
+
+    public void move() {
+        try {
+            if (editedTableEntity.isTypeCatalog()) {
+                catalogService.updateCatalog(editedTableEntity.getCatalog());
+            }
+            else {
+                metricSpecService.updateMetricSpec(editedTableEntity.getMetricSpec());
+            }
+            expandCatalog(getCurrentCatalog());
+        } catch (Exception ex) {
+            LOG.error("Error during moving:", ex);
+            ContextUtils.addErrorSummaryToContext("Error during moving");
         }
     }
 

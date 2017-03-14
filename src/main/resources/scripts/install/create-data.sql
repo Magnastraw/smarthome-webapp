@@ -131,16 +131,16 @@ INSERT INTO public.metric_specs (spec_name, unit_id, metric_type, catalog_id)
 VALUES
   ('Temperature', 1, 'common', 22),
   ('Humidity', 2, 'common', 22),
-  ('metricSpec3', 1, 'temperature', 23),
-  ('metricSpec4', 1, 'temperature', 23),
-  ('metricSpec5', 1, 'temperature', 24),
-  ('metricSpec6', 1, 'temperature', 24),
-  ('metricSpec7', 1, 'temperature', 28),
-  ('metricSpec8', 1, 'temperature', 33),
-  ('metricSpec9', 1, 'temperature', 34),
-  ('metricSpec10', 1, 'temperature', 34),
-  ('metricSpec11', 1, 'temperature', 36),
-  ('metricSpec12', 1, 'temperature', 36);
+  ('metricSpec3', 1, 'common', 23),
+  ('metricSpec4', 1, 'common', 23),
+  ('metricSpec5', 1, 'common', 24),
+  ('metricSpec6', 1, 'common', 24),
+  ('metricSpec7', 1, 'common', 28),
+  ('metricSpec8', 1, 'common', 33),
+  ('metricSpec9', 1, 'common', 34),
+  ('metricSpec10', 1, 'common', 34),
+  ('metricSpec11', 1, 'common', 36),
+  ('metricSpec12', 1, 'common', 36);
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)
 VALUES

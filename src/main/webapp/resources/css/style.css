@@ -114,7 +114,7 @@
 }
 .dialog-input-catalog {
     width: 200px; !important;
-    margin-left: 26px !important;
+    margin-left: 40px !important;
 }
 
 .dialog-select {
@@ -124,12 +124,7 @@
 
 .dialog-select-catalog {
     width: 177px !important;
-    margin-left: 26px !important;
-}
-
-.dialog-input-alarm {
-    width: 200px; !important;
-    margin-left: 13px !important;
+    margin-left: 40px !important;
 }
 
 .table-name {
@@ -164,7 +159,7 @@
 }
 
 .column-delete {
-    width: 40px;
+    width: 60px;
     text-align: center;
 }
 

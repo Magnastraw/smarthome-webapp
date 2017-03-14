@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<p:breadCrumb id="catalogsMenu" homeDisplay="text">
+    <p:menuitem icon="fa fa-home" actionListener="#{alarmSpecsBean.expandCatalog(alarmSpecsBean.root)}" update=":centerForm"/>
+    <c:forEach items="#{alarmSpecsBean.menuCatalogs}" var="catalog">
+        <p:menuitem value="#{catalog.catalogName}" actionListener="#{alarmSpecsBean.expandCatalog(catalog)}" update=":centerForm"/>
+    </c:forEach>
+</p:breadCrumb>
+<p:dataTable id="alarmSpecDT" widgetVar="alarmSpecTable" value="#{alarmSpecsBean.tableEntities}" var="tableEntity"
+             sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" rowKey="#{tableEntity.name}"
+             paginator="true" rows="10" rowsPerPageTemplate="5,10,15"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+             filteredValue="#{alarmSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria" useCacheForFiltering="false">
+    <p:column styleClass="column-delete">
+
+        <p:commandLink action="#{alarmSpecsBean.remove}" update=":centerForm" oncomplete="PF('alarmSpecTable').filter()"
+                       title="Delete" styleClass="fa fa-remove margin">
+            <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
+            <f:setPropertyActionListener value="#{tableEntity}" target="#{alarmSpecsBean.removed}"/>
+        </p:commandLink>
+
+    </p:column>
+    <p:column headerText="Name" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter-alarm">
+        <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon"
+                       value="#{tableEntity.name}" action="#{alarmSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
+        <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}"/>
+    </p:column>
+    <p:column headerText="Object type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByObjectType}" filterBy="#{tableEntity}" filterFunction="#{alarmSpecsBean.filterByObjectType}" filterStyleClass="filter-alarm">
+        <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.alarmSpec.objectType}"/>
+    </p:column>
+</p:dataTable>
+<p:commandButton onclick="PF('alarmSpecTable').clearFilters()" actionListener="#{alarmSpecsBean.clearFilters}" value="Clear" update=":centerForm">
+    <p:resetInput target="alarmSpecDT"/>
+</p:commandButton>
+</html>
