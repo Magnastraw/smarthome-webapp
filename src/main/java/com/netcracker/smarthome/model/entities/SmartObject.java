@@ -27,6 +27,7 @@ public class SmartObject implements Serializable {
     private List<SmartObject> subobjects;
     private Catalog catalog;
     private SmartHome smartHome;
+    private List<Assignment> assignments;
 
     public SmartObject() {
     }
@@ -133,6 +134,15 @@ public class SmartObject implements Serializable {
 
     public void setObjectParams(List<ObjectParam> objectParams) {
         this.objectParams = objectParams;
+    }
+
+    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     @ManyToOne

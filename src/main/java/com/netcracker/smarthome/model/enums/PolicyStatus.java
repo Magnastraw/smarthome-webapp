@@ -1,5 +1,8 @@
 package com.netcracker.smarthome.model.enums;
 
 public enum PolicyStatus {
-    ACTIVE
+    CREATED,
+    ACTIVE,
+    INACTIVE,
+    ERROR
 }

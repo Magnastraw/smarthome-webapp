@@ -16,10 +16,6 @@ VALUES (DEFAULT, 1, 'Address', 'address', 1),
   (DEFAULT, 1, 'Link', 'http://www.outlink.com', 2);
 
 -- add social services
-ALTER TABLE public.social_servicies
-  ADD COLUMN service_type BIGINT NOT NULL,
-  ADD CONSTRAINT service_uk UNIQUE (service_type);
-
 INSERT INTO public.social_servicies (service_name, client_id, secret_key, service_type)
 VALUES (
   'Google',

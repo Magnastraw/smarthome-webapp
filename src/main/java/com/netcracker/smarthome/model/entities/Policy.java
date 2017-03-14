@@ -18,12 +18,13 @@ public class Policy implements Serializable {
     private PolicyStatus status;
     private String description;
     private Catalog catalog;
-    private List<Rule> rule;
+    private List<Rule> rules;
+    private List<Assignment> assignments;
 
     public Policy() {
     }
 
-    public Policy(String name, PolicyStatus status, String description, Catalog catalog) {
+    public Policy(String name, PolicyStatus status, Catalog catalog, String description) {
         this.name = name;
         this.status = status;
         this.description = description;
@@ -83,12 +84,21 @@ public class Policy implements Serializable {
     }
 
     @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
-    public List<Rule> getRule() {
-        return rule;
+    public List<Rule> getRules() {
+        return rules;
     }
 
-    public void setRule(List<Rule> rule) {
-        this.rule = rule;
+    public void setRules(List<Rule> rules) {
+        this.rules = rules;
+    }
+
+    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     @Override
