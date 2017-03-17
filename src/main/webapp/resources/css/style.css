@@ -298,3 +298,69 @@ h3 {
     /*content: url("http://iconizer.net/files/Splashyfish/orig/arrow_state_blue_expanded.png") !important;*/
     content: url("http://iconizer.net/files/Splashyfish/orig/arrow_state_grey_right.png") !important;
 }
+
+.dashboardDiv {
+    width: 100%;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    padding: .0em !important;
+}
+
+.ui-toolbar {
+    padding: .1em !important;
+}
+
+.gridster ul {
+    list-style: none;
+}
+
+.chart-container {
+    width: inherit !important;
+    height: inherit !important;
+}
+
+.gridster .preview-holder {
+    background-color: #ABABB0 !important;
+}
+
+.gridster li header {
+    cursor: move;
+    position: absolute;
+    overflow: visible;
+    z-index: 1000;
+}
+
+.x-tree-icon-leaf, .x-tree-icon-text::before {
+    font: normal normal normal 14px/1 "FontAwesome";
+    display: inline-block;
+    color: #5a5a5a;
+}
+
+.x-tree-icon-leaf::before, .x-tree-icon-text::before {
+    content: "\f047\00a0";
+    font-size: 1.5em;
+    position: relative;
+    top: 5px;
+    left: 5px;
+}
+
+.delete-chart-button {
+    position: absolute;
+    left: 30px;
+    top: 7px;
+    color: #5a5a5a;
+    font-size: 1.5em;
+    overflow: visible;
+    z-index: 1000;
+}
+
+.chart-border{
+    border: 2px solid #CCC;
+    border-right-width: 3px;
+}
+
+.one-dialog-select{
+    width: 145px !important;
+    height: 29px;
+}

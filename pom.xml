@@ -17,6 +17,7 @@
         <jackson.version>2.8.6</jackson.version>
         <catalina.home>${env.CATALINA_HOME}</catalina.home>
     </properties>
+
     <dependencies>
         <!-- Spring dependencies -->
         <dependency>
@@ -131,6 +132,17 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>velocity</groupId>
+            <artifactId>velocity-dep</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
     <build>

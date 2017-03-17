@@ -1,10 +1,13 @@
 package com.netcracker.smarthome.web.chart.options;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.ArrayList;
 
 public class RequestDataOptions {
     private long smartHomeId;
-    private char type;
+    private String chartInterval;
     private ArrayList<Long> objectId;
     private ArrayList<Long> metricSpecId;
     private int rownum;
@@ -25,12 +28,12 @@ public class RequestDataOptions {
         this.smartHomeId = smartHomeId;
     }
 
-    public char getType() {
-        return type;
+    public String getChartInterval() {
+        return chartInterval;
     }
 
-    public void setType(char type) {
-        this.type = type;
+    public void setChartInterval(String chartInterval) {
+        this.chartInterval = chartInterval;
     }
 
     public ArrayList<Long> getObjectId() {
@@ -63,5 +66,15 @@ public class RequestDataOptions {
 
     public void setSeriesSize(int seriesSize) {
         this.seriesSize = seriesSize;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("smartHomeId", getSmartHomeId())
+                .append("chartInterval", getChartInterval())
+                .append("objectId", getObjectId().toString())
+                .append("metricSpecId", getMetricSpecId().toString())
+                .toString();
     }
 }

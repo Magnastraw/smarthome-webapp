@@ -17,7 +17,7 @@ public class ChartOptionsConfigurator {
         this.chartConfigInterface = chartConfigInterface;
     }
 
-    public Chart getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects,List<SmartObject> selectedSubObject){
+    public ChartOptionsInterface getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects,List<SmartObject> selectedSubObject){
         return chartConfigInterface.configure(selectedMetricSpecs, selectedSmartObjects, selectedSubObject);
     }
 }

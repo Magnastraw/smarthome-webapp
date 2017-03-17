@@ -13,14 +13,14 @@ import java.util.List;
 public class ObjectChartConfig extends DefaultChartConfig implements ChartConfigInterface {
     private ChartService chartService;
 
-    public ObjectChartConfig(SmartHome smartHome, int chartId, ChartService chartService, double refreshInterval) {
-        super(smartHome, chartId, refreshInterval);
+    public ObjectChartConfig(SmartHome smartHome, long chartId, ChartService chartService, double refreshInterval, String chartType, String chartInterval) {
+        super(smartHome, chartId, refreshInterval, chartType, chartInterval);
         this.chartService = chartService;
     }
 
-    public Chart configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
+    public ChartOptionsInterface configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
 
-        super.getChartConfig().getChartOptions().getTitle().put("text", selectedSmartObjects.get(0).getName());
+        super.getChartConfig().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
 
         selectedSmartObjects = super.deleteParentObj(selectedSubObject, selectedSmartObjects);
 
@@ -31,7 +31,7 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
                 SeriesConfig seriesConfig = new SeriesConfig();
                 seriesConfig.setData("");
                 seriesConfig.setName(metricSpec.getSpecName());//?
-                seriesConfig.setType("line");
+                seriesConfig.setType(super.getChartType());
                 for (YAxisNumber yAxisNumber : yAxisNumbers) {
                     if (yAxisNumber.getSpecId() == metricSpec.getSpecId()) {
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
@@ -41,7 +41,6 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
             }
             super.getChartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
-        super.getChartConfig().getRequestDataOptions().setType('d');
         super.setInterval();
 
         return super.getChartConfig();

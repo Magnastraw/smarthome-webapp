@@ -3,22 +3,22 @@ package com.netcracker.smarthome.web.chart.options.jsonfields;
 import java.util.HashMap;
 
 public class AxisConfig {
-    private HashMap<String,String> labels;
-    private HashMap<String,String> title;
+    private String label;
+    private String title;
 
-    public HashMap<String, String> getLabels() {
-        return labels;
+    public String getLabel() {
+        return label;
     }
 
-    public void setLabels(HashMap<String, String> labels) {
-        this.labels = labels;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public HashMap<String, String> getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(HashMap<String, String> title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 }

@@ -394,6 +394,32 @@ CREATE TABLE public.home_params (
 
 ALTER SEQUENCE public.home_params_param_id_seq OWNED BY public.home_params.param_id;
 
+CREATE SEQUENCE public.dashboards_dashboard_id_seq;
+
+CREATE TABLE public.dashboards (
+  dashboard_id BIGINT NOT NULL DEFAULT nextval('public.dashboards_dashboard_id_seq'),
+  dashboard_name VARCHAR NOT NULL,
+  smart_home_id BIGINT NOT NULL,
+  CONSTRAINT dashboards_pk PRIMARY KEY (dashboard_id)
+);
+
+
+ALTER SEQUENCE public.dashboards_dashboard_id_seq OWNED BY public.dashboards.dashboard_id;
+
+CREATE SEQUENCE public.charts_chart_id_seq;
+
+CREATE TABLE public.charts (
+                chart_id BIGINT NOT NULL DEFAULT nextval('public.charts_chart_id_seq'),
+                chart_option VARCHAR NOT NULL,
+                request_option VARCHAR NOT NULL,
+                refresh_interval NUMERIC,
+                dashboard_id BIGINT NOT NULL,
+                CONSTRAINT charts_pk PRIMARY KEY (chart_id)
+);
+
+
+ALTER SEQUENCE public.charts_chart_id_seq OWNED BY public.charts.chart_id;
+
 CREATE TABLE public.social_profiles (
   user_id BIGINT NOT NULL,
   service_id BIGINT NOT NULL,
@@ -741,3 +767,19 @@ REFERENCES public.metrics (metric_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.dashboards ADD CONSTRAINT smart_homes_dashboards_fk
+FOREIGN KEY (smart_home_id)
+REFERENCES public.smart_homes (smart_home_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.charts ADD CONSTRAINT dashboards_charts_fk
+FOREIGN KEY (dashboard_id)
+REFERENCES public.dashboards (dashboard_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+

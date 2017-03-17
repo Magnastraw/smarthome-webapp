@@ -14,24 +14,19 @@ import java.util.List;
 public class MetricChartConfig extends DefaultChartConfig implements ChartConfigInterface {
     private ChartService chartService;
 
-    public MetricChartConfig(SmartHome smartHome, int chartId, ChartService chartService,double refreshInterval) {
-        super(smartHome, chartId, refreshInterval);
+    public MetricChartConfig(SmartHome smartHome, long chartId, ChartService chartService,double refreshInterval, String chartType,String chartInterval) {
+        super(smartHome, chartId, refreshInterval, chartType,chartInterval);
         this.chartService=chartService;
     }
 
-    public Chart configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects,List<SmartObject> selectedSubObject) {
+    public ChartOptionsInterface configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects,List<SmartObject> selectedSubObject) {
 
-        super.getChartConfig().getChartOptions().getTitle().put("text",selectedMetricSpecs.get(0).getSpecName());
+        super.getChartConfig().getChartOptions().setChartTitle(selectedMetricSpecs.get(0).getSpecName());
 
         AxisConfig axisConfig = new AxisConfig();
 
-        HashMap<String,String> title = new HashMap<String, String>();
-        title.put("text",selectedMetricSpecs.get(0).getSpecName());
-        axisConfig.setTitle(title);
-
-        HashMap<String,String> labels = new HashMap<String, String>();
-        labels.put("format","{value}"+chartService.getUnitBySpecId(selectedMetricSpecs.get(0).getSpecId()).getLabel());
-        axisConfig.setLabels(labels);
+        axisConfig.setTitle(selectedMetricSpecs.get(0).getSpecName());
+        axisConfig.setLabel(chartService.getUnitBySpecId(selectedMetricSpecs.get(0).getSpecId()).getLabel());
 
         super.getChartConfig().getChartOptions().getyAxis().add(axisConfig);
 
@@ -41,12 +36,11 @@ public class MetricChartConfig extends DefaultChartConfig implements ChartConfig
             SeriesConfig seriesConfig = new SeriesConfig();
             seriesConfig.setData("");
             seriesConfig.setName(smartObject.getName());
-            seriesConfig.setType("line");
+            seriesConfig.setType(super.getChartType());
             super.getChartConfig().getChartOptions().getSeries().add(seriesConfig);
             super.getChartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
         super.getChartConfig().getRequestDataOptions().getMetricSpecId().add(selectedMetricSpecs.get(0).getSpecId());
-        super.getChartConfig().getRequestDataOptions().setType('d');
         super.setInterval();
 
         return super.getChartConfig();

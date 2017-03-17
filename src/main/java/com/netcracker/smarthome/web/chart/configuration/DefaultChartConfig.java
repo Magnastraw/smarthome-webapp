@@ -20,33 +20,32 @@ public class DefaultChartConfig {
 
     private ChartConfig chartConfig;
     private int yAxisNumber;
+    private String chartType;
     private final double TO_MILLISECONDS_CONVERT = 60000;
 
-    public DefaultChartConfig(SmartHome smartHome, int chartId, double refreshInterval) {
+    public DefaultChartConfig(SmartHome smartHome, long chartId, double refreshInterval, String chartType, String chartInterval) {
 
-        chartConfig = new ChartConfig(new ChartOptions(new HashMap<String, String>(), new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
+        chartConfig = new ChartConfig(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
         chartConfig.setChartId(chartId);
         chartConfig.setRefreshInterval(refreshInterval * TO_MILLISECONDS_CONVERT);
 
         chartConfig.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
+        chartConfig.getRequestDataOptions().setChartInterval(chartInterval);
+        setChartType(chartType);
 
-        HashMap<String, String> chart = new HashMap<String, String>();
-        chart.put("renderTo", "component" + chartId + "_chartDiv");
-        chart.put("zoomType", "x");
-        chart.put("type", "line");
-        chartConfig.getChartOptions().setChart(chart);
+        chartConfig.getChartOptions().setxAxisType("datetime");
+        chartConfig.getChartOptions().setCredits("false");
+        chartConfig.getChartOptions().setRenderTo("component" + chartId + "_chartDiv");
+        chartConfig.getChartOptions().setType(chartType);
+        chartConfig.getChartOptions().setZoomType("x");
+    }
 
-        HashMap<String, String> xAxis = new HashMap<String, String>();
-        xAxis.put("type", "datetime");
-        chartConfig.getChartOptions().setxAxis(xAxis);
+    public String getChartType() {
+        return chartType;
+    }
 
-        HashMap<String, String> lang = new HashMap<String, String>();
-        lang.put("fullscreenTooltip", "Fullscreen");
-        chartConfig.getChartOptions().setLang(lang);
-
-        HashMap<String, Boolean> credits = new HashMap<String, Boolean>();
-        credits.put("enabled", false);
-        chartConfig.getChartOptions().setCredits(credits);
+    public void setChartType(String chartType) {
+        this.chartType = chartType;
     }
 
     public ChartConfig getChartConfig() {
@@ -96,13 +95,8 @@ public class DefaultChartConfig {
             yAxisNumber.setSpecId(metricSpec.getSpecId());
             yAxisNumbers.add(yAxisNumber);
 
-            HashMap<String, String> title = new HashMap<String, String>();
-            title.put("text", metricSpec.getSpecName());
-            axisConfig.setTitle(title);
-
-            HashMap<String, String> labels = new HashMap<String, String>();
-            labels.put("format", "{value}" + chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
-            axisConfig.setLabels(labels);
+            axisConfig.setTitle(metricSpec.getSpecName());
+            axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
 
             chartConfig.getChartOptions().getyAxis().add(axisConfig);
 

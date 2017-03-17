@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:panelGroup styleClass="dashboardDiv">
+        <p:dataTable id="dashboardTable" var="dashboard" value="#{dashboardBean.dashboards}" selectionMode="single"
+                     selection="#{dashboardBean.selectedDashboard}" rowKey="#{dashboard}"
+                     sortBy="#{dashboard.dashboardName}">
+            <f:facet name="header">
+                Dashboards
+            </f:facet>
+            <p:ajax event="rowSelect" listener="#{dashboardBean.onRowSelect}" update=":centerForm"/>
+            <p:column headerText="Name" styleClass="column" sortBy="#{dashboard.dashboardName}">
+                <h:outputText value="#{dashboard.dashboardName}"/>
+            </p:column>
+            <p:column headerText="Widgets amount" styleClass="column" sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
+                <h:outputText value="#{dashboardBean.getWidgetsAmount(dashboard)}"/>
+            </p:column>
+            <p:column styleClass="column-delete">
+                <p:commandLink actionListener="#{dashboardBean.setUpdateDialog(true, dashboard)}"
+                               update=":centerForm:dialogDashboard"
+                               oncomplete="PF('dashboardSettingsDialog').show()"
+                               styleClass="fa fa-edit"
+                               title="Edit">
+                </p:commandLink>
+                <p:commandLink actionListener="#{dashboardBean.deleteDashboard(dashboard)}"
+                               update=":centerForm:dashboardTable, menu"
+                               styleClass="fa fa-remove fa-5x margin"
+                               title="Delete">
+                </p:commandLink>
+            </p:column>
+        </p:dataTable>
+        <p:commandButton value="Add dashboard"
+                         actionListener="#{dashboardBean.setSaveDialog(false)}"
+                         update=":centerForm:dialogDashboard"
+                         oncomplete="PF('dashboardSettingsDialog').show()"
+                         style="width: 100%; margin-right: .0em !important;">
+        </p:commandButton>
+    </h:panelGroup>
+
+    <p:dialog id="dialogDashboard" header="Dashboard settings" widgetVar="dashboardSettingsDialog" resizable="false" >
+            <h:panelGrid columns="2" cellpadding="0">
+                <h:outputLabel for="dashboardName" value="Dashboard name:"/>
+                <p:inputText id="dashboardName"  value="#{dashboardBean.dashboardName}"
+                             validatorMessage="The name must not be empty!">
+                    <f:validateRegex pattern="^.*\S.*$"/>
+                    <p:clientValidator/>
+                </p:inputText>
+            </h:panelGrid>
+            <p:commandButton value="Save"
+                             actionListener="#{dashboardBean.saveOrUpdate()}"
+                             ajax="true" icon="fa fa-save"
+                             oncomplete="PF('dashboardSettingsDialog').hide()"
+                             styleClass="btn" validateClient="true"
+                             update=":centerForm:dashboardTable, menu">
+            </p:commandButton>
+    </p:dialog>
+</ui:composition>

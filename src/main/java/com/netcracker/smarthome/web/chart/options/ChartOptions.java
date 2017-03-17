@@ -7,59 +7,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ChartOptions {
-    private HashMap<String, Boolean> credits;
-    private HashMap<String, String> chart;
-    private HashMap<String, String> title;
-    private HashMap<String, String> lang;
-    private HashMap<String, String> xAxis;
+    private String credits;
+    private String chartTitle;
+    private String zoomType;
+    private String type;
+    private String renderTo;
+    private String xAxisType;
     private ArrayList<AxisConfig> yAxis;
-    private HashMap<String, HashMap<String, HashMap<String, String>>> exporting;
     private ArrayList<SeriesConfig> series;
 
-    public ChartOptions(HashMap<String, String> title, ArrayList<AxisConfig> yAxis, ArrayList<SeriesConfig> series) {
-        this.title = title;
+    public ChartOptions(ArrayList<AxisConfig> yAxis, ArrayList<SeriesConfig> series) {
         this.yAxis = yAxis;
         this.series = series;
     }
 
-    public HashMap<String, Boolean> getCredits() {
+    public String getCredits() {
         return credits;
     }
 
-    public void setCredits(HashMap<String, Boolean> credits) {
+    public void setCredits(String credits) {
         this.credits = credits;
     }
 
-    public HashMap<String, String> getChart() {
-        return chart;
+    public String getChartTitle() {
+        return chartTitle;
     }
 
-    public void setChart(HashMap<String, String> chart) {
-        this.chart = chart;
+    public void setChartTitle(String chartTitle) {
+        this.chartTitle = chartTitle;
     }
 
-    public HashMap<String, String> getTitle() {
-        return title;
+    public String getZoomType() {
+        return zoomType;
     }
 
-    public void setTitle(HashMap<String, String> title) {
-        this.title = title;
+    public void setZoomType(String zoomType) {
+        this.zoomType = zoomType;
     }
 
-    public HashMap<String, String> getLang() {
-        return lang;
+    public String getType() {
+        return type;
     }
 
-    public void setLang(HashMap<String, String> lang) {
-        this.lang = lang;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public HashMap<String, String> getxAxis() {
-        return xAxis;
+    public String getRenderTo() {
+        return renderTo;
     }
 
-    public void setxAxis(HashMap<String, String> xAxis) {
-        this.xAxis = xAxis;
+    public void setRenderTo(String renderTo) {
+        this.renderTo = renderTo;
+    }
+
+    public String getxAxisType() {
+        return xAxisType;
+    }
+
+    public void setxAxisType(String xAxisType) {
+        this.xAxisType = xAxisType;
     }
 
     public ArrayList<AxisConfig> getyAxis() {
@@ -68,14 +75,6 @@ public class ChartOptions {
 
     public void setyAxis(ArrayList<AxisConfig> yAxis) {
         this.yAxis = yAxis;
-    }
-
-    public HashMap<String, HashMap<String, HashMap<String, String>>> getExporting() {
-        return exporting;
-    }
-
-    public void setExporting(HashMap<String, HashMap<String, HashMap<String, String>>> exporting) {
-        this.exporting = exporting;
     }
 
     public ArrayList<SeriesConfig> getSeries() {

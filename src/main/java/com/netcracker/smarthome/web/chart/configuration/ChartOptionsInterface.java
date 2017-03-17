@@ -3,9 +3,11 @@ package com.netcracker.smarthome.web.chart.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public interface Chart {
+import java.io.IOException;
+
+public interface ChartOptionsInterface {
     String getRequestDataConfig()throws JsonProcessingException;
-    String getChartConfig() throws JsonProcessingException;
-    int getChartId();
+    String getChartConfig() throws IOException;
+    long getChartId();
     double getRefreshInterval();
 }

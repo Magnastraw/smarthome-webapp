@@ -1,6 +1,9 @@
 package com.netcracker.smarthome.web.chart.options.jsonfields;
 
 
+import java.text.ParseException;
+
 public interface Series {
-    void addData(Object[] metricHistory);
+    void addDayData(Object[] metricHistory) throws ParseException;
+    void addLiveData(Object[] metricHistory);
 }

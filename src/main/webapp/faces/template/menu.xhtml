@@ -38,10 +38,21 @@
                         action="#{navigationBean.setPageName('specs/units')}"
                         update=":centerForm"/>
         </p:submenu>
-        <p:submenu label="Charts">
-            <p:menuitem value="Chart widgets"
-                        action="#{navigationBean.setPageName('charts/chartPage')}"
-                        update="centerForm"/>
+        <p:submenu label="View">
+            <p:menuitem value="Dashboard manager"
+                        action="#{navigationBean.setPageName('charts/dashboardSettings')}"
+                        update="centerForm"
+                        ajax="true"/>
+            <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboards.size()>0}">
+                <c:forEach items="#{dashboardBean.dashboards}" var="dashboard">
+                    <p:menuitem value="#{dashboard.dashboardName}"
+                                update="centerForm"
+                                ajax="true"
+                                actionListener="#{dashboardBean.setCurrentDashboardFromMenu(dashboard)}">
+                        <f:setPropertyActionListener value="false" target="#{dashboardBean.fromDashboard}"/>
+                    </p:menuitem>
+                </c:forEach>
+            </p:submenu>
         </p:submenu>
     </p:panelMenu>
 </ui:composition>

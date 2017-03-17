@@ -6,6 +6,7 @@ import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
 import com.netcracker.smarthome.web.chart.options.jsonfields.Series;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 @Component
@@ -20,7 +21,7 @@ public class ChartConfiguration {
         this.chart = chart;
     }
 
-    public ArrayList<Series> getData(RequestDataOptions requestDataOptions){
+    public ArrayList<Series> getData(RequestDataOptions requestDataOptions) throws ParseException {
         return chart.configure(requestDataOptions);
     }
 }
