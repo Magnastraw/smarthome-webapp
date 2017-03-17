@@ -1,4 +1,10 @@
-package com.netcracker.smarthome.web.specs;
+package com.netcracker.smarthome.web.specs.table;
+
+import org.apache.commons.lang3.time.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Filter {
 
@@ -102,5 +108,13 @@ public class Filter {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static boolean filterByDate(Object value, Object filter) {
+        if (filter == null)
+            return true;
+        if (value == null)
+            return false;
+        return DateUtils.truncatedEquals((Date) filter, (Date) value, Calendar.DATE);
     }
 }

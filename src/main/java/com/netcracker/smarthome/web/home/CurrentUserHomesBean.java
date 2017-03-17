@@ -2,6 +2,8 @@ package com.netcracker.smarthome.web.home;
 
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.web.NavigationBean;
+import com.netcracker.smarthome.web.alarm.AlarmListBean;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.specs.AlarmSpecsBean;
 import com.netcracker.smarthome.web.specs.MetricSpecsBean;
@@ -39,9 +41,13 @@ public class CurrentUserHomesBean {
         return homeService.getHomesList(ContextUtils.getCurrentUser());
     }
 
-    public void setCurrentCatalogs(SmartHome home) {
+    public void switchHome(SmartHome home) {
         setCurrentHome(home);
         ((MetricSpecsBean)ContextUtils.getBean("metricSpecsBean")).initialise();
         ((AlarmSpecsBean)ContextUtils.getBean("alarmSpecsBean")).initialise();
+        ((AlarmListBean)ContextUtils.getBean("alarmListBean")).initialise();
+        NavigationBean navigation = (NavigationBean)ContextUtils.getBean("navigationBean");
+        if (navigation.getPageName().equals("/faces/alarms/alarm"))
+            navigation.setPageName("alarms/alarmlist");
     }
 }

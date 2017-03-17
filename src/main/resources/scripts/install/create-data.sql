@@ -131,31 +131,79 @@ INSERT INTO public.metric_specs (spec_name, unit_id, metric_type, catalog_id)
 VALUES
   ('Temperature', 1, 'common', 22),
   ('Humidity', 2, 'common', 22),
-  ('metricSpec3', 1, 'temperature', 23),
-  ('metricSpec4', 1, 'temperature', 23),
-  ('metricSpec5', 1, 'temperature', 24),
-  ('metricSpec6', 1, 'temperature', 24),
-  ('metricSpec7', 1, 'temperature', 28),
-  ('metricSpec8', 1, 'temperature', 33),
-  ('metricSpec9', 1, 'temperature', 34),
-  ('metricSpec10', 1, 'temperature', 34),
-  ('metricSpec11', 1, 'temperature', 36),
-  ('metricSpec12', 1, 'temperature', 36);
+  ('metricSpec3', 1, 'common', 22),
+  ('metricSpec4', 1, 'common', 23),
+  ('metricSpec5', 1, 'common', 23),
+  ('metricSpec6', 1, 'common', 23),
+  ('metricSpec7', 1, 'common', 24),
+  ('metricSpec8', 1, 'common', 24),
+  ('metricSpec9', 1, 'common', 25),
+  ('metricSpec10', 1, 'common', 25),
+  ('metricSpec11', 1, 'common', 26),
+  ('metricSpec12', 1, 'common', 26),
+  ('Temperature', 1, 'common', 27),
+  ('Humidity', 2, 'common', 27),
+  ('metricSpec3', 1, 'common', 27),
+  ('metricSpec4', 1, 'common', 28),
+  ('metricSpec5', 1, 'common', 28),
+  ('metricSpec6', 1, 'common', 28),
+  ('metricSpec7', 1, 'common', 29),
+  ('metricSpec8', 1, 'common', 29),
+  ('metricSpec9', 1, 'common', 30),
+  ('metricSpec10', 1, 'common', 30),
+  ('metricSpec11', 1, 'common', 31),
+  ('metricSpec12', 1, 'common', 31),
+  ('Temperature', 1, 'common', 32),
+  ('Humidity', 2, 'common', 32),
+  ('metricSpec3', 1, 'common', 32),
+  ('metricSpec4', 1, 'common', 33),
+  ('metricSpec5', 1, 'common', 33),
+  ('metricSpec6', 1, 'common', 33),
+  ('metricSpec7', 1, 'common', 34),
+  ('metricSpec8', 1, 'common', 34),
+  ('metricSpec9', 1, 'common', 35),
+  ('metricSpec10', 1, 'common', 35),
+  ('metricSpec11', 1, 'common', 36),
+  ('metricSpec12', 1, 'common', 36);
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)
 VALUES
-  ('alarmSpec1', 'type1', 13),
-  ('alarmSpec2', 'type1', 16),
-  ('alarmSpec3', 'type1', 16),
-  ('alarmSpec4', 'type1', 17),
-  ('alarmSpec5', 'type1', 17),
-  ('alarmSpec6', 'type2', 17),
-  ('alarmSpec7', 'type2', 18),
-  ('alarmSpec8', 'type2', 18),
-  ('alarmSpec9', 'type2', 19),
-  ('alarmSpec10', 'type3', 19),
-  ('alarmSpec11', 'type3', 19),
-  ('alarmSpec12', 'type3', 20);
+  ('alarmSpec1', 'type1', 46),
+  ('alarmSpec2', 'type1', 46),
+  ('alarmSpec3', 'type1', 46),
+  ('alarmSpec4', 'type1', 47),
+  ('alarmSpec5', 'type1', 47),
+  ('alarmSpec6', 'type2', 47),
+  ('alarmSpec7', 'type2', 48),
+  ('alarmSpec8', 'type2', 48),
+  ('alarmSpec9', 'type2', 49),
+  ('alarmSpec10', 'type3', 49),
+  ('alarmSpec11', 'type3', 50),
+  ('alarmSpec12', 'type3', 50),
+  ('alarmSpec1', 'type1', 51),
+  ('alarmSpec2', 'type1', 51),
+  ('alarmSpec3', 'type1', 51),
+  ('alarmSpec4', 'type1', 52),
+  ('alarmSpec5', 'type1', 52),
+  ('alarmSpec6', 'type2', 52),
+  ('alarmSpec7', 'type2', 53),
+  ('alarmSpec8', 'type2', 53),
+  ('alarmSpec9', 'type2', 54),
+  ('alarmSpec10', 'type3', 54),
+  ('alarmSpec11', 'type3', 55),
+  ('alarmSpec12', 'type3', 55),
+  ('alarmSpec1', 'type1', 56),
+  ('alarmSpec2', 'type1', 56),
+  ('alarmSpec3', 'type1', 56),
+  ('alarmSpec4', 'type1', 57),
+  ('alarmSpec5', 'type1', 57),
+  ('alarmSpec6', 'type2', 57),
+  ('alarmSpec7', 'type2', 58),
+  ('alarmSpec8', 'type2', 58),
+  ('alarmSpec9', 'type2', 59),
+  ('alarmSpec10', 'type3', 59),
+  ('alarmSpec11', 'type3', 60),
+  ('alarmSpec12', 'type3', 60);
 
 --add metrics,objects
 INSERT INTO object_types
@@ -238,3 +286,51 @@ VALUES
   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
    50 + (random() * 35) :: DECIMAL, 12);
 
+
+
+INSERT INTO public.events
+  (object_id, event_type, smart_home_id)
+VALUES
+  (1, 'type', 1),
+  (2, 'type', 1),
+  (3, 'type', 1),
+  (4, 'type', 1),
+  (5, 'type', 1),
+  (6, 'type', 1);
+
+INSERT INTO public.events_history (event_id, read_date, event_description, severity)
+VALUES
+  (1, TIMESTAMP '2017-01-01 11:00', '', 2),
+  (1, TIMESTAMP '2017-01-02 11:00', '', 3),
+  (1, TIMESTAMP '2017-01-03 11:00', '', 3),
+  (1, TIMESTAMP '2017-01-04 11:00', '', 4),
+  (1, TIMESTAMP '2017-01-05 11:00', '', 2),
+  (2, TIMESTAMP '2017-01-01 11:00', '', 2),
+  (2, TIMESTAMP '2017-01-02 11:00', '', 3),
+  (2, TIMESTAMP '2017-01-03 11:00', '', 3),
+  (2, TIMESTAMP '2017-01-04 11:00', '', 3),
+  (3, TIMESTAMP '2017-01-01 11:00', '', 2),
+  (3, TIMESTAMP '2017-01-02 11:00', '', 3),
+  (3, TIMESTAMP '2017-01-03 11:00', '', 3),
+  (3, TIMESTAMP '2017-01-04 11:00', '', 4),
+  (3, TIMESTAMP '2017-01-05 11:00', '', 1),
+  (4, TIMESTAMP '2017-01-01 11:00', '', 2),
+  (4, TIMESTAMP '2017-01-02 11:00', '', 3),
+  (4, TIMESTAMP '2017-01-03 11:00', '', 3),
+  (4, TIMESTAMP '2017-01-04 11:00', '', 4),
+  (5, TIMESTAMP '2017-01-01 11:00', '', 2),
+  (5, TIMESTAMP '2017-01-02 11:00', '', 3),
+  (5, TIMESTAMP '2017-01-03 11:00', '', 3),
+  (5, TIMESTAMP '2017-01-04 11:00', '', 4);
+
+
+INSERT INTO public.alarms
+  (event_id, object_id, spec_id, parent_alarm_id, cleared_user_id, alarm_name, start_time, end_time, severity, severity_change_time)
+VALUES
+  (1, 1, 1, null, -1, 'alarm1', TIMESTAMP '2017-01-05 11:00', TIMESTAMP '2017-01-06 11:00', 2, TIMESTAMP '2017-01-05 11:00'),
+  (2, 2, 2, null, -1, 'alarm2', TIMESTAMP '2017-01-08 11:00', TIMESTAMP '2017-01-09 11:00', 3, TIMESTAMP '2017-01-05 11:00'),
+  (3, 3, 3, null, -1, 'alarm3', TIMESTAMP '2017-01-10 11:00', TIMESTAMP '2017-01-11 11:00', 1, TIMESTAMP '2017-01-05 11:00'),
+  (4, 4, 4, null, -1, 'alarm4', TIMESTAMP '2017-01-13 11:00', TIMESTAMP '2017-01-14 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+  (5, 5, 5, null, -1, 'alarm5', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+  (1, 1, 1, 1, -1, 'alarm6', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+  (6, 1, 1, 1, -1, 'alarm7', TIMESTAMP '2017-01-16 11:00', TIMESTAMP '2017-01-16 23:00', 4, TIMESTAMP '2017-01-05 11:00');

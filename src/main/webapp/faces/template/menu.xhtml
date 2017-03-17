@@ -7,7 +7,7 @@
         <p:submenu label="House" icon="fa fa-home">
             <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
                 <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
-                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.setCurrentCatalogs(home)}"/>
+                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.switchHome(home)}"/>
                 </c:forEach>
             </p:submenu>
             <p:menuitem value="House settings" icon="fa fa-gear"
@@ -30,6 +30,9 @@
                         update=":centerForm"/>
             <p:menuitem value="Alarm specifications"
                         action="#{navigationBean.setPageName('specs/alarmSpecs')}"
+                        update=":centerForm"/>
+            <p:menuitem value="Alarms"
+                        action="#{navigationBean.setPageName('alarms/alarmlist')}"
                         update=":centerForm"/>
             <p:menuitem value="Units"
                         action="#{navigationBean.setPageName('specs/units')}"
