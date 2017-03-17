@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.net.URL;
 
 public class ChartConfig implements ChartOptionsInterface{
     private static final Logger LOG = LoggerFactory.getLogger(ChartConfig.class);
@@ -33,8 +34,8 @@ public class ChartConfig implements ChartOptionsInterface{
         this.chartOptions = chartOptions;
         this.requestDataOptions = requestDataOptions;
         this.objectMapper = new ObjectMapper();
-
-        Velocity.init("C:/Users/hintr/Desktop/smarthome-webapp/src/main/resources/velocity.properties");
+        URL url = this.getClass().getClassLoader().getResource("/velocity.properties");
+        Velocity.init(url.getPath());
 
         vc = new VelocityContext();
 

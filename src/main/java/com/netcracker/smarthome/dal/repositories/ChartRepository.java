@@ -15,25 +15,25 @@ public class ChartRepository extends EntityRepository<Chart> {
     }
 
     public long getChartId() {
-        Query query = getManager().createNativeQuery("SELECT * FROM charts_chart_id_seq");
-        if( query.getResultList().size()==0){
+        Query query = getManager().createNativeQuery("SELECT is_called FROM charts_chart_id_seq");
+        if (!(Boolean) query.getResultList().get(0)) {
             return 0;
-        } else{
+        } else {
             Query q = getManager().createNativeQuery("SELECT last_value FROM charts_chart_id_seq ");
             BigInteger result = (BigInteger) q.getResultList().get(0);
             return result.longValue();
         }
     }
 
-    public List<Chart> getChartByDashboardId(long dashboardId){
+    public List<Chart> getChartByDashboardId(long dashboardId) {
         Query query = getManager().createQuery("select chart from Chart chart where chart.dashboard.dashboardId = :dashboardId ");
-        query.setParameter("dashboardId",dashboardId);
+        query.setParameter("dashboardId", dashboardId);
         return query.getResultList();
     }
 
-    public List<Chart> getChartByRenderId(String id){
+    public List<Chart> getChartByRenderId(String id) {
         Query query = getManager().createQuery("select chart from Chart chart where :id like CONCAT('%',chart.chartId,'%')");
-        query.setParameter("id",id);
+        query.setParameter("id", id);
         return query.getResultList();
     }
 
