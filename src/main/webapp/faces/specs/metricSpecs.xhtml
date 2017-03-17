@@ -17,25 +17,25 @@
         </p:breadCrumb>
         <p:dataTable id="metricSpecDT" widgetVar="metricSpecTable" value="#{metricSpecsBean.tableEntities}" var="tableEntity"
                      sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" rowKey="#{tableEntity.name}"
-                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15"
+                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{metricSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria">
             <p:column styleClass="column-delete">
                 <p:commandLink update=":centerForm:metricDlg" oncomplete="PF('metricDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
                                title="Edit" styleClass="fa fa-edit"/>
+                <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
+                               title="Move to another catalog" styleClass="fa move margin">
+                </p:commandLink>
                 <p:commandLink action="#{metricSpecsBean.remove}" update=":centerForm"
                                title="Delete" styleClass="fa fa-remove margin">
                     <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
                     <f:setPropertyActionListener value="#{tableEntity}" target="#{metricSpecsBean.removed}"/>
                 </p:commandLink>
-                <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
-                               title="Move to another catalog" styleClass="fa fa-long-arrow-right margin">
-                </p:commandLink>
             </p:column>
             <p:column headerText="Name" styleClass="column-name" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon"
+                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon" title="#{tableEntity.name}"
                                value="#{tableEntity.name}" action="#{metricSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
-                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}"/>
+                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}" title="#{tableEntity.name}"/>
             </p:column>
             <p:column headerText="Metric type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMetricType}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMetricType}" filterStyleClass="filter">
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.metricType}"/>

@@ -1,28 +1,27 @@
-package com.netcracker.smarthome.web.specs;
+package com.netcracker.smarthome.web.specs.converters;
 
-import com.netcracker.smarthome.dal.repositories.CatalogRepository;
-import com.netcracker.smarthome.model.entities.Catalog;
+import com.netcracker.smarthome.dal.repositories.UnitRepository;
+import com.netcracker.smarthome.model.entities.Unit;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.servlet.ServletContext;
 
-@FacesConverter("catalogConverter")
-public class CatalogConverter implements Converter {
+@FacesConverter("unitConverter")
+public class UnitConverter implements Converter {
 
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext((ServletContext) facesContext.getCurrentInstance().getExternalContext().getContext());
         if(value != null && value.trim().length() > 0) {
             try {
-                CatalogRepository catalogRepository = (CatalogRepository) context.getBean("catalogRepository");
-                return catalogRepository.get(Long.parseLong(value));
+                UnitRepository unitRepository = (UnitRepository) context.getBean("unitRepository");
+                return unitRepository.get(Long.parseLong(value));
             } catch(NumberFormatException e) {
-                ContextUtils.addErrorMessageToContext("Conversion error: not a valid catalog");
+                ContextUtils.addErrorMessageToContext("Conversion error: not a valid unit");
             }
         }
         return null;
@@ -30,7 +29,7 @@ public class CatalogConverter implements Converter {
 
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if(object != null) {
-            return String.valueOf(((Catalog) object).getCatalogId());
+            return String.valueOf(((Unit) object).getUnitId());
         }
         else {
             return null;

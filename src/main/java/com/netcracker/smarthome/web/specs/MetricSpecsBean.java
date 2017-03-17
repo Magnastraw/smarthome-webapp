@@ -9,6 +9,9 @@ import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.Unit;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
+import com.netcracker.smarthome.web.specs.table.Filter;
+import com.netcracker.smarthome.web.specs.table.Sort;
+import com.netcracker.smarthome.web.specs.table.TableEntity;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -448,9 +451,5 @@ public class MetricSpecsBean implements Serializable {
 
     public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
         this.userHomesBean = userHomesBean;
-    }
-
-    public void destroy() {
-        System.out.println("MetricsBean will destroy now");
     }
 }

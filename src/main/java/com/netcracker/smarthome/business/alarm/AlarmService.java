@@ -1,0 +1,64 @@
+package com.netcracker.smarthome.business.alarm;
+
+import com.netcracker.smarthome.dal.repositories.AlarmRepository;
+import com.netcracker.smarthome.model.entities.Alarm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class AlarmService {
+    private final AlarmRepository alarmRepository;
+
+    @Autowired
+    public AlarmService(AlarmRepository alarmRepository) {
+        this.alarmRepository = alarmRepository;
+    }
+
+    @Transactional
+    public List<Alarm> getChildrenAlarms(Alarm alarm) {
+        return alarmRepository.getChildrenAlarms(alarm);
+    }
+    
+    @Transactional
+    public void deleteAlarm(Object primaryKey) {
+        alarmRepository.delete(primaryKey);
+    }
+    
+    @Transactional
+    public Alarm getAlarmById(long alarmId) {
+        return alarmRepository.get(alarmId);
+    }
+    
+    @Transactional
+    public void createAlarm(Alarm alarm) {
+        alarmRepository.save(alarm);
+    }
+
+    /*@Transactional
+    public boolean checkAlarmName(String alarmName, long parentAlarmId) {
+        return alarmRepository.checkAlarmName(alarmName, parentAlarmId);
+    }*/
+
+    @Transactional
+    public List<Alarm> getPathToAlarm(Alarm alarm) {
+        return alarmRepository.getPathToAlarm(alarm);
+    }
+
+    @Transactional
+    public List<Alarm> getChildrenAlarmsRecursively(Alarm rootAlarm) {
+        return alarmRepository.getChildrenAlarmsRecursively(rootAlarm);
+    }
+
+    @Transactional
+    public Alarm updateCatalog(Alarm alarm) {
+        return alarmRepository.update(alarm);
+    }
+
+    @Transactional
+    public List<Alarm> getRootAlarms(long smartHomeId) {
+        return alarmRepository.getRootAlarms(smartHomeId);
+    }
+}

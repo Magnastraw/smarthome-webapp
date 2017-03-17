@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.specs;
+package com.netcracker.smarthome.web.specs.table;
 
 public class Sort {
 

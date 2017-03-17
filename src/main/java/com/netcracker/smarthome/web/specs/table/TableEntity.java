@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.specs;
+package com.netcracker.smarthome.web.specs.table;
 
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.Catalog;
