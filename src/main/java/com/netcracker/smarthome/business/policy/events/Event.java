@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.policy;
+package com.netcracker.smarthome.business.policy.events;
 
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.Spec;
@@ -6,19 +6,20 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public abstract class Event implements Serializable {
     private EventType type;
     private SmartObject object;
     private SmartObject subobject;
-    private Date registryDate;
+    private Timestamp registryDate;
     private Spec spec;
 
     public Event() {
     }
 
-    public Event(EventType type, SmartObject object, SmartObject subobject, Date registryDate, Spec spec) {
+    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec) {
         this.type = type;
         this.object = object;
         this.subobject = subobject;
@@ -50,11 +51,11 @@ public abstract class Event implements Serializable {
         this.subobject = subobject;
     }
 
-    public Date getRegistryDate() {
+    public Timestamp getRegistryDate() {
         return registryDate;
     }
 
-    public void setRegistryDate(Date registryDate) {
+    public void setRegistryDate(Timestamp registryDate) {
         this.registryDate = registryDate;
     }
 

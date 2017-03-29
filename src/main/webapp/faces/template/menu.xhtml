@@ -24,7 +24,8 @@
         </p:submenu>
         <p:submenu label="Configure">
             <p:menuitem value="Policy"
-                        url="#"/>
+                        action="#{navigationBean.setPageName('policy/rule')}"
+                        update=":centerForm"/>
             <p:menuitem value="Metric specifications"
                         action="#{navigationBean.setPageName('specs/metricSpecs')}"
                         update=":centerForm"/>
