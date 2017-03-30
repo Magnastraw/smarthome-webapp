@@ -4,7 +4,6 @@ import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class MetricEvent extends Event {
     private double value;

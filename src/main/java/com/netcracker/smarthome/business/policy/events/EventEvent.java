@@ -4,7 +4,6 @@ import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class EventEvent extends Event {
     private int severity;

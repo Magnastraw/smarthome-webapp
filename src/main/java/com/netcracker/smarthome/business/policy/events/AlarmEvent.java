@@ -2,10 +2,8 @@ package com.netcracker.smarthome.business.policy.events;
 
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.model.entities.User;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class AlarmEvent extends EventEvent {
     private Timestamp severityChangeTime;
@@ -35,4 +33,4 @@ public class AlarmEvent extends EventEvent {
     public void setClearedUser(long clearedUserId) {
         this.clearedUserId = clearedUserId;
     }
-    }
+}

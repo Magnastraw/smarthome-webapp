@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 public abstract class Event implements Serializable {
     private EventType type;
