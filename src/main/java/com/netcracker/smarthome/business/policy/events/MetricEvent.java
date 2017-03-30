@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.policy;
+package com.netcracker.smarthome.business.policy.events;
 
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
