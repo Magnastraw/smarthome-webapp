@@ -39,4 +39,11 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return query.getResultList();
     }
 
+    public SmartObject getObjectById(long smartObjectId) {
+        Query query = getManager().createQuery("select smartObject from SmartObject smartObject where smartObject.smartObjectId = :smartObjectId");
+        query.setParameter("smartObjectId", smartObjectId);
+        List<SmartObject> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
 }

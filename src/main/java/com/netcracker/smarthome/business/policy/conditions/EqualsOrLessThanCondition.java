@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-public class EqualsOrLessThanCondition implements MetricCondition {
+public class EqualsOrLessThanCondition extends MetricCondition {
     public boolean evaluate() {
         return false;
     }

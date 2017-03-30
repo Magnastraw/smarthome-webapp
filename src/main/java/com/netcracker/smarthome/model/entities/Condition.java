@@ -13,13 +13,13 @@ import java.util.List;
 @Entity
 @Table(name = "conditions", schema = "public", catalog = "smarthome_db")
 public class Condition implements Serializable {
-    private long conditionId;
+    private long nodeId;
     private BooleanOperator operator;
     private List<ConditionParam> conditionParams;
     private Rule rule;
     private ConditionType conditionType;
-    private Condition nextCondition;
-    private List<Condition> prevConditions;
+    private Condition parentNode;
+    private List<Condition> childNodes;
 
     public Condition() {
     }
@@ -28,19 +28,19 @@ public class Condition implements Serializable {
         this.operator = operator;
         this.rule = rule;
         this.conditionType = conditionType;
-        this.nextCondition = nextCondition;
+        this.parentNode = nextCondition;
     }
 
     @Id
-    @Column(name = "condition_id", nullable = false)
+    @Column(name = "node_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cond_seq")
-    @SequenceGenerator(name = "cond_seq", sequenceName = "conditions_condition_id_seq", allocationSize = 1)
-    public long getConditionId() {
-        return conditionId;
+    @SequenceGenerator(name = "cond_seq", sequenceName = "conditions_node_id_seq", allocationSize = 1)
+    public long getNodeId() {
+        return nodeId;
     }
 
-    public void setConditionId(long conditionId) {
-        this.conditionId = conditionId;
+    public void setNodeId(long nodeId) {
+        this.nodeId = nodeId;
     }
 
     @Basic
@@ -84,22 +84,22 @@ public class Condition implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "next_condition_id", referencedColumnName = "condition_id")
-    public Condition getNextCondition() {
-        return nextCondition;
+    @JoinColumn(name = "parent_node_id", referencedColumnName = "node_id")
+    public Condition getParentNode() {
+        return parentNode;
     }
 
-    public void setNextCondition(Condition nextCondition) {
-        this.nextCondition = nextCondition;
+    public void setParentNode(Condition nextCondition) {
+        this.parentNode = nextCondition;
     }
 
-    @OneToMany(mappedBy = "nextCondition")
-    public List<Condition> getPrevConditions() {
-        return prevConditions;
+    @OneToMany(mappedBy = "parentNode")
+    public List<Condition> getChildNodes() {
+        return childNodes;
     }
 
-    public void setPrevConditions(List<Condition> prevConditions) {
-        this.prevConditions = prevConditions;
+    public void setChildNodes(List<Condition> childNodes) {
+        this.childNodes = childNodes;
     }
 
     @Override
@@ -111,25 +111,25 @@ public class Condition implements Serializable {
         Condition condition = (Condition) o;
 
         return new EqualsBuilder()
-                .append(getConditionId(), condition.getConditionId())
+                .append(getNodeId(), condition.getNodeId())
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(getConditionId())
+                .append(getNodeId())
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("conditionId", getConditionId())
+                .append("nodeId", getNodeId())
                 .append("operator", getOperator())
                 .append("rule", getRule())
                 .append("conditionType", getConditionType())
-                .append("nextCondition", getNextCondition())
+                .append("parentNode", getParentNode())
                 .toString();
     }
 }

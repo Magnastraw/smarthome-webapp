@@ -70,7 +70,9 @@ CREATE TABLE public.social_servicies (
   service_name VARCHAR NOT NULL,
   client_id VARCHAR NOT NULL,
   secret_key VARCHAR NOT NULL,
-  CONSTRAINT social_servicies_pk PRIMARY KEY (service_id)
+  service_type BIGINT NOT NULL,
+  CONSTRAINT social_servicies_pk PRIMARY KEY (service_id),
+  CONSTRAINT service_uk UNIQUE (service_type)
 );
 
 
@@ -88,7 +90,6 @@ CREATE TABLE public.users (
   is_two_factor_auth BOOLEAN DEFAULT false NOT NULL,
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
-COMMENT ON COLUMN public.users.email IS 'unique';
 
 CREATE UNIQUE INDEX users_uk
   ON public.users (email);
@@ -213,19 +214,19 @@ CREATE TABLE public.action_params (
 
 ALTER SEQUENCE public.action_params_param_id_seq OWNED BY public.action_params.param_id;
 
-CREATE SEQUENCE public.conditions_condition_id_seq;
+CREATE SEQUENCE public.conditions_node_id_seq;
 
 CREATE TABLE public.conditions (
-  condition_id BIGINT NOT NULL DEFAULT nextval('public.conditions_condition_id_seq'),
+  node_id BIGINT NOT NULL DEFAULT nextval('public.conditions_node_id_seq'),
   rule_id BIGINT NOT NULL,
-  type_id BIGINT NOT NULL,
-  next_condition_id BIGINT,
+  type_id BIGINT,
+  parent_node_id BIGINT,
   operator INTEGER,
-  CONSTRAINT conditions_pk PRIMARY KEY (condition_id)
+  CONSTRAINT conditions_pk PRIMARY KEY (node_id)
 );
 
 
-ALTER SEQUENCE public.conditions_condition_id_seq OWNED BY public.conditions.condition_id;
+ALTER SEQUENCE public.conditions_node_id_seq OWNED BY public.conditions.node_id;
 
 CREATE SEQUENCE public.condition_params_param_id_seq;
 
@@ -401,10 +402,17 @@ CREATE TABLE public.social_profiles (
   CONSTRAINT social_profiles_pk PRIMARY KEY (user_id, service_id)
 );
 
-
 CREATE UNIQUE INDEX sp_profile_uk
   ON public.social_profiles
   ( user_social_id, service_id );
+
+CREATE TABLE public.assignments (
+  policy_id BIGINT NOT NULL,
+  object_id BIGINT NOT NULL,
+  name VARCHAR NOT NULL DEFAULT '',
+  catalog_id BIGINT NOT NULL,
+  CONSTRAINT assignments_pk PRIMARY KEY (policy_id, object_id)
+);
 
 ALTER TABLE public.conditions ADD CONSTRAINT condition_types_conditions_fk
 FOREIGN KEY (type_id)
@@ -618,14 +626,14 @@ DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE public.condition_params ADD CONSTRAINT conditions_condition_params_fk
 FOREIGN KEY (condition_id)
-REFERENCES public.conditions (condition_id)
+REFERENCES public.conditions (node_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE public.conditions ADD CONSTRAINT conditions_conditions_fk
-FOREIGN KEY (next_condition_id)
-REFERENCES public.conditions (condition_id)
+FOREIGN KEY (parent_node_id)
+REFERENCES public.conditions (node_id)
 ON DELETE SET NULL
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
@@ -738,6 +746,27 @@ DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE public.notifications ADD CONSTRAINT metrics_notifications_fk
 FOREIGN KEY (metric_id)
 REFERENCES public.metrics (metric_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.assignments ADD CONSTRAINT assignments_policies_fk
+FOREIGN KEY (policy_id)
+REFERENCES public.policies (policy_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.assignments ADD CONSTRAINT assignments_objects_fk
+FOREIGN KEY (object_id)
+REFERENCES public.objects (smart_object_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.assignments ADD CONSTRAINT assignments_catalogs_fk
+FOREIGN KEY (catalog_id)
+REFERENCES public.catalogs (catalog_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;

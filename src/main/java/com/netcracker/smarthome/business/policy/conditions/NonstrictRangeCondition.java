@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-public class NonstrictRangeCondition implements MetricCondition {
+public class NonstrictRangeCondition extends MetricCondition {
     public boolean evaluate() {
         return false;
     }

@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-public class GreaterThanCondition implements MetricCondition {
+public class GreaterThanCondition extends MetricCondition {
     public boolean evaluate() {
         return false;
     }
