@@ -71,7 +71,7 @@ public class Action implements Serializable {
         this.order = order;
     }
 
-    @OneToMany(mappedBy = "action", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "action", cascade = CascadeType.ALL)
     public List<ActionParam> getActionParams() {
         return actionParams;
     }

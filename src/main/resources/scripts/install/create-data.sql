@@ -232,5 +232,5 @@ VALUES
 INSERT INTO metrics_history
 VALUES
   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   50 + (random() * 35) :: DECIMAL, 12);
+50 + (random() * 35) :: DECIMAL, 12);
 

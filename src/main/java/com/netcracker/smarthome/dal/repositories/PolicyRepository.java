@@ -21,6 +21,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
         query.setParameter("policyId", policy.getPolicyId());
         return query.getResultList();
     }
+
     public List<Policy> getActivePolicies() {
         Query query = getManager().createQuery("select p from Policy p where p.status = :policyStatus");
         query.setParameter("policyStatus", PolicyStatus.ACTIVE);

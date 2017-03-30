@@ -83,7 +83,7 @@ public class Policy implements Serializable {
         this.catalog = catalog;
     }
 
-    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "policy", cascade = CascadeType.ALL)
     public List<Rule> getRules() {
         return rules;
     }

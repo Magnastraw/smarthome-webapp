@@ -10,14 +10,12 @@ import java.util.Date;
 public class AlarmEvent extends EventEvent {
     private Timestamp severityChangeTime;
     private long clearedUserId;
-    private AlarmSpec alarmSpec;
 
     public AlarmEvent() {
     }
 
     public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, int severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(type, object, subobject, registryDate, null, severity);
-        this.alarmSpec = spec;
+        super(type, object, subobject, registryDate, spec, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }
@@ -36,13 +34,5 @@ public class AlarmEvent extends EventEvent {
 
     public void setClearedUser(long clearedUserId) {
         this.clearedUserId = clearedUserId;
-    }
-
-    public AlarmSpec getAlarmSpec() {
-        return alarmSpec;
-    }
-
-    public void setAlarmSpec(AlarmSpec alarmSpec) {
-        this.alarmSpec = alarmSpec;
     }
     }
