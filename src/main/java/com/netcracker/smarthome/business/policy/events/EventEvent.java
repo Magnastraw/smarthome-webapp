@@ -5,13 +5,14 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.sql.Timestamp;
 
+// TODO: add event type
 public class EventEvent extends Event {
-    private int severity;
+    private Integer severity;
 
     public EventEvent() {
     }
 
-    public EventEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, int severity) {
+    public EventEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, Integer severity) {
         super(type, object, subobject, registryDate, spec);
         this.severity = severity;
     }

@@ -12,7 +12,7 @@ public class AlarmEvent extends EventEvent {
     public AlarmEvent() {
     }
 
-    public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, int severity, Timestamp severityChangeTime, long clearedUserId) {
+    public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, Integer severity, Timestamp severityChangeTime, long clearedUserId) {
         super(type, object, subobject, registryDate, spec, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
