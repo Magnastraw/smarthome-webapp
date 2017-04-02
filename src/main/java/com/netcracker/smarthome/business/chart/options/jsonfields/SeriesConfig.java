@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.chart.options.jsonfields;
+package com.netcracker.smarthome.business.chart.options.jsonfields;
 
 public class SeriesConfig {
     private String data;

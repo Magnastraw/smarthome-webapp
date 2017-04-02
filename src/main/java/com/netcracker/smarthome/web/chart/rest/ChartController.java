@@ -1,10 +1,8 @@
 package com.netcracker.smarthome.web.chart.rest;
 
 import com.netcracker.smarthome.business.chart.ChartService;
-import com.netcracker.smarthome.web.chart.options.PositionOptions;
-import com.netcracker.smarthome.web.chart.options.jsonfields.DataSeries;
-import com.netcracker.smarthome.web.chart.options.RequestDataOptions;
-import com.netcracker.smarthome.web.chart.options.jsonfields.Series;
+import com.netcracker.smarthome.business.chart.options.RequestDataOptions;
+import com.netcracker.smarthome.business.chart.options.jsonfields.DataSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,12 @@ import java.util.ArrayList;
 public class ChartController {
     private static final Logger LOG = LoggerFactory.getLogger(ChartController.class);
     private ChartConfiguration chartConfiguration;
+    private final ChartService chartService;
 
     @Autowired
-    ChartService chartService;
+    public ChartController(ChartService chartService) {
+        this.chartService = chartService;
+    }
 
     @PostConstruct
     private void init() {
@@ -30,18 +31,23 @@ public class ChartController {
 
     @RequestMapping(value = {"/jsonData"}, method = RequestMethod.POST)
     @ResponseBody
-    public ArrayList<Series> getJsonData(@RequestBody RequestDataOptions requestDataOptions) throws ParseException {
+    public ArrayList<DataSeries> getJsonData(@RequestBody RequestDataOptions requestDataOptions) throws ParseException {
         LOG.info("request:" + requestDataOptions);
-        this.chartConfiguration.setChart(new MultiChart(chartService));
+        this.chartConfiguration.setChart(new TimeChart(chartService));
         return this.chartConfiguration.getData(requestDataOptions);
-
     }
 
-    @RequestMapping(value = {"/jsonPositionOption"}, method = RequestMethod.POST)
+    @RequestMapping(value="/house/{id}", method=RequestMethod.GET)
     @ResponseBody
-    public String getPositionOptions(@RequestBody ArrayList<PositionOptions> positionOptionss) {
-        LOG.info("request:" + positionOptionss.get(0).getId());
-        return "Done";
+    public String byParameter(@PathVariable int id) {
+        return "This is response "+id;
+    }
+
+    @RequestMapping(value = {"/inventory"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String getInventory(@RequestBody String inventory) {
+        LOG.info("request:" + inventory);
+        return "successful";
     }
 
 }

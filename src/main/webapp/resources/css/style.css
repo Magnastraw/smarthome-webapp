@@ -109,17 +109,12 @@
 }
 
 .dialog-input-chart {
-    width: 169px; !important;
+    width: auto; !important;
     margin: 0px !important;
 }
 .dialog-input-catalog {
     width: 200px; !important;
     margin-left: 40px !important;
-}
-
-.dialog-select {
-    width: 177px !important;
-    margin: 0px !important;
 }
 
 .dialog-select-catalog {
@@ -363,4 +358,34 @@ h3 {
 .one-dialog-select{
     width: 145px !important;
     height: 29px;
+}
+
+.ui-selectonemenu {
+    padding-right: 0 !important;
+    width: 100% !important;
+}
+
+.ui-selectonemenu label {
+    width: auto !important;
+}
+
+.ui-selectcheckboxmenu {
+    width: 100% !important;
+}
+
+.top-aligned-columns td{
+    vertical-align: top;
+    padding: 2px 5px ;
+}
+
+#center{
+    z-index: auto !important;
+
+}
+
+.chartDialogInput{
+    width: 101%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }

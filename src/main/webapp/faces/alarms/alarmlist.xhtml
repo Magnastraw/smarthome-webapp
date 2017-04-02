@@ -10,7 +10,7 @@
     <p:outputPanel id="alarms">
         <h2>"#{homeSettingsBean.home.name}": alarms</h2>
         <p:outputPanel styleClass="button-panel ui-noborder">
-            <p:commandButton action="#{navigationBean.setPageName('charts/dashboardSettings')}" update=":centerForm"
+            <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}" update=":centerForm"
                              value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-bar-chart"/>
             <p:commandButton action="#{alarmListBean.setClearSeverity}" oncomplete="PF('alarmsTable').unselectAllRows()" update=":centerForm:alarmsDT"
                              value="Clear alarms" styleClass="to-dashboard"/>

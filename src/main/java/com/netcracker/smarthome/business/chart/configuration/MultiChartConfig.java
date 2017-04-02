@@ -1,23 +1,23 @@
-package com.netcracker.smarthome.web.chart.configuration;
+package com.netcracker.smarthome.business.chart.configuration;
 
 import com.netcracker.smarthome.business.chart.ChartService;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.web.chart.options.jsonfields.SeriesConfig;
-import com.netcracker.smarthome.web.chart.options.jsonfields.YAxisNumber;
+import com.netcracker.smarthome.business.chart.options.jsonfields.SeriesConfig;
+import com.netcracker.smarthome.business.chart.options.jsonfields.YAxisNumber;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiChartConfig extends DefaultChartConfig implements ChartConfigInterface {
+public class MultiChartConfig extends DefaultChartConfig implements ChartConfigurator {
     private String title;
     private ChartService chartService;
 
     public MultiChartConfig(SmartHome smartHome, long chartId, String chartTitle, ChartService chartService, double refreshInterval, String chartType, String chartInterval) {
         super(smartHome, chartId, refreshInterval, chartType, chartInterval);
-        this.title=chartTitle;
-        this.chartService=chartService;
+        this.title = chartTitle;
+        this.chartService = chartService;
     }
 
     public String getTitle() {
@@ -28,13 +28,9 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigI
         this.title = title;
     }
 
-    public ChartOptionsInterface configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
-
-        super.getChartConfig().getChartOptions().setChartTitle(getTitle());
-
-        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs,chartService);
-
-        selectedSmartObjects=super.deleteParentObj(selectedSubObject,selectedSmartObjects);
+    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
+        super.getChartConfigIml().getChartOptions().setChartTitle(getTitle());
+        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {
@@ -51,13 +47,12 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigI
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfig().getChartOptions().getSeries().add(seriesConfig);
+                super.getChartConfigIml().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getChartConfigIml().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
-        super.setInterval();
 
-        return super.getChartConfig();
+        return super.getChartConfigIml();
     }
 
     private boolean isChild(SmartObject smartObject) {

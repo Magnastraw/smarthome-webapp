@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:mycharts="http://xmlns.jcp.org/jsf/composite/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h2 style="text-align: center;width: 100%; height:100%; margin-bottom: 2px;">#{dashboardBean.currentDashboard.dashboardName}</h2>
+
+    <p:toolbar id="dashboardToolbar">
+        <f:facet name="left">
+            <p:commandButton value="Add widget"
+                             icon="fa fa-plus"
+                             oncomplete="PF('chartSettingDialog').show()"/>
+        </f:facet>
+
+        <f:facet name="right">
+            <p:commandButton value="Delete dashboard"
+                             actionListener="#{dashboardBean.deleteDashboard(dashboardBean.currentDashboard)}"
+                             action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                             icon="fa fa-remove"
+                             update="centerForm, menu" immediate="true"/>
+            <p:commandButton value="Back"
+                             action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                             update="centerForm"
+                             icon="fa fa-level-up "
+                             rendered="#{dashboardBean.fromDashboard}"/>
+            <p:remoteCommand name="remoteSave" actionListener="#{chartBean.saveWidgetPosition()}"/>
+            <h:inputHidden id="widgetPos" value="#{chartBean.widgetPos}"/>
+        </f:facet>
+
+    </p:toolbar>
+
+
+    <div class="gridster">
+        <script type="text/javascript">
+            clearHighchartsContainer();
+        </script>
+        <ul>
+            <c:forEach items="#{chartBean.chartConf}" var="chart">
+                <li id="li_component#{chart.chartId}" data-row="#{chart.row}" data-col="#{chart.col}"
+                    data-sizex="#{chart.sizeX}" data-sizey="#{chart.sizeY}">
+                    <header class="x-tree-icon-leaf"></header>
+                    <p:commandLink id="button_component#{chart.chartId}"
+                                   title="Remove chart"
+                                   actionListener="#{chartBean.removeChart(chart)}"
+                                   styleClass="fa fa-remove delete-chart-button"/>
+                    <mycharts:mychart id="component#{chart.chartId}"
+                                      chartOptions="#{chart.chartOption}"
+                                      requestDataOptions="#{chart.requestOption}"
+                                      refreshInterval="#{chart.refreshInterval}"/>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+
+
+    <p:dialog header="Chart settings" modal="true" widgetVar="chartSettingDialog" resizable="false" >
+        <h:form id="chartSettings">
+            <div class="alert-block">
+                <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true" globalOnly="true"
+                            showIcon="false"
+                            styleClass="alert"/>
+                <p:message for="refreshInterval" display="text" styleClass="alert"/>
+            </div>
+
+            <h:panelGrid id="sub" columns="2" cellpadding="0" styleClass="top-aligned-columns" style=" display: block; overflow-y: auto; max-height: 600px; ">
+
+                <h:outputText value="Drag objects:"/>
+                <h:outputText value="Drop here:"/>
+
+                <p:tree id="objectTree" value="#{chartBean.objectRoot}" var="node"  style="width:100%;height: 100%">
+                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
+                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                    <p:treeNode type="childObject"  >
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                    <p:treeNode >
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                </p:tree>
+
+
+                <p:dataList id="selectedObjects" var="object" value="#{chartBean.selectedSmartObjects}" paginator="true" rows="8">
+                    <f:facet name="header">
+                        Selected objects
+                    </f:facet>
+                    <h:outputText value="#{object.name}" style="display:inline-block"/>
+                    <p:column styleClass="column-delete">
+                        <p:commandLink actionListener="#{chartBean.deleteSelectedObject(object)}"
+                                       update="centerForm:chartSettings:selectedObjects"
+                                       oncomplete="initDND()"
+                                       styleClass="fa fa-remove fa-5x margin"
+                                       title="Delete">
+                        </p:commandLink>
+                    </p:column>
+                </p:dataList>
+
+                <h:outputText value="Drag metrics:"/>
+                <h:outputText value="Drop here:"/>
+                <p:tree id="metricTree" value="#{chartBean.metricRoot}" var="node" style="width:100%;height: 100%">
+                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
+                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                    <p:treeNode >
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                </p:tree>
+
+
+                <p:dataList id="selectedMetrics" var="metric" value="#{chartBean.selectedMetricSpecs}" paginator="true" rows="8">
+                    <f:facet name="header">
+                        Selected metrics
+                    </f:facet>
+                    <h:outputText value="#{metric.specName}" style="display:inline-block"/>
+                    <p:column styleClass="column-delete">
+                        <p:commandLink actionListener="#{chartBean.deleteSelectedMetric(metric)}"
+                                       update="centerForm:chartSettings:selectedMetrics"
+                                       oncomplete="initDND()"
+                                       styleClass="fa fa-remove fa-5x margin"
+                                       title="Delete">
+                        </p:commandLink>
+                    </p:column>
+                </p:dataList>
+
+                <h:outputLabel for="refreshInterval" value="Refresh interval(minutes):"/>
+                <p:inputText id="refreshInterval" value="#{chartBean.refreshInterval}"
+                             styleClass="chartDialogInput"
+                             converterMessage="Please enter digits only." required="true"
+                             requiredMessage="The field is required!" >
+                    <p:clientValidator/>
+                </p:inputText>
+                <h:outputLabel for="chartType" value="Chart type:"/>
+                <p:selectOneMenu id="chartType"
+                                 value="#{chartBean.selectedChartType}"
+                                 label="Select type"
+                                 autoWidth="false">
+                    <f:selectItems value="#{chartBean.chartTypes}"
+                                   var="chartType"
+                                   itemValue="#{chartType}"
+                                   itemLabel="#{chartType.toString()}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel for="chartInterval" value="Chart interval :"/>
+                <p:selectOneMenu id="chartInterval"
+                                 value="#{chartBean.selectedChartInterval}"
+                                 label="Select interval"
+                                 autoWidth="false">
+                    <f:selectItems value="#{chartBean.chartIntervals}"
+                                   var="chartInterval"
+                                   itemValue="#{chartInterval}"
+                                   itemLabel="#{chartInterval.toString()}"/>
+                </p:selectOneMenu>
+                <h:panelGroup id="titleLabel">
+                    <h:outputLabel for="chartName"
+                                   value="Chart title:"
+                                   rendered="#{chartBean.isRendered()}"/>
+                </h:panelGroup>
+                <h:panelGroup id="titleInput">
+                    <p:inputText id="chartName"
+                                 value="#{chartBean.chartTitle}"
+                                 rendered="#{chartBean.isRendered()}"
+                                 styleClass="chartDialogInput"/>
+                </h:panelGroup>
+                <p:commandButton value="Submit"
+                                 action="#{chartBean.addChart()}"
+                                 onclick="clearHighchartsContainer();"
+                                 update="centerForm"
+                                 validateClient="true"
+                                 style="margin-top:10px;"/>
+            </h:panelGrid>
+        </h:form>
+    </p:dialog>
+
+    <h:outputScript name="js/custom_dnd.js"/>
+    <h:outputScript name="js/custom_gridster.js"/>
+
+    <p:remoteCommand name="treeToTable" actionListener="#{chartBean.treeToTable}" update="centerForm:chartSettings:selectedObjects chartSettings:titleLabel chartSettings:titleInput" oncomplete="initDND()"/>
+    <p:remoteCommand name="treeToMetric" actionListener="#{chartBean.treeToMetric}" update="centerForm:chartSettings:selectedMetrics chartSettings:titleLabel chartSettings:titleInput" oncomplete="initDND()"/>
+
+
+</ui:composition>

@@ -1,6 +1,4 @@
-package com.netcracker.smarthome.web.chart.options.jsonfields;
-
-import java.util.HashMap;
+package com.netcracker.smarthome.business.chart.options.jsonfields;
 
 public class AxisConfig {
     private String label;

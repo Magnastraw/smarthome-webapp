@@ -1,27 +1,21 @@
 package com.netcracker.smarthome.web.chart;
 
 import com.netcracker.smarthome.business.chart.ChartService;
-import com.netcracker.smarthome.model.entities.Chart;
+import com.netcracker.smarthome.business.chart.DashboardService;
 import com.netcracker.smarthome.model.entities.Dashboard;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.NavigationBean;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @ManagedBean(name = "dashboardBean")
@@ -29,13 +23,13 @@ import java.util.List;
 public class DashboardBean {
     private static final Logger LOG = LoggerFactory.getLogger(DashboardBean.class);
 
-    @ManagedProperty(value = "#{ChartService}")
-    ChartService chartService;
-
+    @ManagedProperty(value = "#{dashboardService}")
+    private DashboardService dashboardService;
     @ManagedProperty(value = "#{navigationBean}")
-    NavigationBean navigationBean;
+    private NavigationBean navigationBean;
 
     private List<Dashboard> dashboards;
+    private List<Dashboard> dashboardMenuList;
     private Dashboard dashboard;
     private String dashboardName;
     private Dashboard selectedDashboard;
@@ -45,7 +39,7 @@ public class DashboardBean {
 
     @PostConstruct
     public void init() {
-        dashboards = chartService.getDashboards(getCurrentHome().getSmartHomeId());
+        dashboards = dashboardService.getDashboards(getCurrentHome().getSmartHomeId());
     }
 
     public boolean isFromDashboard() {
@@ -79,6 +73,13 @@ public class DashboardBean {
         setDashboardName("");
     }
 
+    public List<Dashboard> getDashboardMenuList() {
+        return dashboardService.getDashboards(getCurrentHome().getSmartHomeId());
+    }
+
+    public void setDashboardMenuList(List<Dashboard> dashboardMenuList) {
+        this.dashboardMenuList = dashboardMenuList;
+    }
 
     public NavigationBean getNavigationBean() {
         return navigationBean;
@@ -110,12 +111,12 @@ public class DashboardBean {
                 if (dashboards.get(i).equals(currentDashboard)) {
                     currentDashboard.setDashboardName(dashboardName);
                     dashboards.set(i, currentDashboard);
-                    chartService.updateDashboard(currentDashboard);
+                    dashboardService.updateDashboard(currentDashboard);
                 }
             }
         } else {
             Dashboard dashboard = new Dashboard(getCurrentHome(), dashboardName);
-            chartService.addDashboard(dashboard);
+            dashboardService.addDashboard(dashboard);
             dashboards.add(dashboard);
             dashboardName = "";
         }
@@ -150,20 +151,20 @@ public class DashboardBean {
     public void setCurrentDashboardFromMenu(Dashboard dashboardFromMenu) {
         this.currentDashboard = dashboardFromMenu;
         if (((ChartBean) ContextUtils.getBean("chartBean")).setCharts(currentDashboard)) {
-            navigationBean.setPageName("charts/chartPage");
+            navigationBean.setPageName("charts/dashboard");
         }
     }
 
-    public ChartService getChartService() {
-        return chartService;
+    public DashboardService getDashboardService() {
+        return dashboardService;
     }
 
-    public void setChartService(ChartService chartService) {
-        this.chartService = chartService;
+    public void setDashboardService(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
     }
 
     public void homeChangeListener(SmartHome smartHome) {
-        List<Dashboard> dashboardList = chartService.getDashboards(smartHome.getSmartHomeId());
+        List<Dashboard> dashboardList = dashboardService.getDashboards(smartHome.getSmartHomeId());
         if (dashboardList.size() > 0) {
             dashboards = dashboardList;
             this.currentDashboard = dashboardList.get(0);
@@ -173,7 +174,7 @@ public class DashboardBean {
             this.dashboard.setDashboardName("Default dashboard");
             this.dashboards = new ArrayList<Dashboard>();
             this.dashboards.add(dashboard);
-            chartService.addDashboard(this.dashboard);
+            dashboardService.addDashboard(this.dashboard);
         }
 
     }
@@ -181,12 +182,12 @@ public class DashboardBean {
     public void onRowSelect(SelectEvent event) {
         setFromDashboard(true);
         setCurrentDashboard(selectedDashboard);
-        navigationBean.setPageName("charts/chartPage");
+        navigationBean.setPageName("charts/dashboard");
         selectedDashboard = null;
     }
 
     public void deleteDashboard(Dashboard dashboard) {
-        chartService.deleteDashboard(dashboard);
+        dashboardService.deleteDashboard(dashboard);
         dashboards.remove(dashboard);
     }
 
@@ -194,7 +195,7 @@ public class DashboardBean {
         if (dashboard == null) {
             return 0;
         } else {
-            return chartService.getWidgetAmount(dashboard);
+            return dashboardService.getWidgetAmount(dashboard);
         }
     }
 

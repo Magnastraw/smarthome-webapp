@@ -1,16 +1,16 @@
-package com.netcracker.smarthome.web.chart.configuration;
+package com.netcracker.smarthome.business.chart.configuration;
 
 import com.netcracker.smarthome.business.chart.ChartService;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.web.chart.options.jsonfields.SeriesConfig;
-import com.netcracker.smarthome.web.chart.options.jsonfields.YAxisNumber;
+import com.netcracker.smarthome.business.chart.options.jsonfields.SeriesConfig;
+import com.netcracker.smarthome.business.chart.options.jsonfields.YAxisNumber;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectChartConfig extends DefaultChartConfig implements ChartConfigInterface {
+public class ObjectChartConfig extends DefaultChartConfig implements ChartConfigurator {
     private ChartService chartService;
 
     public ObjectChartConfig(SmartHome smartHome, long chartId, ChartService chartService, double refreshInterval, String chartType, String chartInterval) {
@@ -18,32 +18,28 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
         this.chartService = chartService;
     }
 
-    public ChartOptionsInterface configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects, List<SmartObject> selectedSubObject) {
+    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
-        super.getChartConfig().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
-
-        selectedSmartObjects = super.deleteParentObj(selectedSubObject, selectedSmartObjects);
-
+        super.getChartConfigIml().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
         ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {
                 SeriesConfig seriesConfig = new SeriesConfig();
                 seriesConfig.setData("");
-                seriesConfig.setName(metricSpec.getSpecName());//?
+                seriesConfig.setName(metricSpec.getSpecName());
                 seriesConfig.setType(super.getChartType());
                 for (YAxisNumber yAxisNumber : yAxisNumbers) {
                     if (yAxisNumber.getSpecId() == metricSpec.getSpecId()) {
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfig().getChartOptions().getSeries().add(seriesConfig);
+                super.getChartConfigIml().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getChartConfigIml().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
-        super.setInterval();
 
-        return super.getChartConfig();
+        return super.getChartConfigIml();
     }
 
 }

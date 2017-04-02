@@ -409,13 +409,18 @@ ALTER SEQUENCE public.dashboards_dashboard_id_seq OWNED BY public.dashboards.das
 CREATE SEQUENCE public.charts_chart_id_seq;
 
 CREATE TABLE public.charts (
-                chart_id BIGINT NOT NULL DEFAULT nextval('public.charts_chart_id_seq'),
-                chart_option VARCHAR NOT NULL,
-                request_option VARCHAR NOT NULL,
-                refresh_interval NUMERIC,
-                dashboard_id BIGINT NOT NULL,
-                CONSTRAINT charts_pk PRIMARY KEY (chart_id)
+  chart_id BIGINT NOT NULL DEFAULT nextval('public.charts_chart_id_seq'),
+  chart_option VARCHAR NOT NULL,
+  col BIGINT DEFAULT 1 NOT NULL,
+  row BIGINT DEFAULT 1 NOT NULL,
+  size_x BIGINT DEFAULT 3 NOT NULL,
+  size_y BIGINT DEFAULT 4 NOT NULL,
+  request_option VARCHAR NOT NULL,
+  refresh_interval NUMERIC,
+  dashboard_id BIGINT NOT NULL,
+  CONSTRAINT charts_pk PRIMARY KEY (chart_id)
 );
+
 
 
 ALTER SEQUENCE public.charts_chart_id_seq OWNED BY public.charts.chart_id;

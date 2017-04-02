@@ -8,9 +8,13 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
     createEmptyChart(function () {
         if (refreshInterval == 0) {
             requestData(function () {
+                chart.reflow();
+                chart.hideLoading();
             });
         } else if (refreshInterval >= 10000) {
             requestData(function () {
+                chart.reflow();
+                chart.hideLoading();
                 dataSource.rownum += 100;
             });
             intervalId = setInterval(function () {
@@ -20,6 +24,8 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             }, refreshInterval);
         } else {
             requestLiveData(function () {
+                chart.reflow();
+                chart.hideLoading();
                 dataSource.rownum++;
             });
             intervalId = setInterval(function () {
@@ -87,10 +93,10 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
     function createEmptyChart(callback) {
         fullscreenMode();
         chart = new Highcharts.Chart(options);
+        chart.showLoading();
+        chart.reflow();
         callback();
     }
-
-
 
     function fullscreenMode() {
         options.exporting = {
@@ -133,12 +139,22 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
 
     $("#centerForm\\:button_"+id).click(function () {
-        chart.destroy();
-        $.each(Highcharts.charts, function (pos, chart) {
-            if (Highcharts.charts[pos] == undefined) {
-                Highcharts.charts.splice(pos, 1);
-            }
-        });
         gridster.remove_widget($(this).closest('li'));
+        chart.destroy();
+        clearInterval(intervalId);
     });
 }
+
+function clearHighchartsContainer() {
+    $.each(Highcharts.charts, function (pos, chart) {
+        if(Highcharts.charts[pos]!=undefined) {
+            Highcharts.charts[pos].destroy();
+        }
+    });
+}
+
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});

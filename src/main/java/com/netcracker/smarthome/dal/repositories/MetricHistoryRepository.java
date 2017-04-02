@@ -2,10 +2,13 @@ package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
+import com.netcracker.smarthome.model.enums.ChartInterval;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 @Repository
@@ -21,7 +24,26 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
         query.setParameter("specId", specId);
         query.setParameter("objectId", objectId);
         query.setParameter("homeId", homeId);
+
         return (List<Object[]>)query.getResultList();
+    }
+
+    public List<MetricHistory> getMetricsHistory( long homeId, long specId, long objectId,Timestamp selectDate){
+        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (mh.readDate > :customDate and  m.metricSpec.specId = :specId and m.object.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId) ");
+        query.setMaxResults(1000);
+        query.setParameter("customDate",selectDate);
+        query.setParameter("specId", specId);
+        query.setParameter("objectId", objectId);
+        query.setParameter("homeId", homeId);
+        return query.getResultList();
+    }
+
+    public List<MetricHistory> getLastMetricsHistory( long homeId, long specId, long objectId){
+        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (m.metricSpec.specId = :specId and m.object.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId) ");
+        query.setParameter("specId", specId);
+        query.setParameter("objectId", objectId);
+        query.setParameter("homeId", homeId);
+        return  query.setMaxResults(1).getResultList();
     }
 
     public List<Object[]> getRangedMetricsHistoryBySpecIdObjectId( long homeId, long specId, long objectId,int rownum,int seriesSize){
@@ -37,7 +59,6 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
         q.setParameter(1, objectId);
         q.setParameter(2, specId);
         q.setParameter(3, homeId);
-
         return (List<Object[]>)q.getResultList();
     }
 
