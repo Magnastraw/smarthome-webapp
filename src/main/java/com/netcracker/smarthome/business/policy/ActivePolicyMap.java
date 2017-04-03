@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+// TODO : переделать этот класс
 @Component
 public class ActivePolicyMap {
     private PolicyService policyService;

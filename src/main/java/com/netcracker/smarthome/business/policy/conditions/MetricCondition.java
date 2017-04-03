@@ -25,14 +25,14 @@ public abstract class MetricCondition implements Condition {
     }
 
     public boolean evaluate(Event event) {
-        if (!eventCorrespond(event)) {
+        if (!checkMatching(event)) {
             double lastValue = loadLastMetricValue();
             return evaluate(lastValue);
         }
         return evaluate(((MetricEvent) event).getValue());
     }
 
-    private boolean eventCorrespond(Event event) {
+    private boolean checkMatching(Event event) {
         return event.getType().equals(EventType.METRIC) && metric.equals(event.getSpec()) && (!isInline() || object.equals(event.getSubobject()));
     }
 
