@@ -17,25 +17,25 @@ import java.util.List;
 public class DefaultChartConfig {
 
     private int yAxisNumber;
-    private ChartConfigIml chartConfigIml;
+    private ChartConfigImpl chartConfigImpl;
     private String chartType;
     private final double TO_MILLISECONDS_CONVERT = 60000;
 
     public DefaultChartConfig(SmartHome smartHome, long chartId, double refreshInterval, String chartType, String chartInterval) {
 
-        chartConfigIml = new ChartConfigIml(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
-        chartConfigIml.setChartId(chartId);
-        chartConfigIml.setRefreshInterval(refreshInterval * TO_MILLISECONDS_CONVERT);
+        chartConfigImpl = new ChartConfigImpl(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
+        chartConfigImpl.setChartId(chartId);
+        chartConfigImpl.setRefreshInterval(refreshInterval * TO_MILLISECONDS_CONVERT);
 
-        chartConfigIml.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
-        chartConfigIml.getRequestDataOptions().setChartInterval(chartInterval);
+        chartConfigImpl.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
+        chartConfigImpl.getRequestDataOptions().setChartInterval(chartInterval);
         setChartType(chartType);
 
-        chartConfigIml.getChartOptions().setxAxisType("datetime");
-        chartConfigIml.getChartOptions().setCredits("false");
-        chartConfigIml.getChartOptions().setRenderTo("component" + chartId + "_chartDiv");
-        chartConfigIml.getChartOptions().setType(chartType);
-        chartConfigIml.getChartOptions().setZoomType("x");
+        chartConfigImpl.getChartOptions().setxAxisType("datetime");
+        chartConfigImpl.getChartOptions().setCredits("false");
+        chartConfigImpl.getChartOptions().setRenderTo("component" + chartId + "_chartDiv");
+        chartConfigImpl.getChartOptions().setType(chartType);
+        chartConfigImpl.getChartOptions().setZoomType("x");
     }
 
     public String getChartType() {
@@ -46,12 +46,12 @@ public class DefaultChartConfig {
         this.chartType = chartType;
     }
 
-    public ChartConfigIml getChartConfigIml() {
-        return chartConfigIml;
+    public ChartConfigImpl getChartConfigImpl() {
+        return chartConfigImpl;
     }
 
-    public void setChartConfigIml(ChartConfigIml chartConfigIml) {
-        this.chartConfigIml = chartConfigIml;
+    public void setChartConfigImpl(ChartConfigImpl chartConfigImpl) {
+        this.chartConfigImpl = chartConfigImpl;
     }
 
     public ArrayList<YAxisNumber> setAxisOptions(List<MetricSpec> selectedMetricSpecs, ChartService chartService) {
@@ -68,9 +68,9 @@ public class DefaultChartConfig {
             axisConfig.setTitle(metricSpec.getSpecName());
             axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
 
-            chartConfigIml.getChartOptions().getyAxis().add(axisConfig);
+            chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);
 
-            chartConfigIml.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
+            chartConfigImpl.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
         }
         return yAxisNumbers;
     }

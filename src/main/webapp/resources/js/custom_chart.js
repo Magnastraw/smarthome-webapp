@@ -15,22 +15,18 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             requestData(function () {
                 chart.reflow();
                 chart.hideLoading();
-                dataSource.rownum += 100;
             });
             intervalId = setInterval(function () {
                 requestData(function () {
-                    dataSource.rownum += 100;
                 });
             }, refreshInterval);
         } else {
             requestLiveData(function () {
                 chart.reflow();
                 chart.hideLoading();
-                dataSource.rownum++;
             });
             intervalId = setInterval(function () {
                 requestLiveData(function () {
-                    dataSource.rownum++;
                 });
             }, refreshInterval);
         }

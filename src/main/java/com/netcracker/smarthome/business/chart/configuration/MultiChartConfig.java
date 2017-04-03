@@ -29,7 +29,7 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
     }
 
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
-        super.getChartConfigIml().getChartOptions().setChartTitle(getTitle());
+        super.getChartConfigImpl().getChartOptions().setChartTitle(getTitle());
         ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
@@ -47,12 +47,12 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfigIml().getChartOptions().getSeries().add(seriesConfig);
+                super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfigIml().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
 
-        return super.getChartConfigIml();
+        return super.getChartConfigImpl();
     }
 
     private boolean isChild(SmartObject smartObject) {

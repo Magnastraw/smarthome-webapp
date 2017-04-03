@@ -16,7 +16,8 @@
             <p:column headerText="Name" styleClass="column" sortBy="#{dashboard.dashboardName}">
                 <h:outputText value="#{dashboard.dashboardName}"/>
             </p:column>
-            <p:column headerText="Widgets amount" styleClass="column" sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
+            <p:column headerText="Widgets amount" styleClass="column"
+                      sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
                 <h:outputText value="#{dashboardBean.getWidgetsAmount(dashboard)}"/>
             </p:column>
             <p:column styleClass="column-delete">
@@ -41,21 +42,23 @@
         </p:commandButton>
     </h:panelGroup>
 
-    <p:dialog id="dialogDashboard" header="Dashboard settings" widgetVar="dashboardSettingsDialog" resizable="false" >
-            <h:panelGrid columns="2" cellpadding="0">
-                <h:outputLabel for="dashboardName" value="Dashboard name:"/>
-                <p:inputText id="dashboardName"  value="#{dashboardBean.dashboardName}"
-                             validatorMessage="The name must not be empty!">
-                    <f:validateRegex pattern="^.*\S.*$"/>
-                    <p:clientValidator/>
-                </p:inputText>
-            </h:panelGrid>
-            <p:commandButton value="Save"
-                             actionListener="#{dashboardBean.saveOrUpdate()}"
-                             ajax="true" icon="fa fa-save"
-                             oncomplete="PF('dashboardSettingsDialog').hide()"
-                             styleClass="btn" validateClient="true"
-                             update=":centerForm:dashboardTable, :menu">
-            </p:commandButton>
+    <p:dialog id="dialogDashboard" header="Dashboard settings" widgetVar="dashboardSettingsDialog" resizable="false">
+        <h:panelGrid columns="2" cellpadding="0">
+            <h:outputLabel for="dashboardName" value="Dashboard name:"/>
+            <p:inputText id="dashboardName" value="#{dashboardBean.dashboardName}"
+                         validatorMessage="The name must not be empty!">
+                <f:validateRegex pattern="^.*\S.*$"/>
+                <p:clientValidator/>
+            </p:inputText>
+        </h:panelGrid>
+        <p:commandButton id="saveButton"
+                         value="Save"
+                         actionListener="#{dashboardBean.saveOrUpdate()}"
+                         ajax="true" icon="fa fa-save"
+                         oncomplete="PF('dashboardSettingsDialog').hide()"
+                         styleClass="btn" validateClient="true"
+                         update=":centerForm:dashboardTable, :menu">
+        </p:commandButton>
+        <p:defaultCommand target="saveButton"/>
     </p:dialog>
 </ui:composition>

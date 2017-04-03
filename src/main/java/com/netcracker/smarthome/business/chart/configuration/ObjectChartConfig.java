@@ -20,7 +20,7 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
 
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
-        super.getChartConfigIml().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
+        super.getChartConfigImpl().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
         ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
@@ -34,12 +34,12 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfigIml().getChartOptions().getSeries().add(seriesConfig);
+                super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfigIml().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
 
-        return super.getChartConfigIml();
+        return super.getChartConfigImpl();
     }
 
 }

@@ -16,8 +16,8 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChartConfigIml implements ChartConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(ChartConfigIml.class);
+public class ChartConfigImpl implements ChartConfig {
+    private static final Logger LOG = LoggerFactory.getLogger(ChartConfigImpl.class);
 
     private String jsonChartConfig;
     private long chartId;
@@ -28,7 +28,7 @@ public class ChartConfigIml implements ChartConfig {
     private VelocityContext vc;
     private Map<String,String> templateMap;
 
-    public ChartConfigIml(ChartOptions chartOptions, RequestDataOptions requestDataOptions) {
+    public ChartConfigImpl(ChartOptions chartOptions, RequestDataOptions requestDataOptions) {
         this.chartOptions = chartOptions;
         this.requestDataOptions = requestDataOptions;
         this.objectMapper = new ObjectMapper();

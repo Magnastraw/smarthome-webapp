@@ -173,8 +173,8 @@ public class ChartBean {
         } else {
             chartConfiguratorImpl.setChartConfigurator(new MultiChartConfig(getCurrentHome(), chartIdLong, getChartTitle(), chartService, refreshInterval, chartType, chartInterval));
         }
-        ChartConfigIml chartConfigIml = (ChartConfigIml) chartConfiguratorImpl.getConfig(selectedMetricSpecs, selectedSmartObjects);
-        chartService.addChart(chartConfigIml.getJsonChartConfig(), chartConfigIml.getJsonRequestDataConfig(), chartConfigIml.getRefreshInterval(), getCurrentDashBoard());
+        ChartConfigImpl chartConfigImpl = (ChartConfigImpl) chartConfiguratorImpl.getConfig(selectedMetricSpecs, selectedSmartObjects);
+        chartService.addChart(chartConfigImpl.getJsonChartConfig(), chartConfigImpl.getJsonRequestDataConfig(), chartConfigImpl.getRefreshInterval(), getCurrentDashBoard());
         setCharts(getCurrentDashBoard());
         setDefault();
     }

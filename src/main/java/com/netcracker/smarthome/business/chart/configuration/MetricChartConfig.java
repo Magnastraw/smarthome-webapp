@@ -20,22 +20,22 @@ public class MetricChartConfig extends DefaultChartConfig implements ChartConfig
 
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
-        super.getChartConfigIml().getChartOptions().setChartTitle(selectedMetricSpecs.get(0).getSpecName());
+        super.getChartConfigImpl().getChartOptions().setChartTitle(selectedMetricSpecs.get(0).getSpecName());
         AxisConfig axisConfig = new AxisConfig();
         axisConfig.setTitle(selectedMetricSpecs.get(0).getSpecName());
         axisConfig.setLabel(chartService.getUnitBySpecId(selectedMetricSpecs.get(0).getSpecId()).getLabel());
-        super.getChartConfigIml().getChartOptions().getyAxis().add(axisConfig);
+        super.getChartConfigImpl().getChartOptions().getyAxis().add(axisConfig);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             SeriesConfig seriesConfig = new SeriesConfig();
             seriesConfig.setData("");
             seriesConfig.setName(smartObject.getName());
             seriesConfig.setType(super.getChartType());
-            super.getChartConfigIml().getChartOptions().getSeries().add(seriesConfig);
-            super.getChartConfigIml().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
+            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
-        super.getChartConfigIml().getRequestDataOptions().getMetricSpecId().add(selectedMetricSpecs.get(0).getSpecId());
+        super.getChartConfigImpl().getRequestDataOptions().getMetricSpecId().add(selectedMetricSpecs.get(0).getSpecId());
 
-        return super.getChartConfigIml();
+        return super.getChartConfigImpl();
     }
 }
