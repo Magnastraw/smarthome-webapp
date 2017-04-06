@@ -19,9 +19,8 @@ public class RaiseAlarmAction implements Action {
         this.severity = severity;
     }
 
-    public void execute(ActionParams params) {
-        Event causeEvent = ((RaiseAlarmActionParams) params).getCauseEvent();
-        AlarmEvent alarmEvent = new AlarmEvent(causeEvent, spec, severity, Timestamp.valueOf(LocalDateTime.now()), -1);
+    public void execute(Event causalEvent) {
+        AlarmEvent alarmEvent = new AlarmEvent(causalEvent, spec, severity, Timestamp.valueOf(LocalDateTime.now()), -1);
         //TODO : add alarm raising (push to event queue)
     }
 }

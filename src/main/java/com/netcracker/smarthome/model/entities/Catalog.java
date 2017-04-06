@@ -21,7 +21,6 @@ public class Catalog implements Serializable {
     private List<MetricSpec> metricSpecs;
     private List<SmartObject> objects;
     private List<Policy> policies;
-    private List<Assignment> assignments;
 
     public Catalog() {
     }
@@ -117,15 +116,6 @@ public class Catalog implements Serializable {
 
     public void setPolicies(List<Policy> policies) {
         this.policies = policies;
-    }
-
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    public List<Assignment> getAssignments() {
-        return assignments;
-    }
-
-    public void setAssignments(List<Assignment> assignments) {
-        this.assignments = assignments;
     }
 
     @Override

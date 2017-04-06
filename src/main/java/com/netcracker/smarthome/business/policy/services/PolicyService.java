@@ -1,10 +1,7 @@
 package com.netcracker.smarthome.business.policy.services;
 
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.Rule;
-import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
@@ -42,27 +39,27 @@ public class PolicyService {
     }
 
     @Transactional
-    public List<Rule> getRules(Policy policy) {
-        return policyRepository.getRules(policy);
+    public List<Policy> getActivePoliciesByObject(SmartObject object) {
+        return policyRepository.getActivePoliciesByObject(object);
     }
 
     @Transactional
     public List<Policy> getActivePolicies() {
-        return policyRepository.getActivePolicies();
-    }
-
-    @Transactional
-    public List<Policy> getActivePoliciesByHome(SmartHome home) {
-        return policyRepository.getActivePoliciesByHome(home);
-    }
-
-    @Transactional
-    public List<Policy> getActivePoliciesByObject(SmartObject smartObject) {
-        return policyRepository.getActivePoliciesByObject(smartObject);
+        return policyRepository.getPoliciesByStatus(PolicyStatus.ACTIVE);
     }
 
     @Transactional
     public List<SmartObject> getObjectsByPolicy(Policy policy) {
         return policyRepository.getObjectsByPolicy(policy);
     }
+
+    @Transactional
+     public List<SmartObject> getObjectsWithActivePolicies() {
+        return policyRepository.getObjectsWithActivePolicies();
+     }
+
+     @Transactional
+     public List<Policy> getPoliciesByCatalog(Catalog catalog) {
+        return policyRepository.getPoliciesByCatalog(catalog);
+     }
 }

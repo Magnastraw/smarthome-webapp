@@ -9,17 +9,18 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "conditions", schema = "public", catalog = "smarthome_db")
 public class Condition implements Serializable {
     private long nodeId;
     private BooleanOperator operator;
-    private List<ConditionParam> conditionParams;
+    private Set<ConditionParam> conditionParams;
     private Rule rule;
     private ConditionType conditionType;
     private Condition parentNode;
-    private List<Condition> childNodes;
+    private Set<Condition> childNodes;
 
     public Condition() {
     }
@@ -55,11 +56,11 @@ public class Condition implements Serializable {
     }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "condition", cascade = CascadeType.ALL)
-    public List<ConditionParam> getConditionParams() {
+    public Set<ConditionParam> getConditionParams() {
         return conditionParams;
     }
 
-    public void setConditionParams(List<ConditionParam> conditionParams) {
+    public void setConditionParams(Set<ConditionParam> conditionParams) {
         this.conditionParams = conditionParams;
     }
 
@@ -93,12 +94,12 @@ public class Condition implements Serializable {
         this.parentNode = nextCondition;
     }
 
-    @OneToMany(mappedBy = "parentNode")
-    public List<Condition> getChildNodes() {
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentNode")
+    public Set<Condition> getChildNodes() {
         return childNodes;
     }
 
-    public void setChildNodes(List<Condition> childNodes) {
+    public void setChildNodes(Set<Condition> childNodes) {
         this.childNodes = childNodes;
     }
 

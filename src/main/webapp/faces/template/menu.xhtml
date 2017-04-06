@@ -7,7 +7,7 @@
         <p:submenu label="House" icon="fa fa-home">
             <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
                 <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
-                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.setCurrentCatalogs(home)}"/>
+                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.initHomeSettings(home)}"/>
                 </c:forEach>
             </p:submenu>
             <p:menuitem value="House settings" icon="fa fa-gear"
@@ -23,8 +23,8 @@
             </p:menuitem>
         </p:submenu>
         <p:submenu label="Configure">
-            <p:menuitem value="Policy"
-                        action="#{navigationBean.setPageName('policy/rule')}"
+            <p:menuitem value="Policies"
+                        action="#{navigationBean.setPageName('policy/policies')}"
                         update=":centerForm"/>
             <p:menuitem value="Metric specifications"
                         action="#{navigationBean.setPageName('specs/metricSpecs')}"

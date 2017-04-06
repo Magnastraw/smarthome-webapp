@@ -1,9 +1,7 @@
 package com.netcracker.smarthome.business.policy.events;
 
-import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.model.entities.Spec;
 
 import java.sql.Timestamp;
 
@@ -14,8 +12,8 @@ public class AlarmEvent extends EventEvent {
     public AlarmEvent() {
     }
 
-    public AlarmEvent(Event causeEvent, AlarmSpec spec, Integer severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(causeEvent.getType(), causeEvent.getObject(), causeEvent.getSubobject(), causeEvent.getRegistryDate(), spec, severity);
+    public AlarmEvent(Event causalEvent, AlarmSpec spec, Integer severity, Timestamp severityChangeTime, long clearedUserId) {
+        super(causalEvent.getType(), causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }

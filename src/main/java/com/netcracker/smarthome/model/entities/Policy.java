@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "policies", schema = "public", catalog = "smarthome_db")
@@ -18,8 +18,8 @@ public class Policy implements Serializable {
     private PolicyStatus status;
     private String description;
     private Catalog catalog;
-    private List<Rule> rules;
-    private List<Assignment> assignments;
+    private Set<Rule> rules;
+    private Set<SmartObject> assignedObjects;
 
     public Policy() {
     }
@@ -83,22 +83,26 @@ public class Policy implements Serializable {
         this.catalog = catalog;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "policy", cascade = CascadeType.ALL)
-    public List<Rule> getRules() {
+    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
+    public Set<Rule> getRules() {
         return rules;
     }
 
-    public void setRules(List<Rule> rules) {
+    public void setRules(Set<Rule> rules) {
         this.rules = rules;
     }
 
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    public List<Assignment> getAssignments() {
-        return assignments;
+    @ManyToMany
+    @JoinTable(name = "assignments", joinColumns = {
+            @JoinColumn(name = "policy_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "object_id",
+                    nullable = false, updatable = false)})
+    public Set<SmartObject> getAssignedObjects() {
+        return assignedObjects;
     }
 
-    public void setAssignments(List<Assignment> assignments) {
-        this.assignments = assignments;
+    public void setAssignedObjects(Set<SmartObject> assignedObjects) {
+        this.assignedObjects = assignedObjects;
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "objects", schema = "public", catalog = "smarthome_db")
@@ -27,7 +28,7 @@ public class SmartObject implements Serializable {
     private List<SmartObject> subobjects;
     private Catalog catalog;
     private SmartHome smartHome;
-    private List<Assignment> assignments;
+    private Set<Policy> assignedPolicies;
 
     public SmartObject() {
     }
@@ -136,13 +137,13 @@ public class SmartObject implements Serializable {
         this.objectParams = objectParams;
     }
 
-    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-    public List<Assignment> getAssignments() {
-        return assignments;
+    @ManyToMany(mappedBy = "assignedObjects")
+    public Set<Policy> getAssignedPolicies() {
+        return assignedPolicies;
     }
 
-    public void setAssignments(List<Assignment> assignments) {
-        this.assignments = assignments;
+    public void setAssignedPolicies(Set<Policy> assignedPolicies) {
+        this.assignedPolicies = assignedPolicies;
     }
 
     @ManyToOne

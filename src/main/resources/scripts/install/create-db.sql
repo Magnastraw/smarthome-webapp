@@ -409,8 +409,6 @@ CREATE UNIQUE INDEX sp_profile_uk
 CREATE TABLE public.assignments (
   policy_id BIGINT NOT NULL,
   object_id BIGINT NOT NULL,
-  name VARCHAR NOT NULL DEFAULT '',
-  catalog_id BIGINT NOT NULL,
   CONSTRAINT assignments_pk PRIMARY KEY (policy_id, object_id)
 );
 
@@ -760,13 +758,6 @@ DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE public.assignments ADD CONSTRAINT assignments_objects_fk
 FOREIGN KEY (object_id)
 REFERENCES public.objects (smart_object_id)
-ON DELETE CASCADE
-ON UPDATE CASCADE
-DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE public.assignments ADD CONSTRAINT assignments_catalogs_fk
-FOREIGN KEY (catalog_id)
-REFERENCES public.catalogs (catalog_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;

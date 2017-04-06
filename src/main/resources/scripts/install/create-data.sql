@@ -116,6 +116,35 @@ VALUES
   ('h2_alarmSubcat2_2', 44, 3),
   ('h2_alarmSubcat3_1', 45, 3);
 
+INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
+VALUES
+  ('d_policyCat1', 3, 1),
+  ('d_policyCat2', 3, 1),
+  ('d_policyCat3', 3, 1),
+  ('h1_policyCat1', 7, 2),
+  ('h1_policyCat2', 7, 2),
+  ('h1_policyCat3', 7, 2),
+  ('h2_policyCat1', 11, 3),
+  ('h2_policyCat2', 11, 3),
+  ('h2_policyCat3', 11, 3);
+
+INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
+VALUES
+  ('d_policySubcat1_1', 61, 1),
+  ('d_policySubcat1_2', 61, 1),
+  ('d_policySubcat2_1', 62, 1),
+  ('d_policySubcat2_2', 62, 1),
+  ('d_policySubcat3_1', 63, 1),
+  ('h1_policySubcat1_1', 64, 2),
+  ('h1_policySubcat1_2', 64, 2),
+  ('h1_policySubcat2_1', 65, 2),
+  ('h1_policySubcat2_2', 65, 2),
+  ('h1_policySubcat3_1', 66, 2),
+  ('h2_policySubcat1_1', 67, 3),
+  ('h2_policySubcat1_2', 67, 3),
+  ('h2_policySubcat2_1', 68, 3),
+  ('h2_policySubcat2_2', 68, 3),
+  ('h2_policySubcat3_1', 69, 3);
 
 INSERT INTO public.units (unit_name, base_factor, label)
 VALUES
@@ -234,3 +263,20 @@ VALUES
   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
 50 + (random() * 35) :: DECIMAL, 12);
 
+INSERT INTO policies (name, status, description, catalog_id)
+    VALUES 
+      ('d_Policy 1', 0, '', 3),
+      ('d_Policy 2', 3, '', 61),
+      ('d_Policy 3', 2, '', 62),
+      ('d_Policy 4', 3, '', 72),
+      ('d_Policy 5', 4, '', 74),
+      ('h1_Policy 1', 0, '', 64),
+      ('h1_Policy 2', 3, '', 65),
+      ('h1_Policy 3', 2, '', 66),
+      ('h1_Policy 4', 3, '', 75),
+      ('h1_Policy 5', 4, '', 76),
+      ('h2_Policy 1', 0, '', 80),
+      ('h2_Policy 2', 3, '', 80),
+      ('h2_Policy 3', 2, '', 81),
+      ('h2_Policy 4', 3, '', 82),
+      ('h2_Policy 5', 4, '', 84)

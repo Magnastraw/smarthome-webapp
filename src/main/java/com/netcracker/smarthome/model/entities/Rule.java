@@ -7,16 +7,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "rules", schema = "public", catalog = "smarthome_db")
 public class Rule implements Serializable {
     private long ruleId;
     private String name;
-    private List<Action> actions;
-    private List<Condition> conditions;
+    private Set<Action> actions;
+    private Set<Condition> conditions;
     private Policy policy;
+    private Condition rootCondition;
 
     @Id
     @Column(name = "rule_id", nullable = false)
@@ -41,20 +42,20 @@ public class Rule implements Serializable {
     }
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
-    public List<Action> getActions() {
+    public Set<Action> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
+    public void setActions(Set<Action> actions) {
         this.actions = actions;
     }
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
-    public List<Condition> getConditions() {
+    public Set<Condition> getConditions() {
         return conditions;
     }
 
-    public void setConditions(List<Condition> conditions) {
+    public void setConditions(Set<Condition> conditions) {
         this.conditions = conditions;
     }
 
@@ -66,6 +67,15 @@ public class Rule implements Serializable {
 
     public void setPolicy(Policy policy) {
         this.policy = policy;
+    }
+
+    @Transient
+    public Condition getRootCondition() {
+        return rootCondition;
+    }
+
+    public void setRootCondition(Condition rootCondition) {
+        this.rootCondition = rootCondition;
     }
 
     @Override

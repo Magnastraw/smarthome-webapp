@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.dal.repositories;
 
+import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.Rule;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
@@ -19,15 +19,9 @@ public class PolicyRepository extends EntityRepository<Policy> {
         super(Policy.class);
     }
 
-    public List<Rule> getRules(Policy policy) {
-        Query query = getManager().createQuery("select r from Rule r where r.policy.policyId = :policyId");
-        query.setParameter("policyId", policy.getPolicyId());
-        return query.getResultList();
-    }
-
-    public List<Policy> getActivePolicies() {
+    public List<Policy> getPoliciesByStatus(PolicyStatus status) {
         Query query = getManager().createQuery("select p from Policy p where p.status = :policyStatus");
-        query.setParameter("policyStatus", PolicyStatus.ACTIVE);
+        query.setParameter("policyStatus", status);
         return query.getResultList();
     }
 
@@ -52,6 +46,22 @@ public class PolicyRepository extends EntityRepository<Policy> {
                 "union select o.* from rules r join conditions c on r.rule_id = c.rule_id join condition_params cp on c.node_id = cp.condition_id and cp.name = 'object' join objects o on to_char(o.smart_object_id) = cp.value " +
                 "where r.policy_id = :policyId");
         query.setParameter("policyId", policy.getPolicyId());
+        return query.getResultList();
+    }
+
+    public List<SmartObject> getObjectsWithActivePolicies() {
+        Query query = getManager().createQuery("select distinct obj from SmartObject obj join fetch obj.assignedPolicies p join fetch p.rules r join fetch r.conditions c where p.status=:status and c.parentNode is null");
+        query.setParameter("status", PolicyStatus.ACTIVE);
+        List<SmartObject> objects = query.getResultList();
+        // TODO : add inline objects loading
+//        query = getManager().createNativeQuery("select o.* from rules r join conditions c on r.rule_id = c.rule_id join condition_params cp on c.node_id = cp.condition_id and cp.name = 'object' join objects o on to_char(o.smart_object_id) = cp.value");
+//        List<SmartObject> inlineObjects = query.getResultList();
+        return objects;
+    }
+
+    public List<Policy> getPoliciesByCatalog(Catalog catalog) {
+        Query query = getManager().createQuery("select p from Policy p where p.catalog=:catalog");
+        query.setParameter("catalog", catalog);
         return query.getResultList();
     }
 }

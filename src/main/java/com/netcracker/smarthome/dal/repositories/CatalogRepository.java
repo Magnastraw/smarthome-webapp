@@ -14,6 +14,7 @@ import java.util.Queue;
 @Repository
 public class CatalogRepository extends EntityRepository<Catalog> {
     private static final Logger LOG = LoggerFactory.getLogger(CatalogRepository.class);
+
     public CatalogRepository() {
         super(Catalog.class);
     }
@@ -24,7 +25,6 @@ public class CatalogRepository extends EntityRepository<Catalog> {
         return query.getResultList();
     }
 
-    @Transactional
     public List<Catalog> getSubcatalogsRecursively(Catalog rootCatalog) {
         List<Catalog> listCatalogs = getSubcatalogs(rootCatalog), tmp;
         Queue<Catalog> queueCatalogs = new LinkedList<Catalog>();
@@ -37,7 +37,24 @@ public class CatalogRepository extends EntityRepository<Catalog> {
         return listCatalogs;
     }
 
-    public List<Catalog> getObjectsCatalogs(long homeId){
+    public List<Catalog> getSubcatalogsRecursively(Catalog rootCatalog, Catalog explicitCatalogTreeRoot) {
+        List<Catalog> listCatalogs = getSubcatalogs(rootCatalog), tmp;
+        Catalog cat;
+        Queue<Catalog> queueCatalogs = new LinkedList<Catalog>();
+        queueCatalogs.addAll(listCatalogs);
+        while (!queueCatalogs.isEmpty()) {
+            cat = queueCatalogs.poll();
+            if (!cat.equals(explicitCatalogTreeRoot)) {
+                tmp = getSubcatalogs(cat);
+                listCatalogs.addAll(tmp);
+                queueCatalogs.addAll(tmp);
+            }
+        }
+        listCatalogs.remove(explicitCatalogTreeRoot);
+        return listCatalogs;
+    }
+
+    public List<Catalog> getObjectsCatalogs(long homeId) {
         Query query = getManager().createQuery("select catalog from Catalog catalog inner join SmartObject smartObject on catalog.catalogId=smartObject.catalog.catalogId where smartObject.smartHome.smartHomeId=:homeId group by catalog.catalogId");
         query.setParameter("homeId", homeId);
         return query.getResultList();

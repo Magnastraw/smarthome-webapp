@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Service
 public class CatalogService {
     private final CatalogRepository catalogRepository;
-    
+
     @Autowired
-    public  CatalogService (CatalogRepository catalogRepository) {
+    public CatalogService(CatalogRepository catalogRepository) {
         this.catalogRepository = catalogRepository;
     }
 
@@ -22,17 +21,17 @@ public class CatalogService {
     public List<Catalog> getSubcatalogs(Catalog catalog) {
         return this.catalogRepository.getSubcatalogs(catalog);
     }
-    
+
     @Transactional
     public void deleteCatalog(Object primaryKey) {
         catalogRepository.delete(primaryKey);
     }
-    
+
     @Transactional
     public Catalog getCatalogById(long catalogId) {
         return catalogRepository.get(catalogId);
     }
-    
+
     @Transactional
     public void createCatalog(Catalog catalog) {
         catalogRepository.save(catalog);
@@ -51,6 +50,11 @@ public class CatalogService {
     @Transactional
     public List<Catalog> getSubcatalogsRecursively(Catalog catalog) {
         return catalogRepository.getSubcatalogsRecursively(catalog);
+    }
+
+    @Transactional
+    public List<Catalog> getSubcatalogsRecursively(Catalog rootCatalog, Catalog explicitCatalogTreeRoot) {
+        return catalogRepository.getSubcatalogsRecursively(rootCatalog, explicitCatalogTreeRoot);
     }
 
     @Transactional
