@@ -87,13 +87,15 @@ public class AlarmListBean implements Serializable {
     public String setStyleClass(int severity) {
         switch (severity) {
             case 2:
-                return "severity-caution";
+                return "severity-info";
             case 3:
-                return "severity-alert";
+                return "severity-warn";
             case 4:
+                return "severity-major";
+            case 5:
                 return "severity-critical";
             default:
-                return "severity-disabled";
+                return "severity-normal";
         }
     }
 
@@ -165,14 +167,14 @@ public class AlarmListBean implements Serializable {
         this.filteredAlarms = filteredAlarms;
     }
 
-    /*public List<Alarm> getFilteredAlarms() {
+    /*public List<JsonAlarm> getFilteredAlarms() {
         if (filteredAlarms == null) {
-            filteredAlarms = (List<Alarm>)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filteredData");
+            filteredAlarms = (List<JsonAlarm>)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filteredData");
         }
         return filteredAlarms;
     }
 
-    public void setFilteredAlarms(List<Alarm> filteredTableEntities) {
+    public void setFilteredAlarms(List<JsonAlarm> filteredTableEntities) {
         this.filteredAlarms = filteredTableEntities;
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filteredData", filteredTableEntities);
     }*/

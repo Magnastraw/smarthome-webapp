@@ -26,11 +26,11 @@
                 <h:outputLabel value="Parent alarm:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{(alarmBean.selectedAlarm.parentAlarm != null)? alarmBean.selectedAlarm.parentAlarm.alarmName : ''}"/>
 
-                <h:outputLabel value="Start time:" styleClass="ui-accordion-header"/>
+                <h:outputLabel value="Start registryDate:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{alarmBean.selectedAlarm.startTime}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>
-                <h:outputLabel value="End time:" styleClass="ui-accordion-header"/>
+                <h:outputLabel value="End registryDate:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{alarmBean.selectedAlarm.endTime}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>

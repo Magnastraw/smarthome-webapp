@@ -23,7 +23,7 @@ public class MetricSpecService {
         metricSpecRepository.delete(primaryKey);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MetricSpec> getMetricSpecs(Catalog catalog) {
         return metricSpecRepository.getMetricSpecs(catalog);
     }
@@ -38,7 +38,7 @@ public class MetricSpecService {
         return metricSpecRepository.update(metricSpec);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkMetricName(String specName, long catalogId) {
         return this.metricSpecRepository.checkMetricSpecName(specName, catalogId);
     }

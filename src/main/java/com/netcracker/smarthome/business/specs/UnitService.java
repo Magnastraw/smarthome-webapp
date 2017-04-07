@@ -18,7 +18,7 @@ public class UnitService {
         this.unitRepository = unitRepository;
     }
     
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Unit> getUnits() {
         return unitRepository.getUnits();
     } 
@@ -28,7 +28,7 @@ public class UnitService {
         unitRepository.update(unit);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Unit getUnit(Object primaryKey) {
         return unitRepository.get(primaryKey);
     }
@@ -38,7 +38,7 @@ public class UnitService {
         unitRepository.save(unit);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkUnitName(String unitName) {
         return unitRepository.checkUnitName(unitName);
     }
@@ -48,7 +48,7 @@ public class UnitService {
         unitRepository.delete(primaryKey);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<BigInteger> getBaseFactors() {
         return unitRepository.getBaseFactors();
     }

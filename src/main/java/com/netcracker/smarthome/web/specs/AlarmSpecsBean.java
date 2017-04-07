@@ -103,7 +103,7 @@ public class AlarmSpecsBean implements Serializable {
     }
 
     public void onSelect(TableEntity folder) {
-        if (folder.isTypeCatalog()) {
+         if (folder.isTypeCatalog()) {
             expandCatalog(folder.getCatalog());
         }
     }

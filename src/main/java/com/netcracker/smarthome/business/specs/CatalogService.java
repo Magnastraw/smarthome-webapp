@@ -18,7 +18,7 @@ public class CatalogService {
         this.catalogRepository = catalogRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Catalog> getSubcatalogs(Catalog catalog) {
         return this.catalogRepository.getSubcatalogs(catalog);
     }
@@ -28,7 +28,7 @@ public class CatalogService {
         catalogRepository.delete(primaryKey);
     }
     
-    @Transactional
+    @Transactional(readOnly = true)
     public Catalog getCatalogById(long catalogId) {
         return catalogRepository.get(catalogId);
     }
@@ -38,17 +38,17 @@ public class CatalogService {
         catalogRepository.save(catalog);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkCatalogName(String catalogName, long parentCatalogId) {
         return this.catalogRepository.checkCatalogName(catalogName, parentCatalogId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Catalog> getPathToCatalog(Catalog catalog) {
         return catalogRepository.getPathToCatalog(catalog);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Catalog> getSubcatalogsRecursively(Catalog catalog) {
         return catalogRepository.getSubcatalogsRecursively(catalog);
     }
@@ -58,7 +58,7 @@ public class CatalogService {
         return catalogRepository.update(catalog);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Catalog getRootCatalog(String catalogName, long smartHomeId) {
         return catalogRepository.getRootCatalog(catalogName, smartHomeId);
     }

@@ -36,7 +36,7 @@ public class AlarmBean implements Serializable {
         }
     }
 
-    public String printSubalarms() {
+    /*public String printSubalarms() {
         int size = selectedAlarm.getSubAlarms().size();
         if (size != 0) {
             String subalarms = "";
@@ -49,7 +49,7 @@ public class AlarmBean implements Serializable {
         }
         else
             return "";
-    }
+    }*/
 
     /*setters and getters*/
     public Alarm getSelectedAlarm() {

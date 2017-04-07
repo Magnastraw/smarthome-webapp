@@ -76,23 +76,6 @@ public class Filter {
         }
     }
 
-    public static boolean filterByAssigned(Object value, Object filter) {
-        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
-        if (filterText == null || filterText.equals("")) {
-            return true;
-        }
-        if (((TableEntity)value).isTypeCatalog()) {
-            return false;
-        }
-        if (((TableEntity)value).getMetricSpec().getAssignedToObject() == null)
-            return false;
-        try {
-            return ((TableEntity) value).getMetricSpec().getAssignedToObject().startsWith(filterText);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public static boolean filterByObjectType(Object value, Object filter) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
         if (filterText == null || filterText.equals("")) {

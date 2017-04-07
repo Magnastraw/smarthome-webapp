@@ -332,10 +332,6 @@ public class MetricSpecsBean implements Serializable {
         return Filter.filterByMaxValue(value, filter);
     }
 
-    public boolean filterByAssigned(Object value, Object filter, Locale locale) {
-        return Filter.filterByAssigned(value, filter);
-    }
-
     /*setters and getters*/
     public List<TableEntity> getTableEntities() {
         return tableEntities;
