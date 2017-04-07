@@ -43,4 +43,9 @@ public class MetricSpecService {
         return this.metricSpecRepository.checkMetricSpecName(specName, catalogId);
     }
 
+    @Transactional(readOnly = true)
+    public MetricSpec getMetricSpecById(long specId) {
+        return this.metricSpecRepository.get(specId);
+    }
+
 }

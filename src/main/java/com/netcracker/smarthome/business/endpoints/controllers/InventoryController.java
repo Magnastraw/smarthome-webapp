@@ -43,13 +43,15 @@ public class InventoryController {
         JsonRestParser parser = new JsonRestParser();
         try {
             List<JsonInventoryObject> objects = parser.parseInventory(json);
-            InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService);
-            ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService);
+            InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService, homeService);
+            ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService, smartObjectService);
             for (JsonInventoryObject object : objects) {
-                SmartObject smartObject = inventoryTransformator.fromJsonEntity(object, home);
+                object.setSmartHomeId(houseId);
+                SmartObject smartObject = inventoryTransformator.fromJsonEntity(object);
                 smartObjectService.saveInventory(smartObject);
                 for (JsonParameter parameter : object.getParameters()) {
-                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter, smartObject);
+                    parameter.setSmartObjectId(smartObject.getSmartObjectId());
+                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter);
                     smartObjectService.saveObjectParam(objectParam);
                 }
             }
@@ -73,17 +75,19 @@ public class InventoryController {
         JsonRestParser parser = new JsonRestParser();
         try {
             List<JsonInventoryObject> objects = parser.parseInventory(json);
-            InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService);
-            ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService);
+            InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService, homeService);
+            ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService, smartObjectService);
             for (JsonInventoryObject object : objects) {
-                SmartObject smartObject = inventoryTransformator.fromJsonEntity(object, home);
+                object.setSmartHomeId(houseId);
+                SmartObject smartObject = inventoryTransformator.fromJsonEntity(object);
                 SmartObject oldObject = smartObjectService.getObjectByExternalKey(houseId, smartObject.getExternalKey());
                 if (oldObject != null) {
                     smartObject.setSmartObjectId(oldObject.getSmartObjectId());
                 }
                 smartObjectService.updateInventory(smartObject);
                 for (JsonParameter parameter : object.getParameters()) {
-                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter, smartObject);
+                    parameter.setSmartObjectId(smartObject.getSmartObjectId());
+                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter);
                     ObjectParam oldParam = smartObjectService.getObjectParamByName(smartObject.getSmartObjectId(), objectParam.getName());
                     if (oldParam != null) {
                         objectParam.setParamId(oldParam.getParamId());

@@ -1,11 +1,17 @@
 package com.netcracker.smarthome.business.endpoints.jsonentities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 public class JsonParameter implements Serializable {
     private String name;
     private String value;
     private String type;
+    @JsonIgnore
+    private long smartHomeId;
+    @JsonIgnore
+    private long smartObjectId;
 
     public JsonParameter() {}
 
@@ -43,4 +49,19 @@ public class JsonParameter implements Serializable {
         this.type = type;
     }
 
+    public long getSmartHomeId() {
+        return smartHomeId;
+    }
+
+    public void setSmartHomeId(long smartHomeId) {
+        this.smartHomeId = smartHomeId;
+    }
+
+    public long getSmartObjectId() {
+        return smartObjectId;
+    }
+
+    public void setSmartObjectId(long smartObjectId) {
+        this.smartObjectId = smartObjectId;
+    }
 }

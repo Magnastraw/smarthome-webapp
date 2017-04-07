@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "metric_specs", schema = "public", catalog = "smarthome_db")
-public class MetricSpec implements Serializable {
+public class MetricSpec extends Spec {
     private long specId;
     private String specName;
     private Double maxValue;

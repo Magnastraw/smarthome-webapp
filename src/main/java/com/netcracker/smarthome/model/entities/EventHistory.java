@@ -111,7 +111,7 @@ public class EventHistory implements Serializable {
                 .append("eventDescription", getEventDescription())
                 .append("severity", getSeverity())
                 .append("eventParameters", getEventParameters())
-                .append("event", getEvent())
+                .append("events", getEvent())
                 .toString();
     }
 }

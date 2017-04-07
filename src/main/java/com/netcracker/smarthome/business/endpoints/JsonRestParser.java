@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.smarthome.business.endpoints.jsonentities.JsonAlarm;
-import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
-import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
-import com.netcracker.smarthome.business.endpoints.jsonentities.JsonParameter;
+import com.netcracker.smarthome.business.endpoints.jsonentities.*;
 import org.codehaus.jackson.JsonParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -168,4 +165,22 @@ public class JsonRestParser {
         }
         return metricList;
     }
+
+    public List<JsonEvent> parseEvents(String json) {
+        List<JsonEvent> eventList = new ArrayList<JsonEvent>();
+        try {
+            eventList = objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, JsonEvent.class));
+        }
+        catch (JsonParseException ex) {
+            LOG.error("Error during parsing of json: ", ex);
+        }
+        catch (IOException ex) {
+            LOG.error("Error during parsing of json: ", ex);
+        }
+        catch (Exception ex) {
+            LOG.error("Error during parsing of json: ", ex);
+        }
+        return eventList;
+    }
+
 }

@@ -38,9 +38,10 @@ public class HouseController {
         JsonRestParser parser = new JsonRestParser();
         try {
             List<JsonParameter> parameters = parser.parseParameters(new JsonFactory().createParser(json));
-            HomeParamTransformator paramTransformator = new HomeParamTransformator(dataTypeService);
+            HomeParamTransformator paramTransformator = new HomeParamTransformator(dataTypeService, homeService);
             for (JsonParameter parameter : parameters) {
-                HomeParam homeParam = paramTransformator.fromJsonEntity(parameter, home);
+                parameter.setSmartHomeId(houseId);
+                HomeParam homeParam = paramTransformator.fromJsonEntity(parameter);
                 homeService.saveParam(homeParam);
             }
         } catch (Exception ex) {

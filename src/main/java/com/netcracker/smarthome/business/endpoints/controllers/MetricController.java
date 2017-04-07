@@ -5,9 +5,13 @@ import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
 import com.netcracker.smarthome.business.endpoints.services.MetricService;
 import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.endpoints.transformators.MetricEventTransformator;
+import com.netcracker.smarthome.business.policy.events.MetricEvent;
+import com.netcracker.smarthome.business.specs.MetricSpecService;
 import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.web.chart.configuration.MetricChartConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +28,12 @@ public class MetricController {
 
     @Autowired
     private HomeService homeService;
-
     @Autowired
     private SmartObjectService smartObjectService;
-
     @Autowired
     private MetricService metricService;
+    @Autowired
+    private MetricSpecService metricSpecService;
 
     @RequestMapping(value = "/metrics",
             method = RequestMethod.POST,
@@ -43,19 +47,22 @@ public class MetricController {
         List<JsonMetric> metrics = parser.parseMetrics(json);
         for (JsonMetric item : metrics) {
             try {
-                Metric metric = new Metric();
+                /*Metric metric = new Metric();
                 metric.setSmartHome(home);
-                metric.setObject(smartObjectService.getObjectById(item.getObjectId()));
-                metric.setObject(smartObjectService.getObjectById(item.getSubobjectId()));
+                metric.setObject(smartObjectService.getObjectByExternalKey(houseId, item.getObjectId()));
+                metric.setSubobject(smartObjectService.getObjectByExternalKey(houseId, item.getSubobjectId()));
                 metric.setMetricSpec(metricService.getMetricSpecById(item.getSpecId()));
-                Metric existingMetric = metricService.getMetric(houseId, smartObjectService.getObjectByExternalKey(houseId, item.getObjectId()).getSmartObjectId(), item.getSpecId());
+                Metric existingMetric = metricService.getMetric(houseId, metric.getObject().getSmartObjectId(), item.getSpecId());
                 if (existingMetric != null) {
                     metric.setMetricId(existingMetric.getMetricId());
                 } else {
                     metricService.saveMetric(metric);
                 }
                 MetricHistory metricHistory = new MetricHistory(item.getRegistryDate(), BigDecimal.valueOf(item.getValue()), metric);
-                metricService.saveMetricValue(metricHistory);
+                metricService.saveMetricValue(metricHistory);*/
+                item.setSmartHomeId(houseId);
+                MetricEventTransformator transformator = new MetricEventTransformator(smartObjectService, metricSpecService);
+                MetricEvent metricEvent = transformator.fromJsonEntity(item);
             }
             catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);

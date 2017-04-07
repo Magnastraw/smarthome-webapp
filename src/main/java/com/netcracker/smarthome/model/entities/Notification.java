@@ -173,7 +173,7 @@ public class Notification implements Serializable {
                 .append("confirm", isRequireConfirm())
                 .append("user", getSmartHome())
                 .append("alarm", getAlarm())
-                .append("event", getEvent())
+                .append("events", getEvent())
                 .append("metric", getMetric())
                 .append("channel", getChannel())
                 .toString();

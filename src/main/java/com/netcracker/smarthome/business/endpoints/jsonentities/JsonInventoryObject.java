@@ -1,5 +1,7 @@
 package com.netcracker.smarthome.business.endpoints.jsonentities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,8 @@ public class JsonInventoryObject implements Serializable {
     private String objectType;
     private long parentId;
     private List<JsonParameter> parameters;
+    @JsonIgnore
+    private long smartHomeId;
 
     public JsonInventoryObject() {
         this.parameters = new ArrayList<JsonParameter>();
@@ -83,5 +87,13 @@ public class JsonInventoryObject implements Serializable {
         }
         sb.append("********\n");
         return sb.toString();
+    }
+
+    public long getSmartHomeId() {
+        return smartHomeId;
+    }
+
+    public void setSmartHomeId(long smartHomeId) {
+        this.smartHomeId = smartHomeId;
     }
 }

@@ -27,10 +27,10 @@ public class AlarmBean implements Serializable {
 
     public void onChange(String id) {
         String selector = "centerForm:eventsTable:"+id;
-        //Calendar time = (Calendar)event.getComponent();
+        //Calendar time = (Calendar)events.getComponent();
         Calendar time = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent(selector);
         if(time.getValue() == null) {
-            //event.getNewValue() == null || event.getNewValue().equals("")) {
+            //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:eventsTable");
             dataTable.resetValue();
         }

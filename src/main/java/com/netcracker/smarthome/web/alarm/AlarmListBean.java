@@ -111,10 +111,10 @@ public class AlarmListBean implements Serializable {
 
     public void onChange(String id) {
         String selector = "centerForm:alarmsDT:"+id;
-        //Calendar time = (Calendar)event.getComponent();
+        //Calendar time = (Calendar)events.getComponent();
         Calendar time = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent(selector);
         if(time.getValue() == null) {
-            //event.getNewValue() == null || event.getNewValue().equals("")) {
+            //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
             dataTable.resetValue();
         }
@@ -123,7 +123,7 @@ public class AlarmListBean implements Serializable {
     /*public void onChange() {
         Calendar startTime = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT:startTimeFilter");
         if(startTime.getValue() == null) {
-        //event.getNewValue() == null || event.getNewValue().equals("")) {
+        //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
             dataTable.resetValue();
             dataTable.reset();

@@ -1,5 +1,7 @@
 package com.netcracker.smarthome.business.endpoints.jsonentities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -9,6 +11,8 @@ public class JsonMetric implements Serializable {
     private Timestamp registryDate;
     private double value;
     private long specId;
+    @JsonIgnore
+    private long smartHomeId;
 
     public JsonMetric() {}
 
@@ -59,4 +63,11 @@ public class JsonMetric implements Serializable {
         this.specId = specId;
     }
 
+    public long getSmartHomeId() {
+        return smartHomeId;
+    }
+
+    public void setSmartHomeId(long smartHomeId) {
+        this.smartHomeId = smartHomeId;
+    }
 }

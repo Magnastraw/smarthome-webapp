@@ -2,20 +2,23 @@ package com.netcracker.smarthome.business.endpoints.transformators;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonParameter;
 import com.netcracker.smarthome.business.endpoints.services.DataTypeService;
+import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.ObjectParam;
-import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ObjectParamTransformator implements ITransformator<ObjectParam, JsonParameter, SmartObject> {
+public class ObjectParamTransformator implements ITransformator<ObjectParam, JsonParameter> {
 
     @Autowired
     private final DataTypeService dataTypeService;
+    @Autowired
+    private final SmartObjectService smartObjectService;
 
-    public ObjectParamTransformator(DataTypeService dataTypeService) {
+    public ObjectParamTransformator(DataTypeService dataTypeService, SmartObjectService smartObjectService) {
         this.dataTypeService = dataTypeService;
+        this.smartObjectService = smartObjectService;
     }
 
-    public ObjectParam fromJsonEntity(JsonParameter jsonEntity, SmartObject smartObject) {
+    public ObjectParam fromJsonEntity(JsonParameter jsonEntity) {
         ObjectParam objectParam = new ObjectParam();
         objectParam.setName(jsonEntity.getName());
         objectParam.setValue(jsonEntity.getValue());
@@ -23,7 +26,7 @@ public class ObjectParamTransformator implements ITransformator<ObjectParam, Jso
             objectParam.setDataType(dataTypeService.getDataTypeByName(jsonEntity.getType()));
         else
             objectParam.setDataType(dataTypeService.getDataTypeByName("string"));
-        objectParam.setObject(smartObject);
+        objectParam.setObject(smartObjectService.getObjectById(jsonEntity.getSmartObjectId()));
         return objectParam;
     }
 }

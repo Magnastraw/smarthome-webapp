@@ -12,7 +12,7 @@ public class MetricRepository extends EntityRepository<Metric> {
     }
 
     public Metric getMetric(long smartHomeId, long smartObjectId, long specId) {
-        Query query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and m.object.smartObjectId = :smartObjectId and m.specId = :specId)");
+        Query query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and m.object.smartObjectId = :smartObjectId and m.metricSpec.specId = :specId)");
         query.setParameter("smartHomeId", smartHomeId);
         query.setParameter("smartObjectId", smartObjectId);
         query.setParameter("specId", specId);
