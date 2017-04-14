@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.notification;
 
-import com.netcracker.smarthome.dao.repositories.NotificationRepository;
+import com.netcracker.smarthome.dal.repositories.NotificationRepository;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.Channel;

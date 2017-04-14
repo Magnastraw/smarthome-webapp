@@ -1,9 +1,11 @@
 package com.netcracker.smarthome.web;
 
 import com.netcracker.smarthome.business.notification.NotificationService;
-import com.netcracker.smarthome.business.notification.SMS;
-import com.netcracker.smarthome.dao.repositories.UserRepository;
+import com.netcracker.smarthome.business.notification.Sms;
+import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
+import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.Notification;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.User;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.enums.NotificationStatus;
@@ -32,7 +34,7 @@ import java.time.LocalTime;
 public class LoginBean implements Serializable {
 
     @Autowired
-    private UserRepository userRepository;
+    private SmartHomeRepository smartHomeRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -42,12 +44,10 @@ public class LoginBean implements Serializable {
         RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login");
         dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
         FacesContext.getCurrentInstance().responseComplete();
-        User user = userRepository.getByEmail(context.getUserPrincipal().getName());
 
-        Notification notification = notificationService.createNotification("User login", NotificationStatus.NOT_RESOLVED,
-                Time.valueOf(LocalTime.now()), false, Channel.PHONE,
-                user, null, null, null);
-        notificationService.sendSMS(notification);
+        //test notification
+        SmartHome home = smartHomeRepository.getHomeByEmail(context.getUserPrincipal().getName());
+        notificationService.sendNotification("test", home, null);
 
         return null;
     }
