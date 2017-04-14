@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -111,6 +112,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<GroupMember> getGroupsMembers() {
+        for (GroupMember groupMember : groupsMembers) {
+            Hibernate.initialize(groupMember);
+        }
         return groupsMembers;
     }
 
@@ -120,6 +124,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "admin")
     public List<Permission> getManagedPermissions() {
+        for (Permission permission : managedPermissions) {
+            Hibernate.initialize(permission);
+        }
         return managedPermissions;
     }
 
@@ -129,6 +136,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<Permission> getPermissions() {
+        for (Permission permission : permissions) {
+            Hibernate.initialize(permission);
+        }
         return permissions;
     }
 
@@ -147,6 +157,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<SocialProfile> getSocialProfiles() {
+        for (SocialProfile socialProfile : socialProfiles){
+            Hibernate.initialize(socialProfile);
+        }
         return socialProfiles;
     }
 
