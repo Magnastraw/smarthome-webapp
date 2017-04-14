@@ -1,17 +1,20 @@
-package com.netcracker.smarthome.web.chart.options;
+package com.netcracker.smarthome.business.chart.options;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.netcracker.smarthome.model.enums.ChartInterval;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class RequestDataOptions {
     private long smartHomeId;
     private String chartInterval;
     private ArrayList<Long> objectId;
     private ArrayList<Long> metricSpecId;
-    private int rownum;
-    private int seriesSize;
 
     public RequestDataOptions() {}
 
@@ -52,20 +55,13 @@ public class RequestDataOptions {
         this.metricSpecId = metricSpecId;
     }
 
-    public int getRownum() {
-        return rownum;
-    }
-
-    public void setRownum(int rownum) {
-        this.rownum = rownum;
-    }
-
-    public int getSeriesSize() {
-        return seriesSize;
-    }
-
-    public void setSeriesSize(int seriesSize) {
-        this.seriesSize = seriesSize;
+    @JsonIgnore
+    public Timestamp getTime(){
+        Timestamp selectTime = new Timestamp(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(selectTime);
+        calendar.add(ChartInterval.getEnum(chartInterval).getCalendarInterval(), ChartInterval.getEnum(chartInterval).getIntValue());
+        return new Timestamp(calendar.getTime().getTime());
     }
 
     @Override

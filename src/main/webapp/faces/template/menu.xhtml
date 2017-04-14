@@ -40,11 +40,11 @@
         </p:submenu>
         <p:submenu label="View">
             <p:menuitem value="Dashboard manager"
-                        action="#{navigationBean.setPageName('charts/dashboardSettings')}"
-                        update="centerForm"
+                        action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                        update=":centerForm"
                         ajax="true"/>
-            <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboards.size()>0}">
-                <c:forEach items="#{dashboardBean.dashboards}" var="dashboard">
+            <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboardMenuList.size()>0}">
+                <c:forEach items="#{dashboardBean.dashboardMenuList}" var="dashboard">
                     <p:menuitem value="#{dashboard.dashboardName}"
                                 update="centerForm"
                                 ajax="true"

@@ -121,7 +121,14 @@ VALUES
   ('h2_alarmSubcat3_1', 45, 3);
 
 
-INSERT INTO public.units (unit_name, base_factor, label)
+INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
+VALUES
+  ('object_catalog',null,1),
+  ('room_catalog',61,1),
+  ('kitchen_catalog',61,1);
+
+
+  INSERT INTO public.units (unit_name, base_factor, label)
 VALUES
   ('Celsius', 1, '°C'),
   ('Percent', 1, '%'),
@@ -205,27 +212,28 @@ VALUES
   ('alarmSpec11', 'type3', 60),
   ('alarmSpec12', 'type3', 60);
 
+
 --add metrics,objects
-INSERT INTO object_types
+INSERT INTO public.object_types
 VALUES
   (DEFAULT, 'Temperature', 'Temperature'),
   (DEFAULT, 'Humidity', 'Humidity');
 
-INSERT INTO objects
+INSERT INTO public.objects
 VALUES
-  (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),
-  (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1),
-  (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
-  (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
+  (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 63, 1),
+  (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL,62, 1),
+  (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 63, 1),
+  (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 62, 1),
   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
-  (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1),
+  (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 62, 1),
   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1),
   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1);
 
-INSERT INTO metrics
+INSERT INTO public.metrics
 VALUES
   (DEFAULT, 1, NULL, 1, 1),
   (DEFAULT, 1, NULL, 2, 1),
@@ -241,49 +249,49 @@ VALUES
   (DEFAULT, 11, NULL, 2, 1);
 
 
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 1);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    50 + (random() * 35) :: DECIMAL, 2);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 3);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    50 + (random() * 35) :: DECIMAL, 4);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    50 + (random() * 35) :: DECIMAL, 5);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 6);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 7);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 8);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 9);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    15 + (random() * 10) :: DECIMAL, 11);
-INSERT INTO metrics_history
+INSERT INTO public.metrics_history
 VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-19 23:55', INTERVAL '5 min'),
+  (DEFAULT, generate_series(TIMESTAMP '2017-03-20 00:00', TIMESTAMP '2017-04-02 23:55', INTERVAL '5 min'),
    50 + (random() * 35) :: DECIMAL, 12);
 
 

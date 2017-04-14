@@ -1,5 +1,8 @@
-package com.netcracker.smarthome.web.chart.options;
+package com.netcracker.smarthome.business.chart.options;
 
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Position {
     private int col;
@@ -37,5 +40,15 @@ public class Position {
 
     public void setSize_y(int size_y) {
         this.size_y = size_y;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("col", getCol())
+                .append("row", getRow())
+                .append("size_x", getSize_x())
+                .append("size_y", getSize_y())
+                .toString();
     }
 }

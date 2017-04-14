@@ -1,10 +1,9 @@
-package com.netcracker.smarthome.web.chart.options;
+package com.netcracker.smarthome.business.chart.options;
 
-import com.netcracker.smarthome.web.chart.options.jsonfields.AxisConfig;
-import com.netcracker.smarthome.web.chart.options.jsonfields.SeriesConfig;
+import com.netcracker.smarthome.business.chart.options.jsonfields.AxisConfig;
+import com.netcracker.smarthome.business.chart.options.jsonfields.SeriesConfig;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ChartOptions {
     private String credits;
