@@ -1,9 +1,12 @@
 package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.auth.oauth.SocialServiceAuthenticator;
+import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
 
@@ -18,6 +21,10 @@ import java.util.Map;
 @ManagedBean
 @ViewScoped
 public class LoginBean implements Serializable {
+
+    @Autowired
+    private SmartHomeRepository smartHomeRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
 
     private boolean remember = true;
