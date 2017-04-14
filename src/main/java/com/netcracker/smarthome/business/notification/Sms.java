@@ -5,7 +5,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
-public class SMS implements NotificationType {
+public class Sms implements NotificationSender {
 
     private final String ACCOUNT_SID = "AC20dcdfe24e0b299b228418bb529fd41e";
     private final String AUTH_TOKEN = "dda60187c70c1492fe62bb1475fe1068";
