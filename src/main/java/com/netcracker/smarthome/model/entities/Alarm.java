@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.model.entities;
 
-import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,7 +19,7 @@ public class Alarm implements Serializable, NotificationObject {
     private String alarmDescription;
     private Timestamp startTime;
     private Timestamp endTime;
-    private int severity;
+    private AlarmSeverity severity;
     private Timestamp severityChangeTime;
     private Event event;
     private SmartObject object;
@@ -33,7 +32,7 @@ public class Alarm implements Serializable, NotificationObject {
     public Alarm() {
     }
 
-    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, int severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
+    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, AlarmSeverity severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
         this.clearedUserId = clearedUserId;
         this.alarmName = alarmName;
         this.alarmDescription = alarmDescription;
@@ -112,11 +111,12 @@ public class Alarm implements Serializable, NotificationObject {
 
     @Basic
     @Column(name = "severity", nullable = false)
-    public int getSeverity() {
+    @Enumerated(EnumType.ORDINAL)
+    public AlarmSeverity getSeverity() {
         return severity;
     }
 
-    public void setSeverity(int severity) {
+    public void setSeverity(AlarmSeverity severity) {
         this.severity = severity;
     }
 

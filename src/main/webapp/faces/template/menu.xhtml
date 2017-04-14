@@ -1,29 +1,60 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
-
-    <p:outputPanel id="menuPanel" style="border:none;font-size:small;padding:0;">
-        <p:panelMenu ajax="true" type="sliding" backLabel="Back">
-            <p:submenu label="Configure">
-                <p:menuitem value="Policy"
-                            url="#"/>
-                <p:menuitem value="Specification"
-                            url="#"/>
-                <p:menuitem value="Houses"
-                            url="#"/>
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:panelMenu>
+        <p:submenu label="House" icon="fa fa-home">
+            <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
+                <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
+                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.switchHome(home)}"/>
+                </c:forEach>
             </p:submenu>
-            <p:submenu label="Catalog 2">
-                <p:menuitem value="Graph"
-                            action="#{navigationBean.setPageName('graph')}"
-                            update=":centerForm"/>
-                <p:menuitem value="User table"
-                            action="#{navigationBean.setPageName('table')}"
-                            update=":centerForm"/>
+            <p:menuitem value="House settings" icon="fa fa-gear"
+                        action="#{navigationBean.setPageName('home/settings')}"
+                        update="centerForm">
+            </p:menuitem>
+            <p:separator/>
+            <p:menuitem value="Add home..." icon="fa fa-plus"
+                        action="#{navigationBean.setPageName('home/form')}"
+                        update="centerForm">
+                <f:setPropertyActionListener value="#{homeFormBean.defaultHomeValue}" target="#{homeFormBean.home}"/>
+                <f:setPropertyActionListener value="#{true}" target="#{homeFormBean.creatingMode}"/>
+            </p:menuitem>
+        </p:submenu>
+        <p:submenu label="Configure">
+            <p:menuitem value="Policy"
+                        url="#"/>
+            <p:menuitem value="Metric specifications"
+                        action="#{navigationBean.setPageName('specs/metricSpecs')}"
+                        update=":centerForm"/>
+            <p:menuitem value="Alarm specifications"
+                        action="#{navigationBean.setPageName('specs/alarmSpecs')}"
+                        update=":centerForm"/>
+            <p:menuitem value="Alarms"
+                        action="#{navigationBean.setPageName('alarms/alarmlist')}"
+                        update=":centerForm"/>
+            <p:menuitem value="Units"
+                        action="#{navigationBean.setPageName('specs/units')}"
+                        update=":centerForm"/>
+        </p:submenu>
+        <p:submenu label="View">
+            <p:menuitem value="Dashboard manager"
+                        action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                        update=":centerForm"
+                        ajax="true"/>
+            <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboardMenuList.size()>0}">
+                <c:forEach items="#{dashboardBean.dashboardMenuList}" var="dashboard">
+                    <p:menuitem value="#{dashboard.dashboardName}"
+                                update="centerForm"
+                                ajax="true"
+                                actionListener="#{dashboardBean.setCurrentDashboardFromMenu(dashboard)}">
+                        <f:setPropertyActionListener value="false" target="#{dashboardBean.fromDashboard}"/>
+                    </p:menuitem>
+                </c:forEach>
             </p:submenu>
-        </p:panelMenu>
-    </p:outputPanel>
-
+        </p:submenu>
+    </p:panelMenu>
 </ui:composition>
 
 

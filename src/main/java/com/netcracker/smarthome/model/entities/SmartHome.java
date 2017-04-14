@@ -21,6 +21,7 @@ public class SmartHome implements Serializable {
     private List<Metric> metrics;
     private List<Notification> notifications;
     private List<SmartObject> objects;
+    private List<Dashboard> dashboards;
     private User user;
 
     public SmartHome() {
@@ -82,7 +83,7 @@ public class SmartHome implements Serializable {
         this.events = events;
     }
 
-    @OneToMany(mappedBy = "smartHome")
+    @OneToMany(mappedBy = "smartHome", cascade = {CascadeType.PERSIST})
     public List<HomeParam> getHomeParams() {
         return homeParams;
     }
@@ -116,6 +117,15 @@ public class SmartHome implements Serializable {
 
     public void setObjects(List<SmartObject> objects) {
         this.objects = objects;
+    }
+
+    @OneToMany(mappedBy = "smartHome")
+    public List<Dashboard> getDashboards() {
+        return dashboards;
+    }
+
+    public void setDashboards(List<Dashboard> dashboards) {
+        this.dashboards = dashboards;
     }
 
     @ManyToOne

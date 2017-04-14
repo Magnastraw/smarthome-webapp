@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.List;
 
 @Entity
@@ -15,8 +14,8 @@ import java.util.List;
 public class MetricSpec implements Serializable {
     private long specId;
     private String specName;
-    private BigInteger maxValue;
-    private BigInteger minValue;
+    private Double maxValue;
+    private Double minValue;
     private String metricType;
     private String assignedToObject;
     private Unit unit;
@@ -26,7 +25,12 @@ public class MetricSpec implements Serializable {
     public MetricSpec() {
     }
 
-    public MetricSpec(String specName, BigInteger maxValue, BigInteger minValue, String metricType, String assignedToObject, Unit unit, Catalog catalog) {
+    public MetricSpec(Catalog catalog, Unit unit) {
+        this.catalog = catalog;
+        this.unit = unit;
+    }
+
+    public MetricSpec(String specName, Double maxValue, Double minValue, String metricType, String assignedToObject, Unit unit, Catalog catalog) {
         this.specName = specName;
         this.maxValue = maxValue;
         this.minValue = minValue;
@@ -60,21 +64,21 @@ public class MetricSpec implements Serializable {
 
     @Basic
     @Column(name = "max_value", nullable = true, precision = 0)
-    public BigInteger getMaxValue() {
+    public Double getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(BigInteger maxValue) {
+    public void setMaxValue(Double maxValue) {
         this.maxValue = maxValue;
     }
 
     @Basic
     @Column(name = "min_value", nullable = true, precision = 0)
-    public BigInteger getMinValue() {
+    public Double getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(BigInteger minValue) {
+    public void setMinValue(Double minValue) {
         this.minValue = minValue;
     }
 

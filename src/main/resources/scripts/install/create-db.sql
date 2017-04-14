@@ -1,3 +1,5 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 CREATE SEQUENCE public.condition_types_type_id_seq;
 
@@ -88,6 +90,8 @@ CREATE TABLE public.users (
 );
 COMMENT ON COLUMN public.users.email IS 'unique';
 
+CREATE UNIQUE INDEX users_uk
+  ON public.users (email);
 
 ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
@@ -254,9 +258,9 @@ CREATE SEQUENCE public.objects_object_id_seq;
 CREATE TABLE public.objects (
   smart_object_id BIGINT NOT NULL DEFAULT nextval('public.objects_object_id_seq'),
   name VARCHAR NOT NULL,
-  description VARCHAR NOT NULL,
+  description VARCHAR,
   object_type_id BIGINT NOT NULL,
-  parent_smart_object_id BIGINT NOT NULL,
+  parent_smart_object_id BIGINT,
   catalog_id BIGINT NOT NULL,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT objects_pk PRIMARY KEY (smart_object_id)
@@ -389,6 +393,37 @@ CREATE TABLE public.home_params (
 
 
 ALTER SEQUENCE public.home_params_param_id_seq OWNED BY public.home_params.param_id;
+
+CREATE SEQUENCE public.dashboards_dashboard_id_seq;
+
+CREATE TABLE public.dashboards (
+  dashboard_id BIGINT NOT NULL DEFAULT nextval('public.dashboards_dashboard_id_seq'),
+  dashboard_name VARCHAR NOT NULL,
+  smart_home_id BIGINT NOT NULL,
+  CONSTRAINT dashboards_pk PRIMARY KEY (dashboard_id)
+);
+
+
+ALTER SEQUENCE public.dashboards_dashboard_id_seq OWNED BY public.dashboards.dashboard_id;
+
+CREATE SEQUENCE public.charts_chart_id_seq;
+
+CREATE TABLE public.charts (
+  chart_id BIGINT NOT NULL DEFAULT nextval('public.charts_chart_id_seq'),
+  chart_option VARCHAR NOT NULL,
+  col BIGINT DEFAULT 1 NOT NULL,
+  row BIGINT DEFAULT 1 NOT NULL,
+  size_x BIGINT DEFAULT 3 NOT NULL,
+  size_y BIGINT DEFAULT 4 NOT NULL,
+  request_option VARCHAR NOT NULL,
+  refresh_interval NUMERIC,
+  dashboard_id BIGINT NOT NULL,
+  CONSTRAINT charts_pk PRIMARY KEY (chart_id)
+);
+
+
+
+ALTER SEQUENCE public.charts_chart_id_seq OWNED BY public.charts.chart_id;
 
 CREATE TABLE public.social_profiles (
   user_id BIGINT NOT NULL,
@@ -737,3 +772,19 @@ REFERENCES public.metrics (metric_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.dashboards ADD CONSTRAINT smart_homes_dashboards_fk
+FOREIGN KEY (smart_home_id)
+REFERENCES public.smart_homes (smart_home_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.charts ADD CONSTRAINT dashboards_charts_fk
+FOREIGN KEY (dashboard_id)
+REFERENCES public.dashboards (dashboard_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+

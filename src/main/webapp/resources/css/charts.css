@@ -1,0 +1,48 @@
+.modal {
+    position: fixed;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
+    overflow: visible;
+    z-index: 999;
+}
+
+.modal .chart-in {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 90% !important;
+    height: 90% !important;
+    padding: 10px;
+    background-color: #FFF;
+    border: 5px solid #CCC;
+    box-shadow: #000 0 2px 18px;
+    overflow: visible;
+    z-index: 999;
+}
+
+.chart-in {
+    width: inherit ;
+    height: inherit ;
+    margin: 0 auto;
+}
+
+.ui-layout-center-visible {
+    z-index: 21 !important;
+    overflow: visible !important;
+}
+
+.ui-layout-unit-content-visible {
+    overflow: visible !important;
+}
+
+.li_overflow{
+    overflow: visible !important;
+    z-index: 24 !important;
+}

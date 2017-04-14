@@ -3,53 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html/js; charset=utf-8"/>
-    <title>Template</title>
-    <f:metadata>
-        <ui:insert name="metadata"/>
-    </f:metadata>
-    <style type="text/css">
-        .ui-layout-north {
-            z-index: 20 !important;
-            overflow: visible !important;;
-        }
+    <title>Smarthome</title>
+    <h:outputStylesheet name="css/style.css"/>
+    <h:outputStylesheet name="css/charts.css"  />
+    <h:outputStylesheet name="css/jquery.gridster.min.css"/>
 
-        .ui-layout-north .ui-layout-unit-content {
-            overflow: visible !important;
-        }
-    </style>
 </h:head>
-
 <h:body>
-    <p:layout fullPage="true" resizeTitle="resize" style="background-color:#FFFFFF;">
+    <p:layout id="mainPage" fullPage="true" style="background-color:#FFFFFF;">
         <p:layoutUnit position="north" id="north">
-            <h:form>
+            <h:form id="header">
                 <ui:include src="header.xhtml"/>
             </h:form>
         </p:layoutUnit>
-
-        <p:layoutUnit position="west" id="west" header="My Home" minSize="250">
-            <h:form>
+        <p:layoutUnit position="west" header="Smarthome management" id="west" minSize="250" style="border: none">
+            <h:form id="menu">
                 <ui:include src="menu.xhtml"/>
             </h:form>
         </p:layoutUnit>
-
-        <p:layoutUnit id="center" styleClass="layoutUnitCenter" position="center">
+        <p:layoutUnit id="center" style="border: none;" position="center">
             <h:form id="centerForm">
                 <ui:include src="#{navigationBean.pageName}.xhtml"/>
             </h:form>
         </p:layoutUnit>
-
-        <p:layoutUnit position="south" resizable="true" id="south">
+        <p:layoutUnit position="south" id="south">
             <h:form>
                 <ui:include src="footer.xhtml"/>
             </h:form>
         </p:layoutUnit>
     </p:layout>
-</h:body>
+    <h:outputScript name="js/highcharts.js"/>
+    <h:outputScript name="js/exporting.js"/>
+    <h:outputScript name="js/custom_chart.js"/>
+    <h:outputScript name="js/jquery.gridster.min.js"/>
 
+</h:body>
 </html>

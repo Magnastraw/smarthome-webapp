@@ -34,13 +34,23 @@
     width: 100%;
 }
 
+.dialog {
+    text-align: center;
+    border: none;
+}
+
+.dialog td, .dialog tr {
+    border: none !important;
+    text-align: left;
+}
+
 .btn {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .link {
     /*text-decoration: none;*/
-    margin-top: 10px;
+    margin-top: 7px;
     display: block;
 }
 
@@ -52,8 +62,13 @@
     margin: 10px auto !important;
 }
 
+.alert-block-specs {
+    margin: 0 auto;
+    width: 350px;
+}
+
 .social-btns-block {
-    margin: 10px auto 0;
+    margin: 15px auto 0;
 }
 
 .social-btn {
@@ -67,4 +82,310 @@
     font-style: italic;
     margin: 0px 0px 5px;
     display: block;
+}
+
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+
+.footer {
+    margin: 5px auto;
+    text-align: center;
+}
+
+.dialog-output {
+    width: 223px !important;
+    margin: 0px !important;
+}
+
+.dialog-input {
+    width: 200px; !important;
+    margin: 0px !important;
+}
+
+.dialog-input-chart {
+    width: auto; !important;
+    margin: 0px !important;
+}
+.dialog-input-catalog {
+    width: 200px; !important;
+    margin-left: 40px !important;
+}
+
+.dialog-select-catalog {
+    width: 177px !important;
+    margin-left: 40px !important;
+}
+
+.table-name {
+    font-family: "latoregular", "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+.icon:before {
+    content: url("http://iconizer.net/files/Essen/thumb/16/folder.png") !important;
+    padding-right: 3px;
+}
+
+.panel {
+    width: 400px;
+    margin: 0px;
+}
+
+.filter {
+    width: 90% !important;
+    max-width: 150px;
+}
+
+.filter-select {
+    min-width: 50px !important;
+    width: 60% !important;
+}
+
+.filter-date input {
+    width: 85% !important;
+    max-width: 150px;
+}
+
+.ui-datatable th.ui-state-active {
+    background-color: #ebedf0;
+    color: #555;
+}
+
+.ui-datatable th.ui-state-active .ui-icon-carat-2-n-s {
+    background-image: url("/javax.faces.resource/images/ui-icons_454545_256x240.png.xhtml?ln=primefaces-omega");
+}
+
+.move:after {
+    content: url("https://cdn2.iconfinder.com/data/icons/folderico-nic/128/Folder_Copy_Arrow_Move_Duplicate_Order_Arrange-16.png");
+}
+
+.column-delete {
+    width: 60px;
+    text-align: center;
+    padding: 5px 2px !important;
+}
+
+.column-name {
+    width: 170px;
+    padding: 5px 2px !important;
+}
+
+.column {
+    text-align: center;
+    padding: 5px 2px !important;
+}
+
+.column-checkbox {
+    width: 28px;
+    text-align: center;
+    padding: 5px 2px !important;
+    margin: 0px !important;
+}
+
+.column-time {
+    width: 100px;
+    text-align: center;
+    padding: 5px 2px !important;
+}
+
+.column-detail {
+    width: 60px;
+    text-align: center;
+}
+
+.margin {
+    margin-left: 7px !important;
+}
+
+.fa {
+    text-decoration: none !important;
+}
+
+.home-form {
+    width: 400px;
+}
+
+.home-form input {
+    display: block;
+    width: 100%;
+}
+
+.home-form textarea {
+    display: block;
+    width: 100%;
+}
+
+.home-form label {
+    margin-top: 10px;
+    display: block;
+}
+
+.home-form button {
+    display: block;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+h3 {
+    margin-bottom: 0;
+}
+
+.home-form .alert {
+    width: 100%;
+}
+
+.ui-accordion-header {
+    font-weight: bold !important;
+}
+
+.fieldset {
+    margin-bottom: 15px;
+}
+
+.param-item {
+    margin-right: 7px;
+}
+
+.reg table td {
+    vertical-align: top;
+}
+
+.ui-password-panel {
+    padding: 4px !important;
+    width: 100% !important;
+    font-size: smaller !important;
+}
+
+.severity-disabled {
+    background-color: green;
+}
+
+.severity-caution {
+    background-color: yellow;
+}
+
+.severity-alert {
+    background-color: darkorange;
+}
+
+.severity-critical {
+    background-color: firebrick;
+}
+
+.to-dashboard {
+    width: 120px;
+    height: 50px;
+    margin-right: 5px !important;
+}
+
+.button-panel {
+    margin-bottom: 10px;
+}
+
+.arrow:before {
+    /*content: url("http://iconizer.net/files/Splashyfish/orig/arrow_state_blue_expanded.png") !important;*/
+    content: url("http://iconizer.net/files/Splashyfish/orig/arrow_state_grey_right.png") !important;
+}
+
+.dashboardDiv {
+    width: 100%;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    padding: .0em !important;
+}
+
+.ui-toolbar {
+    padding: .1em !important;
+}
+
+.gridster ul {
+    list-style: none;
+}
+
+.chart-container {
+    width: inherit !important;
+    height: inherit !important;
+}
+
+.gridster .preview-holder {
+    background-color: #ABABB0 !important;
+}
+
+.gridster li header {
+    cursor: move;
+    position: absolute;
+    overflow: visible;
+    z-index: 1000;
+}
+
+.x-tree-icon-leaf, .x-tree-icon-text::before {
+    font: normal normal normal 14px/1 "FontAwesome";
+    display: inline-block;
+    color: #5a5a5a;
+}
+
+.x-tree-icon-leaf::before, .x-tree-icon-text::before {
+    content: "\f047\00a0";
+    font-size: 1.5em;
+    position: relative;
+    top: 5px;
+    left: 5px;
+}
+
+.delete-chart-button {
+    position: absolute;
+    left: 30px;
+    top: 7px;
+    color: #5a5a5a;
+    font-size: 1.5em;
+    overflow: visible;
+    z-index: 1000;
+}
+
+.chart-border{
+    border: 2px solid #CCC;
+    border-right-width: 3px;
+}
+
+.one-dialog-select{
+    width: 145px !important;
+    height: 29px;
+}
+
+.ui-selectonemenu {
+    padding-right: 0 !important;
+    width: 100% !important;
+}
+
+.ui-selectonemenu label {
+    width: auto !important;
+}
+
+.ui-selectcheckboxmenu {
+    width: 100% !important;
+}
+
+.top-aligned-columns td{
+    vertical-align: top;
+    padding: 2px 5px ;
+}
+
+#center{
+    z-index: auto !important;
+
+}
+
+.chartDialogInput{
+    width: 101%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }

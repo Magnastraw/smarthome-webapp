@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<!--Define component's attribute-->
+<cc:interface>
+    <cc:attribute name="chartOptions"/>
+    <cc:attribute name="requestDataOptions"/>
+    <cc:attribute name="refreshInterval"/>
+</cc:interface>
+
+<!--Define component-->
+<cc:implementation>
+    <h:inputHidden id="chartOptions_#{cc.id}" value="#{cc.attrs.chartOptions}"/>
+    <h:inputHidden id="requestDataOptions_#{cc.id}" value="#{cc.attrs.requestDataOptions}"/>
+    <h:inputHidden id="refreshInterval_#{cc.id}" value="#{cc.attrs.refreshInterval}"/>
+
+    <div id="#{cc.id}_chartContainer" class="chart-container chart-border">
+        <div id="#{cc.id}_chartDiv" class="chart-in">
+            <script type="text/javascript">
+                $("#{cc.id}_chartContainer").ready(function () {
+                    $("#{cc.id}_chartDiv").ready(function () {
+                        createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(), $('input[id$="requestDataOptions_#{cc.id}"]').val(), $('input[id$="refreshInterval_#{cc.id}"]').val(), "#{cc.id}_chartContainer", "#{cc.id}");
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</cc:implementation>
+</html>

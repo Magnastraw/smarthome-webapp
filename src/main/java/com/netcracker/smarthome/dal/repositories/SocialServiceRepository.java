@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.dal.repositories;
 
-import com.netcracker.smarthome.model.entities.SocialProfile;
 import com.netcracker.smarthome.model.entities.SocialService;
+import com.netcracker.smarthome.model.enums.AuthService;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -13,9 +13,10 @@ public class SocialServiceRepository extends EntityRepository<SocialService> {
         super(SocialService.class);
     }
 
-    public List<SocialProfile> getProfiles(SocialService service) {
-        Query query = getManager().createQuery("select sp from SocialProfile sp where sp.serviceId = :serviceId");
-        query.setParameter("serviceId", service.getServiceId());
-        return query.getResultList();
+    public SocialService getByServiceType(AuthService serviceType) {
+        Query query = getManager().createQuery("select s from SocialService s where s.serviceType= :serviceType");
+        query.setParameter("serviceType", serviceType);
+        List<SocialService> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 }
