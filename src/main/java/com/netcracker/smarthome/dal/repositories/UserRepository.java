@@ -3,7 +3,6 @@ package com.netcracker.smarthome.dal.repositories;
 import com.netcracker.smarthome.model.entities.Group;
 import com.netcracker.smarthome.model.entities.SocialProfile;
 import com.netcracker.smarthome.model.entities.User;
-import com.netcracker.smarthome.model.enums.AuthService;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;

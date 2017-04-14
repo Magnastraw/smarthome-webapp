@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "metrics", schema = "public", catalog = "smarthome_db")
-public class Metric implements Serializable {
+public class Metric implements Serializable, NotificationObject {
     private long metricId;
     private SmartObject object;
     private SmartObject subobject;
