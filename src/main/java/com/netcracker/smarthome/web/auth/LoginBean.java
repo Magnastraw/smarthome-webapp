@@ -1,12 +1,6 @@
 package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.auth.oauth.SocialServiceAuthenticator;
-import com.netcracker.smarthome.business.notification.NotificationService;
-import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
-import com.netcracker.smarthome.dal.repositories.UserRepository;
-import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.entities.User;
-import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
