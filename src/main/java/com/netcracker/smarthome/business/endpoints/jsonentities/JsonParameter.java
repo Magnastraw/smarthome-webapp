@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 
 public class JsonParameter implements Serializable {
-    private String name;
     private String value;
     private String type;
+    @JsonIgnore
+    private String name;
     @JsonIgnore
     private long smartHomeId;
     @JsonIgnore
@@ -15,22 +16,9 @@ public class JsonParameter implements Serializable {
 
     public JsonParameter() {}
 
-    public JsonParameter(String name) {
-        this.name = name;
-    }
-
-    public JsonParameter(String name, String value, String type) {
-        this.name = name;
+    public JsonParameter(String value, String type) {
         this.value = value;
         this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getValue() {
@@ -63,5 +51,13 @@ public class JsonParameter implements Serializable {
 
     public void setSmartObjectId(long smartObjectId) {
         this.smartObjectId = smartObjectId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

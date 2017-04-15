@@ -3,7 +3,6 @@ package com.netcracker.smarthome.business.endpoints.controllers;
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
-import com.netcracker.smarthome.business.endpoints.jsonentities.JsonParameter;
 import com.netcracker.smarthome.business.endpoints.services.DataTypeService;
 import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.InventoryTransformator;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -49,9 +49,12 @@ public class InventoryController {
                 object.setSmartHomeId(houseId);
                 SmartObject smartObject = inventoryTransformator.fromJsonEntity(object);
                 smartObjectService.saveInventory(smartObject);
-                for (JsonParameter parameter : object.getParameters()) {
-                    parameter.setSmartObjectId(smartObject.getSmartObjectId());
-                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter);
+                Iterator iterator = object.getParameters().keySet().iterator();
+                while (iterator.hasNext()) {
+                    String paramName = (String)iterator.next();
+                    object.getParameters().get(paramName).setName(paramName);
+                    object.getParameters().get(paramName).setSmartObjectId(smartObject.getSmartObjectId());
+                    ObjectParam objectParam = paramTransformator.fromJsonEntity(object.getParameters().get(paramName));
                     smartObjectService.saveObjectParam(objectParam);
                 }
             }
@@ -83,16 +86,30 @@ public class InventoryController {
                 SmartObject oldObject = smartObjectService.getObjectByExternalKey(houseId, smartObject.getExternalKey());
                 if (oldObject != null) {
                     smartObject.setSmartObjectId(oldObject.getSmartObjectId());
+                    smartObjectService.updateInventory(smartObject);
                 }
-                smartObjectService.updateInventory(smartObject);
-                for (JsonParameter parameter : object.getParameters()) {
-                    parameter.setSmartObjectId(smartObject.getSmartObjectId());
-                    ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter);
+                else {
+                    smartObjectService.saveInventory(smartObject);
+                }
+
+                Iterator iterator = object.getParameters().keySet().iterator();
+                /*for (JsonParameter parameter : object.getParameters()) {
+                //parameter.setSmartObjectId(smartObject.getSmartObjectId());
+                ObjectParam objectParam = paramTransformator.fromJsonEntity(parameter);*/
+                while (iterator.hasNext()) {
+                    String paramName = (String)iterator.next();
+                    object.getParameters().get(paramName).setName(paramName);
+                    object.getParameters().get(paramName).setSmartObjectId(smartObject.getSmartObjectId());
+                    ObjectParam objectParam = paramTransformator.fromJsonEntity(object.getParameters().get(paramName));
+
                     ObjectParam oldParam = smartObjectService.getObjectParamByName(smartObject.getSmartObjectId(), objectParam.getName());
                     if (oldParam != null) {
                         objectParam.setParamId(oldParam.getParamId());
+                        smartObjectService.updateObjectParam(objectParam);
                     }
-                    smartObjectService.updateObjectParam(objectParam);
+                    else {
+                        smartObjectService.saveObjectParam(objectParam);
+                    }
                 }
             }
         }

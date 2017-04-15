@@ -7,12 +7,10 @@ import com.netcracker.smarthome.model.entities.HomeParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HomeParamTransformator implements ITransformator<HomeParam, JsonParameter> {
-
-    @Autowired
     private final DataTypeService dataTypeService;
-    @Autowired
     private final HomeService homeService;
 
+    @Autowired
     public HomeParamTransformator(DataTypeService dataTypeService, HomeService homeService) {
         this.dataTypeService = dataTypeService;
         this.homeService = homeService;
@@ -23,8 +21,9 @@ public class HomeParamTransformator implements ITransformator<HomeParam, JsonPar
         homeParam.setSmartHome(homeService.getHomeById(jsonEntity.getSmartHomeId()));
         homeParam.setName(jsonEntity.getName());
         homeParam.setValue(jsonEntity.getValue());
-        if (jsonEntity.getType() != "")
-            homeParam.setDataType(dataTypeService.getDataTypeByName(jsonEntity.getType()));
+        String type = jsonEntity.getType();
+        if (type != "")
+            homeParam.setDataType(dataTypeService.getDataTypeByName(type));
         else
             homeParam.setDataType(dataTypeService.getDataTypeByName("string"));
         return homeParam;

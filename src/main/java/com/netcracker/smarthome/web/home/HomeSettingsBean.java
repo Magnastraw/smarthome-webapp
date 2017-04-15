@@ -1,10 +1,13 @@
 package com.netcracker.smarthome.web.home;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
 import com.netcracker.smarthome.model.entities.DataType;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.common.ContextUtils;
+import org.json.simple.JSONObject;
 import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +15,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +35,34 @@ public class HomeSettingsBean implements Serializable {
     private void init() {
         types = homeService.getDataTypes();
         selectedParam = getDefaultParamValue();
+    }
+
+    public void test() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File("d:\\master\\file.json");
+        try {
+            objectMapper.writeValue(file, objectMapper.getTypeFactory().constructCollectionType(List.class, JsonInventoryObject.class));
+
+            /*FileWriter writer = new FileWriter("d:\\master\\file.json");
+            writer.write(json.toJSONString());
+            writer.flush();
+            writer.close();*/
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+        /*ParameterMap par = new ParameterMap();
+        HashMap<String, JsonParameter> map = new HashMap<String, JsonParameter>();
+        map.put("par1", new JsonParameter("param1value", "string"));
+        par.setParameterHashMap(map);
+        JSONObject json = new JSONObject(map);
+        try {
+            FileWriter writer = new FileWriter("d:\\master\\file.json");
+            writer.write(json.toJSONString());
+            writer.flush();
+            writer.close();
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }*/
     }
 
     public HomeParam getDefaultParamValue() {

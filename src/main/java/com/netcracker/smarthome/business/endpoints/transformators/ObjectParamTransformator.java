@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ObjectParamTransformator implements ITransformator<ObjectParam, JsonParameter> {
 
-    @Autowired
     private final DataTypeService dataTypeService;
-    @Autowired
     private final SmartObjectService smartObjectService;
 
+    @Autowired
     public ObjectParamTransformator(DataTypeService dataTypeService, SmartObjectService smartObjectService) {
         this.dataTypeService = dataTypeService;
         this.smartObjectService = smartObjectService;

@@ -6,12 +6,12 @@ import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
 import com.netcracker.smarthome.business.endpoints.services.MetricService;
 import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.MetricEventTransformator;
+import com.netcracker.smarthome.business.endpoints.transformators.MetricTransformator;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
 import com.netcracker.smarthome.business.specs.MetricSpecService;
 import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.web.chart.configuration.MetricChartConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +47,15 @@ public class MetricController {
         List<JsonMetric> metrics = parser.parseMetrics(json);
         for (JsonMetric item : metrics) {
             try {
+                item.setSmartHomeId(houseId);
+                MetricTransformator transf = new MetricTransformator(smartObjectService, metricService);
+                Metric metric = transf.fromJsonEntity(item);
+
                 /*Metric metric = new Metric();
                 metric.setSmartHome(home);
                 metric.setObject(smartObjectService.getObjectByExternalKey(houseId, item.getObjectId()));
                 metric.setSubobject(smartObjectService.getObjectByExternalKey(houseId, item.getSubobjectId()));
-                metric.setMetricSpec(metricService.getMetricSpecById(item.getSpecId()));
+                metric.setMetricSpec(metricService.getMetricSpecById(item.getSpecId()));*/
                 Metric existingMetric = metricService.getMetric(houseId, metric.getObject().getSmartObjectId(), item.getSpecId());
                 if (existingMetric != null) {
                     metric.setMetricId(existingMetric.getMetricId());
@@ -59,8 +63,8 @@ public class MetricController {
                     metricService.saveMetric(metric);
                 }
                 MetricHistory metricHistory = new MetricHistory(item.getRegistryDate(), BigDecimal.valueOf(item.getValue()), metric);
-                metricService.saveMetricValue(metricHistory);*/
-                item.setSmartHomeId(houseId);
+                metricService.saveMetricValue(metricHistory);
+
                 MetricEventTransformator transformator = new MetricEventTransformator(smartObjectService, metricSpecService);
                 MetricEvent metricEvent = transformator.fromJsonEntity(item);
             }

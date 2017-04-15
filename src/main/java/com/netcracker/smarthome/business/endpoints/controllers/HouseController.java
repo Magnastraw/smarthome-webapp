@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.*;
@@ -14,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class HouseController {
@@ -37,11 +39,29 @@ public class HouseController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
         try {
-            List<JsonParameter> parameters = parser.parseParameters(new JsonFactory().createParser(json));
+            /*List<Map<String,JsonParameter>> parameters = parser.parseParameters(json);
+            for (Map<String,JsonParameter> parameter : parameters) {
+                HomeParam homeParam = new HomeParam();
+                homeParam.setSmartHome(homeService.getHomeById(houseId));
+                for (String parameterName : parameter.keySet()) {
+                    homeParam.setName(parameterName);
+                }
+                homeParam.setValue(parameter.get(homeParam.getName()).getValue());
+                String type = parameter.get(homeParam.getName()).getType();
+                if (type != "")
+                    homeParam.setDataType(dataTypeService.getDataTypeByName(type));
+                else
+                    homeParam.setDataType(dataTypeService.getDataTypeByName("string"));
+                homeService.saveParam(homeParam);
+            }*/
+            Map<String,JsonParameter> parameters = parser.parseParameters(json);
             HomeParamTransformator paramTransformator = new HomeParamTransformator(dataTypeService, homeService);
-            for (JsonParameter parameter : parameters) {
-                parameter.setSmartHomeId(houseId);
-                HomeParam homeParam = paramTransformator.fromJsonEntity(parameter);
+            Iterator iterator = parameters.keySet().iterator();
+            while (iterator.hasNext()) {
+                String paramName = (String)iterator.next();
+                parameters.get(paramName).setName(paramName);
+                parameters.get(paramName).setSmartHomeId(houseId);
+                HomeParam homeParam = paramTransformator.fromJsonEntity(parameters.get(paramName));
                 homeService.saveParam(homeParam);
             }
         } catch (Exception ex) {
