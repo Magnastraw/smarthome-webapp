@@ -142,9 +142,6 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     public List<SmartHome> getSmartHomes() {
-        for (SmartHome smartHome : smartHomes) {
-            Hibernate.initialize(smartHome);
-        }
         return smartHomes;
     }
 
