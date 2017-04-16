@@ -34,6 +34,7 @@ public class HouseController {
             produces = "application/json")
     public ResponseEntity sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
                                          @RequestBody String json) {
+        LOG.info(json);
         SmartHome home = homeService.getHomeById(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);

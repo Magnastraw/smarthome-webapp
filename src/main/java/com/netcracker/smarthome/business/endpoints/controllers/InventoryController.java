@@ -37,6 +37,7 @@ public class InventoryController {
                     consumes = "application/json")
     public ResponseEntity sendInventories(@RequestParam(value="houseId", required=true) long houseId,
                                           @RequestBody String json) {
+        LOG.info(json);
         SmartHome home = homeService.getHomeById(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);

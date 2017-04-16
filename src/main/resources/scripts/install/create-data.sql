@@ -4,7 +4,8 @@ VALUES (DEFAULT, 'mymail@mail.ru', md5('123456d'), 'firstname', 'lastname', +798
 
 INSERT INTO public.data_types
 VALUES (DEFAULT, 'String', 0),
-  (DEFAULT, 'Link', 1);
+  (DEFAULT, 'Link', 1),
+  (DEFAULT , 'Time',2);
 
 INSERT INTO public.smart_homes
 VALUES (DEFAULT, 'default home', '', 1),
@@ -208,129 +209,130 @@ VALUES
 --add metrics,objects
 INSERT INTO object_types
 VALUES
-  (DEFAULT, 'Temperature', 'Temperature'),
-  (DEFAULT, 'Humidity', 'Humidity');
+  (DEFAULT, 'RootController', 'RootController'),
+  (DEFAULT, 'Controller', 'Controller'),
+  (DEFAULT, 'Sensor', 'Sensor');
 
-INSERT INTO objects
-VALUES
-  (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),
-  (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1),
-  (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
-  (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
-  (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
-  (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
-  (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
-  (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
-  (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1),
-  (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1),
-  (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1);
-
-INSERT INTO metrics
-VALUES
-  (DEFAULT, 1, NULL, 1, 1),
-  (DEFAULT, 1, NULL, 2, 1),
-  (DEFAULT, 2, NULL, 1, 1),
-  (DEFAULT, 3, NULL, 2, 1),
-  (DEFAULT, 4, NULL, 2, 1),
-  (DEFAULT, 5, NULL, 1, 2),
-  (DEFAULT, 6, NULL, 1, 2),
-  (DEFAULT, 7, NULL, 1, 3),
-  (DEFAULT, 8, NULL, 1, 3),
-  (DEFAULT, 1, NULL, 2, 1),
-  (DEFAULT, 10, NULL, 1, 1),
-  (DEFAULT, 11, NULL, 2, 1);
-
-
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 1);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   50 + (random() * 35) :: DECIMAL, 2);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 3);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   50 + (random() * 35) :: DECIMAL, 4);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   50 + (random() * 35) :: DECIMAL, 5);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 6);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 7);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 8);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 9);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   15 + (random() * 10) :: DECIMAL, 11);
-INSERT INTO metrics_history
-VALUES
-  (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
-   50 + (random() * 35) :: DECIMAL, 12);
-
-
-
-INSERT INTO public.events
-  (object_id, event_type, smart_home_id)
-VALUES
-  (1, 'type', 1),
-  (2, 'type', 1),
-  (3, 'type', 1),
-  (4, 'type', 1),
-  (5, 'type', 1),
-  (6, 'type', 1);
-
-INSERT INTO public.events_history (event_id, read_date, event_description, severity)
-VALUES
-  (1, TIMESTAMP '2017-01-01 11:00', '', 2),
-  (1, TIMESTAMP '2017-01-02 11:00', '', 3),
-  (1, TIMESTAMP '2017-01-03 11:00', '', 3),
-  (1, TIMESTAMP '2017-01-04 11:00', '', 4),
-  (1, TIMESTAMP '2017-01-05 11:00', '', 2),
-  (2, TIMESTAMP '2017-01-01 11:00', '', 2),
-  (2, TIMESTAMP '2017-01-02 11:00', '', 3),
-  (2, TIMESTAMP '2017-01-03 11:00', '', 3),
-  (2, TIMESTAMP '2017-01-04 11:00', '', 3),
-  (3, TIMESTAMP '2017-01-01 11:00', '', 2),
-  (3, TIMESTAMP '2017-01-02 11:00', '', 3),
-  (3, TIMESTAMP '2017-01-03 11:00', '', 3),
-  (3, TIMESTAMP '2017-01-04 11:00', '', 4),
-  (3, TIMESTAMP '2017-01-05 11:00', '', 1),
-  (4, TIMESTAMP '2017-01-01 11:00', '', 2),
-  (4, TIMESTAMP '2017-01-02 11:00', '', 3),
-  (4, TIMESTAMP '2017-01-03 11:00', '', 3),
-  (4, TIMESTAMP '2017-01-04 11:00', '', 4),
-  (5, TIMESTAMP '2017-01-01 11:00', '', 2),
-  (5, TIMESTAMP '2017-01-02 11:00', '', 3),
-  (5, TIMESTAMP '2017-01-03 11:00', '', 3),
-  (5, TIMESTAMP '2017-01-04 11:00', '', 4);
-
-
-INSERT INTO public.alarms
-  (event_id, object_id, spec_id, parent_alarm_id, cleared_user_id, alarm_name, start_time, end_time, severity, severity_change_time)
-VALUES
-  (1, 1, 1, null, -1, 'alarm1', TIMESTAMP '2017-01-05 11:00', TIMESTAMP '2017-01-06 11:00', 2, TIMESTAMP '2017-01-05 11:00'),
-  (2, 2, 2, null, -1, 'alarm2', TIMESTAMP '2017-01-08 11:00', TIMESTAMP '2017-01-09 11:00', 3, TIMESTAMP '2017-01-05 11:00'),
-  (3, 3, 3, null, -1, 'alarm3', TIMESTAMP '2017-01-10 11:00', TIMESTAMP '2017-01-11 11:00', 1, TIMESTAMP '2017-01-05 11:00'),
-  (4, 4, 4, null, -1, 'alarm4', TIMESTAMP '2017-01-13 11:00', TIMESTAMP '2017-01-14 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
-  (5, 5, 5, null, -1, 'alarm5', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
-  (1, 1, 1, 1, -1, 'alarm6', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
-  (6, 1, 1, 1, -1, 'alarm7', TIMESTAMP '2017-01-16 11:00', TIMESTAMP '2017-01-16 23:00', 4, TIMESTAMP '2017-01-05 11:00');
+-- INSERT INTO objects
+-- VALUES
+--   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1),
+--   (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
+--   (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
+--   (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1),
+--   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1),
+--   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1);
+--
+-- INSERT INTO metrics
+-- VALUES
+--   (DEFAULT, 1, NULL, 1, 1),
+--   (DEFAULT, 1, NULL, 2, 1),
+--   (DEFAULT, 2, NULL, 1, 1),
+--   (DEFAULT, 3, NULL, 2, 1),
+--   (DEFAULT, 4, NULL, 2, 1),
+--   (DEFAULT, 5, NULL, 1, 2),
+--   (DEFAULT, 6, NULL, 1, 2),
+--   (DEFAULT, 7, NULL, 1, 3),
+--   (DEFAULT, 8, NULL, 1, 3),
+--   (DEFAULT, 1, NULL, 2, 1),
+--   (DEFAULT, 10, NULL, 1, 1),
+--   (DEFAULT, 11, NULL, 2, 1);
+--
+--
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 1);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    50 + (random() * 35) :: DECIMAL, 2);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 3);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    50 + (random() * 35) :: DECIMAL, 4);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    50 + (random() * 35) :: DECIMAL, 5);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 6);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 7);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 8);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 9);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    15 + (random() * 10) :: DECIMAL, 11);
+-- INSERT INTO metrics_history
+-- VALUES
+--   (DEFAULT, generate_series(TIMESTAMP '2017-01-01 00:00', TIMESTAMP '2017-01-20 00:00', INTERVAL '5 min'),
+--    50 + (random() * 35) :: DECIMAL, 12);
+--
+--
+--
+-- INSERT INTO public.events
+--   (object_id, event_type, smart_home_id)
+-- VALUES
+--   (1, 'type', 1),
+--   (2, 'type', 1),
+--   (3, 'type', 1),
+--   (4, 'type', 1),
+--   (5, 'type', 1),
+--   (6, 'type', 1);
+--
+-- INSERT INTO public.events_history (event_id, read_date, event_description, severity)
+-- VALUES
+--   (1, TIMESTAMP '2017-01-01 11:00', '', 2),
+--   (1, TIMESTAMP '2017-01-02 11:00', '', 3),
+--   (1, TIMESTAMP '2017-01-03 11:00', '', 3),
+--   (1, TIMESTAMP '2017-01-04 11:00', '', 4),
+--   (1, TIMESTAMP '2017-01-05 11:00', '', 2),
+--   (2, TIMESTAMP '2017-01-01 11:00', '', 2),
+--   (2, TIMESTAMP '2017-01-02 11:00', '', 3),
+--   (2, TIMESTAMP '2017-01-03 11:00', '', 3),
+--   (2, TIMESTAMP '2017-01-04 11:00', '', 3),
+--   (3, TIMESTAMP '2017-01-01 11:00', '', 2),
+--   (3, TIMESTAMP '2017-01-02 11:00', '', 3),
+--   (3, TIMESTAMP '2017-01-03 11:00', '', 3),
+--   (3, TIMESTAMP '2017-01-04 11:00', '', 4),
+--   (3, TIMESTAMP '2017-01-05 11:00', '', 1),
+--   (4, TIMESTAMP '2017-01-01 11:00', '', 2),
+--   (4, TIMESTAMP '2017-01-02 11:00', '', 3),
+--   (4, TIMESTAMP '2017-01-03 11:00', '', 3),
+--   (4, TIMESTAMP '2017-01-04 11:00', '', 4),
+--   (5, TIMESTAMP '2017-01-01 11:00', '', 2),
+--   (5, TIMESTAMP '2017-01-02 11:00', '', 3),
+--   (5, TIMESTAMP '2017-01-03 11:00', '', 3),
+--   (5, TIMESTAMP '2017-01-04 11:00', '', 4);
+--
+--
+-- INSERT INTO public.alarms
+--   (event_id, object_id, spec_id, parent_alarm_id, cleared_user_id, alarm_name, start_time, end_time, severity, severity_change_time)
+-- VALUES
+--   (1, 1, 1, null, -1, 'alarm1', TIMESTAMP '2017-01-05 11:00', TIMESTAMP '2017-01-06 11:00', 2, TIMESTAMP '2017-01-05 11:00'),
+--   (2, 2, 2, null, -1, 'alarm2', TIMESTAMP '2017-01-08 11:00', TIMESTAMP '2017-01-09 11:00', 3, TIMESTAMP '2017-01-05 11:00'),
+--   (3, 3, 3, null, -1, 'alarm3', TIMESTAMP '2017-01-10 11:00', TIMESTAMP '2017-01-11 11:00', 1, TIMESTAMP '2017-01-05 11:00'),
+--   (4, 4, 4, null, -1, 'alarm4', TIMESTAMP '2017-01-13 11:00', TIMESTAMP '2017-01-14 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+--   (5, 5, 5, null, -1, 'alarm5', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+--   (1, 1, 1, 1, -1, 'alarm6', TIMESTAMP '2017-01-15 11:00', TIMESTAMP '2017-01-16 11:00', 4, TIMESTAMP '2017-01-05 11:00'),
+--   (6, 1, 1, 1, -1, 'alarm7', TIMESTAMP '2017-01-16 11:00', TIMESTAMP '2017-01-16 23:00', 4, TIMESTAMP '2017-01-05 11:00');
