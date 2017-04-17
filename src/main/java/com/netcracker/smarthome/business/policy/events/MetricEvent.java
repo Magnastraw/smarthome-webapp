@@ -11,8 +11,8 @@ public class MetricEvent extends Event {
     public MetricEvent() {
     }
 
-    public MetricEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, double value, MetricSpec spec) {
-        super(type, object, subobject, registryDate, spec);
+    public MetricEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, MetricSpec spec, long dbEventId, double value) {
+        super(type, object, subobject, registryDate, spec, dbEventId);
         this.value = value;
     }
 

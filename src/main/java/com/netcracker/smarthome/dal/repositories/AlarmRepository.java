@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.entities.Event;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

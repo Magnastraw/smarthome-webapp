@@ -14,16 +14,18 @@ public abstract class Event implements Serializable {
     private SmartObject subobject;
     private Timestamp registryDate;
     private Spec spec;
+    private com.netcracker.smarthome.model.entities.Event dbEvent;
 
     public Event() {
     }
 
-    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec) {
+    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec, com.netcracker.smarthome.model.entities.Event dbEvent) {
         this.type = type;
         this.object = object;
         this.subobject = subobject;
         this.registryDate = registryDate;
         this.spec = spec;
+        this.dbEvent = dbEvent;
     }
 
     public EventType getType() {
@@ -64,6 +66,14 @@ public abstract class Event implements Serializable {
 
     public void setSpec(Spec spec) {
         this.spec = spec;
+    }
+
+    public com.netcracker.smarthome.model.entities.Event getDbEvent() {
+        return dbEvent;
+    }
+
+    public void setDbEvent(com.netcracker.smarthome.model.entities.Event dbEvent) {
+        this.dbEvent = dbEvent;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,9 +16,20 @@ public class EventHistory implements Serializable {
     private long historyId;
     private Timestamp readDate;
     private String eventDescription;
-    private int severity;
+    private AlarmSeverity severity;
     private String eventParameters;
     private Event event;
+
+    public EventHistory() {
+    }
+
+    public EventHistory(Timestamp readDate, String eventDescription, AlarmSeverity severity, String eventParameters, Event event) {
+        this.readDate = readDate;
+        this.eventDescription = eventDescription;
+        this.severity = severity;
+        this.eventParameters = eventParameters;
+        this.event = event;
+    }
 
     @Id
     @Column(name = "history_id", nullable = false)
@@ -51,13 +63,13 @@ public class EventHistory implements Serializable {
         this.eventDescription = eventDescription;
     }
 
-    @Basic
+    @Enumerated
     @Column(name = "severity", nullable = false)
-    public int getSeverity() {
+    public AlarmSeverity getSeverity() {
         return severity;
     }
 
-    public void setSeverity(int severity) {
+    public void setSeverity(AlarmSeverity severity) {
         this.severity = severity;
     }
 

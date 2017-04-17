@@ -4,24 +4,22 @@ import com.netcracker.smarthome.business.MetricService;
 import com.netcracker.smarthome.business.policy.events.Event;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
+
+import java.util.HashMap;
 
 public abstract class MetricCondition implements Condition {
     private MetricService service;
-    private MetricSpec metric;
-    private SmartObject object;
-    private Policy policy;
+    private long metric;
+    private long policy;
+    private long object;
 
     public MetricCondition() {
     }
 
-    public MetricCondition(MetricService service, MetricSpec metric, SmartObject object, Policy policy) {
-        this.service = service;
-        this.metric = metric;
-        this.object = object;
-        this.policy = policy;
+    public MetricCondition(HashMap<String, String> params) {
+        this.metric = Long.parseLong(params.get("metric"));
+        this.object = params.containsKey("object") ? Long.parseLong(params.get("object")) : -1;
+        this.policy = Long.parseLong(params.get("policy"));
     }
 
     public boolean evaluate(Event event) {
@@ -33,17 +31,17 @@ public abstract class MetricCondition implements Condition {
     }
 
     private boolean checkMatching(Event event) {
-        return event.getType().equals(EventType.METRIC) && metric.equals(event.getSpec()) && (!isInline() || object.equals(event.getSubobject()));
+        return event.getType().equals(EventType.METRIC) && metric == event.getSpec().getSpecId() && (!isInline() || object == event.getSubobject().getSmartObjectId());
     }
 
     private double loadLastMetricValue() {
         if (isInline())
-            return service.getLastMetricValue(object, metric);
-        return service.getLastMetricValue(policy, metric);
+            return service.getLastMetricValueByObject(object, metric);
+        return service.getLastMetricValueByPolicy(policy, metric);
     }
 
     private boolean isInline() {
-        return object != null;
+        return object > 0;
     }
 
     protected abstract boolean evaluate(double value);

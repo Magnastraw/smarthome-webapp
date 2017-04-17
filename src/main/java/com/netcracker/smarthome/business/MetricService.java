@@ -1,9 +1,6 @@
 package com.netcracker.smarthome.business;
 
 import com.netcracker.smarthome.dal.repositories.MetricRepository;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +15,12 @@ public class MetricService {
     }
 
     @Transactional
-    public Double getLastMetricValue(SmartObject object, MetricSpec spec) {
-        return metricRepository.getLastMetricValue(object, spec);
+    public Double getLastMetricValueByObject(long objectId, long specId) {
+        return metricRepository.getLastMetricValueByObject(objectId, specId);
     }
 
     @Transactional
-    public Double getLastMetricValue(Policy policy, MetricSpec spec) {
-        return metricRepository.getLastMetricValue(policy, spec);
+    public Double getLastMetricValueByPolicy(long policyId, long specId) {
+        return metricRepository.getLastMetricValueByObject(policyId, specId);
     }
 }

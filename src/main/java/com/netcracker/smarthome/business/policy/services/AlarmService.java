@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.business.policy.services;
 
 import com.netcracker.smarthome.business.policy.events.AlarmEvent;
+import com.netcracker.smarthome.business.policy.events.Event;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.UserRepository;
@@ -77,7 +78,7 @@ public class AlarmService {
     private List<AlarmEvent> convertToPolicyAlarms(List<Alarm> alarms) {
         List<AlarmEvent> result = new ArrayList<AlarmEvent>();
         for (Alarm alarm : alarms) {
-            AlarmEvent alarmEvent = new AlarmEvent(EventType.ALARM, alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
+            AlarmEvent alarmEvent = new AlarmEvent(EventType.ALARM, alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getEvent().getEventId(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
             result.add(alarmEvent);
         }
         return result;

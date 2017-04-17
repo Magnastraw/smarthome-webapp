@@ -1,10 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import com.netcracker.smarthome.business.MetricService;
-import com.netcracker.smarthome.dal.repositories.MetricRepository;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import java.util.HashMap;
 
 public class NonstrictRangeCondition extends MetricCondition {
     private double minValue, maxValue;
@@ -12,10 +8,10 @@ public class NonstrictRangeCondition extends MetricCondition {
     public NonstrictRangeCondition() {
     }
 
-    public NonstrictRangeCondition(MetricService service, MetricSpec metric, SmartObject object, Policy policy, double minValue, double maxValue) {
-        super(service, metric, object, policy);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    public NonstrictRangeCondition(HashMap<String, String> params) {
+        super(params);
+        this.minValue = Double.parseDouble(params.get("minValue"));
+        this.maxValue = Double.parseDouble(params.get("maxValue"));
     }
 
     public NonstrictRangeCondition(double minValue, double maxValue) {
