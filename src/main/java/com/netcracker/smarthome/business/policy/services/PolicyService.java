@@ -1,20 +1,23 @@
 package com.netcracker.smarthome.business.policy.services;
 
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
-import com.netcracker.smarthome.model.entities.*;
-import com.netcracker.smarthome.model.enums.PolicyStatus;
-import org.springframework.beans.factory.annotation.*;
+import com.netcracker.smarthome.model.entities.Catalog;
+import com.netcracker.smarthome.model.entities.Policy;
+import com.netcracker.smarthome.model.entities.SmartObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PolicyService {
     private final PolicyRepository policyRepository;
 
     @Autowired
-    public  PolicyService (PolicyRepository policyRepository) {
+    public PolicyService(PolicyRepository policyRepository) {
         this.policyRepository = policyRepository;
     }
 
@@ -39,27 +42,23 @@ public class PolicyService {
     }
 
     @Transactional
-    public List<Policy> getActivePoliciesByObject(SmartObject object) {
-        return policyRepository.getActivePoliciesByObject(object);
+    public List<SmartObject> getObjectsWithActivePolicies() {
+        List<SmartObject> objects = policyRepository.getObjectsWithActivePolicies();
+        Set<SmartObject> inlineObjects = new HashSet<SmartObject>(policyRepository.getActivePoliciesInlineObjects());
+        for (SmartObject object : inlineObjects
+                ) {
+            if (objects.contains(object))
+                objects.get(objects.indexOf(object)).getAssignedPolicies().addAll(policyRepository.getActivePoliciesByInlineObject(object));
+            else {
+                object.setAssignedPolicies(new HashSet<Policy>(policyRepository.getActivePoliciesByInlineObject(object)));
+                objects.add(object);
+            }
+        }
+        return objects;
     }
 
     @Transactional
-    public List<Policy> getActivePolicies() {
-        return policyRepository.getPoliciesByStatus(PolicyStatus.ACTIVE);
-    }
-
-    @Transactional
-    public List<SmartObject> getObjectsByPolicy(Policy policy) {
-        return policyRepository.getObjectsByPolicy(policy);
-    }
-
-    @Transactional
-     public List<SmartObject> getObjectsWithActivePolicies() {
-        return policyRepository.getObjectsWithActivePolicies();
-     }
-
-     @Transactional
-     public List<Policy> getPoliciesByCatalog(Catalog catalog) {
+    public List<Policy> getPoliciesByCatalog(Catalog catalog) {
         return policyRepository.getPoliciesByCatalog(catalog);
-     }
+    }
 }

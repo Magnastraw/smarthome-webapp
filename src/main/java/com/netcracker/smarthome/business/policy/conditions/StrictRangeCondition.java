@@ -1,9 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import com.netcracker.smarthome.business.MetricService;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import java.util.HashMap;
 
 public class StrictRangeCondition extends MetricCondition {
     private double minValue, maxValue;
@@ -11,10 +8,10 @@ public class StrictRangeCondition extends MetricCondition {
     public StrictRangeCondition() {
     }
 
-    public StrictRangeCondition(MetricService service, MetricSpec metric, SmartObject object, Policy policy, double minValue, double maxValue) {
-        super(service, metric, object, policy);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    public StrictRangeCondition(HashMap<String, String> params) {
+        super(params);
+        this.minValue = Double.parseDouble(params.get("minValue"));
+        this.maxValue = Double.parseDouble(params.get("maxValue"));
     }
 
     public StrictRangeCondition(double minValue, double maxValue) {

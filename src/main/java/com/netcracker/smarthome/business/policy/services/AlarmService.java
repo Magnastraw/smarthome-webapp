@@ -1,15 +1,17 @@
 package com.netcracker.smarthome.business.policy.services;
 
-import com.netcracker.smarthome.business.policy.events.AlarmEvent;
-import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
+import com.netcracker.smarthome.dal.repositories.AlarmSpecRepository;
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.entities.AlarmSpec;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,69 +19,64 @@ import java.util.List;
 public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final UserRepository userRepository;
+    private final AlarmSpecRepository alarmSpecRepository;
 
     @Autowired
-    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository) {
+    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, AlarmSpecRepository alarmSpecRepository) {
         this.alarmRepository = alarmRepository;
         this.userRepository = userRepository;
-    }
-
-    @Transactional
-    public void deleteAlarm(long alarmId) {
-        alarmRepository.delete(alarmId);
-    }
-
-    @Transactional
-    public void createAlarm(Alarm alarm) {
-        alarmRepository.save(alarm);
-    }
-
-    @Transactional
-    public Alarm updateAlarm(Alarm alarm) {
-        return alarmRepository.update(alarm);
+        this.alarmSpecRepository = alarmSpecRepository;
     }
 
     @Transactional
     public void clearAll(List<Alarm> alarms, long clearedUserId) {
-        List<Alarm> alarmsWithChildren = new LinkedList<Alarm>();
-        for (Alarm alarm : alarms) {
-            List<Alarm> children = alarmRepository.getChildrenAlarmsRecursively(alarm);
-            alarmsWithChildren.addAll(children);
-            alarmsWithChildren.add(alarm);
-        }
-//        List<AlarmEvent> policyAlarms = convertToPolicyAlarms(alarmsWithChildren);
-//        for (AlarmEvent alarmEvent : policyAlarms) {
-//            //send to PolicyEngine
-//        }
-        for (Alarm alarm : alarmsWithChildren) {
-            alarm.setClearedUserId(clearedUserId);
-            updateAlarm(alarm);
-        }
+        Timestamp clearTime = Timestamp.valueOf(LocalDateTime.now());
+        for (Alarm alarm : alarms)
+            clear(alarm, clearedUserId, clearTime);
     }
 
     @Transactional
-    public void clear(Alarm alarmToClear, long clearedUserId) {
+    public void clearAlarm(Alarm alarmProps, boolean withChildren, boolean bySystem) {
+        Alarm existingAlarm = alarmRepository.get(alarmProps.getObject(), alarmProps.getSubobject());
+        if (existingAlarm == null)
+            return;
+        long clearedUserId = bySystem ? userRepository.getByEmail("system@system.com").getUserId() : alarmProps.getClearedUserId();
+        Timestamp clearTime = Timestamp.valueOf(LocalDateTime.now());
+        if (withChildren)
+            clearWithChildren(existingAlarm, clearedUserId, clearTime);
+        else
+            clear(existingAlarm, clearedUserId, clearTime);
+    }
+
+    private void clear(Alarm alarm, long clearedUserId, Timestamp clearTime) {
+        alarm.setClearedUserId(clearedUserId);
+        alarm.setSeverity(AlarmSeverity.CLEARED);
+        alarm.setEndTime(clearTime);
+        alarmRepository.update(alarm);
+    }
+
+    private void clearWithChildren(Alarm alarmToClear, long clearedUserId, Timestamp clearTime) {
         List<Alarm> alarmWithChildren = new LinkedList<Alarm>();
         alarmWithChildren.add(alarmToClear);
-        alarmWithChildren.addAll(alarmRepository.getChildrenAlarmsRecursively(alarmToClear));
-        for (Alarm alarm : alarmWithChildren) {
-            alarm.setClearedUserId(clearedUserId);
-            updateAlarm(alarm);
-        }
+        alarmWithChildren.addAll(alarmRepository.getChildAlarmsRecursively(alarmToClear));
+        for (Alarm alarm : alarmWithChildren)
+            clear(alarm, clearedUserId, clearTime);
     }
 
     @Transactional
-    public void clearBySystem(Alarm alarmToClear) {
-        long clearedUserId = userRepository.getByEmail("system@system.com").getUserId();
-        clear(alarmToClear, clearedUserId);
+    public void saveRaisedAlarm(Alarm alarm) {
+        Alarm existingAlarm = alarmRepository.get(alarm.getObject(), alarm.getSubobject());
+        if (existingAlarm != null) {
+            alarm.setAlarmId(existingAlarm.getAlarmId());
+            if (existingAlarm.getSeverity() != AlarmSeverity.CLEARED) {
+                alarm.setStartTime(existingAlarm.getStartTime());
+            }
+        }
+        alarmRepository.update(alarm);
     }
 
-    private List<AlarmEvent> convertToPolicyAlarms(List<Alarm> alarms) {
-        List<AlarmEvent> result = new ArrayList<AlarmEvent>();
-        for (Alarm alarm : alarms) {
-            AlarmEvent alarmEvent = new AlarmEvent(EventType.ALARM, alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
-            result.add(alarmEvent);
-        }
-        return result;
+    @Transactional(readOnly = true)
+    public AlarmSpec getSpecById(long specId) {
+        return alarmSpecRepository.get(specId);
     }
 }

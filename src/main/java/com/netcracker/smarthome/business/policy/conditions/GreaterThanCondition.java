@@ -1,9 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import com.netcracker.smarthome.business.MetricService;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import java.util.HashMap;
 
 public class GreaterThanCondition extends MetricCondition {
     private double value;
@@ -11,9 +8,9 @@ public class GreaterThanCondition extends MetricCondition {
     public GreaterThanCondition() {
     }
 
-    public GreaterThanCondition(MetricService service, MetricSpec metric, SmartObject object, Policy policy, double value) {
-        super(service, metric, object, policy);
-        this.value = value;
+    public GreaterThanCondition(HashMap<String, String> params) {
+        super(params);
+        this.value = Double.parseDouble(params.get("value"));
     }
 
     protected boolean evaluate(double value) {

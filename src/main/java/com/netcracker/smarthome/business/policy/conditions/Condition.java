@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import com.netcracker.smarthome.business.policy.events.Event;
+import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 
 public interface Condition {
-    boolean evaluate(Event event);
+    boolean evaluate(PolicyEvent event);
 }

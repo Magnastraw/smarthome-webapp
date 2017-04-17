@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.policy.events;
 
+import com.netcracker.smarthome.model.entities.Event;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.Spec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -8,22 +9,24 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public abstract class Event implements Serializable {
+public abstract class PolicyEvent implements Serializable {
     private EventType type;
     private SmartObject object;
     private SmartObject subobject;
     private Timestamp registryDate;
     private Spec spec;
+    private Event dbEvent;
 
-    public Event() {
+    public PolicyEvent() {
     }
 
-    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec) {
+    public PolicyEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec, Event dbEvent) {
         this.type = type;
         this.object = object;
         this.subobject = subobject;
         this.registryDate = registryDate;
         this.spec = spec;
+        this.dbEvent = dbEvent;
     }
 
     public EventType getType() {
@@ -66,13 +69,21 @@ public abstract class Event implements Serializable {
         this.spec = spec;
     }
 
+    public Event getDbEvent() {
+        return dbEvent;
+    }
+
+    public void setDbEvent(Event dbEvent) {
+        this.dbEvent = dbEvent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof Event)) return false;
+        if (!(o instanceof PolicyEvent)) return false;
 
-        Event event = (Event) o;
+        PolicyEvent event = (PolicyEvent) o;
 
         return new EqualsBuilder()
                 .append(getType(), event.getType())

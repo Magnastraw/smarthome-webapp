@@ -1,8 +1,6 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Metric;
-import com.netcracker.smarthome.model.entities.MetricSpec;
-import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.stereotype.Repository;
 
@@ -15,23 +13,23 @@ public class MetricRepository extends EntityRepository<Metric> {
         super(Metric.class);
     }
 
-    public Double getLastMetricValue(SmartObject object, MetricSpec spec) {
-        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec=:spec and m.subobject=:object");
-        query.setParameter("spec", spec);
-        query.setParameter("object", object);
+    public Double getLastMetricValueByObject(long objectId, long specId) {
+        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject.smartObjectId=:object or m.object.smartObjectId=:object)");
+        query.setParameter("spec", specId);
+        query.setParameter("object", objectId);
         Object result = query.getSingleResult();
         return (Double) result;
     }
 
-    public Double getLastMetricValue(Policy policy, MetricSpec spec) {
-        Query query = getManager().createQuery("select a.object from Policy p join p.assignments a where p=:policy");
-        query.setParameter("policy", policy);
+    public Double getLastMetricValueByPolicy(long policyId, long specId) {
+        Query query = getManager().createQuery("select obj from Policy p join p.assignedObjects obj where p.policyId=:policy");
+        query.setParameter("policy", policyId);
         List<SmartObject> assignedObjects = query.getResultList();
-        return (Double) getLastMetricValue(assignedObjects, spec);
+        return getLastMetricValue(assignedObjects, specId);
     }
 
-    private Double getLastMetricValue(List<SmartObject> objects, MetricSpec spec) {
-        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec=:spec and m.subobject in :objects");
+    private Double getLastMetricValue(List<SmartObject> objects, long spec) {
+        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject in :objects or m.object in :objects)");
         query.setParameter("spec", spec);
         query.setParameter("objects", objects);
         Object result = query.getSingleResult();

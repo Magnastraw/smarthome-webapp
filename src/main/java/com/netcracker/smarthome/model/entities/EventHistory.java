@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,16 +14,27 @@ import java.sql.Timestamp;
 @Table(name = "events_history", schema = "public", catalog = "smarthome_db")
 public class EventHistory implements Serializable {
     private long historyId;
-    private Timestamp readDate;
+    private Timestamp regDate;
     private String eventDescription;
-    private int severity;
+    private AlarmSeverity severity;
     private String eventParameters;
     private Event event;
 
+    public EventHistory() {
+    }
+
+    public EventHistory(Timestamp regDate, String eventDescription, AlarmSeverity severity, String eventParameters, Event event) {
+        this.regDate = regDate;
+        this.eventDescription = eventDescription;
+        this.severity = severity;
+        this.eventParameters = eventParameters;
+        this.event = event;
+    }
+
     @Id
     @Column(name = "history_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_histiory_seq")
-    @SequenceGenerator(name = "ev_histiory_seq", sequenceName = "events_history_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_history_seq")
+    @SequenceGenerator(name = "ev_history_seq", sequenceName = "events_history_id_seq", allocationSize = 1)
     public long getHistoryId() {
         return historyId;
     }
@@ -33,12 +45,12 @@ public class EventHistory implements Serializable {
 
     @Basic
     @Column(name = "read_date", nullable = false)
-    public Timestamp getReadDate() {
-        return readDate;
+    public Timestamp getRegDate() {
+        return regDate;
     }
 
-    public void setReadDate(Timestamp readDate) {
-        this.readDate = readDate;
+    public void setRegDate(Timestamp readDate) {
+        this.regDate = readDate;
     }
 
     @Basic
@@ -51,13 +63,13 @@ public class EventHistory implements Serializable {
         this.eventDescription = eventDescription;
     }
 
-    @Basic
+    @Enumerated
     @Column(name = "severity", nullable = false)
-    public int getSeverity() {
+    public AlarmSeverity getSeverity() {
         return severity;
     }
 
-    public void setSeverity(int severity) {
+    public void setSeverity(AlarmSeverity severity) {
         this.severity = severity;
     }
 
@@ -105,7 +117,7 @@ public class EventHistory implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("historyId", getHistoryId())
-                .append("readDate", getReadDate())
+                .append("readDate", getRegDate())
                 .append("eventDescription", getEventDescription())
                 .append("severity", getSeverity())
                 .append("eventParameters", getEventParameters())

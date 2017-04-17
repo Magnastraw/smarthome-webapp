@@ -58,7 +58,7 @@ public class ConditionParam implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "node_id", referencedColumnName = "node_id", nullable = false)
+    @JoinColumn(name = "condition_id", referencedColumnName = "node_id", nullable = false)
     public Condition getCondition() {
         return condition;
     }
