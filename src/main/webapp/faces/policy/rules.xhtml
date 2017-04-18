@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<div>
+    <h2 class="page-name">#{policiesBean.selectedItem.name}: rules</h2>
+</div>
+<p:dataTable id="rulesTable" var="item" value="#{policiesBean.tableItems}" widgetVar="rulesTable"
+             paginator="true" rows="10" rowsPerPageTemplate="5,10"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+             emptyMessage="No rules.">
+    <f:facet name="header">
+        <div class="rule-btns">
+            <p:commandButton value="New rule" icon="fa fa-plus"
+                             update=":centerForm"
+                             oncomplete="PF('saveItemDialog').show()"
+                             styleClass="left-btn">
+                <f:setPropertyActionListener value="#{rulesBean.defaultRule}"
+                                             target="#{rulesBean.selectedRule}"/>
+            </p:commandButton>
+        </div>
+    </f:facet>
+    <p:column headerText="Actions" styleClass="btns-column"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <p:commandLink rendered="#{!item.catalog}"
+                       title="Details"
+                       styleClass="fa fa-eye icon-item"/>
+        <p:commandLink update=":centerForm"
+                       oncomplete="PF('saveItemDialog').show()"
+                       title="Edit"
+                       styleClass="fa fa-edit icon-item">
+            <f:setPropertyActionListener value="#{item}" target="#{policiesBean.selectedItem}"/>
+        </p:commandLink>
+        <p:commandLink action="#{policiesBean.deleteItem}"
+                       update=":centerForm"
+                       title="Delete"
+                       styleClass="fa fa-remove icon-item">
+            <p:confirm header="Confirmation" message="Are you sure want to delete item?"/>
+            <f:setPropertyActionListener value="#{item}" target="#{policiesBean.selectedItem}"/>
+        </p:commandLink>
+    </p:column>
+    <p:column headerText="Name" styleClass="name-column"
+              sortBy="#{item.name}"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <h:outputText value="#{item.name}" rendered="#{!item.catalog}"/>
+        <h:outputText styleClass="fa fa-folder-open icon-item" rendered="#{item.catalog}"/>
+        <p:commandLink value="#{item.name}"
+                       actionListener="#{policiesBean.changeCatalog(item.item)}"
+                       update=":centerForm"
+                       rendered="#{item.catalog}"
+                       style="text-decoration: none;"/>
+    </p:column>
+    <p:column headerText="Status" styleClass="status-column"
+              sortBy="#{item.status.toString()}"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <h:outputText value="#{item.status.toString()}"/>
+    </p:column>
+</p:dataTable>
+</html>

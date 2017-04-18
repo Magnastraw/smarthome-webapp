@@ -2,7 +2,6 @@ package com.netcracker.smarthome.business.policy.events;
 
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
-import com.netcracker.smarthome.model.entities.Spec;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 
 import java.sql.Timestamp;
@@ -13,8 +12,8 @@ public class EventEvent extends Event {
     public EventEvent() {
     }
 
-    public EventEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, long dbEventId, AlarmSeverity severity) {
-        super(type, object, subobject, registryDate, spec, dbEventId);
+    public EventEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, com.netcracker.smarthome.model.entities.Event dbEvent, AlarmSeverity severity) {
+        super(type, object, subobject, registryDate, spec, dbEvent);
         this.severity = severity;
     }
 

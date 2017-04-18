@@ -14,13 +14,13 @@ public class AlarmEvent extends EventEvent {
     }
 
     public AlarmEvent(Event causalEvent, AlarmSpec spec, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(causalEvent.getType(), causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, causalEvent.getDbEventId(), severity);
+        super(causalEvent.getType(), causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, causalEvent.getDbEvent(), severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }
 
-    public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, long dbEventId, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(type, object, subobject, registryDate, spec, dbEventId, severity);
+    public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, com.netcracker.smarthome.model.entities.Event dbEvent, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
+        super(type, object, subobject, registryDate, spec, dbEvent, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }

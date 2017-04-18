@@ -19,6 +19,12 @@ public class Rule implements Serializable {
     private Policy policy;
     private Condition rootCondition;
 
+    public Rule(){}
+    public Rule(String name, Policy policy) {
+        this.name = name;
+        this.policy = policy;
+    }
+
     @Id
     @Column(name = "rule_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rule_seq")

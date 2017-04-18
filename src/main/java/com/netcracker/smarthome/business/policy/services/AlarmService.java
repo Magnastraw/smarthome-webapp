@@ -6,6 +6,7 @@ import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,14 +49,15 @@ public class AlarmService {
             alarmsWithChildren.addAll(children);
             alarmsWithChildren.add(alarm);
         }
-//        List<AlarmEvent> policyAlarms = convertToPolicyAlarms(alarmsWithChildren);
-//        for (AlarmEvent alarmEvent : policyAlarms) {
-//            //send to PolicyEngine
-//        }
         for (Alarm alarm : alarmsWithChildren) {
             alarm.setClearedUserId(clearedUserId);
+            alarm.setSeverity(AlarmSeverity.CLEARED);
             updateAlarm(alarm);
         }
+//        List<AlarmEvent> policyAlarms = convertToPolicyAlarms(alarmsWithChildren);
+//        for (AlarmEvent alarmEvent : policyAlarms) {
+//            //send to PolicyEngine to check
+//        }
     }
 
     @Transactional
@@ -65,8 +67,13 @@ public class AlarmService {
         alarmWithChildren.addAll(alarmRepository.getChildrenAlarmsRecursively(alarmToClear));
         for (Alarm alarm : alarmWithChildren) {
             alarm.setClearedUserId(clearedUserId);
+            alarm.setSeverity(AlarmSeverity.CLEARED);
             updateAlarm(alarm);
         }
+//      List<AlarmEvent> policyAlarms = convertToPolicyAlarms(alarmsWithChildren);
+//        for (AlarmEvent alarmEvent : policyAlarms) {
+//            //send to PolicyEngine to check
+//        }
     }
 
     @Transactional
@@ -78,7 +85,7 @@ public class AlarmService {
     private List<AlarmEvent> convertToPolicyAlarms(List<Alarm> alarms) {
         List<AlarmEvent> result = new ArrayList<AlarmEvent>();
         for (Alarm alarm : alarms) {
-            AlarmEvent alarmEvent = new AlarmEvent(EventType.ALARM, alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getEvent().getEventId(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
+            AlarmEvent alarmEvent = new AlarmEvent(EventType.ALARM, alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getEvent(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
             result.add(alarmEvent);
         }
         return result;
