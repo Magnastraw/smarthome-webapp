@@ -290,7 +290,7 @@ CREATE TABLE public.events (
   event_id BIGINT NOT NULL DEFAULT nextval('public.events_event_id_seq'),
   object_id BIGINT NOT NULL,
   subobject_id BIGINT,
-  event_type VARCHAR NOT NULL,
+  event_type BIGINT,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT events_pk PRIMARY KEY (event_id)
 );
@@ -307,9 +307,9 @@ CREATE TABLE public.alarms (
   subobject_id BIGINT,
   spec_id BIGINT NOT NULL,
   parent_alarm_id BIGINT,
-  cleared_user_id BIGINT NOT NULL,
+  cleared_user_id BIGINT,
   alarm_name VARCHAR NOT NULL,
-  alarm_description VARCHAR DEFAULT '' NOT NULL,
+  alarm_description VARCHAR,
   start_time TIMESTAMP,
   end_time TIMESTAMP,
   severity INTEGER NOT NULL,
@@ -326,7 +326,7 @@ CREATE TABLE public.events_history (
   history_id BIGINT NOT NULL DEFAULT nextval('public.events_history_id_seq'),
   event_id BIGINT NOT NULL,
   read_date TIMESTAMP NOT NULL,
-  event_description VARCHAR NOT NULL,
+  event_description VARCHAR,
   severity INTEGER NOT NULL,
   event_parameters VARCHAR,
   CONSTRAINT events_history_pk PRIMARY KEY (history_id)
@@ -356,7 +356,7 @@ CREATE TABLE public.notifications (
   smart_home_id BIGINT NOT NULL,
   notification_name VARCHAR NOT NULL,
   notification_status INTEGER NOT NULL,
-  registryDate TIME NOT NULL,
+  time TIME NOT NULL,
   require_confirm BOOLEAN NOT NULL,
   channel INTEGER NOT NULL,
   alarm_id BIGINT,
@@ -394,6 +394,37 @@ CREATE TABLE public.home_params (
 
 
 ALTER SEQUENCE public.home_params_param_id_seq OWNED BY public.home_params.param_id;
+
+CREATE SEQUENCE public.dashboards_dashboard_id_seq;
+
+CREATE TABLE public.dashboards (
+  dashboard_id BIGINT NOT NULL DEFAULT nextval('public.dashboards_dashboard_id_seq'),
+  dashboard_name VARCHAR NOT NULL,
+  smart_home_id BIGINT NOT NULL,
+  CONSTRAINT dashboards_pk PRIMARY KEY (dashboard_id)
+);
+
+
+ALTER SEQUENCE public.dashboards_dashboard_id_seq OWNED BY public.dashboards.dashboard_id;
+
+CREATE SEQUENCE public.charts_chart_id_seq;
+
+CREATE TABLE public.charts (
+  chart_id BIGINT NOT NULL DEFAULT nextval('public.charts_chart_id_seq'),
+  chart_option VARCHAR NOT NULL,
+  col BIGINT DEFAULT 1 NOT NULL,
+  row BIGINT DEFAULT 1 NOT NULL,
+  size_x BIGINT DEFAULT 3 NOT NULL,
+  size_y BIGINT DEFAULT 4 NOT NULL,
+  request_option VARCHAR NOT NULL,
+  refresh_interval NUMERIC,
+  dashboard_id BIGINT NOT NULL,
+  CONSTRAINT charts_pk PRIMARY KEY (chart_id)
+);
+
+
+
+ALTER SEQUENCE public.charts_chart_id_seq OWNED BY public.charts.chart_id;
 
 CREATE TABLE public.social_profiles (
   user_id BIGINT NOT NULL,
@@ -743,23 +774,16 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
-
-CREATE TABLE public.objects_specs (
-  smart_object_id BIGINT NOT NULL,
-  spec_id BIGINT NOT NULL,
-  CONSTRAINT objects_specs_pk PRIMARY KEY (smart_object_id)
-);
-
-ALTER TABLE public.objects_specs ADD CONSTRAINT objects_objects_specs_fk
-FOREIGN KEY (smart_object_id)
-REFERENCES public.objects (smart_object_id)
+ALTER TABLE public.dashboards ADD CONSTRAINT smart_homes_dashboards_fk
+FOREIGN KEY (smart_home_id)
+REFERENCES public.smart_homes (smart_home_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE public.objects_specs ADD CONSTRAINT metric_specs_objects_specs_fk
-FOREIGN KEY (spec_id)
-REFERENCES public.metric_specs (spec_id)
+ALTER TABLE public.charts ADD CONSTRAINT dashboards_charts_fk
+FOREIGN KEY (dashboard_id)
+REFERENCES public.dashboards (dashboard_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;

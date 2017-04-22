@@ -42,4 +42,9 @@ public class AlarmSpecService {
         return this.alarmSpecRepository.checkAlarmSpecName(specName, catalogId);
     }
 
+    @Transactional(readOnly = true)
+    public AlarmSpec getAlarmSpec(long specId) {
+        return alarmSpecRepository.get(specId);
+    }
+
 }

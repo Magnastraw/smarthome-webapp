@@ -10,8 +10,8 @@ public class MetricEvent extends Event {
     public MetricEvent() {
     }
 
-    public MetricEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, double value, MetricSpec spec) {
-        super(type, object, subobject, registryDate, spec);
+    public MetricEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, double value, MetricSpec spec, com.netcracker.smarthome.model.entities.Event dbEvent) {
+        super(type, object, subobject, registryDate, spec, dbEvent);
         this.value = value;
     }
 

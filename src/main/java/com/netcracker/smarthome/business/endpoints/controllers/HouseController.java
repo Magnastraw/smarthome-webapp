@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -34,39 +35,48 @@ public class HouseController {
             produces = "application/json")
     public ResponseEntity sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
                                          @RequestBody String json) {
+        LOG.info("POST /house\nBody:\n" + json);
         SmartHome home = homeService.getHomeById(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
+        Map<String,JsonParameter> parameters;
         try {
-            /*List<Map<String,JsonParameter>> parameters = parser.parseParameters(json);
-            for (Map<String,JsonParameter> parameter : parameters) {
-                HomeParam homeParam = new HomeParam();
-                homeParam.setSmartHome(homeService.getHomeById(houseId));
-                for (String parameterName : parameter.keySet()) {
-                    homeParam.setName(parameterName);
-                }
-                homeParam.setValue(parameter.get(homeParam.getName()).getValue());
-                String type = parameter.get(homeParam.getName()).getType();
-                if (type != "")
-                    homeParam.setDataType(dataTypeService.getDataTypeByName(type));
-                else
-                    homeParam.setDataType(dataTypeService.getDataTypeByName("string"));
-                homeService.saveParam(homeParam);
-            }*/
-            Map<String,JsonParameter> parameters = parser.parseParameters(json);
-            HomeParamTransformator paramTransformator = new HomeParamTransformator(dataTypeService, homeService);
-            Iterator iterator = parameters.keySet().iterator();
-            while (iterator.hasNext()) {
-                String paramName = (String)iterator.next();
-                parameters.get(paramName).setName(paramName);
-                parameters.get(paramName).setSmartHomeId(houseId);
-                HomeParam homeParam = paramTransformator.fromJsonEntity(parameters.get(paramName));
-                homeService.saveParam(homeParam);
-            }
-        } catch (Exception ex) {
-            LOG.error("Error during saving of data", ex);
+            parameters = parser.parseParameters(json);
+        } catch (IOException e) {
+            LOG.error("Error during parsing", e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        /*List<Map<String,JsonParameter>> parameters = parser.parseParameters(json);
+        for (Map<String,JsonParameter> parameter : parameters) {
+            HomeParam homeParam = new HomeParam();
+            homeParam.setSmartHome(homeService.getHomeById(houseId));
+            for (String parameterName : parameter.keySet()) {
+                homeParam.setName(parameterName);
+            }
+            homeParam.setValue(parameter.get(homeParam.getName()).getValue());
+            String type = parameter.get(homeParam.getName()).getType();
+            if (type != "")
+                homeParam.setDataType(dataTypeService.getDataTypeByName(type));
+            else
+                homeParam.setDataType(dataTypeService.getDataTypeByName("string"));
+            homeService.saveParam(homeParam);
+        }*/
+
+        HomeParamTransformator paramTransformator = new HomeParamTransformator(dataTypeService, homeService);
+        Iterator iterator = parameters.keySet().iterator();
+        while (iterator.hasNext()) {
+            String paramName = (String)iterator.next();
+            parameters.get(paramName).setName(paramName);
+            parameters.get(paramName).setSmartHomeId(houseId);
+            HomeParam homeParam = paramTransformator.fromJsonEntity(parameters.get(paramName));
+            try {
+                homeService.saveParam(homeParam);
+            } catch (Exception ex) {
+                LOG.error("Error during saving of data", ex);
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
         }
         return new ResponseEntity(HttpStatus.OK);
     }

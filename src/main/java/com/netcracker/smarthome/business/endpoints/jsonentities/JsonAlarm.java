@@ -1,27 +1,29 @@
 package com.netcracker.smarthome.business.endpoints.jsonentities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class JsonAlarm implements Serializable {
     private long objectId;
     private long subobjectId;
-    private long severity;
+    private String severity;
     private Timestamp registryDate;
     private String alarmParameters;
     private long specId;
-    private String eventType;
+    @JsonIgnore
+    private long smartHomeId;
 
     public JsonAlarm() {}
 
-    public JsonAlarm(long objectId, long subobjectId, long severity, Timestamp registryDate, String alarmParameters, long specId, String eventType) {
+    public JsonAlarm(long objectId, long subobjectId, String severity, Timestamp registryDate, String alarmParameters, long specId) {
         this.objectId = objectId;
         this.subobjectId = subobjectId;
         this.severity = severity;
         this.registryDate = registryDate;
         this.alarmParameters = alarmParameters;
         this.specId = specId;
-        this.eventType = eventType;
     }
 
     public long getObjectId() {
@@ -40,11 +42,11 @@ public class JsonAlarm implements Serializable {
         this.subobjectId = subobjectId;
     }
 
-    public long getSeverity() {
+    public String getSeverity() {
         return severity;
     }
 
-    public void setSeverity(long severity) {
+    public void setSeverity(String severity) {
         this.severity = severity;
     }
 
@@ -72,11 +74,11 @@ public class JsonAlarm implements Serializable {
         this.specId = specId;
     }
 
-    public String getEventType() {
-        return eventType;
+    public long getSmartHomeId() {
+        return smartHomeId;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
+    public void setSmartHomeId(long smartHomeId) {
+        this.smartHomeId = smartHomeId;
     }
 }

@@ -27,8 +27,8 @@ public class MetricService {
     }
 
     @Transactional(readOnly = true)
-    public Metric getMetric(long smartHomeId, long smartObjectId, long specId) {
-        return metricRepository.getMetric(smartHomeId, smartObjectId, specId);
+    public Metric getMetric(long smartHomeId, long objectId,  Long subobjectId, long specId) {
+        return metricRepository.getMetric(smartHomeId, objectId, subobjectId, specId);
     }
 
     @Transactional

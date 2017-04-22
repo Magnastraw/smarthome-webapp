@@ -4,7 +4,6 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.Spec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -14,16 +13,18 @@ public abstract class Event implements Serializable {
     private SmartObject subobject;
     private Timestamp registryDate;
     private Spec spec;
+    private com.netcracker.smarthome.model.entities.Event dbEvent;
 
     public Event() {
     }
 
-    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec) {
+    public Event(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, Spec spec, com.netcracker.smarthome.model.entities.Event dbEvent) {
         this.type = type;
         this.object = object;
         this.subobject = subobject;
         this.registryDate = registryDate;
         this.spec = spec;
+        this.dbEvent = dbEvent;
     }
 
     public EventType getType() {
@@ -66,14 +67,19 @@ public abstract class Event implements Serializable {
         this.spec = spec;
     }
 
+    public com.netcracker.smarthome.model.entities.Event getDbEvent() {
+        return dbEvent;
+    }
+
+    public void setDbEvent(com.netcracker.smarthome.model.entities.Event dbEvent) {
+        this.dbEvent = dbEvent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof Event)) return false;
-
         Event event = (Event) o;
-
         return new EqualsBuilder()
                 .append(getType(), event.getType())
                 .append(getObject(), event.getObject())

@@ -28,4 +28,8 @@ public class HomeParamTransformator implements ITransformator<HomeParam, JsonPar
             homeParam.setDataType(dataTypeService.getDataTypeByName("string"));
         return homeParam;
     }
+
+    public JsonParameter toJsonEntity(HomeParam Entity) {
+        throw new UnsupportedOperationException("Not supported");
+    }
 }

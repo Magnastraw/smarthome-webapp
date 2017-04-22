@@ -22,6 +22,11 @@
                 <f:setPropertyActionListener value="#{true}" target="#{homeFormBean.creatingMode}"/>
             </p:menuitem>
         </p:submenu>
+        <p:submenu label="Inventory">
+            <p:menuitem value="Inventory"
+                        action="#{navigationBean.setPageName('inventory')}"
+                        update=":centerForm"/>
+        </p:submenu>
         <p:submenu label="Configure">
             <p:menuitem value="Policy"
                         url="#"/>

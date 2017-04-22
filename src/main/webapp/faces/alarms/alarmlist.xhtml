@@ -41,7 +41,7 @@
             <p:column headerText="Subobject" styleClass="column" sortBy="#{alarm.subobject.name}" filterBy="#{alarm.subobject.name}" filterMatchMode="startsWith" filterStyleClass="filter">
                 <h:outputText value="#{alarm.subobject.name}"/>
             </p:column>
-            <p:column headerText="Start registryDate" styleClass="column-registryDate" sortBy="#{alarm.startTime}" filterBy="#{alarm.startTime}" filterFunction="#{alarmListBean.filterByDate}">
+            <p:column headerText="Start time" styleClass="column" sortBy="#{alarm.startTime}" filterBy="#{alarm.startTime}" filterFunction="#{alarmListBean.filterByDate}">
                 <f:facet name="filter">
                     <p:calendar id="startTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date" timeInput="true" navigator="true" mask="true" showButtonPanel="true">
                         <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
@@ -52,7 +52,7 @@
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>
             </p:column>
-            <p:column headerText="End registryDate" styleClass="column-registryDate" sortBy="#{alarm.endTime}" filterBy="#{alarm.endTime}" filterFunction="#{alarmListBean.filterByDate}">
+            <p:column headerText="End time" styleClass="column" sortBy="#{alarm.endTime}" filterBy="#{alarm.endTime}" filterFunction="#{alarmListBean.filterByDate}">
                 <f:facet name="filter">
                     <p:calendar id="endTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date" timeInput="true" navigator="true" mask="true" showButtonPanel="true">
                         <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
@@ -63,14 +63,14 @@
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>
             </p:column>
-            <p:column headerText="Severity" styleClass="column-registryDate #{alarmListBean.setStyleClass(alarm.severity.ordinal())}" sortBy="#{alarm.severity}" filterBy="#{alarm.severity}">
+            <p:column headerText="Severity" styleClass="column #{alarmListBean.setStyleClass(alarm.severity.ordinal())}" sortBy="#{alarm.severity.ordinal()}" filterBy="#{alarm.severity.name()}">
                 <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('alarmsTable').filter()" styleClass="filter-select">
                         <f:selectItem/>
                         <f:selectItems value="#{alarmListBean.severities}"/>
                     </p:selectOneMenu>
                 </f:facet>
-                <h:outputText value="#{alarm.severity}"/>
+                <h:outputText value="#{alarm.severity.name()}"/>
             </p:column>
             <!--<p:column headerText="Severity change" styleClass="column" sortBy="#{alarm.severityChangeTime}">
                 <h:outputText value="#{alarm.severityChangeTime}">

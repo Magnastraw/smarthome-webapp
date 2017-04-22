@@ -3,15 +3,13 @@ package com.netcracker.smarthome.business.endpoints.controllers;
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
-import com.netcracker.smarthome.business.endpoints.services.MetricService;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
-import com.netcracker.smarthome.business.endpoints.transformators.MetricEventTransformator;
+import com.netcracker.smarthome.business.endpoints.services.*;
+import com.netcracker.smarthome.business.endpoints.transformators.policyframework.PolicyMetricEventTransformator;
 import com.netcracker.smarthome.business.endpoints.transformators.MetricTransformator;
+import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
 import com.netcracker.smarthome.business.specs.MetricSpecService;
-import com.netcracker.smarthome.model.entities.Metric;
-import com.netcracker.smarthome.model.entities.MetricHistory;
-import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.model.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -34,46 +33,68 @@ public class MetricController {
     private MetricService metricService;
     @Autowired
     private MetricSpecService metricSpecService;
+    @Autowired
+    EventService eventService;
 
     @RequestMapping(value = "/metrics",
             method = RequestMethod.POST,
             consumes = "application/json")
     public ResponseEntity sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
                                          @RequestBody String json) {
+        LOG.info("POST /metrics\nBody:\n" + json);
         SmartHome home = homeService.getHomeById(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
-        List<JsonMetric> metrics = parser.parseMetrics(json);
+        List<JsonMetric> metrics;
+        try {
+            metrics = parser.parseMetrics(json);
+        } catch (IOException e) {
+            LOG.error("Error during parsing", e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        if (metrics.size() == 0)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        MetricTransformator metricTransformator = new MetricTransformator(smartObjectService, metricService);
+        PolicyMetricEventTransformator policyEventTransformator = new PolicyMetricEventTransformator(smartObjectService, metricSpecService);
         for (JsonMetric item : metrics) {
-            try {
+            /*Metric metric = metricService.getMetric(houseId, item.getObjectId(), item.getSubobjectId(), item.getSpecId());
+            if (metric == null) {
                 item.setSmartHomeId(houseId);
-                MetricTransformator transf = new MetricTransformator(smartObjectService, metricService);
-                Metric metric = transf.fromJsonEntity(item);
-
-                /*Metric metric = new Metric();
-                metric.setSmartHome(home);
-                metric.setObject(smartObjectService.getObjectByExternalKey(houseId, item.getObjectId()));
-                metric.setSubobject(smartObjectService.getObjectByExternalKey(houseId, item.getSubobjectId()));
-                metric.setMetricSpec(metricService.getMetricSpecById(item.getSpecId()));*/
-                Metric existingMetric = metricService.getMetric(houseId, metric.getObject().getSmartObjectId(), item.getSpecId());
+                metric = metricTransformator.fromJsonEntity(item);
+                metricService.saveMetric(metric);
+            }*/
+            item.setSmartHomeId(houseId);
+            Metric metric = metricTransformator.fromJsonEntity(item);
+            Metric existingMetric = metricService.getMetric(houseId, metric.getObject().getSmartObjectId(), metric.getSubobject()!=null ? metric.getSubobject().getSmartObjectId() : null, item.getSpecId());
+            try {
                 if (existingMetric != null) {
                     metric.setMetricId(existingMetric.getMetricId());
                 } else {
                     metricService.saveMetric(metric);
                 }
+
                 MetricHistory metricHistory = new MetricHistory(item.getRegistryDate(), BigDecimal.valueOf(item.getValue()), metric);
                 metricService.saveMetricValue(metricHistory);
 
-                MetricEventTransformator transformator = new MetricEventTransformator(smartObjectService, metricSpecService);
-                MetricEvent metricEvent = transformator.fromJsonEntity(item);
+                /*Event dbEvent = eventService.getEvent(houseId, item.getObjectId(), item.getSubobjectId(), EventType.METRIC.ordinal());
+                if (dbEvent == null) {
+                    dbEvent = new Event(EventType.METRIC, metric.getObject(), metric.getSubobject(), metric.getSmartHome());
+                    eventService.saveEvent(dbEvent);
+                }
+
+                EventHistory eventHistory = new EventHistory(item.getRegistryDate(), dbEvent, AlarmSeverity.NORMAL, null);
+                eventService.saveEventHistory(eventHistory);*/
+
+                MetricEvent policyMetricEvent = policyEventTransformator.fromJsonEntity(item);
+                //policyMetricEvent.setDbEvent(dbEvent.getDbEvent());
+                /* */
             }
             catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
-        /* */
         return new ResponseEntity(HttpStatus.OK);
     }
 }

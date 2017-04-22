@@ -26,18 +26,18 @@
                 <h:outputLabel value="Parent alarm:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{(alarmBean.selectedAlarm.parentAlarm != null)? alarmBean.selectedAlarm.parentAlarm.alarmName : ''}"/>
 
-                <h:outputLabel value="Start registryDate:" styleClass="ui-accordion-header"/>
+                <h:outputLabel value="Start time:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{alarmBean.selectedAlarm.startTime}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>
-                <h:outputLabel value="End registryDate:" styleClass="ui-accordion-header"/>
+                <h:outputLabel value="End time:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{alarmBean.selectedAlarm.endTime}">
                     <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
                 </h:outputText>
                 <h:outputLabel value="Severity:" styleClass="ui-accordion-header"/>
-                <h:outputText value="#{alarmBean.selectedAlarm.severity}"/>
-                <h:outputLabel value="Event type:" styleClass="ui-accordion-header"/>
-                <h:outputText value="#{alarmBean.selectedAlarm.event.eventType}"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.severity.name()}"/>
+                <!--<h:outputLabel value="Event type:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.event.eventType}"/> -->
             </p:panelGrid>
         </p:fieldset>
         <p:fieldset id="events" legend="Event history" toggleable="true" styleClass="fieldset">
@@ -63,14 +63,14 @@
                 <p:column headerText="Parameters" styleClass="column" sortBy="#{eventHistory.eventParameters}" filterBy="#{eventHistory.eventParameters}" filterMatchMode="startsWith" filterStyleClass="filter">
                     <h:outputText value="#{eventHistory.eventParameters}"/>
                 </p:column>
-                <p:column headerText="Severity" styleClass="column #{alarmListBean.setStyleClass(eventHistory.severity.ordinal())}" sortBy="#{eventHistory.severity}" filterBy="#{eventHistory.severity}">
+                <p:column headerText="Severity" styleClass="column #{alarmListBean.setStyleClass(eventHistory.severity.ordinal())}" sortBy="#{eventHistory.severity.ordinal()}" filterBy="#{eventHistory.severity.name()}">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('eventsTable').filter()" styleClass="filter-select">
                             <f:selectItem/>
                             <f:selectItems value="#{alarmListBean.severities}"/>
                         </p:selectOneMenu>
                     </f:facet>
-                    <h:outputText value="#{eventHistory.severity}"/>
+                    <h:outputText value="#{eventHistory.severity.name()}"/>
                 </p:column>
             </p:dataTable>
         </p:fieldset>

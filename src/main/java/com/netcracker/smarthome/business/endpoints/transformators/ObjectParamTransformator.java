@@ -28,4 +28,8 @@ public class ObjectParamTransformator implements ITransformator<ObjectParam, Jso
         objectParam.setObject(smartObjectService.getObjectById(jsonEntity.getSmartObjectId()));
         return objectParam;
     }
+
+    public JsonParameter toJsonEntity(ObjectParam Entity) {
+        throw new UnsupportedOperationException("Not supported");
+    }
 }

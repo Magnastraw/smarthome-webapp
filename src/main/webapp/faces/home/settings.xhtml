@@ -15,7 +15,6 @@
         <f:setPropertyActionListener value="#{homeSettingsBean.home}" target="#{homeFormBean.home}"/>
         <f:setPropertyActionListener value="#{false}" target="#{homeFormBean.creatingMode}"/>
     </p:commandLink>
-    <p:commandButton value="test" action="#{homeSettingsBean.test}"/>
     <p:fieldset legend="Description" toggleable="true" styleClass="fieldset">
         <h:outputText value="#{homeSettingsBean.home.description}"
                       rendered="#{!homeSettingsBean.home.description.equals('')}"/>

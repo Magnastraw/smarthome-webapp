@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.business.endpoints.transformators;
 
-import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
 import com.netcracker.smarthome.business.endpoints.services.MetricService;
 import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
@@ -8,14 +7,10 @@ import com.netcracker.smarthome.model.entities.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MetricTransformator implements ITransformator<Metric,JsonMetric> {
-
-    @Autowired
-    private HomeService homeService;
-    @Autowired
     private final SmartObjectService smartObjectService;
-    @Autowired
     private final MetricService metricService;
 
+    @Autowired
     public MetricTransformator(SmartObjectService smartObjectService, MetricService metricService) {
         this.smartObjectService = smartObjectService;
         this.metricService = metricService;
@@ -27,5 +22,9 @@ public class MetricTransformator implements ITransformator<Metric,JsonMetric> {
         metric.setMetricSpec(metricService.getMetricSpecById(jsonEntity.getSpecId()));
         metric.setSmartHome(metric.getObject().getSmartHome());
         return metric;
+    }
+
+    public JsonMetric toJsonEntity(Metric Entity) {
+        throw new UnsupportedOperationException("Not supported");
     }
 }

@@ -4,53 +4,42 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "alarm_specs", schema = "public", catalog = "smarthome_db")
-public class AlarmSpec implements Serializable {
-    private long specId;
-    private String specName;
+public class AlarmSpec extends Spec {
     private String objectType;
-    private Catalog catalog;
     private List<Alarm> alarms;
 
     public AlarmSpec() {
     }
 
     public AlarmSpec(Catalog catalog) {
-        this.catalog = catalog;
+        super(catalog);
     }
 
     public AlarmSpec(String specName, String objectType, Catalog catalog) {
-        this.specName = specName;
+        super(specName, catalog);
         this.objectType = objectType;
-        this.catalog = catalog;
     }
 
     @Id
     @Column(name = "spec_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "a_spec_seq")
     @SequenceGenerator(name = "a_spec_seq", sequenceName = "alarm_specs_spec_id_seq", allocationSize = 1)
+    @Override
     public long getSpecId() {
-        return specId;
-    }
-
-    public void setSpecId(long specId) {
-        this.specId = specId;
+        return super.getSpecId();
     }
 
     @Basic
     @Column(name = "spec_name", nullable = false)
+    @Override
     public String getSpecName() {
-        return specName;
-    }
-
-    public void setSpecName(String specName) {
-        this.specName = specName;
+        return super.getSpecName();
     }
 
     @Basic
@@ -65,12 +54,9 @@ public class AlarmSpec implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "catalog_id", referencedColumnName = "catalog_id", nullable = false)
+    @Override
     public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
+        return super.getCatalog();
     }
 
     @OneToMany(mappedBy = "alarmSpec")

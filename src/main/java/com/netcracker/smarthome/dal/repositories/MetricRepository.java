@@ -11,13 +11,28 @@ public class MetricRepository extends EntityRepository<Metric> {
         super(Metric.class);
     }
 
-    public Metric getMetric(long smartHomeId, long smartObjectId, long specId) {
-        Query query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and m.object.smartObjectId = :smartObjectId and m.metricSpec.specId = :specId)");
-        query.setParameter("smartHomeId", smartHomeId);
-        query.setParameter("smartObjectId", smartObjectId);
-        query.setParameter("specId", specId);
+    public Metric getMetric(long smartHomeId, long objectId, Long subobjectId, long specId) {
+        Query query;
+        if (subobjectId != null) {
+            query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and " +
+                    "m.object.smartObjectId = :objectId and " +
+                    "m.subobject.smartObjectId = :subobjectId and " +
+                    "m.metricSpec.specId = :specId)");
+            query.setParameter("smartHomeId", smartHomeId);
+            query.setParameter("objectId", objectId);
+            query.setParameter("specId", specId);
+            query.setParameter("subobjectId", subobjectId);
+        }
+        else {
+            query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and " +
+                    "m.object.smartObjectId = :objectId and " +
+                    "m.subobject.smartObjectId is null and " +
+                    "m.metricSpec.specId = :specId)");
+            query.setParameter("smartHomeId", smartHomeId);
+            query.setParameter("objectId", objectId);
+            query.setParameter("specId", specId);
+        }
         List<Metric> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
-
 }

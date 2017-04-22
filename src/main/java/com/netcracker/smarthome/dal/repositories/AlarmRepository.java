@@ -46,4 +46,27 @@ public class AlarmRepository extends EntityRepository<Alarm> {
                 .setParameter("alarm_id", alarm.getAlarmId());
         return query.getResultList();
     }
+
+    public Alarm getAlarm(long objectId, Long subobjectId, long specId) {
+        Query query;
+        if (subobjectId != null) {
+            query = getManager().createQuery("select a from Alarm a where " +
+                    "(a.object.smartObjectId = :objectId and " +
+                    "a.subobject.smartObjectId = :subobjectId and " +
+                    "a.alarmSpec.specId = :specId)");
+            query.setParameter("objectId", objectId);
+            query.setParameter("subobjectId", subobjectId);
+            query.setParameter("specId", specId);
+        }
+        else {
+            query = getManager().createQuery("select a from Alarm a where " +
+                    "(a.object.smartObjectId = :objectId and " +
+                    "a.subobject.smartObjectId is null and " +
+                    "a.alarmSpec.specId = :specId)");
+            query.setParameter("objectId", objectId);
+            query.setParameter("specId", specId);
+        }
+        List<Alarm> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
 }

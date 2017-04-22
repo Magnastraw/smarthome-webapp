@@ -7,12 +7,10 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class InventoryTransformator  implements ITransformator<SmartObject, JsonInventoryObject> {
-
-    @Autowired
     private final SmartObjectService smartObjectService;
-    @Autowired
     private final HomeService homeService;
 
+    @Autowired
     public InventoryTransformator(SmartObjectService smartObjectService, HomeService homeService) {
         this.smartObjectService = smartObjectService;
         this.homeService = homeService;
@@ -28,6 +26,10 @@ public class InventoryTransformator  implements ITransformator<SmartObject, Json
             smartObject.setParentObject(smartObjectService.getObjectByExternalKey(jsonEntity.getSmartHomeId(), jsonEntity.getParentId()));
         smartObject.setCatalog(smartObjectService.getRootCatalog(jsonEntity.getSmartHomeId()));
         return smartObject;
+    }
+
+    public JsonInventoryObject toJsonEntity(SmartObject Entity) {
+        throw new UnsupportedOperationException("Not supported");
     }
 
 }
