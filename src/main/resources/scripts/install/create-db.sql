@@ -263,6 +263,7 @@ CREATE TABLE public.objects (
   parent_smart_object_id BIGINT,
   catalog_id BIGINT NOT NULL,
   smart_home_id BIGINT NOT NULL,
+  external_key BIGINT NOT NULL,
   CONSTRAINT objects_pk PRIMARY KEY (smart_object_id)
 );
 
@@ -289,7 +290,7 @@ CREATE TABLE public.events (
   event_id BIGINT NOT NULL DEFAULT nextval('public.events_event_id_seq'),
   object_id BIGINT NOT NULL,
   subobject_id BIGINT,
-  event_type VARCHAR NOT NULL,
+  event_type BIGINT,
   smart_home_id BIGINT NOT NULL,
   CONSTRAINT events_pk PRIMARY KEY (event_id)
 );
@@ -306,9 +307,9 @@ CREATE TABLE public.alarms (
   subobject_id BIGINT,
   spec_id BIGINT NOT NULL,
   parent_alarm_id BIGINT,
-  cleared_user_id BIGINT NOT NULL,
+  cleared_user_id BIGINT,
   alarm_name VARCHAR NOT NULL,
-  alarm_description VARCHAR DEFAULT '' NOT NULL,
+  alarm_description VARCHAR,
   start_time TIMESTAMP,
   end_time TIMESTAMP,
   severity INTEGER NOT NULL,
@@ -325,7 +326,7 @@ CREATE TABLE public.events_history (
   history_id BIGINT NOT NULL DEFAULT nextval('public.events_history_id_seq'),
   event_id BIGINT NOT NULL,
   read_date TIMESTAMP NOT NULL,
-  event_description VARCHAR NOT NULL,
+  event_description VARCHAR,
   severity INTEGER NOT NULL,
   event_parameters VARCHAR,
   CONSTRAINT events_history_pk PRIMARY KEY (history_id)

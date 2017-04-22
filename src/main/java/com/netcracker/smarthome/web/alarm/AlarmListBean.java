@@ -87,13 +87,15 @@ public class AlarmListBean implements Serializable {
     public String setStyleClass(int severity) {
         switch (severity) {
             case 2:
-                return "severity-caution";
+                return "severity-info";
             case 3:
-                return "severity-alert";
+                return "severity-warn";
             case 4:
+                return "severity-major";
+            case 5:
                 return "severity-critical";
             default:
-                return "severity-disabled";
+                return "severity-normal";
         }
     }
 
@@ -109,10 +111,10 @@ public class AlarmListBean implements Serializable {
 
     public void onChange(String id) {
         String selector = "centerForm:alarmsDT:"+id;
-        //Calendar time = (Calendar)event.getComponent();
+        //Calendar time = (Calendar)events.getComponent();
         Calendar time = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent(selector);
         if(time.getValue() == null) {
-            //event.getNewValue() == null || event.getNewValue().equals("")) {
+            //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
             dataTable.resetValue();
         }
@@ -121,7 +123,7 @@ public class AlarmListBean implements Serializable {
     /*public void onChange() {
         Calendar startTime = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT:startTimeFilter");
         if(startTime.getValue() == null) {
-        //event.getNewValue() == null || event.getNewValue().equals("")) {
+        //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
             dataTable.resetValue();
             dataTable.reset();
@@ -165,14 +167,14 @@ public class AlarmListBean implements Serializable {
         this.filteredAlarms = filteredAlarms;
     }
 
-    /*public List<Alarm> getFilteredAlarms() {
+    /*public List<JsonAlarm> getFilteredAlarms() {
         if (filteredAlarms == null) {
-            filteredAlarms = (List<Alarm>)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filteredData");
+            filteredAlarms = (List<JsonAlarm>)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filteredData");
         }
         return filteredAlarms;
     }
 
-    public void setFilteredAlarms(List<Alarm> filteredTableEntities) {
+    public void setFilteredAlarms(List<JsonAlarm> filteredTableEntities) {
         this.filteredAlarms = filteredTableEntities;
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filteredData", filteredTableEntities);
     }*/

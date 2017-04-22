@@ -79,4 +79,14 @@ public class HomeService {
         catalogRepository.save(new Catalog("policiesRootCatalog", null, home));
         catalogRepository.save(new Catalog("objectsRootCatalog", null, home));
     }
+
+    @Transactional(readOnly = true)
+    public SmartHome getHomeById(long smartHomeId) {
+        return homeRepository.get(smartHomeId);
+    }
+
+    @Transactional
+    public void saveParam(HomeParam param) {
+        paramRepository.save(param);
+    }
 }

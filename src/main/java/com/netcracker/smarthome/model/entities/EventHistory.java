@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -19,6 +18,16 @@ public class EventHistory implements Serializable {
     private AlarmSeverity severity;
     private String eventParameters;
     private Event event;
+
+    public EventHistory() {
+    }
+
+    public EventHistory(Timestamp readDate, Event event, AlarmSeverity severity, String eventParameters) {
+        this.readDate = readDate;
+        this.event = event;
+        this.severity = severity;
+        this.eventParameters = eventParameters;
+    }
 
     @Id
     @Column(name = "history_id", nullable = false)
@@ -43,7 +52,7 @@ public class EventHistory implements Serializable {
     }
 
     @Basic
-    @Column(name = "event_description", nullable = false)
+    @Column(name = "event_description", nullable = true)
     public String getEventDescription() {
         return eventDescription;
     }
@@ -111,7 +120,7 @@ public class EventHistory implements Serializable {
                 .append("eventDescription", getEventDescription())
                 .append("severity", getSeverity())
                 .append("eventParameters", getEventParameters())
-                .append("event", getEvent())
+                .append("events", getEvent())
                 .toString();
     }
 }

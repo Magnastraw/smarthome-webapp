@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "alarms", schema = "public", catalog = "smarthome_db")
 public class Alarm implements Serializable, NotificationObject {
     private long alarmId;
-    private long clearedUserId;
+    private Long clearedUserId;
     private String alarmName;
     private String alarmDescription;
     private Timestamp startTime;
@@ -34,7 +34,7 @@ public class Alarm implements Serializable, NotificationObject {
     public Alarm() {
     }
 
-    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, AlarmSeverity severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
+    public Alarm(Long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, AlarmSeverity severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
         this.clearedUserId = clearedUserId;
         this.alarmName = alarmName;
         this.alarmDescription = alarmDescription;
@@ -62,12 +62,12 @@ public class Alarm implements Serializable, NotificationObject {
     }
 
     @Basic
-    @Column(name = "cleared_user_id", nullable = false)
-    public long getClearedUserId() {
+    @Column(name = "cleared_user_id", nullable = true)
+    public Long getClearedUserId() {
         return clearedUserId;
     }
 
-    public void setClearedUserId(long clearedUserId) {
+    public void setClearedUserId(Long clearedUserId) {
         this.clearedUserId = clearedUserId;
     }
 
@@ -113,7 +113,6 @@ public class Alarm implements Serializable, NotificationObject {
 
     @Basic
     @Column(name = "severity", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
     public AlarmSeverity getSeverity() {
         return severity;
     }

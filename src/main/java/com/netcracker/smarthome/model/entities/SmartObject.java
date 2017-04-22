@@ -27,17 +27,19 @@ public class SmartObject implements Serializable {
     private List<SmartObject> subobjects;
     private Catalog catalog;
     private SmartHome smartHome;
+    private long externalKey;
 
     public SmartObject() {
     }
 
-    public SmartObject(String name, String description, ObjectType objectType, SmartObject parentObject, Catalog catalog, SmartHome smartHome) {
+    public SmartObject(String name, String description, ObjectType objectType, SmartObject parentObject, Catalog catalog, SmartHome smartHome, long externalKey) {
         this.name = name;
         this.description = description;
         this.objectType = objectType;
         this.parentObject = parentObject;
         this.catalog = catalog;
         this.smartHome = smartHome;
+        this.externalKey = externalKey;
     }
 
     @Id
@@ -63,9 +65,19 @@ public class SmartObject implements Serializable {
     }
 
     @Basic
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     public String getDescription() {
         return description;
+    }
+
+    @Basic
+    @Column(name = "external_key", nullable = true)
+    public long getExternalKey() {
+        return externalKey;
+    }
+
+    public void setExternalKey(long externalKey) {
+        this.externalKey = externalKey;
     }
 
     public void setDescription(String description) {

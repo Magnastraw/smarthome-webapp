@@ -22,7 +22,7 @@ public class AlarmSpecService {
         alarmSpecRepository.delete(primaryKey);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<AlarmSpec> getAlarmSpecs(Catalog catalog) {
         return alarmSpecRepository.getAlarmSpecs(catalog);
     }
@@ -37,9 +37,14 @@ public class AlarmSpecService {
         return alarmSpecRepository.update(alarmSpec);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkAlarmSpecName(String specName, long catalogId) {
         return this.alarmSpecRepository.checkAlarmSpecName(specName, catalogId);
+    }
+
+    @Transactional(readOnly = true)
+    public AlarmSpec getAlarmSpec(long specId) {
+        return alarmSpecRepository.get(specId);
     }
 
 }

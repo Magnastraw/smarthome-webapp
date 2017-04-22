@@ -45,4 +45,11 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return query.getResultList();
     }
 
+    public SmartObject getObjectByExternalKey(long smartHomeId, long externalKey){
+        Query query = getManager().createQuery("select so from SmartObject so where (so.smartHome.smartHomeId = :smartHomeId and so.externalKey = :externalKey)");
+        query.setParameter("smartHomeId", smartHomeId);
+        query.setParameter("externalKey", externalKey);
+        List<SmartObject> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
 }
