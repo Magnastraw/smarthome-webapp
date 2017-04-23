@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class SmartObjectService {
 
@@ -70,4 +72,20 @@ public class SmartObjectService {
     public ObjectParam getObjectParamByName(long smartObjectId, String paramName) {
         return objectParamRepository.getByName(smartObjectId, paramName);
     }
+
+    @Transactional(readOnly = true)
+    public SmartObject getRootController(long smartObjectId) {
+        return smartObjectRepository.getRootController(smartObjectId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SmartObject> getSubobjectsByObjectId(long objectId) {
+        return smartObjectRepository.getSubobjectsByObjectId(objectId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getObjectTypes() {
+        return objectTypeRepository.getObjectTypes();
+    }
+
 }

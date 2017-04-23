@@ -32,7 +32,7 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return query.getResultList();
     }
 
-    public List<SmartObject> getSubObjectByObjectId(long objectId){
+    public List<SmartObject> getSubobjectsByObjectId(long objectId){
         Query query = getManager().createQuery("select smartObject from SmartObject smartObject where smartObject.parentObject.smartObjectId = :objectId");
         query.setParameter("objectId",objectId);
         return query.getResultList();
@@ -49,6 +49,13 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         Query query = getManager().createQuery("select so from SmartObject so where (so.smartHome.smartHomeId = :smartHomeId and so.externalKey = :externalKey)");
         query.setParameter("smartHomeId", smartHomeId);
         query.setParameter("externalKey", externalKey);
+        List<SmartObject> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public SmartObject getRootController(long smartHomeId) {
+        Query query = getManager().createQuery("select so from SmartObject so where (so.smartHome.smartHomeId = :smartHomeId and so.parentObject.smartObjectId is null)");
+        query.setParameter("smartHomeId", smartHomeId);
         List<SmartObject> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }

@@ -17,7 +17,7 @@ public class AlarmService {
         this.alarmRepository = alarmRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Alarm> getChildrenAlarms(Alarm alarm) {
         return alarmRepository.getChildrenAlarms(alarm);
     }
@@ -27,7 +27,7 @@ public class AlarmService {
         alarmRepository.delete(primaryKey);
     }
     
-    @Transactional
+    @Transactional(readOnly = true)
     public Alarm getAlarmById(long alarmId) {
         return alarmRepository.get(alarmId);
     }
@@ -42,12 +42,12 @@ public class AlarmService {
         return alarmRepository.checkAlarmName(alarmName, parentAlarmId);
     }*/
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Alarm> getPathToAlarm(Alarm alarm) {
         return alarmRepository.getPathToAlarm(alarm);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Alarm> getChildrenAlarmsRecursively(Alarm rootAlarm) {
         return alarmRepository.getChildrenAlarmsRecursively(rootAlarm);
     }
@@ -57,8 +57,14 @@ public class AlarmService {
         return alarmRepository.update(alarm);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Alarm> getRootAlarms(long smartHomeId) {
         return alarmRepository.getRootAlarms(smartHomeId);
     }
+
+    @Transactional(readOnly = true)
+    public List<Alarm> getAlarmsByObject(long objectId) {
+        return alarmRepository.getAlarmsByObject(objectId);
+    }
+
 }

@@ -18,4 +18,9 @@ public class ObjectTypeRepository extends EntityRepository<ObjectType> {
         List<ObjectType> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
+
+    public List<String> getObjectTypes() {
+        Query query = getManager().createQuery("select ot.name from ObjectType ot");
+        return query.getResultList();
+    }
 }

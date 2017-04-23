@@ -21,6 +21,7 @@ public class InventoryTransformator  implements ITransformator<SmartObject, Json
         smartObject.setSmartHome(homeService.getHomeById(jsonEntity.getSmartHomeId()));
         smartObject.setExternalKey(jsonEntity.getObjectId());
         smartObject.setName(jsonEntity.getObjectName());
+        smartObject.setDescription(jsonEntity.getObjectDescription());
         smartObject.setObjectType(smartObjectService.getObjectTypeByName(jsonEntity.getObjectType()));
         if (jsonEntity.getParentId() != 0)
             smartObject.setParentObject(smartObjectService.getObjectByExternalKey(jsonEntity.getSmartHomeId(), jsonEntity.getParentId()));

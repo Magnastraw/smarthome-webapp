@@ -69,4 +69,13 @@ public class AlarmRepository extends EntityRepository<Alarm> {
         List<Alarm> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
+
+    public List<Alarm> getAlarmsByObject(long objectId) {
+        Query query = getManager().createQuery("select a from Alarm a where " +
+                "(a.object.smartObjectId = :objectId or " +
+                "a.subobject.smartObjectId = :objectId) and " +
+                "(a.severity > 1)");
+        query.setParameter("objectId", objectId);
+        return query.getResultList();
+    }
 }

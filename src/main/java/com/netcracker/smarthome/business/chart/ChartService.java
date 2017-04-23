@@ -68,7 +68,7 @@ public class ChartService {
     }
 
     public List<SmartObject> getSubObjectByParentId(long objectId) {
-        return smartObjectRepository.getSubObjectByObjectId(objectId);
+        return smartObjectRepository.getSubobjectsByObjectId(objectId);
     }
 
     public List<MetricSpec> getMetricSpecByCatalogId(Catalog catalog) {

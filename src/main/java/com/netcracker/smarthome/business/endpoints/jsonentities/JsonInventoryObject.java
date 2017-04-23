@@ -8,6 +8,7 @@ import java.util.Map;
 public class JsonInventoryObject implements Serializable {
     private long objectId;
     private String objectName;
+    private String objectDescription;
     private String objectType;
     private long parentId;
     private Map<String,JsonParameter> parameters;
@@ -18,9 +19,10 @@ public class JsonInventoryObject implements Serializable {
         this.parameters = new LinkedHashMap<String, JsonParameter>();
     }
 
-    public JsonInventoryObject(long objectId, String objectName, String objectType, long parentId, Map<String,JsonParameter> parameters) {
+    public JsonInventoryObject(long objectId, String objectName, String objectDescription, String objectType, long parentId, Map<String,JsonParameter> parameters) {
         this.objectId = objectId;
         this.objectName = objectName;
+        this.objectDescription = objectDescription;
         this.objectType = objectType;
         this.parentId = parentId;
         this.parameters = parameters;
@@ -76,5 +78,13 @@ public class JsonInventoryObject implements Serializable {
 
     public void setSmartHomeId(long smartHomeId) {
         this.smartHomeId = smartHomeId;
+    }
+
+    public String getObjectDescription() {
+        return objectDescription;
+    }
+
+    public void setObjectDescription(String objectDescription) {
+        this.objectDescription = objectDescription;
     }
 }
