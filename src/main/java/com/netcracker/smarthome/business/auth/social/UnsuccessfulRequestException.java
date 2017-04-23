@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.auth.oauth;
+package com.netcracker.smarthome.business.auth.social;
 
 public class UnsuccessfulRequestException extends Exception {
     public UnsuccessfulRequestException(String message, int statusCode, String reasonPhrase) {
