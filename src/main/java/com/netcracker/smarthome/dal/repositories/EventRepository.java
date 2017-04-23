@@ -12,27 +12,26 @@ public class EventRepository extends EntityRepository<Event> {
         super(Event.class);
     }
 
-    public Event getEvent(long smartHomeId, long objectId, Long subobjectId, EventType eventType) {
-        Query query;
-        if (subobjectId != null) {
-            query = getManager().createQuery("select e from Event e where (e.smartHome.smartHomeId = :smartHomeId and " +
-                    "e.object.smartObjectId = :objectId and " +
-                    "e.subobject.smartObjectId = :subobjectId and " +
-                    "e.eventType = :type)");
-            query.setParameter("smartHomeId", smartHomeId);
-            query.setParameter("objectId", objectId);
+    public Event getEvent(long smartHomeId, long objectId, Long subobjectId, Long eventType) {
+        String base = "select e from Event e where (e.smartHome.smartHomeId = :smartHomeId and " +
+                "e.object.smartObjectId = :objectId and ";
+        String conditionSubObject;
+        String conditionEventType;
+        if (subobjectId != null)
+            conditionSubObject = "e.subobject.smartObjectId = :subobjectId and ";
+        else
+            conditionSubObject = "e.subobject.smartObjectId is null and ";
+        if (eventType != null)
+            conditionEventType = "e.eventType = :type)";
+        else
+            conditionEventType = "e.eventType is null)";
+        Query query = getManager().createQuery(base + conditionSubObject + conditionEventType);
+        query.setParameter("smartHomeId", smartHomeId);
+        query.setParameter("objectId", objectId);
+        if (subobjectId != null)
             query.setParameter("subobjectId", subobjectId);
+        if (eventType != null)
             query.setParameter("type", eventType);
-        }
-        else {
-            query = getManager().createQuery("select e from Event e where (e.smartHome.smartHomeId = :smartHomeId and " +
-                    "e.object.smartObjectId = :objectId and " +
-                    "e.subobject.smartObjectId is null and " +
-                    "e.eventType = :type)");
-            query.setParameter("smartHomeId", smartHomeId);
-            query.setParameter("objectId", objectId);
-            query.setParameter("type", eventType);
-        }
         List<Event> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }

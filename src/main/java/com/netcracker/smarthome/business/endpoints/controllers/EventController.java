@@ -66,7 +66,7 @@ public class EventController {
             }*/
             item.setSmartHomeId(houseId);
             Event event = eventTransformator.fromJsonEntity(item);
-            Event existingEvent = eventService.getEvent(houseId, event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, EventType.EVENT);
+            Event existingEvent = eventService.getEvent(houseId, event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, null);
             try {
                 if (existingEvent != null) {
                     event.setEventId(existingEvent.getEventId());

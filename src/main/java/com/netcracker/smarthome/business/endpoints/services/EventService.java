@@ -32,7 +32,7 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Event getEvent(long smartHomeId, long objectId,  Long subobjectId, EventType eventType) {
+    public Event getEvent(long smartHomeId, long objectId,  Long subobjectId, Long eventType) {
         return eventRepository.getEvent(smartHomeId, objectId, subobjectId, eventType);
     }
 

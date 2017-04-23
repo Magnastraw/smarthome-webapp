@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "events", schema = "public", catalog = "smarthome_db")
 public class Event implements Serializable, NotificationObject {
     private long eventId;
-    private long eventType;
+    private Long eventType;
     private List<Alarm> alarms;
     private SmartObject object;
     private SmartObject subobject;
@@ -25,7 +25,7 @@ public class Event implements Serializable, NotificationObject {
     public Event() {
     }
 
-    public Event(long eventType, SmartObject object, SmartObject subobject, SmartHome smartHome) {
+    public Event(Long eventType, SmartObject object, SmartObject subobject, SmartHome smartHome) {
         this.eventType = eventType;
         this.object = object;
         this.subobject = subobject;
@@ -46,11 +46,11 @@ public class Event implements Serializable, NotificationObject {
 
     @Basic
     @Column(name = "event_type", nullable = true)
-    public long getEventType() {
+    public Long getEventType() {
         return eventType;
     }
 
-    public void setEventType(long eventType) {
+    public void setEventType(Long eventType) {
         this.eventType = eventType;
     }
 
