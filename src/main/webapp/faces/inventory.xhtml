@@ -10,29 +10,23 @@
 
     <h2>Inventory</h2>
     <p:growl id="growl"/>
-    <p:outputPanel id="inventory">
+    <h:outputLabel rendered="#{empty inventoryBean.rootNode}" value="Data is not received"/>
+    <p:outputPanel id="inventory" rendered="#{not empty inventoryBean.rootNode}">
         <p:organigram id="organigram" widgetVar="organigram" value="#{inventoryBean.rootNode}" var="node"
                       selection="#{inventoryBean.selectedNode}">
             <p:ajax event="select" process="@this" update="@form:growl" listener="#{inventoryBean.onSelectNode}"/>
             <p:ajax event="contextmenu" process="@this" update="@form:growl" listener="#{inventoryBean.onClickContextMenu}"/>
-
-            <p:organigramNode>
-                <h:outputText value="#{node.data.name}"/>
-            </p:organigramNode>
-
-            <p:organigramNode type="rootcontroller" styleClass="rootcontroller">
-                <h:outputText value="#{node.data.name}"/>
-            </p:organigramNode>
-
-            <c:forEach items="#{inventoryBean.objectTypes}" var="type">
-                <p:organigramNode type="#{type}"
-                                  styleClass="#{type} #{(node.isLeaf())? 'leaf' : ''}"
-                                  iconPos="left"
-                                  skipLeafHandling="true">
-                    <h:outputText value="#{node.data.name}"/>
-                </p:organigramNode>
-            </c:forEach>
+                <c:forEach items="#{inventoryBean.objectTypes}" var="type">
+                    <p:organigramNode type="#{type}"
+                                      styleClass="#{type} #{(node.isLeaf())? 'leaf' : ''}"
+                                      icon="#{type}"
+                                      iconPos="left"
+                                      skipLeafHandling="true">
+                        <h:outputText value="#{node.data.name}"/>
+                    </p:organigramNode>
+                </c:forEach>
         </p:organigram>
+
         <c:forEach items="#{inventoryBean.objectTypes}" var="type">
             <p:contextMenu for="organigram" nodeType="#{type}">
                 <p:menuitem value="View detail" icon="ui-icon-search"
@@ -40,34 +34,46 @@
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
-    <p:dialog position="center" header="Device info" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
-        <p:outputPanel id="info" rendered="#{not empty inventoryBean.selectedNode}">
-            <p:panelGrid columns="2" rendered="#{not empty inventoryBean.selectedNode}" styleClass="ui-noborder">
+    <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
+        <p:outputPanel id="info">
+            <p:panelGrid columns="2" styleClass="ui-noborder">
                 <f:facet name="header">
-                    <p:graphicImage name="images/inventory/#{inventoryBean.selectedNode.data.objectType.name}.png"
-                                    width="200px"/>
+                    <p:graphicImage name="images/inventory/#{inventoryBean.selectedObject.objectType.name}.png"
+                                    width="200px" style="text-align: center !important;"/>
                 </f:facet>
-                <p:outputLabel value="Name:"/>
-                <p:outputLabel value="#{inventoryBean.selectedNode.data.name}"/>
-                <p:outputLabel value="Description:"/>
-                <p:outputPanel value="#{inventoryBean.selectedNode.data.description}"/>
-                <p:outputLabel value="Current alarms:"/>
+                <p:outputLabel value="Name:" styleClass="label"/>
+                <p:outputLabel value="#{inventoryBean.selectedObject.name}"/>
+                <p:outputLabel value="Description:" styleClass="label"/>
+                <p:outputLabel value="#{inventoryBean.selectedObject.description}"/>
+                <p:outputLabel value="Current alarms:" styleClass="label"/>
                 <p:row>
                     <c:if test="#{inventoryBean.selectedObjectAlarms == null}">
                         <p:outputLabel/>
                     </c:if>
-                    <c:if test="#{inventoryBean.selectedObjectAlarms != null}">
-                        <c:forEach items="#{inventoryBean.selectedObjectAlarms}" var="alarm">
-                            <p:commandLink value="#{alarm.alarmName}"
-                                           action="#{navigationBean.setPageName('alarms/alarm')}"
-                                           update=":centerForm" oncomplete="PF('infoDialog').hide(); return true;">
-                                <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
-                            </p:commandLink>
-                            <h:outputText value="  "/>
-                        </c:forEach>
-                    </c:if>
+                    <c:forEach items="#{inventoryBean.selectedObjectAlarms}" var="alarm">
+                        <p:commandLink value="#{alarm.alarmName}"
+                                       action="#{navigationBean.setPageName('alarms/alarm')}"
+                                       update=":centerForm" oncomplete="PF('infoDialog').hide(); return true;">
+                            <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
+                        </p:commandLink>
+                        <h:outputText value="  "/>
+                    </c:forEach>
                 </p:row>
+                <p:outputLabel value="Catalog" styleClass="label"/>
+                <p:inplace label="#{(inventoryBean.selectedNode.data.catalog.catalogName == 'objectsRootCatalog')? '/' : inventoryBean.selectedNode.data.catalog.catalogName}" effectSpeed="fast" event="dblclick">
+                    <p:selectOneMenu binding="#{catalogSelect}" value="#{inventoryBean.selectedObject.catalog}"
+                                     filter="true" filterMatchMode="startsWith" converter="catalogConverter" styleClass="inventory-dialog-select">
+                        <p:ajax event="change" update="@form:info" listener="#{inventoryBean.onChangeCatalog(catalogSelect.label)}"/>
+                        <f:selectItem itemLabel="+ Add catalog"/>
+                        <f:selectItem itemLabel="/" itemValue="#{inventoryBean.rootCatalog}"/>
+                        <f:selectItems var="item" value="#{inventoryBean.objectsCatalogs}"
+                                       itemLabel="#{item.catalogName}" itemValue="#{item}"/>
+                    </p:selectOneMenu>
+                </p:inplace>
+                <p:outputLabel rendered="#{inventoryBean.adding}" value="New catalog name:" styleClass="label"/>
+                <p:inputText rendered="#{inventoryBean.adding}" value="#{inventoryBean.addedCatalog.catalogName}"/>
             </p:panelGrid>
         </p:outputPanel>
+        <br/>
     </p:dialog>
 </html>

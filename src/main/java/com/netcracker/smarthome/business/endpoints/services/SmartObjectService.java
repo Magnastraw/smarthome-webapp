@@ -70,7 +70,7 @@ public class SmartObjectService {
 
     @Transactional(readOnly = true)
     public ObjectParam getObjectParamByName(long smartObjectId, String paramName) {
-        return objectParamRepository.getByName(smartObjectId, paramName);
+        return objectParamRepository.getByName(smartObjectId, paramName.toLowerCase());
     }
 
     @Transactional(readOnly = true)
