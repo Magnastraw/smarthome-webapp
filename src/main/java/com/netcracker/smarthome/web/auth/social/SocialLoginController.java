@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 @Controller
+@RequestMapping(value = "/social_login")
 public class SocialLoginController {
     private static final Logger logger = LoggerFactory.getLogger(SocialLoginController.class);
 
