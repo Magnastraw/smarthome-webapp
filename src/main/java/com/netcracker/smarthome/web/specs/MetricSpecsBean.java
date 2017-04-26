@@ -1,8 +1,8 @@
 package com.netcracker.smarthome.web.specs;
 
-import com.netcracker.smarthome.business.specs.CatalogService;
-import com.netcracker.smarthome.business.specs.MetricSpecService;
-import com.netcracker.smarthome.business.specs.UnitService;
+import com.netcracker.smarthome.business.services.CatalogService;
+import com.netcracker.smarthome.business.services.MetricSpecService;
+import com.netcracker.smarthome.business.services.UnitService;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartHome;

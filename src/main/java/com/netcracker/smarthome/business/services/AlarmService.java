@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.alarm;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.model.entities.Alarm;

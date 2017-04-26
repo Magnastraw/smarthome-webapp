@@ -1,9 +1,8 @@
 package com.netcracker.smarthome.web.inventory;
 
-import com.netcracker.smarthome.business.alarm.AlarmService;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.AlarmService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.Alarm;
-import com.netcracker.smarthome.model.entities.ObjectType;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;

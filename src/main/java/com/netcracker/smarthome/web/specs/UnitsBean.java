@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.web.specs;
 
-import com.netcracker.smarthome.business.specs.UnitService;
+import com.netcracker.smarthome.business.services.UnitService;
 import com.netcracker.smarthome.model.entities.Unit;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.primefaces.context.RequestContext;

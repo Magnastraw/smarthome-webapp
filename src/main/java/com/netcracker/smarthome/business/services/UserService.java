@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.SocialProfileRepository;
 import com.netcracker.smarthome.dal.repositories.SocialServiceRepository;

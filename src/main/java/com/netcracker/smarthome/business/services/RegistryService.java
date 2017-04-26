@@ -1,7 +1,8 @@
-package com.netcracker.smarthome.business.auth;
+package com.netcracker.smarthome.business.services;
 
-import com.netcracker.smarthome.business.HomeService;
-import com.netcracker.smarthome.business.UserService;
+import com.netcracker.smarthome.business.auth.UserExistsException;
+import com.netcracker.smarthome.business.services.HomeService;
+import com.netcracker.smarthome.business.services.UserService;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.User;
 import com.netcracker.smarthome.model.enums.AuthService;

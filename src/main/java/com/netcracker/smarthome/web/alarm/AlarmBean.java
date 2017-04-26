@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.web.alarm;
 
-import com.netcracker.smarthome.business.alarm.EventHistoryService;
+import com.netcracker.smarthome.business.services.EventService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.EventHistory;
 import org.primefaces.component.calendar.Calendar;
@@ -21,8 +21,8 @@ public class AlarmBean implements Serializable {
     private Alarm selectedAlarm;
     private List<EventHistory> events;
 
-    @ManagedProperty(value = "#{eventHistoryService}")
-    private EventHistoryService eventHistoryService;
+    @ManagedProperty(value = "#{eventService}")
+    private EventService eventService;
 
     public void onChange(String id) {
         String selector = "centerForm:eventsTable:"+id;
@@ -57,7 +57,7 @@ public class AlarmBean implements Serializable {
 
     public void setSelectedAlarm(Alarm selectedAlarm) {
         this.selectedAlarm = selectedAlarm;
-        events = eventHistoryService.getEventHistory(this.selectedAlarm.getEvent().getEventId());
+        events = eventService.getEventHistory(this.selectedAlarm.getEvent().getEventId());
     }
 
     public List<EventHistory> getEvents() {
@@ -68,7 +68,7 @@ public class AlarmBean implements Serializable {
         this.events = events;
     }
 
-    public void setEventHistoryService(EventHistoryService eventHistoryService) {
-        this.eventHistoryService = eventHistoryService;
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
     }
 }

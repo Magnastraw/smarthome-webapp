@@ -1,9 +1,9 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.*;
-import com.netcracker.smarthome.business.endpoints.services.DataTypeService;
+import com.netcracker.smarthome.business.services.DataTypeService;
 import com.netcracker.smarthome.business.endpoints.transformators.HomeParamTransformator;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 public class HouseController {

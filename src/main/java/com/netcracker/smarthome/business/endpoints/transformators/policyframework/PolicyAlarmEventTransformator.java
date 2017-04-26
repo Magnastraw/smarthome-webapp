@@ -1,11 +1,11 @@
 package com.netcracker.smarthome.business.endpoints.transformators.policyframework;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonAlarm;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.ITransformator;
 import com.netcracker.smarthome.business.policy.events.AlarmEvent;
 import com.netcracker.smarthome.business.policy.events.EventType;
-import com.netcracker.smarthome.business.specs.AlarmSpecService;
+import com.netcracker.smarthome.business.services.AlarmSpecService;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 

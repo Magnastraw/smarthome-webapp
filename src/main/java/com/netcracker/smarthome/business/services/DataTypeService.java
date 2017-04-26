@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.endpoints.services;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.DataTypeRepository;
 import com.netcracker.smarthome.model.entities.DataType;

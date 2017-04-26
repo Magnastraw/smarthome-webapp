@@ -2,11 +2,11 @@ package com.netcracker.smarthome.web.chart;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.smarthome.business.chart.ChartService;
+import com.netcracker.smarthome.business.services.ChartService;
 import com.netcracker.smarthome.business.chart.tree.obj.wrapper.CatalogWrapper;
 import com.netcracker.smarthome.business.chart.tree.obj.wrapper.MetricSpecWrapper;
 import com.netcracker.smarthome.business.chart.tree.obj.wrapper.SmartObjectWrapper;
-import com.netcracker.smarthome.business.specs.CatalogService;
+import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.ChartInterval;
 import com.netcracker.smarthome.model.enums.ChartType;

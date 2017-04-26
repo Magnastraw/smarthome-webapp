@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.web.chart.rest;
 
-import com.netcracker.smarthome.business.chart.ChartService;
+import com.netcracker.smarthome.business.services.ChartService;
 import com.netcracker.smarthome.business.chart.options.RequestDataOptions;
 import com.netcracker.smarthome.business.chart.options.jsonfields.DataSeries;
 import io.swagger.annotations.ApiOperation;

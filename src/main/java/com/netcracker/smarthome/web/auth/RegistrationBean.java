@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.web.auth;
 
-import com.netcracker.smarthome.business.auth.RegistryService;
+import com.netcracker.smarthome.business.services.RegistryService;
 import com.netcracker.smarthome.business.auth.UserExistsException;
 import com.netcracker.smarthome.model.entities.User;
 import com.netcracker.smarthome.web.common.ContextUtils;

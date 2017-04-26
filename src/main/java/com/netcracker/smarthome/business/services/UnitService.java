@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.specs;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.UnitRepository;
 import com.netcracker.smarthome.model.entities.Unit;

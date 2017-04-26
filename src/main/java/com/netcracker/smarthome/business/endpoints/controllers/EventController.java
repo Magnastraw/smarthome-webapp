@@ -1,15 +1,14 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.HomeService;
-import com.netcracker.smarthome.business.alarm.AlarmService;
+import com.netcracker.smarthome.business.services.HomeService;
+import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonEvent;
-import com.netcracker.smarthome.business.endpoints.services.EventService;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.EventService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.EventTransformator;
 import com.netcracker.smarthome.business.endpoints.transformators.policyframework.PolicyEventTransformator;
 import com.netcracker.smarthome.business.policy.events.EventEvent;
-import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.model.entities.Event;
 import com.netcracker.smarthome.model.entities.EventHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;

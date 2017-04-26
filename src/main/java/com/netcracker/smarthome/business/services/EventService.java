@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.endpoints.services;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
@@ -10,6 +10,8 @@ import com.netcracker.smarthome.model.entities.EventHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class EventService {
@@ -49,6 +51,11 @@ public class EventService {
     @Transactional
     public void updateAlarm(Alarm alarm) {
         alarmRepository.update(alarm);
+    }
+
+    @Transactional
+    public List<EventHistory> getEventHistory(long eventId) {
+        return eventHistoryRepository.getEventHistory(eventId);
     }
 
 }

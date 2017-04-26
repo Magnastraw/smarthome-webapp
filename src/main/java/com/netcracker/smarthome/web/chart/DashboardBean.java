@@ -1,7 +1,6 @@
 package com.netcracker.smarthome.web.chart;
 
-import com.netcracker.smarthome.business.chart.ChartService;
-import com.netcracker.smarthome.business.chart.DashboardService;
+import com.netcracker.smarthome.business.services.DashboardService;
 import com.netcracker.smarthome.model.entities.Dashboard;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.NavigationBean;

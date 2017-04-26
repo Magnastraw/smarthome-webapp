@@ -1,16 +1,13 @@
 package com.netcracker.smarthome.web.alarm;
 
-import com.netcracker.smarthome.business.alarm.AlarmService;
+import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
-import org.apache.commons.lang3.time.DateUtils;
-import org.primefaces.component.calendar.*;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
@@ -18,9 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
-import java.awt.event.FocusEvent;
 import java.io.Serializable;
 import java.util.*;
 

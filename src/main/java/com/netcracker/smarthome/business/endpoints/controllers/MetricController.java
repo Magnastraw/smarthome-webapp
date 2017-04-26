@@ -1,14 +1,15 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
-import com.netcracker.smarthome.business.endpoints.services.*;
 import com.netcracker.smarthome.business.endpoints.transformators.policyframework.PolicyMetricEventTransformator;
 import com.netcracker.smarthome.business.endpoints.transformators.MetricTransformator;
-import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
-import com.netcracker.smarthome.business.specs.MetricSpecService;
+import com.netcracker.smarthome.business.services.EventService;
+import com.netcracker.smarthome.business.services.MetricService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.MetricSpecService;
 import com.netcracker.smarthome.model.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

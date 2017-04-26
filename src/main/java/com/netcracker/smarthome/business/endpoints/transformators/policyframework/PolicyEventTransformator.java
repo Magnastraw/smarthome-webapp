@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.business.endpoints.transformators.policyframework;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonEvent;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.ITransformator;
 import com.netcracker.smarthome.business.policy.events.EventEvent;
 import com.netcracker.smarthome.business.policy.events.EventType;

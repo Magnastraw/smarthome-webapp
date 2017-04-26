@@ -1,12 +1,9 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.HomeService;
-import com.netcracker.smarthome.business.endpoints.IListener;
-import com.netcracker.smarthome.business.policy.services.PolicyService;
-import com.netcracker.smarthome.business.specs.CatalogService;
-import com.netcracker.smarthome.model.entities.Policy;
+import com.netcracker.smarthome.business.services.HomeService;
+import com.netcracker.smarthome.business.services.PolicyService;
+import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
