@@ -3,6 +3,7 @@ package com.netcracker.smarthome.dal.repositories;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -12,6 +13,14 @@ import java.util.List;
 public class SmartHomeRepository extends EntityRepository<SmartHome> {
     public SmartHomeRepository() {
         super(SmartHome.class);
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public SmartHome getHomeByEmail(String email) {
+        User user = userRepository.getByEmail(email);
+        return getHomesByUser(user).get(0);
     }
 
     public List<SmartHome> getHomesByUser(User user) {

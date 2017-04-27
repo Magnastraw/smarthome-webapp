@@ -1,0 +1,64 @@
+{
+  "credits": {
+    "enabled": $chartOption.credits
+  },
+  "chart": {
+    "renderTo": "$chartOption.renderTo",
+    "zoomType": "$chartOption.zoomType",
+    "type": "$chartOption.type",
+    "panning": true,
+    "panKey": "shift",
+    "plotBackgroundColor": null,
+    "plotBorderWidth": null,
+    "plotShadow": false
+  },
+  "title": {
+    "text": "$chartOption.chartTitle"
+  },
+  "subtitle": {
+        "text": "Click and drag to zoom in. Hold down shift key to pan."
+  },
+  "lang": {
+    "fullscreenTooltip": "Fullscreen"
+  },
+  "xAxis": {
+    "type": "$chartOption.xAxisType"
+  },
+  "yAxis":[ #foreach ($axisConfig in $chartOption.yAxis)
+    {
+      "labels": {
+        "format": "{value}$axisConfig.label"
+      },
+      "title": {
+        "text": "$axisConfig.title"
+      }
+    }#comma($chartOption.yAxis)
+#end],
+  "exporting": null,
+    "plotOptions": {
+        "area": {
+           "marker": {
+                "enabled": false,
+                "symbol": "circle",
+                "radius": 2,
+                "states": {
+                    "hover": {
+                    "enabled": true
+                    }
+                }
+            }
+        }
+    },
+  "series": [ #foreach($seriesConfig in $chartOption.series)
+    {
+        "data": "$seriesConfig.data",
+        "name": "$seriesConfig.name",
+        "type": "$seriesConfig.type",
+        "yAxis": $seriesConfig.yAxis
+    }#comma($chartOption.series)
+#end]
+}
+
+#macro( comma $array )
+    #if ($velocityCount == ${array.size()}) #else , #end
+#end

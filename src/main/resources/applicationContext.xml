@@ -2,21 +2,19 @@
 <beans xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:util="http://www.springframework.org/schema/util"
-
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context.xsd
-          http://www.springframework.org/schema/mvc
-          http://www.springframework.org/schema/mvc/spring-mvc.xsd
           http://www.springframework.org/schema/util
           http://www.springframework.org/schema/util/spring-util.xsd">
     <import resource="classpath:dataSourceConfig.xml"/>
     <import resource="classpath:securityConfig.xml"/>
-    <context:annotation-config/>
-    <mvc:annotation-driven/>
-    <context:component-scan base-package="com.netcracker.smarthome"/>
     <util:properties id="oauthProperties" location="classpath:oauth.properties"/>
+    <context:annotation-config/>
+    <context:component-scan base-package="com.netcracker.smarthome">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+    </context:component-scan>
 </beans>

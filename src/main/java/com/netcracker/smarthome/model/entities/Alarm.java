@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.model.entities;
 
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
+import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,9 +14,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "alarms", schema = "public", catalog = "smarthome_db")
-public class Alarm implements Serializable {
+public class Alarm implements Serializable, NotificationObject {
     private long alarmId;
-    private long clearedUserId;
+    private Long clearedUserId;
     private String alarmName;
     private String alarmDescription;
     private Timestamp startTime;
@@ -33,7 +34,7 @@ public class Alarm implements Serializable {
     public Alarm() {
     }
 
-    public Alarm(long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, AlarmSeverity severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
+    public Alarm(Long clearedUserId, String alarmName, String alarmDescription, Timestamp startTime, Timestamp endTime, AlarmSeverity severity, Timestamp severityChangeTime, Event event, SmartObject object, SmartObject subobject, AlarmSpec alarmSpec, Alarm parentAlarm) {
         this.clearedUserId = clearedUserId;
         this.alarmName = alarmName;
         this.alarmDescription = alarmDescription;
@@ -61,12 +62,12 @@ public class Alarm implements Serializable {
     }
 
     @Basic
-    @Column(name = "cleared_user_id", nullable = false)
-    public long getClearedUserId() {
+    @Column(name = "cleared_user_id", nullable = true)
+    public Long getClearedUserId() {
         return clearedUserId;
     }
 
-    public void setClearedUserId(long clearedUserId) {
+    public void setClearedUserId(Long clearedUserId) {
         this.clearedUserId = clearedUserId;
     }
 

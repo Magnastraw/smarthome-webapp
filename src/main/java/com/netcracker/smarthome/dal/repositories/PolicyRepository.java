@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.dal.repositories;
 
+import com.netcracker.smarthome.business.endpoints.IListener;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.model.entities.SmartObject;
@@ -7,12 +8,50 @@ import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class PolicyRepository extends EntityRepository<Policy> {
+    private List<IListener> listeners = new ArrayList<IListener>();
+
     public PolicyRepository() {
         super(Policy.class);
+        //initListeners();
+    }
+
+    /*protected void initListeners() {
+        Reflections reflections = new Reflections("com.netcracker.smarthome");
+        Set<Class<? extends IListener>> subTypes = reflections.getSubTypesOf(IListener.class);
+        for (Class cl : subTypes) {
+            String[] name = cl.getName().split("(?<=\\.)");
+            listeners.add((IListener) ContextUtils.getBean(name[name.length-1]));
+        }
+    }*/
+
+    public void addPolicyListener(IListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removePolicyListener(IListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void save(Policy policy) {
+        super.save(policy);
+        onSaveOrUpdate(policy);
+    }
+
+    public Policy update(Policy policy) {
+        Policy updatedPolicy = super.update(policy);
+        onSaveOrUpdate(updatedPolicy);
+        return updatedPolicy;
+    }
+
+    public void onSaveOrUpdate(Object object) {
+        for(IListener listener : listeners) {
+            listener.onSaveOrUpdate(object);
+        }
     }
 
     public List<Policy> getPoliciesByStatus(PolicyStatus status) {

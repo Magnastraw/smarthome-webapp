@@ -43,11 +43,8 @@ public class ConditionNode implements ExecutionNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof ConditionNode)) return false;
-
         ConditionNode that = (ConditionNode) o;
-
         return new EqualsBuilder()
                 .append(getIdentifier(), that.getIdentifier())
                 .isEquals();

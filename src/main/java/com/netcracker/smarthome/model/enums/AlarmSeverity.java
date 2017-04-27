@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.model.enums;
 
 public enum AlarmSeverity {
-    CLEARED,
+    CLEAR,
     NORMAL,
     INFO,
     WARN,

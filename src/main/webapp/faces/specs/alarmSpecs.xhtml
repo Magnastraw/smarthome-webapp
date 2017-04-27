@@ -10,31 +10,34 @@
     <p:outputPanel id="alarmSpecs">
         <h2>"#{homeSettingsBean.home.name}": alarm specifications</h2>
         <p:breadCrumb id="catalogsMenu" homeDisplay="text">
-            <p:menuitem icon="fa fa-home" actionListener="#{alarmSpecsBean.getRootCatalogs}" update=":centerForm"/>
+            <p:menuitem icon="fa fa-home" actionListener="#{alarmSpecsBean.expandCatalog(alarmSpecsBean.root)}" update=":centerForm"/>
             <c:forEach items="#{alarmSpecsBean.menuCatalogs}" var="catalog">
                 <p:menuitem value="#{catalog.catalogName}" actionListener="#{alarmSpecsBean.expandCatalog(catalog)}" update=":centerForm"/>
             </c:forEach>
         </p:breadCrumb>
         <p:dataTable id="alarmSpecDT" widgetVar="alarmSpecTable" value="#{alarmSpecsBean.tableEntities}" var="tableEntity"
                      sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" rowKey="#{tableEntity.name}"
-                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15"
+                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{alarmSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria">
             <p:column styleClass="column-delete">
                 <p:commandLink update=":centerForm:alarmDlg" oncomplete="PF('alarmDialog').show()" action="#{alarmSpecsBean.setCurrentTableEntity(tableEntity)}"
                                title="Edit" styleClass="fa fa-edit"/>
-                <p:commandLink action="#{alarmSpecsBean.remove}" update=":centerForm" oncomplete="PF('alarmSpecTable').filter()"
+                <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{alarmSpecsBean.setCurrentTableEntity(tableEntity)}"
+                               title="Move to another catalog" styleClass="fa move margin">
+                </p:commandLink>
+                <p:commandLink action="#{alarmSpecsBean.remove}" update=":centerForm"
                                title="Delete" styleClass="fa fa-remove margin">
                     <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
                     <f:setPropertyActionListener value="#{tableEntity}" target="#{alarmSpecsBean.removed}"/>
                 </p:commandLink>
             </p:column>
-            <p:column headerText="Name" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter-alarm">
-                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon"
+            <p:column headerText="Name" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter">
+                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon" title="#{tableEntity.name}"
                                value="#{tableEntity.name}" action="#{alarmSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
-                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}"/>
+                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}" title="#{tableEntity.name}"/>
             </p:column>
-            <p:column headerText="Object type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByObjectType}" filterBy="#{tableEntity}" filterFunction="#{alarmSpecsBean.filterByObjectType}" filterStyleClass="filter-alarm">
+            <p:column headerText="Object type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByObjectType}" filterBy="#{tableEntity}" filterFunction="#{alarmSpecsBean.filterByObjectType}" filterStyleClass="filter">
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.alarmSpec.objectType}"/>
             </p:column>
         </p:dataTable>
@@ -56,38 +59,24 @@
             </div>
             <p:panelGrid styleClass="ui-noborder" columns="2">
                 <h:outputLabel for="type" value="Type:" styleClass="dialog-output" rendered="#{alarmSpecsBean.creatingMode}"/>
-                <p:selectOneMenu id="type" value="#{alarmSpecsBean.editedTableEntity.typeCatalog}" styleClass="dialog-select"
+                <p:selectOneMenu id="type" value="#{alarmSpecsBean.editedTableEntity.typeCatalog}" styleClass="dialog-select-catalog"
                                  rendered="#{alarmSpecsBean.creatingMode}">
                     <f:selectItem itemLabel="Catalog" itemValue="#{true}"/>
                     <f:selectItem itemLabel="Specification" itemValue="#{false}"/>
                     <p:ajax event="change" update=":centerForm:alarmDlg" oncomplete="PF('alarmDialog').show();"/>
                 </p:selectOneMenu>
                 <h:outputLabel for="name" value="Name*:" styleClass="dialog-output"/>
-                <p:inputText id="name" styleClass="dialog-input" value="#{alarmSpecsBean.editedTableEntity.name}"
+                <p:inputText id="name" styleClass="dialog-input-catalog" value="#{alarmSpecsBean.editedTableEntity.name}"
                              validatorMessage="The field 'Name' must not contain the following characters: \ / * : ? > |">
                     <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
                     <p:clientValidator/>
                 </p:inputText>
-                <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>
-                <p:selectOneMenu rendered="#{alarmSpecsBean.editedTableEntity.typeCatalog}" id="parentCatalog"
-                                 styleClass="dialog-select" value="#{alarmSpecsBean.editedTableEntity.catalog.parentCatalog}"
-                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
-                    <f:selectItem itemLabel="" itemValue="#{alarmSpecsBean.root}"/>
-                    <f:selectItems var="catalog" value="#{alarmSpecsBean.allCatalogs}"
-                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
-                </p:selectOneMenu>
-                <p:selectOneMenu rendered="#{!alarmSpecsBean.editedTableEntity.typeCatalog}" id="specParentCatalog"
-                                 styleClass="dialog-select" value="#{alarmSpecsBean.editedTableEntity.alarmSpec.catalog}"
-                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
-                    <f:selectItems var="catalog" value="#{alarmSpecsBean.allCatalogs}"
-                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
-                </p:selectOneMenu>
             </p:panelGrid>
 
             <p:panelGrid id="container" rendered="#{!alarmSpecsBean.editedTableEntity.typeCatalog}"
                          columns="2" styleClass="ui-noborder">
                 <h:outputLabel for="objectType" value="Object type*:" styleClass="dialog-output"/>
-                <p:inputText id="objectType" styleClass="dialog-input-alarm" value="#{alarmSpecsBean.editedTableEntity.alarmSpec.objectType}"
+                <p:inputText id="objectType" styleClass="dialog-input" value="#{alarmSpecsBean.editedTableEntity.alarmSpec.objectType}"
                              validatorMessage="The field 'Object type' must contain only letters">
                     <f:validateRegex pattern="[A-Za-z]+"/>
                     <p:clientValidator/>
@@ -99,6 +88,31 @@
             <p:commandButton value="Cancel" onclick="PF('alarmDialog').hide();" icon="fa fa-undo" update=":centerForm" styleClass="btn"/>
         </p:panel>
         <p:ajax event="close" listener="#{alarmSpecsBean.setMode(false)}"/>
+    </p:dialog>
+    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move '#{metricSpecsBean.editedTableEntity.name}' to another catalog" position="center">
+        <p:panel>
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+                <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>
+                <p:selectOneMenu rendered="#{alarmSpecsBean.editedTableEntity.typeCatalog}" id="parentCatalog"
+                                 styleClass="dialog-select" value="#{alarmSpecsBean.editedTableEntity.catalog.parentCatalog}"
+                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
+                    <f:selectItem itemLabel="" itemValue="#{alarmSpecsBean.root}"/>
+                    <f:selectItems var="catalog" value="#{alarmSpecsBean.allCatalogs}"
+                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
+                </p:selectOneMenu>
+                <p:selectOneMenu rendered="#{!alarmSpecsBean.editedTableEntity.typeCatalog}" id="specParentCatalog"
+                                 styleClass="dialog-select" value="#{alarmSpecsBean.editedTableEntity.alarmSpec.catalog}"
+                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
+                    <f:selectItem itemLabel="" itemValue="#{alarmSpecsBean.root}"/>
+                    <f:selectItems var="catalog" value="#{alarmSpecsBean.allCatalogs}"
+                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Save" action="#{metricSpecsBean.move}" update=":centerForm" styleClass="btn" icon="fa fa-save"/>
+            <p:commandButton value="Cancel" onclick="PF('moveDialog').hide();" icon="fa fa-undo" update=":centerForm" styleClass="btn"/>
+        </p:panel>
+        <p:ajax event="close" listener="#{metricSpecsBean.setMode(false)}"/>
     </p:dialog>
     <script type="text/javascript">
         function handleRequest(xhr, status, args, dialogName) {

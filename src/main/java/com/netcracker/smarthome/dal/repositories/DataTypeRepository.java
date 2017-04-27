@@ -19,4 +19,11 @@ public class DataTypeRepository extends EntityRepository<DataType> {
         List<DataType> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
+
+    public DataType getByName(String name) {
+        Query query = getManager().createQuery("select dt from DataType dt where lower(dt.name) = :name");
+        query.setParameter("name", name);
+        List<DataType> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
 }

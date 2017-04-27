@@ -1,13 +1,15 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
     <p:panelMenu>
         <p:submenu label="House" icon="fa fa-home">
             <p:submenu label="#{currentUserHomesBean.currentHome.name}" icon="fa fa-home">
                 <c:forEach items="#{currentUserHomesBean.userHomes}" var="home">
-                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.initHomeSettings(home)}"/>
+                    <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true"
+                                actionListener="#{currentUserHomesBean.switchHome(home)}"/>
                 </c:forEach>
             </p:submenu>
             <p:menuitem value="House settings" icon="fa fa-gear"
@@ -22,6 +24,11 @@
                 <f:setPropertyActionListener value="#{true}" target="#{homeFormBean.creatingMode}"/>
             </p:menuitem>
         </p:submenu>
+        <p:submenu label="Inventory">
+            <p:menuitem value="Inventory"
+                        action="#{navigationBean.setPageName('inventory')}"
+                        update=":centerForm"/>
+        </p:submenu>
         <p:submenu label="Configure">
             <p:menuitem value="Policies"
                         action="#{navigationBean.setPageName('policy/policies')}"
@@ -32,14 +39,28 @@
             <p:menuitem value="Alarm specifications"
                         action="#{navigationBean.setPageName('specs/alarmSpecs')}"
                         update=":centerForm"/>
+            <p:menuitem value="Alarms"
+                        action="#{navigationBean.setPageName('alarms/alarmlist')}"
+                        update=":centerForm"/>
             <p:menuitem value="Units"
                         action="#{navigationBean.setPageName('specs/units')}"
                         update=":centerForm"/>
         </p:submenu>
-        <p:submenu label="Charts">
-            <p:menuitem value="Chart widgets"
-                        action="#{navigationBean.setPageName('charts/chartPage')}"
-                        update="centerForm"/>
+        <p:submenu label="View">
+            <p:menuitem value="Dashboard manager"
+                        action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                        update=":centerForm"
+                        ajax="true"/>
+            <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboardMenuList.size()>0}">
+                <c:forEach items="#{dashboardBean.dashboardMenuList}" var="dashboard">
+                    <p:menuitem value="#{dashboard.dashboardName}"
+                                update="centerForm"
+                                ajax="true"
+                                actionListener="#{dashboardBean.setCurrentDashboardFromMenu(dashboard)}">
+                        <f:setPropertyActionListener value="false" target="#{dashboardBean.fromDashboard}"/>
+                    </p:menuitem>
+                </c:forEach>
+            </p:submenu>
         </p:submenu>
     </p:panelMenu>
 </ui:composition>

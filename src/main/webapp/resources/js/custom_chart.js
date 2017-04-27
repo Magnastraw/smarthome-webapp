@@ -1,4 +1,4 @@
-function createNewChart(configurationJson, requestDataOptions, refreshInterval, inputDiv) {
+function createNewChart(configurationJson, requestDataOptions, refreshInterval, inputDiv, id) {
     var chart,
         intervalId,
         options = $.parseJSON(configurationJson),
@@ -6,26 +6,27 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     //stop setInterval
     createEmptyChart(function () {
-        console.log(options);
         if (refreshInterval == 0) {
             requestData(function () {
+                chart.reflow();
+                chart.hideLoading();
             });
         } else if (refreshInterval >= 10000) {
             requestData(function () {
-                dataSource.rownum += 100;
+                chart.reflow();
+                chart.hideLoading();
             });
             intervalId = setInterval(function () {
                 requestData(function () {
-                    dataSource.rownum += 100;
                 });
             }, refreshInterval);
         } else {
             requestLiveData(function () {
-                dataSource.rownum++;
+                chart.reflow();
+                chart.hideLoading();
             });
             intervalId = setInterval(function () {
                 requestLiveData(function () {
-                    dataSource.rownum++;
                 });
             }, refreshInterval);
         }
@@ -51,9 +52,9 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                 callback();
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                clearInterval(intervalId);
                 alert(xhr.status);
                 alert(thrownError);
-                clearInterval(intervalId);
             },
             cache: false
         });
@@ -67,16 +68,19 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             dataType: "json",
             type: 'POST',
             success: function (data) {
+                console.log(dataSource);
+                console.log(data);
                 $.each(data, function (pos, series) {
                         chart.series[pos].setData(series.data);
+
                 });
                 chart.redraw();
                 callback();
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                clearInterval(intervalId);
                 alert(xhr.status);
                 alert(thrownError);
-                clearInterval(intervalId);
             },
             cache: false
         });
@@ -84,11 +88,10 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     function createEmptyChart(callback) {
         fullscreenMode();
-        console.log(options);
         chart = new Highcharts.Chart(options);
+        chart.showLoading();
+        chart.reflow();
         callback();
-
-
     }
 
     function fullscreenMode() {
@@ -105,7 +108,11 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
         options.exporting.buttons.customButton.onclick = function () {
             $('.ui-layout-center').toggleClass('ui-layout-center-visible');
             $('.ui-layout-center .ui-layout-unit-content').toggleClass('ui-layout-unit-content-visible');
-            $('#' + inputDiv).toggleClass('modal');
+            $('#li_' + id).toggleClass('li_overflow');
+            $('#' + inputDiv).toggleClass('chart-container chart-border modal chart-in ');
+            $('header').toggleClass("x-tree-icon-leaf");
+            $("#centerForm\\:button_"+id).toggleClass("delete-chart-button");
+
             chart.reflow();
         };
 
@@ -125,4 +132,25 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             }
         });
     }
+
+
+    $("#centerForm\\:button_"+id).click(function () {
+        gridster.remove_widget($(this).closest('li'));
+        chart.destroy();
+        clearInterval(intervalId);
+    });
 }
+
+function clearHighchartsContainer() {
+    $.each(Highcharts.charts, function (pos, chart) {
+        if(Highcharts.charts[pos]!=undefined) {
+            Highcharts.charts[pos].destroy();
+        }
+    });
+}
+
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});

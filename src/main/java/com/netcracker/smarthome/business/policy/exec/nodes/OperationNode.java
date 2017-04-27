@@ -82,11 +82,8 @@ public class OperationNode implements ConditionExecutionCompleteListener, Execut
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof OperationNode)) return false;
-
         OperationNode that = (OperationNode) o;
-
         return new EqualsBuilder()
                 .append(identifier, that.identifier)
                 .isEquals();

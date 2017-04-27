@@ -81,7 +81,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>6.0</version>
+            <version>6.1</version>
         </dependency>
         <!-- Servlet dependencies -->
         <dependency>
@@ -117,7 +117,7 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <dependency><!-- jackson -->
+        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version>
@@ -131,6 +131,43 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>velocity</groupId>
+            <artifactId>velocity-dep</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <!-- Twilio dependency (sms) -->
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>(7.0,7.9)</version>
+        </dependency>
+        <!-- Javamail dependency -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
     <build>

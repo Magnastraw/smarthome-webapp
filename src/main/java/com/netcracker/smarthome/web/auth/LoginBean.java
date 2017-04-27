@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.web.auth;
 
-import com.netcracker.smarthome.business.auth.oauth.SocialServiceAuthenticator;
+import com.netcracker.smarthome.business.auth.social.SocialServiceClient;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,8 +64,8 @@ public class LoginBean implements Serializable {
     }
 
     private String getRedirectUri(String serviceName) {
-        SocialServiceAuthenticator authenticator = (SocialServiceAuthenticator) ContextUtils.getBean(serviceName + "Authenticator");
-        return authenticator.getServiceRedirectURI(getSocialLoginPath(serviceName));
+        SocialServiceClient serviceClient = (SocialServiceClient) ContextUtils.getBean(serviceName + "Client");
+        return serviceClient.buildServiceRedirectUrl(getSocialLoginPath(serviceName));
     }
 
     private String getSocialLoginPath(String serviceName) {

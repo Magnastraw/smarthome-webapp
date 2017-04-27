@@ -71,11 +71,8 @@ public class RuleNode implements ConditionExecutionCompleteListener, ActionExecu
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof RuleNode)) return false;
-
         RuleNode ruleNode = (RuleNode) o;
-
         return new EqualsBuilder()
                 .append(identifier, ruleNode.identifier)
                 .isEquals();

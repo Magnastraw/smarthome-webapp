@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.policy.events.EventType;
+import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.util.HashMap;

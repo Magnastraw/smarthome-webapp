@@ -11,24 +11,22 @@
     <cc:attribute name="chartOptions"/>
     <cc:attribute name="requestDataOptions"/>
     <cc:attribute name="refreshInterval"/>
-
 </cc:interface>
 
 <!--Define component-->
 <cc:implementation>
-
-    <h:outputStylesheet library="css" name="charts.css"  />
-
     <h:inputHidden id="chartOptions_#{cc.id}" value="#{cc.attrs.chartOptions}"/>
     <h:inputHidden id="requestDataOptions_#{cc.id}" value="#{cc.attrs.requestDataOptions}"/>
     <h:inputHidden id="refreshInterval_#{cc.id}" value="#{cc.attrs.refreshInterval}"/>
 
-    <div id="#{cc.id}_chartContainer" class="chart-container">
-        <div id="#{cc.id}_chartDiv"  class="chart" style="width: 600px; height: 400px; margin-right: auto; margin-left: auto;"><!--ширина-высота-->
+    <div id="#{cc.id}_chartContainer" class="chart-container chart-border">
+        <div id="#{cc.id}_chartDiv" class="chart-in">
             <script type="text/javascript">
-                   $(function () {
-                       createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(), $('input[id$="requestDataOptions_#{cc.id}"]').val(), $('input[id$="refreshInterval_#{cc.id}"]').val(), "#{cc.id}_chartContainer");
-                   })
+                $("#{cc.id}_chartContainer").ready(function () {
+                    $("#{cc.id}_chartDiv").ready(function () {
+                        createNewChart($('input[id$="chartOptions_#{cc.id}"]').val(), $('input[id$="requestDataOptions_#{cc.id}"]').val(), $('input[id$="refreshInterval_#{cc.id}"]').val(), "#{cc.id}_chartContainer", "#{cc.id}");
+                    });
+                });
             </script>
         </div>
     </div>

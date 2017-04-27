@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -14,7 +13,7 @@ import java.sql.Timestamp;
 @Table(name = "events_history", schema = "public", catalog = "smarthome_db")
 public class EventHistory implements Serializable {
     private long historyId;
-    private Timestamp regDate;
+    private Timestamp readDate;
     private String eventDescription;
     private AlarmSeverity severity;
     private String eventParameters;
@@ -23,12 +22,11 @@ public class EventHistory implements Serializable {
     public EventHistory() {
     }
 
-    public EventHistory(Timestamp regDate, String eventDescription, AlarmSeverity severity, String eventParameters, Event event) {
-        this.regDate = regDate;
-        this.eventDescription = eventDescription;
+    public EventHistory(Timestamp readDate, Event event, AlarmSeverity severity, String eventParameters) {
+        this.readDate = readDate;
+        this.event = event;
         this.severity = severity;
         this.eventParameters = eventParameters;
-        this.event = event;
     }
 
     @Id
@@ -45,16 +43,16 @@ public class EventHistory implements Serializable {
 
     @Basic
     @Column(name = "read_date", nullable = false)
-    public Timestamp getRegDate() {
-        return regDate;
+    public Timestamp getReadDate() {
+        return readDate;
     }
 
-    public void setRegDate(Timestamp readDate) {
-        this.regDate = readDate;
+    public void setReadDate(Timestamp readDate) {
+        this.readDate = readDate;
     }
 
     @Basic
-    @Column(name = "event_description", nullable = false)
+    @Column(name = "event_description", nullable = true)
     public String getEventDescription() {
         return eventDescription;
     }
@@ -63,8 +61,9 @@ public class EventHistory implements Serializable {
         this.eventDescription = eventDescription;
     }
 
-    @Enumerated
+    @Basic
     @Column(name = "severity", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     public AlarmSeverity getSeverity() {
         return severity;
     }
@@ -117,11 +116,12 @@ public class EventHistory implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("historyId", getHistoryId())
-                .append("readDate", getRegDate())
+                .append("readDate", getReadDate())
                 .append("eventDescription", getEventDescription())
                 .append("severity", getSeverity())
                 .append("eventParameters", getEventParameters())
-                .append("event", getEvent())
+                .append("events", getEvent())
                 .toString();
     }
 }
+

@@ -1,12 +1,11 @@
 package com.netcracker.smarthome.web.home;
 
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.model.entities.DataType;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.primefaces.context.RequestContext;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;

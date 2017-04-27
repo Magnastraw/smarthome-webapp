@@ -2,7 +2,7 @@ package com.netcracker.smarthome.business.policy.exec;
 
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.policy.exec.nodes.PolicyNode;
-import com.netcracker.smarthome.business.policy.services.PolicyService;
+import com.netcracker.smarthome.business.services.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

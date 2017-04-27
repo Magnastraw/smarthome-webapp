@@ -1,12 +1,16 @@
 package com.netcracker.smarthome.web.specs;
 
-import com.netcracker.smarthome.business.specs.CatalogService;
-import com.netcracker.smarthome.business.specs.AlarmSpecService;
+import com.netcracker.smarthome.business.services.CatalogService;
+import com.netcracker.smarthome.business.services.AlarmSpecService;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
+import com.netcracker.smarthome.web.specs.table.Filter;
+import com.netcracker.smarthome.web.specs.table.Sort;
+import com.netcracker.smarthome.web.specs.table.TableEntity;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.*;
 
@@ -62,39 +67,34 @@ public class AlarmSpecsBean implements Serializable {
         });
         creatingMode = true;
         editedTableEntity = getDefaultTableEntity();
-        getRootCatalogs();
+        expandCatalog(root);
     }
 
-    public void getRootCatalogs() {
+    /*public void getRootCatalogs() {
         clearMenuCatalogs();
         currentCatalogs = catalogService.getSubcatalogs(root);
         tableEntities.clear();
         for (Catalog c : currentCatalogs) {
             tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
         }
-    }
+    }*/
 
     public void expandCatalog(Catalog catalog) {
-        if (catalog != null) {
-            LOG.info("expandCatalog: " + catalog.getCatalogName());
-            tableEntities.clear();
-            clearMenuCatalogs();
-            menuCatalogs = catalogService.getPathToCatalog(catalog);
-            currentCatalogs = catalogService.getSubcatalogs(catalog);
-            if (currentCatalogs.size() != 0) {
-                for (Catalog c : currentCatalogs) {
-                    tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
-                }
-            }
-            alarmSpecs = alarmSpecService.getAlarmSpecs(catalog);
-            if (alarmSpecs.size() != 0) {
-                for (AlarmSpec as : alarmSpecs) {
-                    tableEntities.add(new TableEntity(as, as.getSpecName(), false));
-                }
+        LOG.info("expandCatalog: " + catalog.getCatalogName());
+        tableEntities.clear();
+        clearMenuCatalogs();
+        menuCatalogs = catalogService.getPathToCatalog(catalog);
+        currentCatalogs = catalogService.getSubcatalogs(catalog);
+        if (currentCatalogs.size() != 0) {
+            for (Catalog c : currentCatalogs) {
+                tableEntities.add(new TableEntity(c, c.getCatalogName(), true));
             }
         }
-        else {
-            getRootCatalogs();
+        alarmSpecs = alarmSpecService.getAlarmSpecs(catalog);
+        if (alarmSpecs.size() != 0) {
+            for (AlarmSpec as : alarmSpecs) {
+                tableEntities.add(new TableEntity(as, as.getSpecName(), false));
+            }
         }
     }
 
@@ -103,7 +103,7 @@ public class AlarmSpecsBean implements Serializable {
     }
 
     public void onSelect(TableEntity folder) {
-        if (folder.isTypeCatalog()) {
+         if (folder.isTypeCatalog()) {
             expandCatalog(folder.getCatalog());
         }
     }
@@ -147,7 +147,8 @@ public class AlarmSpecsBean implements Serializable {
                 try {
                     Catalog catalog = editedTableEntity.getCatalog();
                     catalog.setCatalogName(editedTableEntity.getName());
-                    catalog.setSmartHome(getHome());
+                    catalog.setParentCatalog(getCurrentCatalog());
+                    //catalog.setSmartHome(getHome());
                     check = false;
                     if (catalog.getCatalogName().equals(currentName)) {
                         check = true;
@@ -195,6 +196,7 @@ public class AlarmSpecsBean implements Serializable {
                 try {
                     AlarmSpec alarmSpec = editedTableEntity.getAlarmSpec();
                     alarmSpec.setSpecName(editedTableEntity.getName());
+                    alarmSpec.setCatalog(getCurrentCatalog());
                     check = false;
                     if (alarmSpec.getSpecName().equals(currentName)) {
                         check = true;
@@ -225,6 +227,21 @@ public class AlarmSpecsBean implements Serializable {
                     context.addCallbackParam("correct", false);
                 }
             }
+        }
+    }
+
+    public void move() {
+        try {
+            if (editedTableEntity.isTypeCatalog()) {
+                catalogService.updateCatalog(editedTableEntity.getCatalog());
+            }
+            else {
+                alarmSpecService.updateAlarmSpec(editedTableEntity.getAlarmSpec());
+            }
+            expandCatalog(getCurrentCatalog());
+        } catch (Exception ex) {
+            LOG.error("Error during moving:", ex);
+            ContextUtils.addErrorSummaryToContext("Error during moving");
         }
     }
 
@@ -315,14 +332,14 @@ public class AlarmSpecsBean implements Serializable {
         this.menuCatalogs = menuCatalogs;
     }
 
-    public List<TableEntity> getFilteredTableEntities() {
+   /* public List<TableEntity> getFilteredTableEntities() {
         return filteredTableEntities;
     }
 
     public void setFilteredTableEntities(List<TableEntity> filteredTableEntities) {
         this.filteredTableEntities = filteredTableEntities;
     }
-
+*/
     public TableEntity getRemoved() {
         return this.removed;
     }
@@ -373,5 +390,25 @@ public class AlarmSpecsBean implements Serializable {
 
     public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
         this.userHomesBean = userHomesBean;
+    }
+
+    public void clearFilters() {
+        DataTable dataTable = (DataTable)FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmSpecDT");
+        dataTable.resetValue();
+        dataTable.reset();
+        //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("filteredData");
+    }
+
+
+    public List<TableEntity> getFilteredTableEntities() {
+        if (filteredTableEntities == null) {
+            filteredTableEntities = (List<TableEntity>)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("filteredData");
+        }
+        return filteredTableEntities;
+    }
+
+    public void setFilteredTableEntities(List<TableEntity> filteredTableEntities) {
+        this.filteredTableEntities = filteredTableEntities;
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("filteredData", filteredTableEntities);
     }
 }

@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.web.policy;
 
-import com.netcracker.smarthome.business.policy.services.PolicyService;
-import com.netcracker.smarthome.business.specs.CatalogService;
+import com.netcracker.smarthome.business.services.PolicyService;
+import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
@@ -90,7 +90,7 @@ public class PoliciesBean {
                 catalogToSave.setParentCatalog(selectedCatalog);
                 selectedItem.setItem(catalogService.updateCatalog(catalogToSave));
             } else
-                selectedItem.setItem(policyService.updatePolicy((Policy) selectedItem.getItem()));
+                selectedItem.setItem(policyService.savePolicy((Policy) selectedItem.getItem()));
         } catch (Exception e) {
             ContextUtils.addErrorMessageToContext("Error during saving changes!");
             context.addCallbackParam("correct", false);

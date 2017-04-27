@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -11,9 +12,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "events", schema = "public", catalog = "smarthome_db")
-public class Event implements Serializable {
+public class Event implements Serializable, NotificationObject {
     private long eventId;
-    private String eventType;
+    private Long eventType;
     private List<Alarm> alarms;
     private SmartObject object;
     private SmartObject subobject;
@@ -24,7 +25,7 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(String eventType, SmartObject object, SmartObject subobject, SmartHome smartHome) {
+    public Event(Long eventType, SmartObject object, SmartObject subobject, SmartHome smartHome) {
         this.eventType = eventType;
         this.object = object;
         this.subobject = subobject;
@@ -44,12 +45,12 @@ public class Event implements Serializable {
     }
 
     @Basic
-    @Column(name = "event_type", nullable = false)
-    public String getEventType() {
+    @Column(name = "event_type", nullable = true)
+    public Long getEventType() {
         return eventType;
     }
 
-    public void setEventType(String eventType) {
+    public void setEventType(Long eventType) {
         this.eventType = eventType;
     }
 

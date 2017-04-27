@@ -32,6 +32,12 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return query.getResultList();
     }
 
+    public List<SmartObject> getSubobjectsByObjectId(long objectId){
+        Query query = getManager().createQuery("select smartObject from SmartObject smartObject where smartObject.parentObject.smartObjectId = :objectId");
+        query.setParameter("objectId",objectId);
+        return query.getResultList();
+    }
+
     public List<SmartObject> getObjectsByCatalogId(long smartHomeId, long catalogId){
         Query query = getManager().createQuery("select smartObject from SmartObject smartObject where (smartObject.smartHome.smartHomeId=:smartHomeId and smartObject.catalog.catalogId=:catalogId)");
         query.setParameter("catalogId", catalogId);
@@ -46,4 +52,18 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return result.isEmpty() ? null : result.get(0);
     }
 
+    public SmartObject getObjectByExternalKey(long smartHomeId, long externalKey){
+        Query query = getManager().createQuery("select so from SmartObject so where (so.smartHome.smartHomeId = :smartHomeId and so.externalKey = :externalKey)");
+        query.setParameter("smartHomeId", smartHomeId);
+        query.setParameter("externalKey", externalKey);
+        List<SmartObject> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public SmartObject getRootController(long smartHomeId) {
+        Query query = getManager().createQuery("select so from SmartObject so where (so.smartHome.smartHomeId = :smartHomeId and so.parentObject.smartObjectId is null)");
+        query.setParameter("smartHomeId", smartHomeId);
+        List<SmartObject> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
 }

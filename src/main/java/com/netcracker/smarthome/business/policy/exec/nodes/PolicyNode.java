@@ -75,11 +75,8 @@ public class PolicyNode implements RuleExecutionCompleteListener {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof PolicyNode)) return false;
-
         PolicyNode that = (PolicyNode) o;
-
         return new EqualsBuilder()
                 .append(getIdentifier(), that.getIdentifier())
                 .isEquals();

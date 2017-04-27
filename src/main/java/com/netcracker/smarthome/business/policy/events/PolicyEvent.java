@@ -5,7 +5,6 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.Spec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -69,22 +68,19 @@ public abstract class PolicyEvent implements Serializable {
         this.spec = spec;
     }
 
-    public Event getDbEvent() {
+    public com.netcracker.smarthome.model.entities.Event getDbEvent() {
         return dbEvent;
     }
 
-    public void setDbEvent(Event dbEvent) {
+    public void setDbEvent(com.netcracker.smarthome.model.entities.Event dbEvent) {
         this.dbEvent = dbEvent;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof PolicyEvent)) return false;
-
         PolicyEvent event = (PolicyEvent) o;
-
         return new EqualsBuilder()
                 .append(getType(), event.getType())
                 .append(getObject(), event.getObject())

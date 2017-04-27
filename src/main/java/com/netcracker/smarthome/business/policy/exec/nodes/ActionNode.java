@@ -44,11 +44,8 @@ public class ActionNode implements ExecutionNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof ActionNode)) return false;
-
         ActionNode that = (ActionNode) o;
-
         return new EqualsBuilder()
                 .append(getIdentifier(), that.getIdentifier())
                 .isEquals();

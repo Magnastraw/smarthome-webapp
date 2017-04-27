@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <p:outputPanel id="alarm">
+        <h2>Alarm properties</h2>
+        <p:commandButton action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm"
+                         value="To Alarms page" icon="fa fa-level-up" styleClass="btn fieldset"/>
+        <p:commandButton action="#{navigationBean.setPageName('inventory')}" update=":centerForm"
+                         value="To Inventory page" icon="fa fa-level-up" styleClass="btn fieldset"/>
+        <p:fieldset legend="Parameters" toggleable="true" styleClass="fieldset">
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+                <h:outputLabel value="Name:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.alarmName}"/>
+                <h:outputLabel value="Description:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.alarmDescription}"/>
+                <h:outputLabel value="Object:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.object.name}"/>
+                <h:outputLabel value="Subobject:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{(alarmBean.selectedAlarm.subobject != null)? alarmBean.selectedAlarm.subobject.name : ''}"/>
+                <h:outputLabel value="Alarm specification:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.alarmSpec.specName}"/>
+                <h:outputLabel value="Parent alarm:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{(alarmBean.selectedAlarm.parentAlarm != null)? alarmBean.selectedAlarm.parentAlarm.alarmName : ''}"/>
+
+                <h:outputLabel value="Start time:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.startTime}">
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                </h:outputText>
+                <h:outputLabel value="End time:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.endTime}">
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                </h:outputText>
+                <h:outputLabel value="Severity:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.severity.name()}"/>
+                <!--<h:outputLabel value="Event type:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.event.eventType}"/> -->
+            </p:panelGrid>
+        </p:fieldset>
+        <p:fieldset id="events" legend="Event history" toggleable="true" styleClass="fieldset">
+            <p:dataTable id="eventsTable" widgetVar="eventsTable" value="#{alarmBean.events}" var="eventHistory"
+                         sortBy="#{eventHistory.readDate}" sortOrder="descending" rowKey="#{eventHistory.historyId}"
+                         paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                          emptyMessage="No objects found with given criteria">
+                <p:column headerText="Date" styleClass="column" sortBy="#{eventHistory.readDate}" filterBy="#{eventHistory.readDate}" filterFunction="#{alarmListBean.filterByDate}">
+                    <f:facet name="filter">
+                        <p:calendar id="timeFilter" widgetVar="timeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date" timeInput="true" navigator="true" mask="true" showButtonPanel="true">
+                            <p:ajax event="dateSelect" oncomplete="PF('eventsTable').filter()"/>
+                            <p:ajax event="change" listener="#{alarmBean.onChange('timeFilter')}" oncomplete="PF('eventsTable').filter()"/>
+                        </p:calendar>
+                    </f:facet>
+                    <h:outputText value="#{eventHistory.readDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Description" styleClass="column" sortBy="#{eventHistory.eventDescription}" filterBy="#{eventHistory.eventDescription}" filterMatchMode="startsWith" filterStyleClass="filter">
+                    <h:outputText value="#{eventHistory.eventDescription}"/>
+                </p:column>
+                <p:column headerText="Parameters" styleClass="column" sortBy="#{eventHistory.eventParameters}" filterBy="#{eventHistory.eventParameters}" filterMatchMode="startsWith" filterStyleClass="filter">
+                    <h:outputText value="#{eventHistory.eventParameters}"/>
+                </p:column>
+                <p:column headerText="Severity" styleClass="column #{alarmListBean.setStyleClass(eventHistory.severity.ordinal())}" sortBy="#{eventHistory.severity.ordinal()}" filterBy="#{eventHistory.severity.name()}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('eventsTable').filter()" styleClass="filter-select">
+                            <f:selectItem/>
+                            <f:selectItems value="#{alarmListBean.severities}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{eventHistory.severity.name()}"/>
+                </p:column>
+            </p:dataTable>
+        </p:fieldset>
+    </p:outputPanel>
+</html>

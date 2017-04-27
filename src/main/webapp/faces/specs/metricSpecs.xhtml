@@ -10,29 +10,32 @@
     <p:outputPanel id="metricSpecs">
         <h2>"#{homeSettingsBean.home.name}": metric specifications</h2>
         <p:breadCrumb id="catalogsMenu" homeDisplay="text">
-            <p:menuitem icon="fa fa-home" actionListener="#{metricSpecsBean.getRootCatalogs}" update=":centerForm"/>
+            <p:menuitem icon="fa fa-home" actionListener="#{metricSpecsBean.expandCatalog(metricSpecsBean.root)}" update=":centerForm"/>
             <c:forEach items="#{metricSpecsBean.menuCatalogs}" var="catalog">
                 <p:menuitem value="#{catalog.catalogName}" actionListener="#{metricSpecsBean.expandCatalog(catalog)}" update=":centerForm"/>
             </c:forEach>
         </p:breadCrumb>
         <p:dataTable id="metricSpecDT" widgetVar="metricSpecTable" value="#{metricSpecsBean.tableEntities}" var="tableEntity"
                      sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" rowKey="#{tableEntity.name}"
-                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15"
+                     paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{metricSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria">
             <p:column styleClass="column-delete">
                 <p:commandLink update=":centerForm:metricDlg" oncomplete="PF('metricDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
                                title="Edit" styleClass="fa fa-edit"/>
-                <p:commandLink action="#{metricSpecsBean.remove}" update=":centerForm" oncomplete="PF('metricSpecTable').filter()"
+                <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
+                               title="Move to another catalog" styleClass="fa move margin">
+                </p:commandLink>
+                <p:commandLink action="#{metricSpecsBean.remove}" update=":centerForm"
                                title="Delete" styleClass="fa fa-remove margin">
                     <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
                     <f:setPropertyActionListener value="#{tableEntity}" target="#{metricSpecsBean.removed}"/>
                 </p:commandLink>
             </p:column>
             <p:column headerText="Name" styleClass="column-name" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon"
+                <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon" title="#{tableEntity.name}"
                                value="#{tableEntity.name}" action="#{metricSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
-                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}"/>
+                <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}" title="#{tableEntity.name}"/>
             </p:column>
             <p:column headerText="Metric type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMetricType}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMetricType}" filterStyleClass="filter">
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.metricType}"/>
@@ -46,9 +49,7 @@
             <p:column headerText="Max value" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMaxValue}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMaxValue}" filterStyleClass="filter">
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.maxValue}"/>
             </p:column>
-            <p:column headerText="Assigned to object" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByAssigned}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByAssigned}" filterStyleClass="filter">
-                <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.assignedToObject}"/>
-            </p:column>
+
         </p:dataTable>
 
         <p:commandButton action="#{metricSpecsBean.setMode(true)}" oncomplete="PF('metricDialog').show();"
@@ -80,20 +81,6 @@
                     <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
                     <p:clientValidator/>
                 </p:inputText>
-                <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>
-                <p:selectOneMenu rendered="#{metricSpecsBean.editedTableEntity.typeCatalog}" id="parentCatalog"
-                                 styleClass="dialog-select-catalog" value="#{metricSpecsBean.editedTableEntity.catalog.parentCatalog}"
-                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
-                    <f:selectItem itemLabel="" itemValue="#{metricSpecsBean.root}"/>
-                    <f:selectItems var="catalog" value="#{metricSpecsBean.allCatalogs}"
-                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
-                </p:selectOneMenu>
-                <p:selectOneMenu rendered="#{!metricSpecsBean.editedTableEntity.typeCatalog}" id="specParentCatalog"
-                                 styleClass="dialog-select-catalog" value="#{metricSpecsBean.editedTableEntity.metricSpec.catalog}"
-                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
-                    <f:selectItems var="catalog" value="#{metricSpecsBean.allCatalogs}"
-                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
-                </p:selectOneMenu>
             </p:panelGrid>
 
             <p:panelGrid id="container" rendered="#{!metricSpecsBean.editedTableEntity.typeCatalog}"
@@ -114,28 +101,47 @@
                 <p:inputText id="minValue" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.minValue}"
                              converterMessage="The field 'Min value' must contain only numbers (separator '.')">
                     <f:validateDoubleRange/>
-                <p:clientValidator/>
-            </p:inputText>
-            <h:outputLabel for="maxValue" value="Max value:" styleClass="dialog-input"/>
-            <p:inputText id="maxValue" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.maxValue}"
-                         converterMessage="The field 'Max value' must contain only numbers (separator '.')">
-                <f:validateDoubleRange/>
-                <p:clientValidator/>
-            </p:inputText>
-            <h:outputLabel for="assignedToObject" value="Assigned to object:" styleClass="dialog-input"/>
-            <p:inputText id="assignedToObject" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.assignedToObject}"
-                         validatorMessage="The field 'Assigned to object' must contain only letters">
-            <f:validateRegex pattern="[A-Za-z]+"/>
-            <p:clientValidator/>
-        </p:inputText>
-        </p:panelGrid>
-        <br/>
-        <p:commandButton value="Save" action="#{metricSpecsBean.saveChanges}" update=":centerForm:metricDlg,:centerForm" validateClient="true"
-                         oncomplete="handleRequest(xhr, status, args, 'metricDialog')" styleClass="btn" icon="fa fa-save"/>
-        <p:commandButton value="Cancel" onclick="PF('metricDialog').hide();" icon="fa fa-undo" update=":centerForm" styleClass="btn"/>
-    </p:panel>
-    <p:ajax event="close" listener="#{metricSpecsBean.setMode(false)}"/>
-</p:dialog>
+                    <p:clientValidator/>
+                </p:inputText>
+                <h:outputLabel for="maxValue" value="Max value:" styleClass="dialog-input"/>
+                <p:inputText id="maxValue" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.maxValue}"
+                             converterMessage="The field 'Max value' must contain only numbers (separator '.')">
+                    <f:validateDoubleRange/>
+                    <p:clientValidator/>
+                </p:inputText>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Save" action="#{metricSpecsBean.saveChanges}" update=":centerForm:metricDlg,:centerForm" validateClient="true"
+                             oncomplete="handleRequest(xhr, status, args, 'metricDialog')" styleClass="btn" icon="fa fa-save"/>
+            <p:commandButton value="Cancel" onclick="PF('metricDialog').hide();" icon="fa fa-undo" update=":centerForm" styleClass="btn"/>
+        </p:panel>
+        <p:ajax event="close" listener="#{metricSpecsBean.setMode(false)}"/>
+    </p:dialog>
+    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move '#{metricSpecsBean.editedTableEntity.name}' to another catalog" position="center">
+        <p:panel>
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+                <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>
+                <p:selectOneMenu rendered="#{metricSpecsBean.editedTableEntity.typeCatalog}" id="parentCatalog"
+                                 styleClass="dialog-select-catalog" value="#{metricSpecsBean.editedTableEntity.catalog.parentCatalog}"
+                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
+                    <f:selectItem itemLabel="" itemValue="#{metricSpecsBean.root}"/>
+                    <f:selectItems var="catalog" value="#{metricSpecsBean.allCatalogs}"
+                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
+                </p:selectOneMenu>
+                <p:selectOneMenu rendered="#{!metricSpecsBean.editedTableEntity.typeCatalog}" id="specParentCatalog"
+                                 styleClass="dialog-select-catalog" value="#{metricSpecsBean.editedTableEntity.metricSpec.catalog}"
+                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter">
+                    <f:selectItem itemLabel="" itemValue="#{metricSpecsBean.root}"/>
+                    <f:selectItems var="catalog" value="#{metricSpecsBean.allCatalogs}"
+                                   itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Save" action="#{metricSpecsBean.move}" update=":centerForm" styleClass="btn" icon="fa fa-save"/>
+            <p:commandButton value="Cancel" onclick="PF('moveDialog').hide();" icon="fa fa-undo" update=":centerForm" styleClass="btn"/>
+        </p:panel>
+        <p:ajax event="close" listener="#{metricSpecsBean.setMode(false)}"/>
+    </p:dialog>
     <script type="text/javascript">
         function handleRequest(xhr, status, args, dialogName) {
             if (!args.correct) {

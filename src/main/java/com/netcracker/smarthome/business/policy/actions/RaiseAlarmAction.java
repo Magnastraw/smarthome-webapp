@@ -5,8 +5,8 @@ import com.netcracker.smarthome.business.policy.events.AlarmEvent;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.policy.exec.PolicyEngine;
-import com.netcracker.smarthome.business.policy.services.AlarmService;
-import com.netcracker.smarthome.business.policy.services.EventService;
+import com.netcracker.smarthome.business.services.AlarmService;
+import com.netcracker.smarthome.business.services.EventService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.Event;
@@ -44,7 +44,7 @@ public class RaiseAlarmAction implements Action {
 
     public void execute(PolicyEvent causalEvent) {
         Timestamp regDate = Timestamp.valueOf(LocalDateTime.now());
-        if (severity.equals(AlarmSeverity.CLEARED)) {
+        if (severity.equals(AlarmSeverity.CLEAR)) {
             clearAlarm(causalEvent);
         } else
             saveAlarm(causalEvent, regDate);
@@ -61,7 +61,7 @@ public class RaiseAlarmAction implements Action {
 
     private void saveAlarm(PolicyEvent causalEvent, Timestamp regDate) {
         Event dbEvent = causalEvent.getType().equals(EventType.METRIC) ? saveMetricEvent(causalEvent, regDate) : causalEvent.getDbEvent();
-        Alarm alarm = new Alarm(-1, "", "", regDate, null, severity, regDate, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
+        Alarm alarm = new Alarm(-1l, "", "", regDate, null, severity, regDate, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
         alarmService.saveRaisedAlarm(alarm);
     }
 

@@ -1,10 +1,10 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
-import com.netcracker.smarthome.business.MetricService;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
+import com.netcracker.smarthome.business.services.MetricService;
 import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.util.HashMap;
