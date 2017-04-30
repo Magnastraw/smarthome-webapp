@@ -4,6 +4,12 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
         options = $.parseJSON(configurationJson),
         dataSource = $.parseJSON(requestDataOptions);
 
+    Highcharts.setOptions({
+        global : {
+            timezone: moment.tz.guess()
+        }
+    });
+
     //stop setInterval
     createEmptyChart(function () {
         if (refreshInterval == 0) {
@@ -28,7 +34,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             intervalId = setInterval(function () {
                 requestLiveData(function () {
                 });
-            }, refreshInterval);
+            }, 60000);
         }
     });
 
@@ -42,7 +48,13 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             success: function (data) {
                 $.each(data, function (pos, series) {
                     var shift = chart.series[pos].data.length > 15;
-                    console.log(chart.series[pos].data);
+                    // console.log(chart.series[pos].data);
+                    // console.log(moment.tz(series.data[0].x, moment.tz.guess()).format());
+                    // console.log(moment.parseZone(moment.tz(series.data[0].x, moment.tz.guess()).format()).format());
+                    // console.log(moment.tz(series.data[0].x, moment.tz.guess()).format());
+                    // console.log(moment.tz(series.data[0].x, moment.tz.guess()).utcOffset());
+                    // console.log(moment.tz(moment.tz.guess()).utcOffset());
+                    // console.log(series.data[0].x);
                     chart.series[pos].addPoint({
                         x: series.data[0].x,
                         y: series.data[0].y
@@ -71,8 +83,11 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                 console.log(dataSource);
                 console.log(data);
                 $.each(data, function (pos, series) {
+                    // $.each(series.data, function (pos_1, series_1){
+                    //     series_1.x=series_1.x+moment.tz(moment.tz.guess()).utcOffset()*60*1000;
+                    // });
+                        console.log(series.data);
                         chart.series[pos].setData(series.data);
-
                 });
                 chart.redraw();
                 callback();

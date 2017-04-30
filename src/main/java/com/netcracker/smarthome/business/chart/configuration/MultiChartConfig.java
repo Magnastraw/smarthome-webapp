@@ -30,7 +30,7 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
 
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
         super.getChartConfigImpl().getChartOptions().setChartTitle(getTitle());
-        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
+        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, selectedSmartObjects, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {

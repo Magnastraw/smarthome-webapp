@@ -455,3 +455,11 @@ h3 {
     margin-right: 2px !important;
 }
 /* */
+
+.ui-icon-sensor{
+    background: transparent url("#{resource['images/Transistor-16.png']}") no-repeat top !important;
+}
+
+.ui-icon-controller{
+    background: transparent url("#{resource['images/Electronics-16.png']}") no-repeat top !important;
+}

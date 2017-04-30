@@ -47,7 +47,7 @@ public class TimeChart implements Chart {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {
                 if (isSelectedMetric(requestDataOptions.getMetricSpecId(), metricSpec.getSpecId())) {
                     DataSeries dataSeries = new DataSeries(new ArrayList<Data>());
-                    if(requestDataOptions.getChartInterval().equals(ChartInterval.Live.toString().toLowerCase())){
+                    if(requestDataOptions.getChartInterval().equalsIgnoreCase(ChartInterval.Live.toString())){
                         for (MetricHistory metricHistory : chartService.getLastMetricHistory(requestDataOptions.getSmartHomeId(), metricSpec.getSpecId(), smartObject.getSmartObjectId())) {
                             dataSeries.addData(metricHistory);
                         }

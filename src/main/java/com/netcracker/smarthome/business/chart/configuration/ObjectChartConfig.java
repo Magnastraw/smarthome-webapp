@@ -21,7 +21,7 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
         super.getChartConfigImpl().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
-        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
+        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, selectedSmartObjects, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {

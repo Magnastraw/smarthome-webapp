@@ -1,6 +1,8 @@
 package com.netcracker.smarthome.business.chart.options.jsonfields;
 
 import com.netcracker.smarthome.model.entities.MetricHistory;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -33,4 +35,10 @@ public class DataSeries  {
         this.data.add(data);
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("data", getData())
+                .toString();
+    }
 }

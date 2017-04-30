@@ -29,7 +29,7 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
     }
 
     public List<MetricHistory> getMetricsHistory( long homeId, long specId, long objectId,Timestamp selectDate){
-        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (mh.readDate > :customDate and  m.metricSpec.specId = :specId and m.object.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId) ");
+        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (mh.readDate > :customDate and  m.metricSpec.specId = :specId and coalesce(m.subobject.smartObjectId,m.object.smartObjectId)  = :objectId and m.smartHome.smartHomeId = :homeId) order by mh.historyId");
         query.setMaxResults(1000);
         query.setParameter("customDate",selectDate);
         query.setParameter("specId", specId);
@@ -39,7 +39,7 @@ public class MetricHistoryRepository extends EntityRepository<MetricHistory> {
     }
 
     public List<MetricHistory> getLastMetricsHistory( long homeId, long specId, long objectId){
-        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (m.metricSpec.specId = :specId and m.object.smartObjectId = :objectId and m.smartHome.smartHomeId = :homeId) ");
+        Query query = getManager().createQuery("select mh from MetricHistory mh inner join Metric m on mh.metric.metricId = m.metricId where (m.metricSpec.specId = :specId and coalesce(m.subobject.smartObjectId,m.object.smartObjectId) = :objectId and m.smartHome.smartHomeId = :homeId) order by mh.historyId desc ");
         query.setParameter("specId", specId);
         query.setParameter("objectId", objectId);
         query.setParameter("homeId", homeId);

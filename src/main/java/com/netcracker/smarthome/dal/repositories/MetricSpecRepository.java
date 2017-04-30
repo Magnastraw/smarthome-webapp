@@ -2,6 +2,7 @@ package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.MetricSpec;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.util.List;
@@ -13,7 +14,7 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
     }
 
     public List<MetricSpec> getSpecByObjectId(long objectId) {
-        Query query = getManager().createQuery("select ms from MetricSpec ms inner join Metric m on m.metricSpec.specId  = ms.specId inner join SmartObject so on m.object.smartObjectId = so.smartObjectId where (so.smartObjectId = :objectId ) group by ms.specId");
+        Query query = getManager().createQuery("select ms from MetricSpec ms inner join Metric m on m.metricSpec.specId  = ms.specId where (coalesce(m.subobject.smartObjectId,m.object.smartObjectId) = :objectId ) group by ms.specId");
         query.setParameter("objectId", objectId);
         return query.getResultList();
     }
@@ -36,5 +37,11 @@ public class MetricSpecRepository extends EntityRepository<MetricSpec> {
         query.setParameter("specName", specName);
         List<MetricSpec> result = query.getResultList();
         return result.isEmpty() ? true : false;
+    }
+
+    public List<MetricSpec> getSupportedSpecs(List<SmartObject> smartObjects){
+        Query query = getManager().createQuery("select ms from MetricSpec ms inner join Metric m on m.metricSpec.specId  = ms.specId where (coalesce( m.subobject,m.object) in :smartObjects ) group by ms.specId");
+        query.setParameter("smartObjects",smartObjects);
+        return query.getResultList();
     }
 }

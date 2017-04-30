@@ -9,6 +9,7 @@ import com.netcracker.smarthome.business.chart.options.RequestDataOptions;
 import com.netcracker.smarthome.business.chart.options.jsonfields.AxisConfig;
 import com.netcracker.smarthome.business.chart.options.jsonfields.SeriesConfig;
 import com.netcracker.smarthome.business.chart.options.jsonfields.YAxisNumber;
+import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,24 +55,28 @@ public class DefaultChartConfig {
         this.chartConfigImpl = chartConfigImpl;
     }
 
-    public ArrayList<YAxisNumber> setAxisOptions(List<MetricSpec> selectedMetricSpecs, ChartService chartService) {
+    public ArrayList<YAxisNumber> setAxisOptions(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObject, ChartService chartService) {
         ArrayList<YAxisNumber> yAxisNumbers = new ArrayList<YAxisNumber>();
+        List<MetricSpec> supportedMetricSpecs = chartService.getSupportedMetricSpecs(selectedSmartObject);
         for (MetricSpec metricSpec : selectedMetricSpecs) {
+            if (supportedMetricSpecs.contains(metricSpec)) {
 
-            AxisConfig axisConfig = new AxisConfig();
-            YAxisNumber yAxisNumber = new YAxisNumber();
+                AxisConfig axisConfig = new AxisConfig();
+                YAxisNumber yAxisNumber = new YAxisNumber();
 
-            yAxisNumber.setNumber(this.yAxisNumber++);
-            yAxisNumber.setSpecId(metricSpec.getSpecId());
-            yAxisNumbers.add(yAxisNumber);
+                yAxisNumber.setNumber(this.yAxisNumber++);
+                yAxisNumber.setSpecId(metricSpec.getSpecId());
+                yAxisNumbers.add(yAxisNumber);
 
-            axisConfig.setTitle(metricSpec.getSpecName());
-            axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
+                axisConfig.setTitle(metricSpec.getSpecName());
+                axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
 
-            chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);
+                chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);
 
-            chartConfigImpl.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
+                chartConfigImpl.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
+            }
         }
         return yAxisNumbers;
     }
+
 }

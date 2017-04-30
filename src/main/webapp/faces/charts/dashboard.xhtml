@@ -71,11 +71,14 @@
                 <h:outputText value="Drop here:"/>
 
                 <p:tree id="objectTree" value="#{chartBean.objectRoot}" var="node"  style="width:100%;height: 100%">
-                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
-                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                    <p:treeNode type="catalog"  expandedIcon="fa fa-folder-open"
+                                collapsedIcon="fa fa-folder">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
-                    <p:treeNode type="childObject"  >
+                    <p:treeNode type="Controller" icon="ui-icon-controller" >
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                    <p:treeNode type="Sensor" icon="ui-icon-sensor">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
                     <p:treeNode >
@@ -102,8 +105,8 @@
                 <h:outputText value="Drag metrics:"/>
                 <h:outputText value="Drop here:"/>
                 <p:tree id="metricTree" value="#{chartBean.metricRoot}" var="node" style="width:100%;height: 100%">
-                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
-                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                    <p:treeNode type="catalog"  expandedIcon="fa fa-folder-open"
+                                collapsedIcon="fa fa-folder">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
                     <p:treeNode >

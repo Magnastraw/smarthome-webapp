@@ -75,6 +75,10 @@ public class ChartService {
         return metricSpecRepository.getMetricSpecs(catalog);
     }
 
+    public List<MetricSpec> getSupportedMetricSpecs(List<SmartObject> smartObjects){
+        return metricSpecRepository.getSupportedSpecs(smartObjects);
+    }
+
     @Transactional(readOnly = false)
     public long getChartId() {
         return chartRepository.getChartId();
