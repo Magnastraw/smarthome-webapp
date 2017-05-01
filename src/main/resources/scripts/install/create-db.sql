@@ -788,4 +788,26 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
+CREATE EXTENSION pgcrypto;
+
+CREATE OR REPLACE FUNCTION insert_secret_key() RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+  INSERT INTO
+    home_params (smart_home_id, name, value ,type_id )
+  VALUES
+    (NEW.smart_home_id,
+     'Secret key',
+     (select gen_random_uuid()),
+     1);
+  return new;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_sec_key_trig
+AFTER INSERT ON smart_homes
+FOR EACH ROW
+EXECUTE PROCEDURE insert_secret_key();
+
+
 

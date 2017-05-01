@@ -20,13 +20,12 @@ public class DefaultChartConfig {
     private int yAxisNumber;
     private ChartConfigImpl chartConfigImpl;
     private String chartType;
-    private final double TO_MILLISECONDS_CONVERT = 60000;
 
-    public DefaultChartConfig(SmartHome smartHome, long chartId, double refreshInterval, String chartType, String chartInterval) {
+    public DefaultChartConfig(SmartHome smartHome, long chartId, long refreshInterval, String chartType, String chartInterval) {
 
         chartConfigImpl = new ChartConfigImpl(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
         chartConfigImpl.setChartId(chartId);
-        chartConfigImpl.setRefreshInterval(refreshInterval * TO_MILLISECONDS_CONVERT);
+        chartConfigImpl.setRefreshInterval(refreshInterval);
 
         chartConfigImpl.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
         chartConfigImpl.getRequestDataOptions().setChartInterval(chartInterval);
@@ -70,6 +69,9 @@ public class DefaultChartConfig {
 
                 axisConfig.setTitle(metricSpec.getSpecName());
                 axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
+                axisConfig.setMax(metricSpec.getMaxValue());
+                axisConfig.setMin(metricSpec.getMinValue());
+
 
                 chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);
 

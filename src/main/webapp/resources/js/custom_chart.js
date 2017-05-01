@@ -12,12 +12,16 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
 
     //stop setInterval
     createEmptyChart(function () {
-        if (refreshInterval == 0) {
-            requestData(function () {
+        if (dataSource.chartInterval==='Live') {
+            requestLiveData(function () {
                 chart.reflow();
                 chart.hideLoading();
             });
-        } else if (refreshInterval >= 10000) {
+            intervalId = setInterval(function () {
+                requestLiveData(function () {
+                });
+            }, refreshInterval);
+        } else {
             requestData(function () {
                 chart.reflow();
                 chart.hideLoading();
@@ -26,15 +30,6 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                 requestData(function () {
                 });
             }, refreshInterval);
-        } else {
-            requestLiveData(function () {
-                chart.reflow();
-                chart.hideLoading();
-            });
-            intervalId = setInterval(function () {
-                requestLiveData(function () {
-                });
-            }, 60000);
         }
     });
 
@@ -80,8 +75,6 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             dataType: "json",
             type: 'POST',
             success: function (data) {
-                console.log(dataSource);
-                console.log(data);
                 $.each(data, function (pos, series) {
                     // $.each(series.data, function (pos_1, series_1){
                     //     series_1.x=series_1.x+moment.tz(moment.tz.guess()).utcOffset()*60*1000;

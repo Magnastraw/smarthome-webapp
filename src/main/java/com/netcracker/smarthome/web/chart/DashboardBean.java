@@ -174,6 +174,7 @@ public class DashboardBean {
             this.dashboards = new ArrayList<Dashboard>();
             this.dashboards.add(dashboard);
             dashboardService.addDashboard(this.dashboard);
+            setCurrentDashboard(this.dashboard);
         }
 
     }

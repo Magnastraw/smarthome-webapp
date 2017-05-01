@@ -56,12 +56,7 @@
                          update=":centerForm:metricDlg" value="Add" styleClass="btn" icon="fa fa-plus">
         </p:commandButton>
     </p:outputPanel>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        <div class="dialog">
-            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-        </div>
-    </p:confirmDialog>
+
     <p:dialog id="metricDlg" widgetVar="metricDialog" resizable="false" header="Edit metric specification/catalog" position="center">
         <p:panel id="panelDlg">
             <div class="alert-block-specs">

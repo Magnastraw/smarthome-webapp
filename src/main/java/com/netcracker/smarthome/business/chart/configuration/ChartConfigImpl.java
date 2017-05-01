@@ -23,7 +23,7 @@ public class ChartConfigImpl implements ChartConfig {
     private long chartId;
     private ChartOptions chartOptions;
     private RequestDataOptions requestDataOptions;
-    private double refreshInterval;
+    private long refreshInterval;
     private ObjectMapper objectMapper;
     private VelocityContext vc;
     private Map<String,String> templateMap;
@@ -79,11 +79,11 @@ public class ChartConfigImpl implements ChartConfig {
         this.requestDataOptions = requestDataOptions;
     }
 
-    public double getRefreshInterval() {
+    public long getRefreshInterval() {
         return refreshInterval;
     }
 
-    public void setRefreshInterval(double refreshInterval) {
+    public void setRefreshInterval(long refreshInterval) {
         this.refreshInterval = refreshInterval;
     }
 }

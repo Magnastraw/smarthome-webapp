@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <h:panelGroup styleClass="dashboardDiv">
+    <p:outputPanel styleClass="dashboardDiv">
         <p:dataTable id="dashboardTable" var="dashboard" value="#{dashboardBean.dashboards}" selectionMode="single"
                      selection="#{dashboardBean.selectedDashboard}" rowKey="#{dashboard}"
                      sortBy="#{dashboard.dashboardName}">
@@ -27,10 +27,11 @@
                                styleClass="fa fa-edit"
                                title="Edit">
                 </p:commandLink>
-                <p:commandLink actionListener="#{dashboardBean.deleteDashboard(dashboard)}"
+                <p:commandLink action="#{dashboardBean.deleteDashboard(dashboard)}"
                                update=":centerForm:dashboardTable, menu"
                                styleClass="fa fa-remove fa-5x margin"
                                title="Delete">
+                    <p:confirm header="Confirmation" message="Are you want to remove this dashboard?"/>
                 </p:commandLink>
             </p:column>
         </p:dataTable>
@@ -40,7 +41,7 @@
                          oncomplete="PF('dashboardSettingsDialog').show()"
                          style="width: 100%; margin-right: .0em !important;">
         </p:commandButton>
-    </h:panelGroup>
+    </p:outputPanel>
 
     <p:dialog id="dialogDashboard" header="Dashboard settings" widgetVar="dashboardSettingsDialog" resizable="false">
         <h:panelGrid columns="2" cellpadding="0">

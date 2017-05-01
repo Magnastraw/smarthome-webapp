@@ -9,6 +9,7 @@ import com.netcracker.smarthome.business.chart.tree.obj.wrapper.SmartObjectWrapp
 import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.ChartInterval;
+import com.netcracker.smarthome.model.enums.ChartRefreshInterval;
 import com.netcracker.smarthome.model.enums.ChartType;
 import com.netcracker.smarthome.business.chart.configuration.*;
 import com.netcracker.smarthome.business.chart.options.Position;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import java.io.IOException;
 import java.util.*;
 
@@ -36,7 +38,6 @@ public class ChartBean {
     @ManagedProperty(value = "#{catalogService}")
     private CatalogService catalogService;
 
-    private double refreshInterval;
     private String chartTitle;
 
     private List<SmartObject> selectedSmartObjects;
@@ -51,6 +52,10 @@ public class ChartBean {
 
     private ChartInterval selectedChartInterval;
     private ChartInterval[] chartIntervals;
+
+    private ChartRefreshInterval selectedChartRefreshInterval;
+    private ChartRefreshInterval[] chartRefreshIntervals;
+
 
     private String widgetPos;
 
@@ -67,9 +72,25 @@ public class ChartBean {
         chartConfiguratorImpl = new ChartConfiguratorImpl();
         selectedMetricSpecs = new ArrayList<MetricSpec>();
         selectedSmartObjects = new ArrayList<SmartObject>();
+        objectMapper = new ObjectMapper();
         chartTypes = ChartType.values();
         chartIntervals = ChartInterval.values();
-        objectMapper = new ObjectMapper();
+        chartRefreshIntervals = ChartRefreshInterval.values();
+        treeObjectMap = new HashMap<String, TreeNode>();
+        treeMetricMap = new HashMap<String, TreeNode>();
+
+        Catalog root = catalogService.getRootCatalog("objectsRootCatalog", getCurrentHome().getSmartHomeId());
+        objectRoot = new DefaultTreeNode("Catalog", new CatalogWrapper(null, root), null);
+
+        recursionObjectsCatalog(root, objectRoot);
+
+        Catalog metricRootCatalog = catalogService.getRootCatalog("metricSpecsRootCatalog", getCurrentHome().getSmartHomeId());
+        metricRoot = new DefaultTreeNode("Catalog", new CatalogWrapper(null, metricRootCatalog), null);
+
+        recursionMetricSpecsCatalog(metricRootCatalog, metricRoot);
+    }
+
+    public void buildCatalog() {
         treeObjectMap = new HashMap<String, TreeNode>();
         treeMetricMap = new HashMap<String, TreeNode>();
 
@@ -85,27 +106,27 @@ public class ChartBean {
     }
 
     private void recursionObjectsCatalog(Catalog recursiveCatalog, TreeNode treeElement) {
-        List<SmartObject> objectArrayList = chartService.getSmartObjectByCatalogId(getCurrentHome().getSmartHomeId(), recursiveCatalog.getCatalogId());
+        List<SmartObject> objectArrayList = chartService.getMetricObjectsByCatalogId(getCurrentHome().getSmartHomeId(), recursiveCatalog.getCatalogId());
         ArrayList<TreeNode> defaultTreeNodes = new ArrayList<TreeNode>();
-        for(SmartObject smartObject:objectArrayList){
-            if(objectArrayList.contains(smartObject.getParentObject())){
-                if(!isContainParent(defaultTreeNodes,smartObject)){
-                    TreeNode parentObject = new DefaultTreeNode(smartObject.getParentObject().getObjectType().getName(),new SmartObjectWrapper(treeElement,smartObject.getParentObject()),treeElement);
-                    TreeNode childObject = new DefaultTreeNode(smartObject.getObjectType().getName(),new SmartObjectWrapper(parentObject,smartObject),parentObject);
+        for (SmartObject smartObject : objectArrayList) {
+            if (objectArrayList.contains(smartObject.getParentObject())) {
+                if (!isContainParent(defaultTreeNodes, smartObject)) {
+                    TreeNode parentObject = new DefaultTreeNode(smartObject.getParentObject().getObjectType().getName(), new SmartObjectWrapper(treeElement, smartObject.getParentObject()), treeElement);
+                    TreeNode childObject = new DefaultTreeNode(smartObject.getObjectType().getName(), new SmartObjectWrapper(parentObject, smartObject), parentObject);
                     defaultTreeNodes.add(parentObject);
                     defaultTreeNodes.add(childObject);
                     treeObjectMap.put(parentObject.getRowKey(), parentObject);
                     treeObjectMap.put(childObject.getRowKey(), childObject);
 
                 } else {
-                    TreeNode childObject = new DefaultTreeNode(smartObject.getObjectType().getName(),new SmartObjectWrapper(getParentNode(defaultTreeNodes,smartObject),smartObject),getParentNode(defaultTreeNodes,smartObject));
+                    TreeNode childObject = new DefaultTreeNode(smartObject.getObjectType().getName(), new SmartObjectWrapper(getParentNode(defaultTreeNodes, smartObject), smartObject), getParentNode(defaultTreeNodes, smartObject));
                     defaultTreeNodes.add(childObject);
                     treeObjectMap.put(childObject.getRowKey(), childObject);
                 }
 
             } else {
-                defaultTreeNodes.add(new DefaultTreeNode(smartObject.getObjectType().getName(),new SmartObjectWrapper(treeElement,smartObject),treeElement));
-                treeObjectMap.put(defaultTreeNodes.get(defaultTreeNodes.size()-1).getRowKey(), defaultTreeNodes.get(defaultTreeNodes.size()-1));
+                defaultTreeNodes.add(new DefaultTreeNode(smartObject.getObjectType().getName(), new SmartObjectWrapper(treeElement, smartObject), treeElement));
+                treeObjectMap.put(defaultTreeNodes.get(defaultTreeNodes.size() - 1).getRowKey(), defaultTreeNodes.get(defaultTreeNodes.size() - 1));
 
             }
         }
@@ -117,24 +138,23 @@ public class ChartBean {
         }
     }
 
-    private boolean isContainParent(ArrayList<TreeNode> defaultTreeNodes,SmartObject smartObject){
-        for(TreeNode defaultTreeNode:defaultTreeNodes){
-            if(((SmartObjectWrapper)defaultTreeNode.getData()).getSmartObject().equals(smartObject.getParentObject())){
+    private boolean isContainParent(ArrayList<TreeNode> defaultTreeNodes, SmartObject smartObject) {
+        for (TreeNode defaultTreeNode : defaultTreeNodes) {
+            if (((SmartObjectWrapper) defaultTreeNode.getData()).getSmartObject().equals(smartObject.getParentObject())) {
                 return true;
             }
         }
         return false;
     }
 
-    private TreeNode getParentNode(ArrayList<TreeNode> defaultTreeNodes,SmartObject smartObject){
-        for(TreeNode defaultTreeNode:defaultTreeNodes){
-            if(((SmartObjectWrapper)defaultTreeNode.getData()).getSmartObject().equals(smartObject.getParentObject())){
+    private TreeNode getParentNode(ArrayList<TreeNode> defaultTreeNodes, SmartObject smartObject) {
+        for (TreeNode defaultTreeNode : defaultTreeNodes) {
+            if (((SmartObjectWrapper) defaultTreeNode.getData()).getSmartObject().equals(smartObject.getParentObject())) {
                 return defaultTreeNode;
             }
         }
         return null;
     }
-
 
     private void recursionMetricSpecsCatalog(Catalog recursiveCatalog, TreeNode treeElement) {
         for (Catalog catalog : catalogService.getSubcatalogs(recursiveCatalog)) {
@@ -163,7 +183,7 @@ public class ChartBean {
 
     private void recursiveGetObject(TreeNode node) {
         List<TreeNode> childNodes = node.getChildren();
-        if (!node.getType().equals("catalog") && !node.getType().equals("Controller")&& node.getChildren().size() == 0) {
+        if (!node.getType().equals("catalog") && !node.getType().equals("Controller") && node.getChildren().size() == 0) {
             SmartObject smartObject = ((SmartObjectWrapper) node.getData()).getSmartObject();
             if (!selectedSmartObjects.contains(smartObject)) {
                 selectedSmartObjects.add(((SmartObjectWrapper) node.getData()).getSmartObject());
@@ -202,6 +222,7 @@ public class ChartBean {
         long chartIdLong = chartService.getChartId() + 1;
         String chartType = selectedChartType.toString().toLowerCase();
         String chartInterval = selectedChartInterval.toString();
+        long refreshInterval = selectedChartRefreshInterval.getMillisec();
         if (selectedMetricSpecs.size() == 1) {
             chartConfiguratorImpl.setChartConfigurator(new MetricChartConfig(getCurrentHome(), chartIdLong, chartService, refreshInterval, chartType, chartInterval));
         } else if (selectedSmartObjects.size() == 1) {
@@ -218,7 +239,7 @@ public class ChartBean {
     public void setDefault() {
         selectedSmartObjects = new ArrayList<SmartObject>();
         selectedMetricSpecs = new ArrayList<MetricSpec>();
-        refreshInterval = 0.0;
+        selectedChartRefreshInterval = null;
         chartTitle = "";
     }
 
@@ -310,6 +331,22 @@ public class ChartBean {
         this.chartTypes = chartTypes;
     }
 
+    public ChartRefreshInterval getSelectedChartRefreshInterval() {
+        return selectedChartRefreshInterval;
+    }
+
+    public void setSelectedChartRefreshInterval(ChartRefreshInterval selectedChartRefreshInterval) {
+        this.selectedChartRefreshInterval = selectedChartRefreshInterval;
+    }
+
+    public ChartRefreshInterval[] getChartRefreshIntervals() {
+        return chartRefreshIntervals;
+    }
+
+    public void setChartRefreshIntervals(ChartRefreshInterval[] chartRefreshIntervals) {
+        this.chartRefreshIntervals = chartRefreshIntervals;
+    }
+
     public List<Chart> getChartConf() {
         return chartConf;
     }
@@ -333,14 +370,6 @@ public class ChartBean {
 
     public void setSelectedMetricSpecs(List<MetricSpec> selectedMetricSpecs) {
         this.selectedMetricSpecs = selectedMetricSpecs;
-    }
-
-    public double getRefreshInterval() {
-        return refreshInterval;
-    }
-
-    public void setRefreshInterval(double refreshInterval) {
-        this.refreshInterval = refreshInterval;
     }
 
     public String getChartTitle() {
@@ -370,5 +399,6 @@ public class ChartBean {
     public void deleteSelectedMetric(MetricSpec metricSpec) {
         selectedMetricSpecs.remove(metricSpec);
     }
+
 
 }

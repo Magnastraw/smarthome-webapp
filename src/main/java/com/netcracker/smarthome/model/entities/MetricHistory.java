@@ -51,7 +51,7 @@ public class MetricHistory implements Serializable {
     }
 
     @Basic
-    @Column(name = "value", nullable = false, precision = 0)
+    @Column(name = "value", nullable = false, precision = 3)
     public BigDecimal getValue() {
         return value;
     }

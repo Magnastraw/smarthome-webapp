@@ -41,12 +41,7 @@
                          oncomplete="PF('unitDialog').show();" value="Add" styleClass="btn" icon="fa fa-plus">
         </p:commandButton>
 </p:outputPanel>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        <div class="dialog">
-            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-        </div>
-    </p:confirmDialog>
+
     <p:dialog id="unitDlg" widgetVar="unitDialog" resizable="false" header="Unit properties">
         <p:panel>
             <div class="alert-block-specs">
