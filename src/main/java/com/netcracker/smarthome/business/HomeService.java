@@ -89,4 +89,19 @@ public class HomeService {
     public void saveParam(HomeParam param) {
         paramRepository.save(param);
     }
+
+    @Transactional(readOnly = true)
+    public HomeParam getHomeParamByName(long smartHomeId, String paramName) {
+        return paramRepository.getHomeParamByName(smartHomeId, paramName.toLowerCase());
+    }
+
+    @Transactional(readOnly = true)
+    public SmartHome getHomeBySecretKey(long secretKey) {
+        return paramRepository.getHomeBySecretKey(secretKey);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SmartHome> getSmartHomes() {
+        return homeRepository.getAll();
+    }
 }

@@ -41,10 +41,10 @@ public class AlarmListBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        initialise();
+        changeCurrentHome();
     }
 
-    public void initialise() {
+    public void changeCurrentHome() {
         alarmPath = new ArrayList<Alarm>();
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());

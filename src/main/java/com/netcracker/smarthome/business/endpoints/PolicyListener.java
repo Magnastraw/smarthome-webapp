@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.endpoints;
 
+import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.reflections.Reflections;
 import java.util.ArrayList;
@@ -31,9 +32,9 @@ public class PolicyListener implements IListener, IListenerSupport<IListener> {
         listeners.remove(listener);
     }
 
-    public void onSaveOrUpdate(Object object) {
+    public void onSaveOrUpdate(Long smartHouseId, Object object) {
         for(IListener listener : listeners) {
-            listener.onSaveOrUpdate(object);
+            listener.onSaveOrUpdate(((Policy)object).getCatalog().getSmartHome().getSmartHomeId(),object);
         }
     }
 }

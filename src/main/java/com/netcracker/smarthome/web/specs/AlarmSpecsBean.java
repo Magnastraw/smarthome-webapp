@@ -47,10 +47,10 @@ public class AlarmSpecsBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        initialise();
+        changeCurrentHome();
     }
 
-    public void initialise() {
+    public void changeCurrentHome() {
         root = catalogService.getRootCatalog("alarmSpecsRootCatalog", getHome().getSmartHomeId());
         tableEntities = new ArrayList<TableEntity>();
         menuCatalogs = new ArrayList<Catalog>();

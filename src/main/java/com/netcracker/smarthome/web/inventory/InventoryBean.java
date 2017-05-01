@@ -1,6 +1,8 @@
 package com.netcracker.smarthome.web.inventory;
 
 import com.netcracker.smarthome.business.alarm.AlarmService;
+import com.netcracker.smarthome.business.endpoints.TaskManager;
+import com.netcracker.smarthome.business.endpoints.jsonentities.HomeTask;
 import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
 import com.netcracker.smarthome.business.specs.CatalogService;
 import com.netcracker.smarthome.model.entities.*;
@@ -46,6 +48,9 @@ public class InventoryBean implements Serializable {
     private AlarmService alarmService;
     @ManagedProperty(value = "#{catalogService}")
     private CatalogService catalogService;
+    @ManagedProperty(value = "#{taskManager}")
+    private TaskManager taskManager;
+
 
     @PostConstruct
     public void init() {
@@ -53,6 +58,11 @@ public class InventoryBean implements Serializable {
         for(int i=0; i<objectTypes.size(); i++) {
             objectTypes.set(i, objectTypes.get(i).toLowerCase());
         }
+        changeCurrentHome();
+    }
+
+    public void changeCurrentHome() {
+        reset();
         SmartObject rootObject = smartObjectService.getRootController(getHome().getSmartHomeId());
         if(rootObject != null) {
             rootNode = new DefaultOrganigramNode("rootcontroller", rootObject, null);
@@ -61,17 +71,29 @@ public class InventoryBean implements Serializable {
             addSubobjects(rootNode);
 
             setRootCatalog(catalogService.getRootCatalog("objectsRootCatalog", getHome().getSmartHomeId()));
-            objectsCatalogs = new ArrayList<Catalog>();
             objectsCatalogs.addAll(catalogService.getSubcatalogsRecursively(rootCatalog));
             Collections.sort(objectsCatalogs, new Comparator<Catalog>() {
                 public int compare(final Catalog obj1, final Catalog obj2) {
                     return (obj1.getCatalogName().compareTo(obj2.getCatalogName()));
                 }
             });
-            addedCatalog = new Catalog();
-            addedCatalog.setCatalogName("New catalog");
-            setAdding(false);
         }
+        else {
+            rootNode = null;
+        }
+    }
+
+    private void reset() {
+        objectsCatalogs = new ArrayList<Catalog>();
+        rootCatalog = new Catalog();
+        addedCatalog = new Catalog("New catalog", null, getHome());
+        setAdding(false);
+    }
+
+    public void addTaskInventory() {
+        taskManager.addHomeTask(getHome().getSmartHomeId(), new HomeTask("GetInventory"));
+        LOG.info("GetInventory: home=" + getHome().getSmartHomeId()+
+                ".\n" + taskManager.getTaskMap().toString());
     }
 
     protected void addSubobjects(OrganigramNode parent) {
@@ -105,7 +127,7 @@ public class InventoryBean implements Serializable {
         setSelectedObjectAlarms(alarmService.getAlarmsByObject(selectedObject.getSmartObjectId()));
     }
 
-    public List<Alarm> selectedObjectAlarms() {
+    public List<Alarm> getObjectAlarms() {
         if(selectedNode == null)
             return null;
         List<Alarm>  alarms = alarmService.getAlarmsByObject(((SmartObject)selectedNode.getData()).getSmartObjectId());
@@ -226,5 +248,9 @@ public class InventoryBean implements Serializable {
 
     public void setAdding(boolean adding) {
         this.adding = adding;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
     }
 }

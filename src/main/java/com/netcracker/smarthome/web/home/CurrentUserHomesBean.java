@@ -6,6 +6,7 @@ import com.netcracker.smarthome.web.NavigationBean;
 import com.netcracker.smarthome.web.alarm.AlarmListBean;
 import com.netcracker.smarthome.web.chart.DashboardBean;
 import com.netcracker.smarthome.web.common.ContextUtils;
+import com.netcracker.smarthome.web.inventory.InventoryBean;
 import com.netcracker.smarthome.web.specs.AlarmSpecsBean;
 import com.netcracker.smarthome.web.specs.MetricSpecsBean;
 import javax.annotation.PostConstruct;
@@ -45,12 +46,13 @@ public class CurrentUserHomesBean {
 
     public void switchHome(SmartHome home) {
         setCurrentHome(home);
-        ((MetricSpecsBean)ContextUtils.getBean("metricSpecsBean")).initialise();
-        ((AlarmSpecsBean)ContextUtils.getBean("alarmSpecsBean")).initialise();
-        ((AlarmListBean)ContextUtils.getBean("alarmListBean")).initialise();
+        ((MetricSpecsBean)ContextUtils.getBean("metricSpecsBean")).changeCurrentHome();
+        ((AlarmSpecsBean)ContextUtils.getBean("alarmSpecsBean")).changeCurrentHome();
+        ((AlarmListBean)ContextUtils.getBean("alarmListBean")).changeCurrentHome();
+        ((InventoryBean)ContextUtils.getBean("inventoryBean")).changeCurrentHome();
         NavigationBean navigation = (NavigationBean)ContextUtils.getBean("navigationBean");
         if (navigation.getPageName().equals("/faces/alarms/alarm"))
             navigation.setPageName("alarms/alarmlist");
-        ((DashboardBean)ContextUtils.getBean("dashboardBean")).homeChangeListener(home);
+        //((DashboardBean)ContextUtils.getBean("dashboardBean")).homeChangeListener(home);
     }
 }

@@ -31,9 +31,15 @@
             <p:contextMenu for="organigram" nodeType="#{type}">
                 <p:menuitem value="View detail" icon="ui-icon-search"
                             update="@form:info" oncomplete="PF('infoDialog').show()"/>
+                <p:menuitem value="Alarms" actionListener="#{alarmsDataTable.getFilters().put('Object', 'Humidity sensor')}"
+                            action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm">
+                    <f:setPropertyActionListener value="#{inventoryBean.getObjectAlarms()}" target="#{alarmListBean.filteredAlarms}"/>
+                    
+                </p:menuitem>
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
+    <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn"/>
     <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
         <p:outputPanel id="info">
             <p:panelGrid columns="2" styleClass="ui-noborder">
@@ -60,8 +66,8 @@
                     </c:forEach>
                 </p:row>
                 <p:outputLabel value="Catalog" styleClass="label"/>
-                <p:inplace label="#{(inventoryBean.selectedNode.data.catalog.catalogName == 'objectsRootCatalog')? '/' : inventoryBean.selectedNode.data.catalog.catalogName}" effectSpeed="fast" event="dblclick">
-                    <p:selectOneMenu binding="#{catalogSelect}" value="#{inventoryBean.selectedObject.catalog}"
+                <p:outputLabel value="#{inventoryBean.selectedObject.catalog.catalogName}"/>
+                <!--<p:selectOneMenu binding="#{catalogSelect}" value="#{inventoryBean.selectedObject.catalog}"
                                      filter="true" filterMatchMode="startsWith" converter="catalogConverter" styleClass="inventory-dialog-select">
                         <p:ajax event="change" update="@form:info" listener="#{inventoryBean.onChangeCatalog(catalogSelect.label)}"/>
                         <f:selectItem itemLabel="+ Add catalog"/>
@@ -69,11 +75,14 @@
                         <f:selectItems var="item" value="#{inventoryBean.objectsCatalogs}"
                                        itemLabel="#{item.catalogName}" itemValue="#{item}"/>
                     </p:selectOneMenu>
-                </p:inplace>
-                <p:outputLabel rendered="#{inventoryBean.adding}" value="New catalog name:" styleClass="label"/>
-                <p:inputText rendered="#{inventoryBean.adding}" value="#{inventoryBean.addedCatalog.catalogName}"/>
+
+                <p:outputLabel rendered="#{(inventoryBean.adding == true)}" value="New catalog name:" styleClass="label"/>
+                <p:inputText rendered="#{(inventoryBean.adding == true)}" value="#{inventoryBean.addedCatalog.catalogName}"/>
+               -->
             </p:panelGrid>
         </p:outputPanel>
         <br/>
+        <p:commandButton value="Save" action="#{inventoryBean.saveChanges}" update=":centerForm" styleClass="btn" icon="fa fa-save"/>
+
     </p:dialog>
 </html>

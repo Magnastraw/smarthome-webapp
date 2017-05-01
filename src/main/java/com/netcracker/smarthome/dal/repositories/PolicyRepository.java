@@ -54,7 +54,7 @@ public class PolicyRepository extends EntityRepository<Policy>{
 
     public void onSaveOrUpdate(Object object) {
         for(IListener listener : listeners) {
-            listener.onSaveOrUpdate(object);
+            listener.onSaveOrUpdate(((Policy)object).getCatalog().getSmartHome().getSmartHomeId(), object);
         }
     }
 

@@ -21,7 +21,7 @@
                 <p:menuitem value="#{alarm.alarmName}" actionListener="#{alarmListBean.expand(alarm)}" update=":centerForm"/>
             </c:forEach>
         </p:breadCrumb>
-        <p:dataTable id="alarmsDT" widgetVar="alarmsTable" value="#{alarmListBean.currentAlarms}" var="alarm"
+        <p:dataTable binding="#{alarmsDataTable}" id="alarmsDT" widgetVar="alarmsTable" value="#{alarmListBean.currentAlarms}" var="alarm"
                      sortBy="#{alarm.startTime}" sortOrder="descending" rowKey="#{alarm.alarmId}"
                      selection="#{alarmListBean.selectedAlarms}" paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

@@ -39,7 +39,7 @@ public class InventoryController {
     public ResponseEntity sendInventories(@RequestParam(value="houseId", required=true) long houseId,
                                           @RequestBody String json) {
         LOG.info("POST /inventories\nBody:\n" + json);
-        SmartHome home = homeService.getHomeById(houseId);
+        SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
@@ -95,7 +95,7 @@ public class InventoryController {
                                           @RequestParam(value = "houseId", required = true) long houseId,
                                           @RequestBody String json) {
         LOG.info("PUT /inventories\nBody:\n" + json);
-        SmartHome home = homeService.getHomeById(houseId);
+        SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
@@ -142,7 +142,7 @@ public class InventoryController {
             consumes = "application/json")
     public ResponseEntity deleteInventory(@PathVariable(value = "objectId", required = true) long objectId,
                                           @RequestParam(value = "houseId", required = true) long houseId) {
-        SmartHome home = homeService.getHomeById(houseId);
+        SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         try {

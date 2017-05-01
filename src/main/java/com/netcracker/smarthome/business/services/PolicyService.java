@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.policy.services;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.business.endpoints.IListener;
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
