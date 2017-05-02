@@ -1,98 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <p:outputPanel id="units">
-        <h2>Units</h2>
-        <p:dataTable id="unitsDT" value="#{unitsBean.units}" var="unit" sortBy="#{unit.unitName}"
-                     rowKey="#{unit}" widgetVar="unitsDataTable"
-                     paginator="true" rows="10" filteredValue="#{unitsBean.filteredUnits}" paginatorPosition="bottom"
-                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15" emptyMessage="No units found with given criteria">
-            <p:ajax event="rowSelect" listener="#{unitsBean.onRowSelect}"/>
-            <p:column styleClass="column-delete">
-                <p:commandLink update=":centerForm:unitDlg" oncomplete="PF('unitDialog').show()" action="#{unitsBean.setCurrentUnit(unit)}"
-                               title="Edit" styleClass="fa fa-edit">
-                </p:commandLink>
-                <p:commandLink action="#{unitsBean.removeUnit}" oncomplete="PF('unitsDataTable').filter()" update=":centerForm"
-                               title="Delete" styleClass="fa fa-remove margin">
-                    <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
-                    <f:setPropertyActionListener value="#{unit}" target="#{unitsBean.removedUnit}"/>
-                </p:commandLink>
-            </p:column>
-            <p:column headerText="Name" sortBy="#{unit.unitName}" filterBy="#{unit.unitName}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <h:outputText value="#{unit.unitName}"/>
-            </p:column>
-            <p:column headerText="Parent unit" sortBy="#{unit.parentUnit.unitName}" filterBy="#{unit.parentUnit.unitName}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <h:outputText value="#{unit.parentUnit.unitName}"/>
-            </p:column>
-            <p:column headerText="Base factor" sortBy="#{unit.baseFactor}" filterBy="#{unit.baseFactor}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <h:outputText value="#{unit.baseFactor}"/>
-            </p:column>
-            <p:column headerText="Label" sortBy="#{unit.label}" filterBy="#{unit.label}" filterMatchMode="startsWith" filterStyleClass="filter">
-                <h:outputText value="#{unit.label}"/>
-            </p:column>
-        </p:dataTable>
-        <p:commandButton update=":centerForm:unitDlg" action="#{unitsBean.setMode(true)}"
-                         oncomplete="PF('unitDialog').show();" value="Add" styleClass="btn" icon="fa fa-plus">
-        </p:commandButton>
+<p:outputPanel id="units">
+    <h2>Units</h2>
+    <p:dataTable id="unitsDT" value="#{unitsBean.units}" var="unit" sortBy="#{unit.unitName}"
+                 rowKey="#{unit}" widgetVar="unitsDataTable"
+                 paginator="true" rows="10" filteredValue="#{unitsBean.filteredUnits}" paginatorPosition="bottom"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15" emptyMessage="No units found with given criteria">
+        <p:ajax event="rowSelect" listener="#{unitsBean.onRowSelect}"/>
+        <p:column styleClass="column-delete">
+            <p:commandLink update=":centerForm:unitDlg" oncomplete="PF('unitDialog').show()"
+                           action="#{unitsBean.setCurrentUnit(unit)}"
+                           title="Edit" styleClass="fa fa-edit">
+            </p:commandLink>
+            <p:commandLink action="#{unitsBean.removeUnit}" oncomplete="PF('unitsDataTable').filter()"
+                           update=":centerForm"
+                           title="Delete" styleClass="fa fa-remove margin">
+                <p:confirm header="Confirmation" message="Are you sure want to delete object?"/>
+                <f:setPropertyActionListener value="#{unit}" target="#{unitsBean.removedUnit}"/>
+            </p:commandLink>
+        </p:column>
+        <p:column headerText="Name" sortBy="#{unit.unitName}" filterBy="#{unit.unitName}" filterMatchMode="startsWith"
+                  filterStyleClass="filter">
+            <h:outputText value="#{unit.unitName}"/>
+        </p:column>
+        <p:column headerText="Parent unit" sortBy="#{unit.parentUnit.unitName}" filterBy="#{unit.parentUnit.unitName}"
+                  filterMatchMode="startsWith" filterStyleClass="filter">
+            <h:outputText value="#{unit.parentUnit.unitName}"/>
+        </p:column>
+        <p:column headerText="Base factor" sortBy="#{unit.baseFactor}" filterBy="#{unit.baseFactor}"
+                  filterMatchMode="startsWith" filterStyleClass="filter">
+            <h:outputText value="#{unit.baseFactor}"/>
+        </p:column>
+        <p:column headerText="Label" sortBy="#{unit.label}" filterBy="#{unit.label}" filterMatchMode="startsWith"
+                  filterStyleClass="filter">
+            <h:outputText value="#{unit.label}"/>
+        </p:column>
+    </p:dataTable>
+    <p:commandButton update=":centerForm:unitDlg" action="#{unitsBean.setMode(true)}"
+                     oncomplete="PF('unitDialog').show();" value="Add" styleClass="btn" icon="fa fa-plus">
+    </p:commandButton>
 </p:outputPanel>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        <div class="dialog">
-            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+    <div class="dialog">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </div>
+</p:confirmDialog>
+<p:dialog id="unitDlg" widgetVar="unitDialog" resizable="false" header="Unit properties">
+    <p:panel>
+        <div class="alert-block-specs">
+            <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" showIcon="false"
+                        styleClass="alert"/>
         </div>
-    </p:confirmDialog>
-    <p:dialog id="unitDlg" widgetVar="unitDialog" resizable="false" header="Unit properties">
-        <p:panel>
-            <div class="alert-block-specs">
-                <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" showIcon="false" styleClass="alert"/>
-            </div>
-            <p:panelGrid columns="2" styleClass="ui-noborder">
-                <p:outputLabel for="name" value="Name*:" class="output"/>
-                <p:inputText id="name" value="#{unitsBean.editedUnit.unitName}" class="dialog-input"
-                             validatorMessage="The field 'Name' must not contain the following characters: \ / * : ? > |">
-                    <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
-                    <p:clientValidator/>
-                </p:inputText>
-                <p:outputLabel for="baseFactor" value="Base factor*:" class="output"/>
-                <p:inputText id="baseFactor" value="#{unitsBean.editedUnit.baseFactor}" class="dialog-input"
-                             converterMessage="The field 'Base factor' must contain only numbers">
-                    <p:clientValidator event="keyup"/>
-                </p:inputText>
-                <p:outputLabel for="label" value="Label*:" class="output"/>
-                <p:inputText id="label" value="#{unitsBean.editedUnit.label}" class="dialog-input"
-                             validatorMessage="The field 'Label' must not contain the following characters: \ / * : ? > |">
-                    <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
-                    <p:clientValidator/>
-                </p:inputText>
-                <p:outputLabel for="parentUnit" value="Parent unit:" class="output"/>
-                <p:selectOneMenu id="parentUnit" value="#{unitsBean.editedUnit.parentUnit}" effect="fade"
-                                 filter="true" filterMatchMode="startsWith" converter="unitConverter" class="dialog-select">
-                    <f:selectItem />
-                    <f:selectItems var="unit" value="#{unitsBean.units}"
-                                   itemLabel="#{unit.unitName}" itemValue="#{unit}"/>
-                </p:selectOneMenu>
-            </p:panelGrid>
-            <br/>
-            <p:commandButton value="Save" action="#{unitsBean.saveChanges}" update=":centerForm" validateClient="true"
-                             oncomplete="handleRequest(xhr, status, args, 'unitDialog')" styleClass="btn" icon="fa fa-save"/>
-            <p:commandButton value="Cancel" onclick="PF('unitDialog').hide();" styleClass="btn" icon="fa fa-undo"/>
-        </p:panel>
-        <p:ajax event="close" listener="#{unitsBean.setMode(false)}"/>
-    </p:dialog>
-    <script type="text/javascript">
-        function handleRequest(xhr, status, args, dialogName) {
-            if (!args.correct) {
-                PF(dialogName).show();
-            }
-            else {
-                PF(dialogName).hide();
-            }
+        <p:panelGrid columns="2" styleClass="ui-noborder">
+            <p:outputLabel for="name" value="Name*:" class="output"/>
+            <p:inputText id="name" value="#{unitsBean.editedUnit.unitName}" class="dialog-input"
+                         validatorMessage="The field 'Name' must not contain the following characters: \ / * : ? > |">
+                <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
+                <p:clientValidator/>
+            </p:inputText>
+            <p:outputLabel for="baseFactor" value="Base factor*:" class="output"/>
+            <p:inputText id="baseFactor" value="#{unitsBean.editedUnit.baseFactor}" class="dialog-input"
+                         converterMessage="The field 'Base factor' must contain only numbers">
+                <p:clientValidator event="keyup"/>
+            </p:inputText>
+            <p:outputLabel for="label" value="Label*:" class="output"/>
+            <p:inputText id="label" value="#{unitsBean.editedUnit.label}" class="dialog-input"
+                         validatorMessage="The field 'Label' must not contain the following characters: \ / * : ? > |">
+                <f:validateRegex pattern="^[!\w][!\w,\.\s]*"/>
+                <p:clientValidator/>
+            </p:inputText>
+            <p:outputLabel for="parentUnit" value="Parent unit:" class="output"/>
+            <p:selectOneMenu id="parentUnit" value="#{unitsBean.editedUnit.parentUnit}" effect="fade"
+                             filter="true" filterMatchMode="startsWith" converter="unitConverter" class="dialog-select">
+                <f:selectItem/>
+                <f:selectItems var="unit" value="#{unitsBean.units}"
+                               itemLabel="#{unit.unitName}" itemValue="#{unit}"/>
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <br/>
+        <p:commandButton value="Save" action="#{unitsBean.saveChanges}" update=":centerForm" validateClient="true"
+                         oncomplete="handleRequest(xhr, status, args, 'unitDialog')" styleClass="btn"
+                         icon="fa fa-save"/>
+        <p:commandButton value="Cancel" onclick="PF('unitDialog').hide();" styleClass="btn" icon="fa fa-undo"/>
+    </p:panel>
+    <p:ajax event="close" listener="#{unitsBean.setMode(false)}"/>
+</p:dialog>
+<script type="text/javascript">
+    function handleRequest(xhr, status, args, dialogName) {
+        if (!args.correct) {
+            PF(dialogName).show();
         }
-    </script>
+        else {
+            PF(dialogName).hide();
+        }
+    }
+</script>
 </html>

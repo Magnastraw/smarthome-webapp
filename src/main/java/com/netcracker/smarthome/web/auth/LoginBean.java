@@ -1,11 +1,18 @@
 package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.auth.oauth.SocialServiceAuthenticator;
+import com.netcracker.smarthome.business.notification.NotificationService;
+import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
+import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
+import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -16,9 +23,15 @@ import java.io.Serializable;
 import java.util.Map;
 
 @ManagedBean
-@ViewScoped
+@Scope(value = "request")
+@Component
 public class LoginBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
+
+    @Autowired
+    private SmartHomeRepository smartHomeRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     private boolean remember = true;
 
@@ -44,6 +57,9 @@ public class LoginBean implements Serializable {
         try {
             FacesContext.getCurrentInstance().getExternalContext().dispatch("/login");
             FacesContext.getCurrentInstance().responseComplete();
+            //пример отправки оповещения
+            //SmartHome home = smartHomeRepository.getHomeByEmail("noullex@gmail.com");
+            //notificationService.sendNotification("smth", home, Channel.Sms,null);
         } catch (IOException e) {
             logger.error("Error during dispatching login request", e);
         }
