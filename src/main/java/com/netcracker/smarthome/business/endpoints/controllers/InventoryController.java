@@ -36,7 +36,7 @@ public class InventoryController {
     @RequestMapping(value = "/inventories",
                     method = RequestMethod.POST,
                     consumes = "application/json")
-    public ResponseEntity sendInventories(@RequestParam(value="houseId", required=true) long houseId,
+    public ResponseEntity sendInventories(@RequestParam(value="houseId", required=true) String houseId,
                                           @RequestBody String json) {
         LOG.info("POST /inventories\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
@@ -55,9 +55,9 @@ public class InventoryController {
         InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService, homeService);
         ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService, smartObjectService);
         for (JsonInventoryObject object : objects) {
-            object.setSmartHomeId(houseId);
+            object.setSmartHomeId(home.getSmartHomeId());
             SmartObject smartObject = inventoryTransformator.fromJsonEntity(object);
-            SmartObject oldObject = smartObjectService.getObjectByExternalKey(houseId, smartObject.getExternalKey());
+            SmartObject oldObject = smartObjectService.getObjectByExternalKey(home.getSmartHomeId(), smartObject.getExternalKey());
             try {
                 if (oldObject != null) {
                     smartObject.setSmartObjectId(oldObject.getSmartObjectId());
@@ -92,7 +92,7 @@ public class InventoryController {
                     method = RequestMethod.PUT,
                     consumes = "application/json")
     public ResponseEntity updateInventory(@PathVariable(value = "objectId", required = true) long objectId,
-                                          @RequestParam(value = "houseId", required = true) long houseId,
+                                          @RequestParam(value = "houseId", required = true) String houseId,
                                           @RequestBody String json) {
         LOG.info("PUT /inventories\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
@@ -108,9 +108,9 @@ public class InventoryController {
         }
         InventoryTransformator inventoryTransformator = new InventoryTransformator(smartObjectService, homeService);
         ObjectParamTransformator paramTransformator = new ObjectParamTransformator(dataTypeService, smartObjectService);
-        jsonObject.setSmartHomeId(houseId);
+        jsonObject.setSmartHomeId(home.getSmartHomeId());
         SmartObject smartObject = inventoryTransformator.fromJsonEntity(jsonObject);
-        SmartObject oldObject = smartObjectService.getObjectByExternalKey(houseId, objectId);
+        SmartObject oldObject = smartObjectService.getObjectByExternalKey(home.getSmartHomeId(), objectId);
         smartObject.setSmartObjectId(oldObject.getSmartObjectId());
         try {
             smartObjectService.updateInventory(smartObject);
@@ -141,12 +141,13 @@ public class InventoryController {
             method = RequestMethod.DELETE,
             consumes = "application/json")
     public ResponseEntity deleteInventory(@PathVariable(value = "objectId", required = true) long objectId,
-                                          @RequestParam(value = "houseId", required = true) long houseId) {
+                                          @RequestParam(value = "houseId", required = true) String houseId) {
+        LOG.info("DELETE /inventories\nId:\n"+objectId);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         try {
-            smartObjectService.deleteObject(smartObjectService.getObjectByExternalKey(houseId, objectId).getSmartObjectId());
+            smartObjectService.deleteObject(smartObjectService.getObjectByExternalKey(home.getSmartHomeId(), objectId).getSmartObjectId());
         }
         catch (Exception ex) {
             LOG.error("Error during deleting of object", ex);

@@ -28,7 +28,7 @@ public class PoliciesController  {
     @RequestMapping(value = "/policies",
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) long houseId) {
+    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) String houseId) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);

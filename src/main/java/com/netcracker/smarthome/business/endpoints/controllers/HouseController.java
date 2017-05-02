@@ -40,7 +40,7 @@ public class HouseController {
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<String> sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
+    public ResponseEntity<String> sendHomeParams(@RequestParam(value="houseId", required=true) String houseId,
                                          @RequestBody String json) {
         LOG.info("POST /house\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
@@ -78,14 +78,14 @@ public class HouseController {
             }
 
         }
-        //return new ResponseEntity(taskManager.getTaskMap().get(home.getSmartHomeId()), HttpStatus.OK);
-        return new ResponseEntity<String>("test", HttpStatus.OK);
+        return new ResponseEntity(taskManager.getTaskMap().get(home.getSmartHomeId()), HttpStatus.OK);
+        //return new ResponseEntity<String>("test", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/house",
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity<String> getCommands(@RequestParam(value="houseId", required=true) long houseId) {
+    public ResponseEntity<String> getCommands(@RequestParam(value="houseId", required=true) String houseId) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);

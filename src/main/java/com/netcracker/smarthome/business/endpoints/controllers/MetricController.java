@@ -39,7 +39,7 @@ public class MetricController {
     @RequestMapping(value = "/metrics",
             method = RequestMethod.POST,
             consumes = "application/json")
-    public ResponseEntity sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
+    public ResponseEntity sendHomeParams(@RequestParam(value="houseId", required=true) String houseId,
                                          @RequestBody String json) {
         LOG.info("POST /metrics\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
@@ -64,9 +64,9 @@ public class MetricController {
                 metric = metricTransformator.fromJsonEntity(item);
                 metricService.saveMetric(metric);
             }*/
-            item.setSmartHomeId(houseId);
+            item.setSmartHomeId(home.getSmartHomeId());
             Metric metric = metricTransformator.fromJsonEntity(item);
-            Metric existingMetric = metricService.getMetric(houseId, metric.getObject().getSmartObjectId(), metric.getSubobject()!=null ? metric.getSubobject().getSmartObjectId() : null, item.getSpecId());
+            Metric existingMetric = metricService.getMetric(home.getSmartHomeId(), metric.getObject().getSmartObjectId(), metric.getSubobject()!=null ? metric.getSubobject().getSmartObjectId() : null, item.getSpecId());
             try {
                 if (existingMetric != null) {
                     metric.setMetricId(existingMetric.getMetricId());
