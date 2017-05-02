@@ -435,12 +435,18 @@ h3 {
     background: -webkit-linear-gradient(top, #dda0dd 0%,#8a2be2 100%) !important;
     background: linear-gradient(to bottom, #dda0dd 0%,#8a2be2 100%) !important;
 }
+.ui-organigram-icon.ui-icon.rootcontroller {
+    background-image: url("https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Home.png");
+}
 
 .ui-organigram .ui-organigram-node.controller {
     background: #93e7ff !important;
     background: -moz-linear-gradient(top, #93e7ff 0%, #007efc 100%) !important;
     background: -webkit-linear-gradient(top, #93e7ff 0%,#007efc 100%) !important;
     background: linear-gradient(to bottom, #93e7ff 0%,#007efc 100%) !important;
+}
+.ui-organigram-icon.ui-icon.controller {
+    background-image: url("https://cdn2.iconfinder.com/data/icons/aspneticons_v1.0_Nov2006/disconnect2_16x16.gif");
 }
 
 .ui-organigram .ui-organigram-node.sensor {
@@ -449,10 +455,25 @@ h3 {
     background: -webkit-linear-gradient(top, #88c080 0%,#69a038 100%) !important;
     background: linear-gradient(to bottom, #88c080 0%,#69a038 100%) !important;
 }
+.ui-organigram-icon.ui-icon.sensor {
+    background-image: url("https://cdn2.iconfinder.com/data/icons/aspneticons_v1.0_Nov2006/turn-off_16x16.gif");
+}
 
 .ui-organigram .ui-organigram-node.leaf {
     margin-left: 2px !important;
     margin-right: 2px !important;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.btn-dialog {
+    text-align: center;
+}
+
+.inventory-dialog-select {
+    min-width: 100px !important;
 }
 /* */
 

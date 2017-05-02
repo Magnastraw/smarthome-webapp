@@ -27,6 +27,7 @@ public class AlarmListBean implements Serializable {
     private List<Alarm> filteredAlarms;
     private List<AlarmSeverity> severities;
     private List<Alarm> selectedAlarms;
+    private Long currentObjectId;
 
     @ManagedProperty(value = "#{alarmService}")
     private AlarmService alarmService;
@@ -35,11 +36,12 @@ public class AlarmListBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        initialise();
+        changeCurrentHome();
     }
 
-    public void initialise() {
+    public void changeCurrentHome() {
         alarmPath = new ArrayList<Alarm>();
+        currentObjectId = null;
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -49,8 +51,17 @@ public class AlarmListBean implements Serializable {
     }
 
     public void getRootAlarms() {
+        if (currentObjectId != null)
+            currentAlarms = alarmService.getRootAlarmsByObject(currentObjectId);
+        else
+            currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
         clearAlarmPath();
-        currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
+        setSubAlarms();
+    }
+
+    public void showObjectAlarms(Long objectId) {
+        currentObjectId = objectId;
+        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObjectId));
         setSubAlarms();
     }
 
@@ -187,5 +198,13 @@ public class AlarmListBean implements Serializable {
 
     public void setSelectedAlarms(List<Alarm> selectedAlarms) {
         this.selectedAlarms = selectedAlarms;
+    }
+
+    public Long getCurrentObjectId() {
+        return currentObjectId;
+    }
+
+    public void setCurrentObjectId(Long currentObjectId) {
+        this.currentObjectId = currentObjectId;
     }
 }

@@ -3,7 +3,10 @@ package com.netcracker.smarthome.business.endpoints.controllers;
 import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.services.PolicyService;
 import com.netcracker.smarthome.business.services.CatalogService;
+import com.netcracker.smarthome.model.entities.Policy;
+import com.netcracker.smarthome.model.entities.Rule;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PoliciesController  {
+public class PoliciesController {
     private static final Logger LOG = LoggerFactory.getLogger(PoliciesController.class);
 
     @Autowired
@@ -28,19 +31,17 @@ public class PoliciesController  {
     @RequestMapping(value = "/policies",
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) long houseId) {
-        SmartHome home = homeService.getHomeById(houseId);
+    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) String houseId) {
+        SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         /* */
-        //policyService.addPolicyListener(this);
-        //policyService.savePolicy(new Policy("policy", PolicyStatus.ACTIVE, "description", catalogService.getRootCatalog("policiesRootCatalog", houseId)));
-
-
+        //policyService.savePolicy(new Policy("policy", PolicyStatus.ACTIVE, "description", catalogService.getRootCatalog("policiesRootCatalog", home.getSmartHomeId())));
+        Rule rule = new Rule();
+        rule.setName("rule1");
+        rule.setPolicy(policyService.getPolicyById(10));
+        policyService.saveRule(rule);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    public void onSaveOrUpdate(Object object) {
-        LOG.info("Call 'onSaveOrUpdate'");
-    }
 }
