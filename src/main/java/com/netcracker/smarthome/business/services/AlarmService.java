@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.alarm;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
@@ -63,8 +63,8 @@ public class AlarmService {
     }
 
     @Transactional(readOnly = true)
-    public List<Alarm> getAlarmsByObject(long objectId) {
-        return alarmRepository.getAlarmsByObject(objectId);
+    public List<Alarm> getRootAlarmsByObject(long objectId) {
+        return alarmRepository.getRootAlarmsByObject(objectId);
     }
 
 }

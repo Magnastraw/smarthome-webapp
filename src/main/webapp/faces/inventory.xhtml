@@ -11,6 +11,8 @@
     <h2>Inventory</h2>
     <p:growl id="growl"/>
     <h:outputLabel rendered="#{empty inventoryBean.rootNode}" value="Data is not received"/>
+    <br/>
+    <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn"/>
     <p:outputPanel id="inventory" rendered="#{not empty inventoryBean.rootNode}">
         <p:organigram id="organigram" widgetVar="organigram" value="#{inventoryBean.rootNode}" var="node"
                       selection="#{inventoryBean.selectedNode}">
@@ -31,15 +33,13 @@
             <p:contextMenu for="organigram" nodeType="#{type}">
                 <p:menuitem value="View detail" icon="ui-icon-search"
                             update="@form:info" oncomplete="PF('infoDialog').show()"/>
-                <p:menuitem value="Alarms" actionListener="#{alarmsDataTable.getFilters().put('Object', 'Humidity sensor')}"
-                            action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm">
-                    <f:setPropertyActionListener value="#{inventoryBean.getObjectAlarms()}" target="#{alarmListBean.filteredAlarms}"/>
-                    
+                <p:menuitem value="Alarms" action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm"
+                            actionListener="#{alarmListBean.showObjectAlarms(inventoryBean.getSelectedObjectId())}">
+
                 </p:menuitem>
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
-    <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn"/>
     <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
         <p:outputPanel id="info">
             <p:panelGrid columns="2" styleClass="ui-noborder">
@@ -69,7 +69,7 @@
                 <p:outputLabel value="#{inventoryBean.selectedObject.catalog.catalogName}"/>
                 <!--<p:selectOneMenu binding="#{catalogSelect}" value="#{inventoryBean.selectedObject.catalog}"
                                      filter="true" filterMatchMode="startsWith" converter="catalogConverter" styleClass="inventory-dialog-select">
-                        <p:ajax event="change" update="@form:info" listener="#{inventoryBean.onChangeCatalog(catalogSelect.label)}"/>
+                        <p:ajax event="change" updatePolicy="@form:info" listener="#{inventoryBean.onChangeCatalog(catalogSelect.label)}"/>
                         <f:selectItem itemLabel="+ Add catalog"/>
                         <f:selectItem itemLabel="/" itemValue="#{inventoryBean.rootCatalog}"/>
                         <f:selectItems var="item" value="#{inventoryBean.objectsCatalogs}"

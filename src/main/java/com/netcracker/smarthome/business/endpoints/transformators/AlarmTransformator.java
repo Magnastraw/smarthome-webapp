@@ -1,8 +1,8 @@
 package com.netcracker.smarthome.business.endpoints.transformators;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonAlarm;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
-import com.netcracker.smarthome.business.specs.AlarmSpecService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.AlarmSpecService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;

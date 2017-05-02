@@ -1,8 +1,8 @@
 package com.netcracker.smarthome.business.endpoints.transformators;
 
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.beans.factory.annotation.Autowired;
 

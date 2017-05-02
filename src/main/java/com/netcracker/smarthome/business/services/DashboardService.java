@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.business.chart;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.DashBoardRepository;
 import com.netcracker.smarthome.model.entities.Dashboard;

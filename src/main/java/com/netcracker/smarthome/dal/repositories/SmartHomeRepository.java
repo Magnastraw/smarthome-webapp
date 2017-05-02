@@ -30,7 +30,7 @@ public class SmartHomeRepository extends EntityRepository<SmartHome> {
     }
 
     public List<HomeParam> getParams(SmartHome home) {
-        Query query = getManager().createQuery("select hp from HomeParam hp where hp.smartHome = :smartHome and lower(hp.name) <> 'secret key'");
+        Query query = getManager().createQuery("select hp from HomeParam hp where hp.smartHome = :smartHome and lower(hp.name) <> 'secretkey'");
         query.setParameter("smartHome", home);
         return query.getResultList();
     }

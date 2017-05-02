@@ -1,8 +1,8 @@
 package com.netcracker.smarthome.business.endpoints.transformators;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
-import com.netcracker.smarthome.business.endpoints.services.MetricService;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.MetricService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 

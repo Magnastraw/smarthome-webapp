@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.business.auth.oauth;
 
-import com.netcracker.smarthome.business.UserService;
-import com.netcracker.smarthome.business.auth.RegistryService;
+import com.netcracker.smarthome.business.services.UserService;
+import com.netcracker.smarthome.business.services.RegistryService;
 import com.netcracker.smarthome.business.auth.UserExistsException;
 import com.netcracker.smarthome.model.entities.User;
 import org.apache.http.HttpResponse;

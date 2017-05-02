@@ -23,13 +23,13 @@ public class PolicyRepository extends EntityRepository<Policy> {
         listeners.remove(listener);
     }
 
-    public void save(Policy policy) {
-        super.save(policy);
+    public void savePolicy(Policy policy) {
+        super.savePolicy(policy);
         onSaveOrUpdate(policy);
     }
 
-    public Policy update(Policy policy) {
-        Policy updatedPolicy = super.update(policy);
+    public Policy updatePolicy(Policy policy) {
+        Policy updatedPolicy = super.updatePolicy(policy);
         onSaveOrUpdate(updatedPolicy);
         return updatedPolicy;
     }

@@ -1,11 +1,11 @@
 package com.netcracker.smarthome.business.endpoints.transformators.policyframework;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonMetric;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.ITransformator;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
-import com.netcracker.smarthome.business.specs.MetricSpecService;
+import com.netcracker.smarthome.business.services.MetricSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PolicyMetricEventTransformator implements ITransformator<MetricEvent,JsonMetric> {

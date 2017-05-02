@@ -1,10 +1,10 @@
 package com.netcracker.smarthome.web.inventory;
 
-import com.netcracker.smarthome.business.alarm.AlarmService;
+import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.endpoints.jsonentities.HomeTask;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
-import com.netcracker.smarthome.business.specs.CatalogService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
@@ -124,14 +124,21 @@ public class InventoryBean implements Serializable {
         message.setSummary("Node '" + selectedObject.getName() + "' selected. " + selectedObject.getCatalog().getCatalogName());
         message.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, message);
-        setSelectedObjectAlarms(alarmService.getAlarmsByObject(selectedObject.getSmartObjectId()));
+        setSelectedObjectAlarms(alarmService.getRootAlarmsByObject(selectedObject.getSmartObjectId()));
     }
 
     public List<Alarm> getObjectAlarms() {
         if(selectedNode == null)
             return null;
-        List<Alarm>  alarms = alarmService.getAlarmsByObject(((SmartObject)selectedNode.getData()).getSmartObjectId());
+        List<Alarm>  alarms = alarmService.getRootAlarmsByObject(((SmartObject)selectedNode.getData()).getSmartObjectId());
         return alarms;
+    }
+
+    public Long getSelectedObjectId() {
+        if (selectedNode != null)
+            return ((SmartObject)selectedNode.getData()).getSmartObjectId();
+        else
+            return null;
     }
 
     public void onChangeCatalog(String label) {

@@ -28,7 +28,7 @@ public class HomeParamRepository extends EntityRepository<HomeParam> {
     }
 
     public SmartHome getHomeBySecretKey(String secretKey) {
-        Query query = getManager().createQuery("select hp.smartHome from HomeParam hp where lower(hp.name) = 'secret key' and hp.value = :secretKey");
+        Query query = getManager().createQuery("select hp.smartHome from HomeParam hp where lower(hp.name) = 'secretkey' and hp.value = :secretKey");
         query.setParameter("secretKey", secretKey);
         List<SmartHome> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);

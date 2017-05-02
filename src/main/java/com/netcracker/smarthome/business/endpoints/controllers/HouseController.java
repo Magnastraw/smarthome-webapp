@@ -2,11 +2,11 @@ package com.netcracker.smarthome.business.endpoints.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.endpoints.jsonentities.*;
-import com.netcracker.smarthome.business.endpoints.services.DataTypeService;
+import com.netcracker.smarthome.business.services.DataTypeService;
 import com.netcracker.smarthome.business.endpoints.transformators.HomeParamTransformator;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;

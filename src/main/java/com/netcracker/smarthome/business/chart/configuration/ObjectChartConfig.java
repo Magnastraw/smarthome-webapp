@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.chart.configuration;
 
-import com.netcracker.smarthome.business.chart.ChartService;
+import com.netcracker.smarthome.business.services.ChartService;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;

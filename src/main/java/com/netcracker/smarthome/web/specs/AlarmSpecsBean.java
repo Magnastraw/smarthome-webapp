@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.web.specs;
 
-import com.netcracker.smarthome.business.specs.CatalogService;
-import com.netcracker.smarthome.business.specs.AlarmSpecService;
+import com.netcracker.smarthome.business.services.CatalogService;
+import com.netcracker.smarthome.business.services.AlarmSpecService;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.SmartHome;

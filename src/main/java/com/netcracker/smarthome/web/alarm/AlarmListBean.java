@@ -1,16 +1,13 @@
 package com.netcracker.smarthome.web.alarm;
 
-import com.netcracker.smarthome.business.alarm.AlarmService;
+import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
-import org.apache.commons.lang3.time.DateUtils;
-import org.primefaces.component.calendar.*;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
@@ -18,9 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
-import java.awt.event.FocusEvent;
 import java.io.Serializable;
 import java.util.*;
 
@@ -33,6 +27,7 @@ public class AlarmListBean implements Serializable {
     private List<Alarm> filteredAlarms;
     private List<AlarmSeverity> severities;
     private List<Alarm> selectedAlarms;
+    private Long currentObjectId;
 
     @ManagedProperty(value = "#{alarmService}")
     private AlarmService alarmService;
@@ -46,6 +41,7 @@ public class AlarmListBean implements Serializable {
 
     public void changeCurrentHome() {
         alarmPath = new ArrayList<Alarm>();
+        currentObjectId = null;
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -55,8 +51,17 @@ public class AlarmListBean implements Serializable {
     }
 
     public void getRootAlarms() {
+        if (currentObjectId != null)
+            currentAlarms = alarmService.getRootAlarmsByObject(currentObjectId);
+        else
+            currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
         clearAlarmPath();
-        currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
+        setSubAlarms();
+    }
+
+    public void showObjectAlarms(Long objectId) {
+        currentObjectId = objectId;
+        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObjectId));
         setSubAlarms();
     }
 
@@ -193,5 +198,13 @@ public class AlarmListBean implements Serializable {
 
     public void setSelectedAlarms(List<Alarm> selectedAlarms) {
         this.selectedAlarms = selectedAlarms;
+    }
+
+    public Long getCurrentObjectId() {
+        return currentObjectId;
+    }
+
+    public void setCurrentObjectId(Long currentObjectId) {
+        this.currentObjectId = currentObjectId;
     }
 }

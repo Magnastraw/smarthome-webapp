@@ -1,8 +1,7 @@
 package com.netcracker.smarthome.business.endpoints.transformators;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonEvent;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
-import com.netcracker.smarthome.business.policy.events.EventType;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 

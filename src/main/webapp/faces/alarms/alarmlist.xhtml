@@ -14,6 +14,8 @@
                              value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-bar-chart"/>
             <p:commandButton action="#{alarmListBean.setClearSeverity}" oncomplete="PF('alarmsTable').unselectAllRows()" update=":centerForm:alarmsDT"
                              value="Clear alarms" styleClass="to-dashboard"/>
+            <p:commandButton action="#{alarmListBean.changeCurrentHome}" update=":centerForm"
+                             value="Show all alarms" styleClass="to-dashboard"/>
         </p:outputPanel>
         <p:breadCrumb id="alarmPath" homeDisplay="text">
             <p:menuitem icon="fa fa-home" actionListener="#{alarmListBean.getRootAlarms}" update=":centerForm"/>

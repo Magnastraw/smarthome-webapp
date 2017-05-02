@@ -1,10 +1,10 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.HomeService;
+import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
-import com.netcracker.smarthome.business.endpoints.services.DataTypeService;
-import com.netcracker.smarthome.business.endpoints.services.SmartObjectService;
+import com.netcracker.smarthome.business.services.DataTypeService;
+import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.InventoryTransformator;
 import com.netcracker.smarthome.business.endpoints.transformators.ObjectParamTransformator;
 import com.netcracker.smarthome.model.entities.ObjectParam;
@@ -138,8 +138,7 @@ public class InventoryController {
     }
 
     @RequestMapping(value = "/inventories/{objectId}",
-            method = RequestMethod.DELETE,
-            consumes = "application/json")
+            method = RequestMethod.DELETE)
     public ResponseEntity deleteInventory(@PathVariable(value = "objectId", required = true) long objectId,
                                           @RequestParam(value = "houseId", required = true) String houseId) {
         LOG.info("DELETE /inventories\nId:\n"+objectId);
