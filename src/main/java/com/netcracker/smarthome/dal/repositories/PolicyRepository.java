@@ -1,27 +1,21 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.business.endpoints.IListener;
-import com.netcracker.smarthome.business.endpoints.IListenerSupport;
 import com.netcracker.smarthome.business.endpoints.ListenersInitializer;
 import com.netcracker.smarthome.model.entities.Policy;
 import org.springframework.stereotype.Repository;
-import java.util.HashSet;
 import java.util.Set;
 
 @Repository
-public class PolicyRepository extends EntityRepository<Policy> implements IListenerSupport<IListener>{
-    private Set<IListener> listeners = new HashSet<IListener>();
+public class PolicyRepository extends EntityRepository<Policy> {
+    //private Set<IListener> listeners;
 
     public PolicyRepository() {
         super(Policy.class);
-        initListeners();
+        //listeners = ListenersInitializer.init();
     }
 
-    public void initListeners() {
-        listeners = ListenersInitializer.init();
-    }
-
-    public void addListener(IListener listener) {
+    /*public void addListener(IListener listener) {
         listeners.add(listener);
     }
 
@@ -44,5 +38,5 @@ public class PolicyRepository extends EntityRepository<Policy> implements IListe
         for(IListener listener : listeners) {
             listener.onSaveOrUpdate(((Policy)object).getCatalog().getSmartHome().getSmartHomeId(), object);
         }
-    }
+    }*/
 }

@@ -40,7 +40,7 @@ public class AlarmController {
     @RequestMapping(value = "/alarm",
                     method = RequestMethod.POST,
                     consumes = "application/json")
-    public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) long houseId,
+    public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) String houseId,
                                      @RequestBody String json) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)

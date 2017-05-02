@@ -1,7 +1,6 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
 import com.netcracker.smarthome.business.HomeService;
-import com.netcracker.smarthome.business.endpoints.IListener;
 import com.netcracker.smarthome.business.services.PolicyService;
 import com.netcracker.smarthome.business.specs.CatalogService;
 import com.netcracker.smarthome.model.entities.Policy;
@@ -31,12 +30,12 @@ public class PoliciesController {
     @RequestMapping(value = "/policies",
             method = RequestMethod.GET,
             produces = "application/json")
-    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) long houseId) {
+    public ResponseEntity getPolicies(@RequestParam(value="houseId", required=true) String houseId) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         /* */
-        policyService.savePolicy(new Policy("policy", PolicyStatus.ACTIVE, "description", catalogService.getRootCatalog("policiesRootCatalog", home.getSmartHomeId())));
+        policyService.save(new Policy("policy", PolicyStatus.ACTIVE, "description", catalogService.getRootCatalog("policiesRootCatalog", home.getSmartHomeId())));
 
 
         return new ResponseEntity(HttpStatus.OK);

@@ -96,7 +96,7 @@ public class HomeService {
     }
 
     @Transactional(readOnly = true)
-    public SmartHome getHomeBySecretKey(long secretKey) {
+    public SmartHome getHomeBySecretKey(String secretKey) {
         return paramRepository.getHomeBySecretKey(secretKey);
     }
 

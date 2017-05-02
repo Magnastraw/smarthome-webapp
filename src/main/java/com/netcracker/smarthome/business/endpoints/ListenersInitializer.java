@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ListenersInitializer {
-    public static Set<IListener> init() {
+    /*public static Set<IListener> init() {
         Set<IListener> listeners = new HashSet<IListener>();
         Reflections reflections = new Reflections("com.netcracker.smarthome");
         Set<Class<? extends IListener>> subTypes = reflections.getSubTypesOf(IListener.class);
@@ -18,5 +18,5 @@ public class ListenersInitializer {
             } catch (Exception ex) {}
         }
         return listeners;
-    }
+    }*/
 }
