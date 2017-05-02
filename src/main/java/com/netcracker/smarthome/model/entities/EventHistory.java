@@ -124,4 +124,3 @@ public class EventHistory implements Serializable {
                 .toString();
     }
 }
-
