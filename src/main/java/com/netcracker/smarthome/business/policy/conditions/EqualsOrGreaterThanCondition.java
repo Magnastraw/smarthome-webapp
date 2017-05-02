@@ -1,6 +1,6 @@
 package com.netcracker.smarthome.business.policy.conditions;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class EqualsOrGreaterThanCondition extends MetricCondition {
     private double value;
@@ -8,7 +8,7 @@ public class EqualsOrGreaterThanCondition extends MetricCondition {
     public EqualsOrGreaterThanCondition() {
     }
 
-    public EqualsOrGreaterThanCondition(HashMap<String, String> params) {
+    public EqualsOrGreaterThanCondition(Map<String, String> params) {
         super(params);
         this.value = Double.parseDouble(params.get("value"));
     }

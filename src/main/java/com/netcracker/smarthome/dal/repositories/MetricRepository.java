@@ -1,9 +1,12 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Metric;
+import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.Query;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -23,8 +26,7 @@ public class MetricRepository extends EntityRepository<Metric> {
             query.setParameter("objectId", objectId);
             query.setParameter("specId", specId);
             query.setParameter("subobjectId", subobjectId);
-        }
-        else {
+        } else {
             query = getManager().createQuery("select m from Metric m where (m.smartHome.smartHomeId = :smartHomeId and " +
                     "m.object.smartObjectId = :objectId and " +
                     "m.subobject.smartObjectId is null and " +
@@ -33,6 +35,16 @@ public class MetricRepository extends EntityRepository<Metric> {
             query.setParameter("objectId", objectId);
             query.setParameter("specId", specId);
         }
+        List<Metric> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public Metric get(SmartObject object, SmartObject subobject, MetricSpec spec, Timestamp regDate) {
+        Query query = getManager().createQuery("select mh.metric from MetricHistory mh where mh.readDate=:regDate and mh.metric.object=:object and mh.metric.subobject=:subobject and mh.metric.metricSpec=:spec");
+        query.setParameter("regDate", regDate);
+        query.setParameter("object", object);
+        query.setParameter("subobject", subobject);
+        query.setParameter("spec", spec);
         List<Metric> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }

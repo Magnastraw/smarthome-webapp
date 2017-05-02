@@ -6,9 +6,12 @@ import com.netcracker.smarthome.dal.repositories.MetricSpecRepository;
 import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
 import com.netcracker.smarthome.model.entities.MetricSpec;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
 
 @Service
 public class MetricService {
@@ -31,6 +34,11 @@ public class MetricService {
     @Transactional(readOnly = true)
     public Metric getMetric(long smartHomeId, long objectId,  Long subobjectId, long specId) {
         return metricRepository.getMetric(smartHomeId, objectId, subobjectId, specId);
+    }
+
+    @Transactional(readOnly = true)
+    public Metric getMetric(SmartObject object, SmartObject subobject, MetricSpec spec, Timestamp regDate) {
+        return metricRepository.get(object, subobject, spec, regDate);
     }
 
     @Transactional

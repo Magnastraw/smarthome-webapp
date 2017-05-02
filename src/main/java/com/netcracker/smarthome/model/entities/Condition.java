@@ -35,7 +35,7 @@ public class Condition implements Serializable {
     @Id
     @Column(name = "node_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cond_seq")
-    @SequenceGenerator(name = "cond_seq", sequenceName = "conditions_node_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "cond_seq", sequenceName = "policies_policy_seq", allocationSize = 1)
     public long getNodeId() {
         return nodeId;
     }

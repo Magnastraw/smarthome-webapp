@@ -245,17 +245,17 @@ VALUES
   ('d_Policy 2', 3, '', 61),
   ('d_Policy 3', 2, '', 62),
   ('d_Policy 4', 3, '', 72),
-  ('d_Policy 5', 4, '', 74),
+  ('d_Policy 5', 1, '', 74),
   ('h1_Policy 1', 0, '', 64),
   ('h1_Policy 2', 3, '', 65),
   ('h1_Policy 3', 2, '', 66),
   ('h1_Policy 4', 3, '', 75),
-  ('h1_Policy 5', 4, '', 76),
+  ('h1_Policy 5', 1, '', 76),
   ('h2_Policy 1', 0, '', 80),
   ('h2_Policy 2', 3, '', 80),
   ('h2_Policy 3', 2, '', 81),
   ('h2_Policy 4', 3, '', 82),
-  ('h2_Policy 5', 4, '', 84);
+  ('h2_Policy 5', 1, '', 84);
 
 --add metrics,objects
 INSERT INTO public.object_types

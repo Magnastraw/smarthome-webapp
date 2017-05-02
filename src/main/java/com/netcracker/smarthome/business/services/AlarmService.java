@@ -5,6 +5,7 @@ import com.netcracker.smarthome.dal.repositories.AlarmSpecRepository;
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,17 +33,22 @@ public class AlarmService {
     public List<Alarm> getChildrenAlarms(Alarm alarm) {
         return alarmRepository.getChildAlarms(alarm);
     }
-    
+
     @Transactional
     public void deleteAlarm(Object primaryKey) {
         alarmRepository.delete(primaryKey);
     }
-    
+
     @Transactional(readOnly = true)
-    public Alarm getAlarmById(long alarmId) {
+    public Alarm getAlarm(long alarmId) {
         return alarmRepository.get(alarmId);
     }
-    
+
+    @Transactional(readOnly = true)
+    public Alarm getAlarm(SmartObject object, SmartObject subobject) {
+        return alarmRepository.get(object, subobject);
+    }
+
     @Transactional
     public void createAlarm(Alarm alarm) {
         alarmRepository.save(alarm);

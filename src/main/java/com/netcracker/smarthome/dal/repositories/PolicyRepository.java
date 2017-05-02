@@ -1,63 +1,19 @@
 package com.netcracker.smarthome.dal.repositories;
 
-import com.netcracker.smarthome.business.endpoints.IListener;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class PolicyRepository extends EntityRepository<Policy> {
-    private List<IListener> listeners = new ArrayList<IListener>();
-
     public PolicyRepository() {
         super(Policy.class);
-        //initListeners();
-    }
-
-    /*protected void initListeners() {
-        Reflections reflections = new Reflections("com.netcracker.smarthome");
-        Set<Class<? extends IListener>> subTypes = reflections.getSubTypesOf(IListener.class);
-        for (Class cl : subTypes) {
-            String[] name = cl.getName().split("(?<=\\.)");
-            listeners.add((IListener) ContextUtils.getBean(name[name.length-1]));
-        }
-    }*/
-
-    public void addPolicyListener(IListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removePolicyListener(IListener listener) {
-        listeners.remove(listener);
-    }
-
-    public void save(Policy policy) {
-        super.save(policy);
-        onSaveOrUpdate(policy);
-    }
-
-    public Policy update(Policy policy) {
-        Policy updatedPolicy = super.update(policy);
-        onSaveOrUpdate(updatedPolicy);
-        return updatedPolicy;
-    }
-
-    public void onSaveOrUpdate(Object object) {
-        for(IListener listener : listeners) {
-            listener.onSaveOrUpdate(object);
-        }
-    }
-
-    public List<Policy> getPoliciesByStatus(PolicyStatus status) {
-        Query query = getManager().createQuery("select p from Policy p where p.status = :policyStatus");
-        query.setParameter("policyStatus", status);
-        return query.getResultList();
     }
 
 //    public List<Policy> getActivePoliciesByObject(SmartObject smartObject) {
@@ -76,6 +32,12 @@ public class PolicyRepository extends EntityRepository<Policy> {
 //        query.setParameter("policyId", policy.getPolicyId());
 //        return query.getResultList();
 //    }
+
+    public List<Policy> getPoliciesByHome(long homeId) {
+        Query query = getManager().createQuery("select distinct p from Policy p left join fetch p.assignedObjects obj left join fetch p.rules r left join fetch r.conditions c left join fetch r.actions where c.parentNode is null and p.catalog.smartHome.smartHomeId=:home");
+        query.setParameter("home", homeId);
+        return query.getResultList();
+    }
 
     public List<SmartObject> getObjectsWithActivePolicies() {
         Query query = getManager().createQuery("select distinct obj from SmartObject obj join fetch obj.assignedPolicies p join fetch p.rules r join fetch r.conditions c join fetch r.actions where c.parentNode is null and p.status=:status");
@@ -98,6 +60,19 @@ public class PolicyRepository extends EntityRepository<Policy> {
     public List<Policy> getPoliciesByCatalog(Catalog catalog) {
         Query query = getManager().createQuery("select p from Policy p where p.catalog.catalogId=:catalog");
         query.setParameter("catalog", catalog.getCatalogId());
+        return query.getResultList();
+    }
+
+    public Policy getInitializedPolicy(long policyId) {
+        Query query = getManager().createQuery("select distinct p from Policy p left join fetch p.assignedObjects join fetch p.rules r join fetch r.actions join fetch r.conditions c where p.policyId=:id and c.parentNode is null");
+        query.setParameter("id", policyId);
+        List<Policy> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public List<SmartObject> getInlineObjects(Policy policy) {
+        Query query = getManager().createQuery("select obj from ConditionParam cp join SmartObject obj on cp.name='object' and cp.value=function('to_char', obj.smartObjectId, '9') and cp.condition.rule.policy=:policy");
+        query.setParameter("policy", policy);
         return query.getResultList();
     }
 }

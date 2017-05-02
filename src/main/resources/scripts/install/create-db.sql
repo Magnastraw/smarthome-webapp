@@ -161,10 +161,11 @@ CREATE TABLE public.metric_specs (
 
 ALTER SEQUENCE public.metric_specs_spec_id_seq OWNED BY public.metric_specs.spec_id;
 
-CREATE SEQUENCE public.policies_policy_id_seq;
+
+CREATE SEQUENCE public.policies_policy_seq;
 
 CREATE TABLE public.policies (
-  policy_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_id_seq'),
+  policy_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   name VARCHAR NOT NULL,
   status INTEGER NOT NULL,
   description VARCHAR,
@@ -172,34 +173,21 @@ CREATE TABLE public.policies (
   CONSTRAINT policies_pk PRIMARY KEY (policy_id)
 );
 
-
-ALTER SEQUENCE public.policies_policy_id_seq OWNED BY public.policies.policy_id;
-
-CREATE SEQUENCE public.rules_rule_id_seq;
-
 CREATE TABLE public.rules (
-  rule_id BIGINT NOT NULL DEFAULT nextval('public.rules_rule_id_seq'),
+  rule_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   name VARCHAR NOT NULL,
   policy_id BIGINT NOT NULL,
   CONSTRAINT rules_pk PRIMARY KEY (rule_id)
 );
 
-
-ALTER SEQUENCE public.rules_rule_id_seq OWNED BY public.rules.rule_id;
-
-CREATE SEQUENCE public.actions_action_id_seq;
-
 CREATE TABLE public.actions (
-  action_id BIGINT NOT NULL DEFAULT nextval('public.actions_action_id_seq'),
+  action_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   rule_id BIGINT NOT NULL,
   type BIT NOT NULL,
   action_class VARCHAR NOT NULL,
   action_order BIGINT NOT NULL,
   CONSTRAINT actions_pk PRIMARY KEY (action_id)
 );
-
-
-ALTER SEQUENCE public.actions_action_id_seq OWNED BY public.actions.action_id;
 
 CREATE SEQUENCE public.action_params_param_id_seq;
 
@@ -214,10 +202,8 @@ CREATE TABLE public.action_params (
 
 ALTER SEQUENCE public.action_params_param_id_seq OWNED BY public.action_params.param_id;
 
-CREATE SEQUENCE public.conditions_node_id_seq;
-
 CREATE TABLE public.conditions (
-  node_id BIGINT NOT NULL DEFAULT nextval('public.conditions_node_id_seq'),
+  node_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   rule_id BIGINT NOT NULL,
   type_id BIGINT,
   parent_node_id BIGINT,
@@ -225,8 +211,6 @@ CREATE TABLE public.conditions (
   CONSTRAINT conditions_pk PRIMARY KEY (node_id)
 );
 
-
-ALTER SEQUENCE public.conditions_node_id_seq OWNED BY public.conditions.node_id;
 
 CREATE SEQUENCE public.condition_params_param_id_seq;
 

@@ -1,10 +1,10 @@
 package com.netcracker.smarthome.business.policy.actions;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
+import com.netcracker.smarthome.business.policy.core.PolicyEngine;
 import com.netcracker.smarthome.business.policy.events.AlarmEvent;
 import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
-import com.netcracker.smarthome.business.policy.exec.PolicyEngine;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.business.services.EventService;
 import com.netcracker.smarthome.model.entities.Alarm;
@@ -15,9 +15,9 @@ import org.springframework.context.ApplicationContext;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Map;
 
-public class RaiseAlarmAction implements Action {
+public class RaiseAlarmAction implements PolicyAction {
     private AlarmSpec spec;
     private AlarmSeverity severity;
 
@@ -29,7 +29,7 @@ public class RaiseAlarmAction implements Action {
         initBeans();
     }
 
-    public RaiseAlarmAction(HashMap<String, String> params) {
+    public RaiseAlarmAction(Map<String, String> params) {
         initBeans();
         this.spec = alarmService.getSpecById(Long.parseLong(params.get("spec")));
         this.severity = AlarmSeverity.valueOf(params.get("severity"));
@@ -61,7 +61,7 @@ public class RaiseAlarmAction implements Action {
 
     private void saveAlarm(PolicyEvent causalEvent, Timestamp regDate) {
         Event dbEvent = causalEvent.getType().equals(EventType.METRIC) ? saveMetricEvent(causalEvent, regDate) : causalEvent.getDbEvent();
-        Alarm alarm = new Alarm(-1l, "", "", regDate, null, severity, regDate, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
+        Alarm alarm = new Alarm(-1L, "", "", regDate, null, severity, regDate, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
         alarmService.saveRaisedAlarm(alarm);
     }
 

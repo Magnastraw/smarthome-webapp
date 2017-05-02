@@ -7,9 +7,9 @@ import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.services.MetricService;
 import com.netcracker.smarthome.model.entities.SmartObject;
 
-import java.util.HashMap;
+import java.util.Map;
 
-public abstract class MetricCondition implements Condition {
+public abstract class MetricCondition implements PolicyCondition {
     private long metric;
     private long policy;
     private long object;
@@ -20,7 +20,7 @@ public abstract class MetricCondition implements Condition {
         metricService = ApplicationContextHolder.getApplicationContext().getBean(MetricService.class);
     }
 
-    public MetricCondition(HashMap<String, String> params) {
+    public MetricCondition(Map<String, String> params) {
         this.metric = Long.parseLong(params.get("metric"));
         this.object = params.containsKey("object") ? Long.parseLong(params.get("object")) : -1;
         this.policy = Long.parseLong(params.get("policy"));
@@ -36,11 +36,8 @@ public abstract class MetricCondition implements Condition {
     }
 
     private boolean checkMatching(PolicyEvent event) {
-        return event.getType().equals(EventType.METRIC) && metric == event.getSpec().getSpecId() && (!isInline() || object == getEventObject(event).getSmartObjectId());
-    }
-
-    private SmartObject getEventObject(PolicyEvent event) {
-        return event.getSubobject() == null ? event.getObject() : event.getSubobject();
+        long eventObject = event.getSubobject() == null ? event.getObject().getSmartObjectId() : event.getSubobject().getSmartObjectId();
+        return event.getType().equals(EventType.METRIC) && metric == event.getSpec().getSpecId() && (!isInline() || object == eventObject);
     }
 
     private double loadLastMetricValue() {

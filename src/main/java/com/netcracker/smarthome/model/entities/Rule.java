@@ -17,12 +17,19 @@ public class Rule implements Serializable {
     private Set<Action> actions;
     private Set<Condition> conditions;
     private Policy policy;
-    private Condition rootCondition;
+
+    public Rule() {
+    }
+
+    public Rule(String name, Policy policy) {
+        this.name = name;
+        this.policy = policy;
+    }
 
     @Id
     @Column(name = "rule_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rule_seq")
-    @SequenceGenerator(name = "rule_seq", sequenceName = "rules_rule_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "rule_seq", sequenceName = "policies_policy_seq", allocationSize = 1)
     public long getRuleId() {
         return ruleId;
     }
@@ -42,6 +49,7 @@ public class Rule implements Serializable {
     }
 
     @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL)
+    @OrderBy(value = "type, order asc")
     public Set<Action> getActions() {
         return actions;
     }
@@ -71,11 +79,7 @@ public class Rule implements Serializable {
 
     @Transient
     public Condition getRootCondition() {
-        return rootCondition;
-    }
-
-    public void setRootCondition(Condition rootCondition) {
-        this.rootCondition = rootCondition;
+        return conditions == null ? null : conditions.stream().findAny().orElse(null);
     }
 
     @Override
