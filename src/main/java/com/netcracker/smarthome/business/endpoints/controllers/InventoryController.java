@@ -142,7 +142,6 @@ public class InventoryController {
             consumes = "application/json")
     public ResponseEntity deleteInventory(@PathVariable(value = "objectId", required = true) long objectId,
                                           @RequestParam(value = "houseId", required = true) String houseId) {
-                                          @RequestParam(value = "houseId", required = true) String houseId) {
         LOG.info("DELETE /inventories\nId:\n"+objectId);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
