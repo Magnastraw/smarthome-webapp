@@ -36,7 +36,7 @@ public class HouseController {
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<String> sendHomeParams(@RequestParam(value="houseId", required=true) String houseId,
+    public ResponseEntity<String> sendHomeParams(@RequestParam(value="houseId", required=true) long houseId,
                                          @RequestBody String json) {
         LOG.info("POST /house\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
