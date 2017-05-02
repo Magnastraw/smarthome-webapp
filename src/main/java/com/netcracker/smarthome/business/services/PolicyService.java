@@ -18,6 +18,6 @@ public class PolicyService {
     }
 
     public void addPolicyListener(IListener listener) {
-        policyRepository.addPolicyListener(listener);
+        policyRepository.addListener(listener);
     }
 }

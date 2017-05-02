@@ -1,14 +1,13 @@
 package com.netcracker.smarthome.business.endpoints;
 
+import com.netcracker.smarthome.ApplicationContextHolder;
 import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.web.common.ContextUtils;
 import org.reflections.Reflections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
-public class PolicyListener implements IListener, IListenerSupport<IListener> {
+public class PolicyListener {/*implements IListener, IListenerSupport<IListener> {
     List<IListener> listeners = new ArrayList<IListener>();
 
     public PolicyListener() {
@@ -20,7 +19,8 @@ public class PolicyListener implements IListener, IListenerSupport<IListener> {
         Set<Class<? extends IListener>> subTypes = reflections.getSubTypesOf(IListener.class);
         for (Class cl : subTypes) {
             String[] name = cl.getName().split("(?<=\\.)");
-            listeners.add((IListener)ContextUtils.getBean(name[name.length-1]));
+            if (!name[name.length-1].equals("PolicyListener"))
+                listeners.add((IListener)ApplicationContextHolder.getApplicationContext().getBean(name[name.length-1]));
         }
     }
 
@@ -36,5 +36,5 @@ public class PolicyListener implements IListener, IListenerSupport<IListener> {
         for(IListener listener : listeners) {
             listener.onSaveOrUpdate(((Policy)object).getCatalog().getSmartHome().getSmartHomeId(),object);
         }
-    }
+    }*/
 }

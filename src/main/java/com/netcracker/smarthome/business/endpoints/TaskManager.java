@@ -1,14 +1,8 @@
 package com.netcracker.smarthome.business.endpoints;
 
 import com.netcracker.smarthome.business.endpoints.jsonentities.HomeTask;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -6,6 +6,8 @@ public class HomeTask {
     private String action;
     private Map<String,JsonParameter> parameters;
 
+    public HomeTask() {}
+
     public HomeTask(String action) {
         this.action = action;
     }

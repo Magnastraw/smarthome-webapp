@@ -2,6 +2,7 @@ package com.netcracker.smarthome.business.endpoints.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netcracker.smarthome.ApplicationContextHolder;
 import com.netcracker.smarthome.business.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.TaskManager;
@@ -14,12 +15,14 @@ import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.faces.bean.ManagedProperty;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -71,15 +74,21 @@ public class HouseController {
                 } else {
                     homeService.saveParam(homeParam);
                 }
-                /**/
             } catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-
         }
-        //return new ResponseEntity(taskManager.getTaskMap().get(home.getSmartHomeId()), HttpStatus.OK);
-        return new ResponseEntity<String>("test", HttpStatus.OK);
+        String responseBody = new String();
+        try {
+            TaskManager taskManager = (TaskManager)ApplicationContextHolder.getApplicationContext().getBean("taskManager");
+            taskManager.addHomeTask(home.getSmartHomeId(), new HomeTask("GetInventory"));
+            responseBody = mapper.writeValueAsString(taskManager.getTaskMap().get(home.getSmartHomeId()));
+            taskManager.getTaskMap().get(home.getSmartHomeId()).clear();
+        } catch (JsonProcessingException ex) {
+            LOG.error("Json to string", ex);
+        }
+        return new ResponseEntity<String>(responseBody, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/house",
@@ -92,20 +101,13 @@ public class HouseController {
         /* */
         String responseBody = new String();
         try {
+            TaskManager taskManager = (TaskManager)ApplicationContextHolder.getApplicationContext().getBean("taskManager");
             responseBody = mapper.writeValueAsString(taskManager.getTaskMap().get(home.getSmartHomeId()));
             taskManager.getTaskMap().get(home.getSmartHomeId()).clear();
         } catch (JsonProcessingException ex) {
             LOG.error("Json to string", ex);
         }
         return new ResponseEntity<String>(responseBody, HttpStatus.OK);
-    }
-
-    public ObjectMapper getMapper() {
-        return mapper;
-    }
-
-    public void setMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
     }
 
 }
