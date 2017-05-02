@@ -69,8 +69,6 @@ public class DefaultChartConfig {
 
                 axisConfig.setTitle(metricSpec.getSpecName());
                 axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
-                axisConfig.setMax(metricSpec.getMaxValue());
-                axisConfig.setMin(metricSpec.getMinValue());
 
 
                 chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);

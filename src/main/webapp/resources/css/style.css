@@ -381,12 +381,12 @@ h3 {
     height: 29px;
 }
 
-.ui-selectonemenu {
+.ui-selectonemenu-dashboard {
     padding-right: 0 !important;
     width: 100% !important;
 }
 
-.ui-selectonemenu label {
+.ui-selectonemenu-dashboard label {
     width: auto !important;
 }
 
