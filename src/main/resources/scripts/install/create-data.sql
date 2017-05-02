@@ -219,6 +219,7 @@ VALUES
 --add metrics,objects
 INSERT INTO public.object_types
 VALUES
+  (DEFAULT, 'RootController', 'RootController'),
   (DEFAULT, 'Controller', 'Controller'),
   (DEFAULT, 'Sensor', 'Sensor');
 
