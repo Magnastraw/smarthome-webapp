@@ -5,7 +5,6 @@ import com.netcracker.smarthome.business.endpoints.IListenerSupport;
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PolicyService implements IListenerSupport<IListener> {
@@ -67,23 +65,27 @@ public class PolicyService implements IListenerSupport<IListener> {
 
     @Transactional
     public List<SmartObject> getObjectsWithActivePolicies() {
-        List<SmartObject> objects = policyRepository.getObjectsWithActivePolicies();
-        Set<SmartObject> inlineObjects = new HashSet<SmartObject>(policyRepository.getActivePoliciesInlineObjects());
-        for (SmartObject object : inlineObjects
-                ) {
+        List<SmartObject> objects = policyRepository.getObjectsWithActivePolicies(),
+                inlineObjects = policyRepository.getActiveInlineObjects();
+        for (SmartObject object : inlineObjects)
             if (objects.contains(object))
-                objects.get(objects.indexOf(object)).getAssignedPolicies().addAll(policyRepository.getActivePoliciesByInlineObject(object));
+                objects.get(objects.indexOf(object)).getAssignedPolicies().addAll(policyRepository.getActivePoliciesByInlineObject(object.getSmartObjectId()));
             else {
-                object.setAssignedPolicies(new HashSet<>(policyRepository.getActivePoliciesByInlineObject(object)));
+                object.setAssignedPolicies(new HashSet<>(policyRepository.getActivePoliciesByInlineObject(object.getSmartObjectId())));
                 objects.add(object);
             }
-        }
         return objects;
     }
 
     @Transactional
-    public List<Policy> getPoliciesByHome(long homeId) {
-        return policyRepository.getPoliciesByHome(homeId);
+    public List<Policy> getActivePoliciesByHome(long homeId) {
+        List<Policy> assignedPolicies = policyRepository.getAssignedActivePoliciesByHome(homeId),
+                inlinePolicies;
+        inlinePolicies = assignedPolicies.isEmpty() ? policyRepository.getInlineActivePoliciesByHome(homeId) : policyRepository.getInlineActivePoliciesByHome(homeId, assignedPolicies);
+        for (Policy policy : inlinePolicies)
+            policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
+        assignedPolicies.addAll(inlinePolicies);
+        return assignedPolicies;
     }
 
     @Transactional
@@ -97,6 +99,8 @@ public class PolicyService implements IListenerSupport<IListener> {
         if (policy != null && policy.getStatus() == PolicyStatus.ACTIVE) {
             policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
         }
+        if (policy.getAssignedObjects().isEmpty())
+            return null;
         return policy;
     }
 }

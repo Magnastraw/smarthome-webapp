@@ -11,51 +11,67 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+//TODO: change reinitialization (and maybe storing model)
 @Component
 public class PolicyEngine implements IListener {
     private final PolicyService policyService;
     private Map<Long, Set<PolicyNode>> policiesByObjects;
+    private ReadWriteLock lock;
 
     @Autowired
     public PolicyEngine(PolicyService policyService) {
         this.policyService = policyService;
+        policiesByObjects = new HashMap<>();
+        lock = new ReentrantReadWriteLock();
     }
 
-//    @PostConstruct
+    @PostConstruct
     private void initialize() {
         PolicyConverter converter = new PolicyConverter();
         List<SmartObject> objects = policyService.getObjectsWithActivePolicies();
-        for (SmartObject object : objects)
-            policiesByObjects.put(
-                    object.getSmartObjectId(),
-                    object.getAssignedPolicies().stream()
-                            .map(converter::convert)
-                            .collect(Collectors.toSet())
-            );
-        policyService.addListener(this);
+        Map<Long, PolicyNode> initializedNodes = new HashMap<>();
+        Set<PolicyNode> assignedPolicies;
+        PolicyNode policyNode;
+        for (SmartObject object : objects) {
+            assignedPolicies = new HashSet<>();
+            for (Policy policy : object.getAssignedPolicies())
+                if (initializedNodes.containsKey(policy.getPolicyId()))
+                    assignedPolicies.add(initializedNodes.get(policy.getPolicyId()));
+                else {
+                    policyNode = converter.convert(policy);
+                    assignedPolicies.add(policyNode);
+                    initializedNodes.put(policyNode.getIdentifier(), policyNode);
+                }
+            policiesByObjects.put(object.getSmartObjectId(), assignedPolicies);
+        }
+//        policyService.addListener(this);
     }
 
     private void reinitialize(long policyId) {
-        for (Set<PolicyNode> policyNodes : policiesByObjects.values())
-            policyNodes.removeIf(node -> node.getIdentifier() == policyId);
-        policiesByObjects = policiesByObjects.entrySet().stream()
-                .filter(entry -> !entry.getValue().isEmpty())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        Policy policy = policyService.getActiveInitializedPolicy(policyId);
-        if (policy != null) {
-            PolicyConverter converter = new PolicyConverter();
-            PolicyNode policyNode = converter.convert(policy);
-            for (SmartObject object : policy.getAssignedObjects()) {
-                if (!policiesByObjects.containsKey(object.getSmartObjectId()))
-                    policiesByObjects.put(object.getSmartObjectId(), new HashSet<>());
-                policiesByObjects.get(object.getSmartObjectId()).add(policyNode);
+        lock.writeLock().lock();
+        try {
+            for (Set<PolicyNode> policyNodes : policiesByObjects.values())
+                policyNodes.removeIf(node -> node.getIdentifier() == policyId);
+            policiesByObjects = policiesByObjects.entrySet().stream()
+                    .filter(entry -> !entry.getValue().isEmpty())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Policy policy = policyService.getActiveInitializedPolicy(policyId);
+            if (policy != null) {
+                PolicyConverter converter = new PolicyConverter();
+                PolicyNode policyNode = converter.convert(policy);
+                for (SmartObject object : policy.getAssignedObjects()) {
+                    if (!policiesByObjects.containsKey(object.getSmartObjectId()))
+                        policiesByObjects.put(object.getSmartObjectId(), new HashSet<>());
+                    policiesByObjects.get(object.getSmartObjectId()).add(policyNode);
+                }
             }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
@@ -65,8 +81,13 @@ public class PolicyEngine implements IListener {
     }
 
     public void handleEvent(PolicyEvent event) {
-        long objectId = event.getSubobject() == null ? event.getObject().getSmartObjectId() : event.getSubobject().getSmartObjectId();
-        for (PolicyNode policy : policiesByObjects.get(objectId))
-            policy.handle(event);
+        lock.readLock().lock();
+        try {
+            long objectId = event.getSubobject() == null ? event.getObject().getSmartObjectId() : event.getSubobject().getSmartObjectId();
+            for (PolicyNode policy : policiesByObjects.get(objectId))
+                policy.handle(event);
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 }

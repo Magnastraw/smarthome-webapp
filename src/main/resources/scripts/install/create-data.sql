@@ -266,17 +266,17 @@ VALUES
 
 -- INSERT INTO objects
 -- VALUES
---   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
---   (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
---   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
---   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
---   (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1),
---   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1);
+--   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1, 1),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1, 2),
+--   (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1, 3),
+--   (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1,4),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2, 5),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2, 6),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3, 7),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3, 8),
+--   (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1, 9),
+--   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1, 10),
+--   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1, 11);
 --
 -- INSERT INTO metrics
 -- VALUES

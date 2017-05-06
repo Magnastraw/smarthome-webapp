@@ -39,12 +39,11 @@ public class PolicyNode implements RuleCompletionListener, PolicyNodesHolder, En
 
     public void handle(PolicyEvent event) {
         eventQueue.add(event);
-        if (!locked)
-            handleNextEvent();
+        handleNextEvent();
     }
 
     private synchronized void handleNextEvent() {
-        if (!eventQueue.isEmpty()) {
+        if (!locked && !eventQueue.isEmpty()) {
             locked = true;
             launchConditions(eventQueue.poll());
         }

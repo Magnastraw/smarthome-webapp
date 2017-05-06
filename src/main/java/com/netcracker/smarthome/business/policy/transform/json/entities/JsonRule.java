@@ -1,11 +1,13 @@
 package com.netcracker.smarthome.business.policy.transform.json.entities;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.io.Serializable;
 import java.util.List;
 
+@JsonPropertyOrder({"id", "name", "root_condition", "then_actions", "else_actions"})
 public class JsonRule implements Serializable {
     private long id;
     private String name;

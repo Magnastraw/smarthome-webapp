@@ -24,7 +24,6 @@ public class PolicyTransformer implements ITransformator<Policy, JsonPolicy> {
         JsonPolicy jsonPolicy = new JsonPolicy();
         jsonPolicy.setId(policy.getPolicyId());
         jsonPolicy.setName(policy.getName());
-        jsonPolicy.setStatus(policy.getStatus());
         jsonPolicy.setAssignedObjects(policy.getAssignedObjects()
                 .stream()
                 .map(SmartObject::getExternalKey)

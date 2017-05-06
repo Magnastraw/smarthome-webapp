@@ -1,10 +1,12 @@
 package com.netcracker.smarthome.business.policy.transform.json.entities;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.io.Serializable;
 
+@JsonPropertyOrder({"id", "order", "class", "params"})
 public class JsonAction implements Serializable {
     private long id;
     private long order;

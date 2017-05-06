@@ -5,6 +5,7 @@ import com.netcracker.smarthome.business.notification.NotificationService;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.business.services.MetricService;
+import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
@@ -49,7 +50,7 @@ public class SendNotificationAction implements PolicyAction {
             case EVENT:
                 return event.getDbEvent();
             case ALARM:
-                return alarmService.getAlarm(event.getObject(), event.getSubobject());
+                return alarmService.getAlarm(event.getObject(), event.getSubobject(), (AlarmSpec)event.getSpec());
             case METRIC:
                 return metricService.getMetric(event.getObject(), event.getSubobject(), (MetricSpec) event.getSpec(), event.getRegistryDate());
             default:

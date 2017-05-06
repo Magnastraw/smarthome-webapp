@@ -45,8 +45,8 @@ public class AlarmService {
     }
 
     @Transactional(readOnly = true)
-    public Alarm getAlarm(SmartObject object, SmartObject subobject) {
-        return alarmRepository.get(object, subobject);
+    public Alarm getAlarm(SmartObject object, SmartObject subobject, AlarmSpec spec) {
+        return alarmRepository.get(object, subobject, spec);
     }
 
     @Transactional
@@ -81,7 +81,7 @@ public class AlarmService {
 
     @Transactional
     public void saveRaisedAlarm(Alarm alarm) {
-        Alarm existingAlarm = alarmRepository.get(alarm.getObject(), alarm.getSubobject());
+        Alarm existingAlarm = alarmRepository.get(alarm.getObject(), alarm.getSubobject(), alarm.getAlarmSpec());
         if (existingAlarm != null) {
             alarm.setAlarmId(existingAlarm.getAlarmId());
             if (existingAlarm.getSeverity() != AlarmSeverity.CLEAR) {
@@ -100,7 +100,7 @@ public class AlarmService {
 
     @Transactional
     public void clearAlarm(Alarm alarmProps, boolean withChildren, boolean bySystem) {
-        Alarm existingAlarm = alarmRepository.get(alarmProps.getObject(), alarmProps.getSubobject());
+        Alarm existingAlarm = alarmRepository.get(alarmProps.getObject(), alarmProps.getSubobject(), alarmProps.getAlarmSpec());
         if (existingAlarm == null)
             return;
         long clearedUserId = bySystem ? userRepository.getByEmail("system@system.com").getUserId() : alarmProps.getClearedUserId();

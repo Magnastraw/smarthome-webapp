@@ -79,7 +79,7 @@ public class Rule implements Serializable {
 
     @Transient
     public Condition getRootCondition() {
-        return conditions == null ? null : conditions.stream().findAny().orElse(null);
+        return conditions == null ? null : conditions.stream().filter(condition -> condition.getParentNode() == null).findAny().orElse(null);
     }
 
     @Override

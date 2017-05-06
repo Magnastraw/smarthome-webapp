@@ -75,7 +75,7 @@ public class Condition implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "type_id", nullable = false)
+    @JoinColumn(name = "type_id", referencedColumnName = "type_id", nullable = true)
     public ConditionType getConditionType() {
         return conditionType;
     }

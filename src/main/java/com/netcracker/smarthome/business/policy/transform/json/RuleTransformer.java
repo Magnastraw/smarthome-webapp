@@ -25,7 +25,8 @@ public class RuleTransformer implements ITransformator<Rule, JsonRule> {
         JsonRule jsonRule = new JsonRule();
         jsonRule.setId(rule.getRuleId());
         jsonRule.setName(rule.getName());
-        jsonRule.setRootCondition(conditionTransformer.toJsonEntity(rule.getRootCondition()));
+        if (rule.getRootCondition() != null)
+            jsonRule.setRootCondition(conditionTransformer.toJsonEntity(rule.getRootCondition()));
         jsonRule.setThenActions(rule.getActions()
                 .stream()
                 .filter(action -> action.getType())

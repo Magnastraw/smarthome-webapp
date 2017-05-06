@@ -16,19 +16,29 @@ public class ConditionTransformer implements ITransformator<Condition, JsonCondi
 
     @Override
     public JsonCondition toJsonEntity(Condition condition) {
+        return condition.getOperator() == null ? conditionToJson(condition) : operatorToJson(condition);
+    }
+
+    private JsonCondition conditionToJson(Condition condition) {
         JsonCondition jsonCondition = new JsonCondition();
         jsonCondition.setId(condition.getNodeId());
-        jsonCondition.setOperator(condition.getOperator());
         jsonCondition.setConditionClass(condition.getConditionType().getConditionClass());
         jsonCondition.setParams(new JsonParams(condition.getConditionParams()
-                        .stream()
-                        .collect(Collectors.toMap(ConditionParam::getName, ConditionParam::getValue)))
+                .stream()
+                .collect(Collectors.toMap(ConditionParam::getName, ConditionParam::getValue)))
         );
-        jsonCondition.setChildren(condition.getChildNodes()
+        return jsonCondition;
+    }
+
+    private JsonCondition operatorToJson(Condition operator) {
+        JsonCondition jsonOperator = new JsonCondition();
+        jsonOperator.setId(operator.getNodeId());
+        jsonOperator.setOperator(operator.getOperator());
+        jsonOperator.setChildren(operator.getChildNodes()
                 .stream()
                 .map(this::toJsonEntity)
                 .collect(Collectors.toList())
         );
-        return jsonCondition;
+        return jsonOperator;
     }
 }
