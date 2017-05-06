@@ -8,5 +8,5 @@ import java.io.IOException;
 public interface ChartConfig {
     String getJsonChartConfig() throws IOException;
     String getJsonRequestDataConfig() throws JsonProcessingException;
-    double getRefreshInterval();
+    long getRefreshInterval();
 }

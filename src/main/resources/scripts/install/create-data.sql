@@ -158,13 +158,15 @@ INSERT INTO public.units (unit_name, base_factor, label)
 VALUES
   ('Celsius', 1, '°C'),
   ('Percent', 1, '%'),
-  ('kW', 1000, 'label');
+  ('Cubic metre', 1, 'm³'),
+  ('Kilowatt-hour', 1000, 'kWh');
 
 INSERT INTO public.metric_specs (spec_name, unit_id, metric_type, catalog_id)
 VALUES
   ('Temperature', 1, 'common', 22),
   ('Humidity', 2, 'common', 22),
-  ('metricSpec3', 1, 'common', 22),
+  ('WaterFlow', 3, 'common', 22),
+  ('Power', 4, 'common', 22),
   ('metricSpec4', 1, 'common', 23),
   ('metricSpec5', 1, 'common', 23),
   ('metricSpec6', 1, 'common', 23),

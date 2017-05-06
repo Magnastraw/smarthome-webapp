@@ -46,12 +46,7 @@
                          update=":centerForm:alarmDlg" value="Add" styleClass="btn" icon="fa fa-plus">
         </p:commandButton>
     </p:outputPanel>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        <div class="dialog">
-            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-        </div>
-    </p:confirmDialog>
+
     <p:dialog id="alarmDlg" widgetVar="alarmDialog" resizable="false" header="Edit alarm specification/catalog" position="center">
         <p:panel>
             <div class="alert-block-specs">

@@ -36,20 +36,9 @@ public class ChartController {
     public ArrayList<DataSeries> getJsonData(@RequestBody RequestDataOptions requestDataOptions) throws ParseException {
         LOG.info("request:" + requestDataOptions);
         this.chartConfiguration.setChart(new TimeChart(chartService));
-        return this.chartConfiguration.getData(requestDataOptions);
-    }
-
-    @RequestMapping(value="/house/{id}", method=RequestMethod.GET)
-    @ResponseBody
-    public String byParameter(@PathVariable int id) {
-        return "This is response "+id;
-    }
-
-    @RequestMapping(value = {"/inventory"}, method = RequestMethod.POST)
-    @ResponseBody
-    public String getInventory(@RequestBody String inventory) {
-        LOG.info("request:" + inventory);
-        return "successful";
+        ArrayList<DataSeries> list = this.chartConfiguration.getData(requestDataOptions);
+        LOG.info(list.toString());
+        return list;
     }
 
 }

@@ -14,7 +14,7 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
     private String title;
     private ChartService chartService;
 
-    public MultiChartConfig(SmartHome smartHome, long chartId, String chartTitle, ChartService chartService, double refreshInterval, String chartType, String chartInterval) {
+    public MultiChartConfig(SmartHome smartHome, long chartId, String chartTitle, ChartService chartService, long refreshInterval, String chartType, String chartInterval) {
         super(smartHome, chartId, refreshInterval, chartType, chartInterval);
         this.title = chartTitle;
         this.chartService = chartService;
@@ -30,7 +30,7 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
 
     public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
         super.getChartConfigImpl().getChartOptions().setChartTitle(getTitle());
-        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, chartService);
+        ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, selectedSmartObjects, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {

@@ -39,9 +39,9 @@ public class EventController {
     @RequestMapping(value = "/event",
             method = RequestMethod.POST,
             consumes = "application/json")
-    public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) long houseId,
+    public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) String houseId,
                                      @RequestBody String json) {
-        SmartHome home = homeService.getHomeById(houseId);
+        SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         JsonRestParser parser = new JsonRestParser();
@@ -63,9 +63,9 @@ public class EventController {
                 event = eventTransformator.fromJsonEntity(item);
                 eventService.saveEvent(event);
             }*/
-            item.setSmartHomeId(houseId);
+            item.setSmartHomeId(home.getSmartHomeId());
             Event event = eventTransformator.fromJsonEntity(item);
-            Event existingEvent = eventService.getEvent(houseId, event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, null);
+            Event existingEvent = eventService.getEvent(home.getSmartHomeId(), event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, null);
             try {
                 if (existingEvent != null) {
                     event.setEventId(existingEvent.getEventId());

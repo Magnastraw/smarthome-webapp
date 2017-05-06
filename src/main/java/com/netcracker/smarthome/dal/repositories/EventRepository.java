@@ -1,6 +1,5 @@
 package com.netcracker.smarthome.dal.repositories;
 
-import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.model.entities.Event;
 import org.springframework.stereotype.Repository;
 import javax.persistence.Query;

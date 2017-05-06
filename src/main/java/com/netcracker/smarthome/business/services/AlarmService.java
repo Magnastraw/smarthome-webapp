@@ -75,8 +75,8 @@ public class AlarmService {
     }
 
     @Transactional(readOnly = true)
-    public List<Alarm> getAlarmsByObject(long objectId) {
-        return alarmRepository.getAlarmsByObject(objectId);
+    public List<Alarm> getRootAlarmsByObject(long objectId) {
+        return alarmRepository.getRootAlarmsByObject(objectId);
     }
 
     @Transactional

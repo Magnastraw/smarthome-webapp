@@ -1,10 +1,12 @@
 package com.netcracker.smarthome.web.inventory;
 
 import com.netcracker.smarthome.business.services.AlarmService;
+import com.netcracker.smarthome.business.endpoints.TaskManager;
+import com.netcracker.smarthome.business.endpoints.jsonentities.HomeTask;
 import com.netcracker.smarthome.business.services.SmartObjectService;
-import com.netcracker.smarthome.model.entities.Alarm;
-import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import com.netcracker.smarthome.business.services.CatalogService;
+import com.netcracker.smarthome.model.entities.*;
+import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import org.primefaces.event.organigram.OrganigramNodeSelectEvent;
 import org.primefaces.model.DefaultOrganigramNode;
@@ -18,6 +20,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @ManagedBean(name="inventoryBean")
@@ -26,9 +31,14 @@ public class InventoryBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(InventoryBean.class);
     private OrganigramNode rootNode;
     private OrganigramNode selectedNode;
+    private SmartObject selectedObject;
     private String style;
     private List<String> objectTypes;
     private List<Alarm> selectedObjectAlarms;
+    private Catalog rootCatalog;
+    private List<Catalog> objectsCatalogs;
+    private Catalog addedCatalog;
+    private boolean adding;
 
     @ManagedProperty(value = "#{smartObjectService}")
     private SmartObjectService smartObjectService;
@@ -36,19 +46,54 @@ public class InventoryBean implements Serializable {
     private CurrentUserHomesBean userHomesBean;
     @ManagedProperty(value = "#{alarmService}")
     private AlarmService alarmService;
+    @ManagedProperty(value = "#{catalogService}")
+    private CatalogService catalogService;
+    @ManagedProperty(value = "#{taskManager}")
+    private TaskManager taskManager;
+
 
     @PostConstruct
     public void init() {
-        objectTypes = smartObjectService.getObjectTypes();
+        setObjectTypes(smartObjectService.getObjectTypes());
         for(int i=0; i<objectTypes.size(); i++) {
             objectTypes.set(i, objectTypes.get(i).toLowerCase());
         }
-        SmartObject rootObject = smartObjectService.getRootController(getHome().getSmartHomeId());
-        rootNode = new DefaultOrganigramNode("rootcontroller", rootObject, null);
-        rootNode.setCollapsible(false);
-        rootNode.setSelectable(true);
-        addSubobjects(rootNode);
+        changeCurrentHome();
+    }
 
+    public void changeCurrentHome() {
+        reset();
+        SmartObject rootObject = smartObjectService.getRootController(getHome().getSmartHomeId());
+        if(rootObject != null) {
+            rootNode = new DefaultOrganigramNode("rootcontroller", rootObject, null);
+            rootNode.setCollapsible(false);
+            rootNode.setSelectable(true);
+            addSubobjects(rootNode);
+
+            setRootCatalog(catalogService.getRootCatalog("objectsRootCatalog", getHome().getSmartHomeId()));
+            objectsCatalogs.addAll(catalogService.getSubcatalogsRecursively(rootCatalog));
+            Collections.sort(objectsCatalogs, new Comparator<Catalog>() {
+                public int compare(final Catalog obj1, final Catalog obj2) {
+                    return (obj1.getCatalogName().compareTo(obj2.getCatalogName()));
+                }
+            });
+        }
+        else {
+            rootNode = null;
+        }
+    }
+
+    private void reset() {
+        objectsCatalogs = new ArrayList<Catalog>();
+        rootCatalog = new Catalog();
+        addedCatalog = new Catalog("New catalog", null, getHome());
+        setAdding(false);
+    }
+
+    public void addTaskInventory() {
+        taskManager.addHomeTask(getHome().getSmartHomeId(), new HomeTask("GetInventory"));
+        LOG.info("GetInventory: home=" + getHome().getSmartHomeId()+
+                ".\n" + taskManager.getTaskMap().toString());
     }
 
     protected void addSubobjects(OrganigramNode parent) {
@@ -62,23 +107,10 @@ public class InventoryBean implements Serializable {
                 addSubobjects(objectNode);
             }
         }
-        /*OrganigramNode divisionNode = new DefaultOrganigramNode("division", name, parent);
-        divisionNode.setDroppable(true);
-        divisionNode.setDraggable(true);
-        divisionNode.setSelectable(true);
-
-        if (employees != null) {
-            for (String employee : employees) {
-                OrganigramNode employeeNode = new DefaultOrganigramNode("employee", employee, divisionNode);
-                employeeNode.setDraggable(true);
-                employeeNode.setSelectable(true);
-            }
-        }
-*/
     }
 
     public void onSelectNode(OrganigramNodeSelectEvent event) {
-        SmartObject selectedObject = (SmartObject)event.getOrganigramNode().getData();
+        setSelectedObject((SmartObject)event.getOrganigramNode().getData());
         FacesMessage message = new FacesMessage();
         message.setSummary("Node '" + selectedObject.getName() + "' selected." +
                 "\nParent: " + selectedObject.getParentObject().getName());
@@ -87,19 +119,41 @@ public class InventoryBean implements Serializable {
     }
 
     public void onClickContextMenu(OrganigramNodeSelectEvent event) {
-        SmartObject selectedObject = (SmartObject)selectedNode.getData();
+        setSelectedObject((SmartObject)event.getOrganigramNode().getData());
         FacesMessage message = new FacesMessage();
-        message.setSummary("Node '" + selectedObject.getName() + "' selected.");
+        message.setSummary("Node '" + selectedObject.getName() + "' selected. " + selectedObject.getCatalog().getCatalogName());
         message.setSeverity(FacesMessage.SEVERITY_INFO);
         FacesContext.getCurrentInstance().addMessage(null, message);
-        selectedObjectAlarms = alarmService.getAlarmsByObject(selectedObject.getSmartObjectId());
+        setSelectedObjectAlarms(alarmService.getRootAlarmsByObject(selectedObject.getSmartObjectId()));
     }
 
-    public List<Alarm> selectedObjectAlarms() {
+    public List<Alarm> getObjectAlarms() {
         if(selectedNode == null)
             return null;
-        List<Alarm>  alarms = alarmService.getAlarmsByObject(((SmartObject)selectedNode.getData()).getSmartObjectId());
+        List<Alarm>  alarms = alarmService.getRootAlarmsByObject(((SmartObject)selectedNode.getData()).getSmartObjectId());
         return alarms;
+    }
+
+    public Long getSelectedObjectId() {
+        if (selectedNode != null)
+            return ((SmartObject)selectedNode.getData()).getSmartObjectId();
+        else
+            return null;
+    }
+
+    public void onChangeCatalog(String label) {
+        if (label.equals("+ Add catalog"))
+            setAdding(true);
+    }
+
+    public void saveChanges() {
+        try {
+            smartObjectService.updateInventory((SmartObject)selectedNode.getData());
+            setAdding(false);
+        } catch (Exception ex) {
+            LOG.error("Error during saving:", ex);
+            ContextUtils.addErrorSummaryToContext("Error during saving");
+        }
     }
 
     private SmartHome getHome() {
@@ -156,5 +210,54 @@ public class InventoryBean implements Serializable {
 
     public void setSelectedObjectAlarms(List<Alarm> selectedObjectAlarms) {
         this.selectedObjectAlarms = selectedObjectAlarms;
+    }
+
+    public List<Catalog> getObjectsCatalogs() {
+        return objectsCatalogs;
+    }
+
+    public void setObjectsCatalogs(List<Catalog> objectsCatalogs) {
+        this.objectsCatalogs = objectsCatalogs;
+    }
+
+    public void setCatalogService(CatalogService catalogService) {
+        this.catalogService = catalogService;
+    }
+
+    public Catalog getRootCatalog() {
+        return rootCatalog;
+    }
+
+    public void setRootCatalog(Catalog rootCatalog) {
+        this.rootCatalog = rootCatalog;
+    }
+
+
+    public Catalog getAddedCatalog() {
+        return addedCatalog;
+    }
+
+    public void setAddedCatalog(Catalog addedCatalog) {
+        this.addedCatalog = addedCatalog;
+    }
+
+    public SmartObject getSelectedObject() {
+        return selectedObject;
+    }
+
+    public void setSelectedObject(SmartObject selectedObject) {
+        this.selectedObject = selectedObject;
+    }
+
+    public boolean isAdding() {
+        return adding;
+    }
+
+    public void setAdding(boolean adding) {
+        this.adding = adding;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
     }
 }

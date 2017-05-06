@@ -38,8 +38,17 @@ public class SmartObjectRepository extends EntityRepository<SmartObject> {
         return query.getResultList();
     }
 
-    public List<SmartObject> getObjectsByCatalogId(long smartHomeId, long catalogId){
-        Query query = getManager().createQuery("select smartObject from SmartObject smartObject where (smartObject.smartHome.smartHomeId=:smartHomeId and smartObject.catalog.catalogId=:catalogId)");
+    public List<SmartObject> getMetricObjectsByCatalogId(long smartHomeId, long catalogId){
+        Query query = getManager().createQuery("select  o\n" +
+                "  from  SmartObject o\n" +
+                "  where o.smartHome.smartHomeId=:smartHomeId and\n" +
+                "        o.catalog.catalogId=:catalogId and\n" +
+                "        (o.smartObjectId in\n" +
+                "          ( select  m.object.smartObjectId\n" +
+                "              from  Metric m) or\n" +
+                "         o.smartObjectId in\n" +
+                "          ( select  m.subobject.smartObjectId\n" +
+                "              from  Metric m))");
         query.setParameter("catalogId", catalogId);
         query.setParameter("smartHomeId", smartHomeId);
         return query.getResultList();

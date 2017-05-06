@@ -30,7 +30,7 @@ public class PolicyEngine implements IListener {
         lock = new ReentrantReadWriteLock();
     }
 
-    @PostConstruct
+//    @PostConstruct
     private void initialize() {
         PolicyConverter converter = new PolicyConverter();
         List<SmartObject> objects = policyService.getObjectsWithActivePolicies();

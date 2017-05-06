@@ -63,8 +63,8 @@ public class ChartService {
     }
 
 
-    public List<SmartObject> getSmartObjectByCatalogId(long homeId, long catalogId) {
-        return smartObjectRepository.getObjectsByCatalogId(homeId, catalogId);
+    public List<SmartObject> getMetricObjectsByCatalogId(long homeId, long catalogId) {
+        return smartObjectRepository.getMetricObjectsByCatalogId(homeId, catalogId);
     }
 
     public List<SmartObject> getSubObjectByParentId(long objectId) {
@@ -73,6 +73,10 @@ public class ChartService {
 
     public List<MetricSpec> getMetricSpecByCatalogId(Catalog catalog) {
         return metricSpecRepository.getMetricSpecs(catalog);
+    }
+
+    public List<MetricSpec> getSupportedMetricSpecs(List<SmartObject> smartObjects){
+        return metricSpecRepository.getSupportedSpecs(smartObjects);
     }
 
     @Transactional(readOnly = false)

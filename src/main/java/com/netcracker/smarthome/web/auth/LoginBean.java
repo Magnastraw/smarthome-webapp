@@ -1,6 +1,8 @@
 package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.auth.social.SocialServiceClient;
+import com.netcracker.smarthome.business.notification.NotificationService;
+import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -19,6 +22,12 @@ import java.util.Map;
 @ViewScoped
 public class LoginBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
+
+    @ManagedProperty(value = "#{smartHomeRepository}")
+    private SmartHomeRepository smartHomeRepository;
+
+    @ManagedProperty(value = "#{notificationService}")
+    private NotificationService notificationService;
 
     private boolean remember = true;
 
@@ -44,6 +53,9 @@ public class LoginBean implements Serializable {
         try {
             FacesContext.getCurrentInstance().getExternalContext().dispatch("/login");
             FacesContext.getCurrentInstance().responseComplete();
+            //пример отправки оповещения
+            //SmartHome home = smartHomeRepository.getHomeByEmail("noullex@gmail.com");
+            //notificationService.sendNotification("login", home, Channel.Email,null);
         } catch (IOException e) {
             logger.error("Error during dispatching login request", e);
         }
@@ -76,5 +88,13 @@ public class LoginBean implements Serializable {
                 context.getRequestServerPort(),
                 context.getRequestContextPath(),
                 serviceName);
+    }
+
+    public void setSmartHomeRepository(SmartHomeRepository smartHomeRepository) {
+        this.smartHomeRepository = smartHomeRepository;
+    }
+
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 }

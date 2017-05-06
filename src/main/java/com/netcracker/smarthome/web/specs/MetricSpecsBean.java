@@ -50,10 +50,10 @@ public class MetricSpecsBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        initialise();
+        changeCurrentHome();
     }
 
-    public void initialise() {
+    public void changeCurrentHome() {
         root = catalogService.getRootCatalog("metricSpecsRootCatalog", getHome().getSmartHomeId());
         tableEntities = new ArrayList<TableEntity>();
         menuCatalogs = new ArrayList<Catalog>();

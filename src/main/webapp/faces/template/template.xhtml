@@ -27,6 +27,12 @@
         <p:layoutUnit id="center" style="border: none;" position="center">
             <h:form id="centerForm">
                 <ui:include src="#{navigationBean.pageName}.xhtml"/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <div style="text-align: center">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    </div>
+                </p:confirmDialog>
             </h:form>
         </p:layoutUnit>
         <p:layoutUnit position="south" id="south">
@@ -39,6 +45,9 @@
     <h:outputScript name="js/exporting.js"/>
     <h:outputScript name="js/custom_chart.js"/>
     <h:outputScript name="js/jquery.gridster.min.js"/>
+    <h:outputScript name="js/moment.js"/>
+    <h:outputScript name="js/moment-timezone-with-data.js"/>
+
 
 </h:body>
 </html>

@@ -6,6 +6,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
+    <f:event listener="#{chartBean.buildCatalog}" type="preRenderView" />
+
     <h2 style="text-align: center;width: 100%; height:100%; margin-bottom: 2px;">#{dashboardBean.currentDashboard.dashboardName}</h2>
 
     <p:toolbar id="dashboardToolbar">
@@ -58,12 +60,6 @@
 
     <p:dialog header="Chart settings" modal="true" widgetVar="chartSettingDialog" resizable="false" >
         <h:form id="chartSettings">
-            <div class="alert-block">
-                <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true" globalOnly="true"
-                            showIcon="false"
-                            styleClass="alert"/>
-                <p:message for="refreshInterval" display="text" styleClass="alert"/>
-            </div>
 
             <h:panelGrid id="sub" columns="2" cellpadding="0" styleClass="top-aligned-columns" style=" display: block; overflow-y: auto; max-height: 600px; ">
 
@@ -71,11 +67,14 @@
                 <h:outputText value="Drop here:"/>
 
                 <p:tree id="objectTree" value="#{chartBean.objectRoot}" var="node"  style="width:100%;height: 100%">
-                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
-                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                    <p:treeNode type="catalog"  expandedIcon="fa fa-folder-open"
+                                collapsedIcon="fa fa-folder">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
-                    <p:treeNode type="childObject"  >
+                    <p:treeNode type="Controller" icon="ui-icon-controller" >
+                        <h:outputText value="#{node}"/>
+                    </p:treeNode>
+                    <p:treeNode type="Sensor" icon="ui-icon-sensor">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
                     <p:treeNode >
@@ -102,8 +101,8 @@
                 <h:outputText value="Drag metrics:"/>
                 <h:outputText value="Drop here:"/>
                 <p:tree id="metricTree" value="#{chartBean.metricRoot}" var="node" style="width:100%;height: 100%">
-                    <p:treeNode type="catalog"  expandedIcon="ui-icon ui-icon-folder-open"
-                                collapsedIcon="ui-icon ui-icon-folder-collapsed">
+                    <p:treeNode type="catalog"  expandedIcon="fa fa-folder-open"
+                                collapsedIcon="fa fa-folder">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>
                     <p:treeNode >
@@ -127,17 +126,23 @@
                     </p:column>
                 </p:dataList>
 
-                <h:outputLabel for="refreshInterval" value="Refresh interval(minutes):"/>
-                <p:inputText id="refreshInterval" value="#{chartBean.refreshInterval}"
-                             styleClass="chartDialogInput"
-                             converterMessage="Please enter digits only." required="true"
-                             requiredMessage="The field is required!" >
-                    <p:clientValidator/>
-                </p:inputText>
+
+                <h:outputLabel for="refreshInterval" value="Refresh interval(minutes) :"/>
+                <p:selectOneMenu id="refreshInterval"
+                                 value="#{chartBean.selectedChartRefreshInterval}"
+                                 label="Select interval"
+                                 styleClass="ui-selectonemenu-dashboard"
+                                 autoWidth="false">
+                    <f:selectItems value="#{chartBean.chartRefreshIntervals}"
+                                   var="chartRefreshInterval"
+                                   itemValue="#{chartRefreshInterval}"
+                                   itemLabel="#{chartRefreshInterval.toString()}"/>
+                </p:selectOneMenu>
                 <h:outputLabel for="chartType" value="Chart type:"/>
                 <p:selectOneMenu id="chartType"
                                  value="#{chartBean.selectedChartType}"
                                  label="Select type"
+                                 styleClass="ui-selectonemenu-dashboard"
                                  autoWidth="false">
                     <f:selectItems value="#{chartBean.chartTypes}"
                                    var="chartType"
@@ -149,6 +154,7 @@
                 <p:selectOneMenu id="chartInterval"
                                  value="#{chartBean.selectedChartInterval}"
                                  label="Select interval"
+                                 styleClass="ui-selectonemenu-dashboard"
                                  autoWidth="false">
                     <f:selectItems value="#{chartBean.chartIntervals}"
                                    var="chartInterval"
@@ -166,21 +172,23 @@
                                  rendered="#{chartBean.isRendered()}"
                                  styleClass="chartDialogInput"/>
                 </h:panelGroup>
-                <p:commandButton value="Submit"
+
+                <p:commandButton id="submitButton"
+                                 value="Submit"
                                  action="#{chartBean.addChart()}"
                                  onclick="clearHighchartsContainer();"
                                  update="centerForm"
                                  validateClient="true"
+                                 disabled="#{!(chartBean.selectedSmartObjects.size()>0 and chartBean.selectedMetricSpecs.size()>0) }"
                                  style="margin-top:10px;"/>
             </h:panelGrid>
         </h:form>
     </p:dialog>
-
     <h:outputScript name="js/custom_dnd.js"/>
     <h:outputScript name="js/custom_gridster.js"/>
 
-    <p:remoteCommand name="treeToTable" actionListener="#{chartBean.treeToTable}" update="centerForm:chartSettings:selectedObjects chartSettings:titleLabel chartSettings:titleInput" oncomplete="initDND()"/>
-    <p:remoteCommand name="treeToMetric" actionListener="#{chartBean.treeToMetric}" update="centerForm:chartSettings:selectedMetrics chartSettings:titleLabel chartSettings:titleInput" oncomplete="initDND()"/>
+    <p:remoteCommand name="treeToTable" actionListener="#{chartBean.treeToTable}" update="centerForm:chartSettings:selectedObjects chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
+    <p:remoteCommand name="treeToMetric" actionListener="#{chartBean.treeToMetric}" update="centerForm:chartSettings:selectedMetrics chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
 
 
 </ui:composition>

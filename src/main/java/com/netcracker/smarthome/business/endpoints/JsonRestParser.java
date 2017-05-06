@@ -28,6 +28,11 @@ public class JsonRestParser {
         return inventoryObjects;
     }
 
+    public JsonInventoryObject parseInventoryObject(String json) throws IOException {
+        JsonInventoryObject inventoryObject = objectMapper.readValue(json, JsonInventoryObject.class);
+        return inventoryObject;
+    }
+
     public List<JsonAlarm> parseAlarms(String json) throws IOException {
         List<JsonAlarm> alarmList = objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, JsonAlarm.class));
         return alarmList;

@@ -58,12 +58,7 @@
         </h:panelGrid>
     </p:fieldset>
 </p:outputPanel>
-<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-    <div style="text-align: center">
-        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-    </div>
-</p:confirmDialog>
+
 <p:dialog header="Parameter properties" widgetVar="saveParamDialog"
           resizable="false" position="center" id="paramSave">
     <p:panel styleClass="dialog">
@@ -104,6 +99,7 @@
 </p:dialog>
 <script type="text/javascript">
     function handleHomeRequest(xhr, status, args, dialogName) {
+        console.log(args);
         if (!args.correct) {
             PF(dialogName).jq.effect("shake", {times: 5}, 100);
         }

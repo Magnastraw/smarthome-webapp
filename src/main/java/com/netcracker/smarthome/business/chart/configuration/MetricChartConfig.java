@@ -13,7 +13,7 @@ import java.util.List;
 public class MetricChartConfig extends DefaultChartConfig implements ChartConfigurator {
     private ChartService chartService;
 
-    public MetricChartConfig(SmartHome smartHome, long chartId, ChartService chartService, double refreshInterval, String chartType, String chartInterval) {
+    public MetricChartConfig(SmartHome smartHome, long chartId, ChartService chartService, long refreshInterval, String chartType, String chartInterval) {
         super(smartHome, chartId, refreshInterval, chartType, chartInterval);
         this.chartService = chartService;
     }
