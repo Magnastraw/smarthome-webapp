@@ -24,13 +24,13 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
 @ManagedBean(name = "chartBean")
 @SessionScoped
-public class ChartBean {
+public class ChartBean implements Serializable{
     private static final Logger LOG = LoggerFactory.getLogger(ChartBean.class);
 
     @ManagedProperty(value = "#{chartService}")

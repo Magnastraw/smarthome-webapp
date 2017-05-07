@@ -6,17 +6,30 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
     <p:outputPanel styleClass="dashboardDiv">
+
         <p:dataTable id="dashboardTable" var="dashboard" value="#{dashboardBean.dashboards}" selectionMode="single"
                      selection="#{dashboardBean.selectedDashboard}" rowKey="#{dashboard}"
                      sortBy="#{dashboard.dashboardName}">
             <f:facet name="header">
-                Dashboards
+
+                <p:outputPanel style="text-align: right;min-height: 20px">
+                    <p:outputLabel style="position:absolute; left: 48%;">
+                        Dashboards
+                    </p:outputLabel>
+                    <p:commandButton value="Back"
+                                     action="#{navigationBean.toPrevPage()}"
+                                     update="centerForm"
+                                     icon="fa fa-level-up"
+                                     rendered="#{dashboardBean.checkBack()}"/>
+                </p:outputPanel>
+
+
             </f:facet>
             <p:ajax event="rowSelect" listener="#{dashboardBean.onRowSelect}" update=":centerForm"/>
             <p:column headerText="Name" styleClass="column" sortBy="#{dashboard.dashboardName}">
                 <h:outputText value="#{dashboard.dashboardName}"/>
             </p:column>
-            <p:column headerText="Widgets amount" styleClass="column"
+            <p:column headerText="Widgets quantity" styleClass="column"
                       sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
                 <h:outputText value="#{dashboardBean.getWidgetsAmount(dashboard)}"/>
             </p:column>

@@ -19,6 +19,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @ManagedBean
@@ -58,7 +59,7 @@ public class LoginBean implements Serializable {
             FacesContext.getCurrentInstance().responseComplete();
             //пример отправки оповещения
             //SmartHome home = smartHomeRepository.getHomeByEmail("noullex@gmail.com");
-            //notificationService.sendNotification("login", home, Channel.Email,null);
+           // notificationService.sendNotification("Signed in,"+ContextUtils.getCurrentUser().getLastName()+" "+ ContextUtils.getCurrentUser().getFirstName(), smartHomeRepository.getHomeByEmail(ContextUtils.getCurrentUser().getEmail()), Channel.Email,null);
         } catch (IOException e) {
             logger.error("Error during dispatching login request", e);
         }

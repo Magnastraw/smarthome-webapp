@@ -3,18 +3,17 @@ INSERT INTO public.users
 VALUES (DEFAULT, 'mymail@mail.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE);
 
 INSERT INTO public.data_types
-VALUES (DEFAULT, 'String', 0),
-  (DEFAULT, 'Link', 1),
-  (DEFAULT , 'Time',2);
+  VALUES  (DEFAULT, 'String', 0),
+          (DEFAULT, 'Link', 1);
 
 INSERT INTO public.smart_homes
-VALUES (DEFAULT, 'default home', '', 1),
-  (DEFAULT, 'Smart home 1', '', 1),
-  (DEFAULT, 'Smart home 2', '', 1);
+VALUES (DEFAULT, 'Apartment in the central district', 'TO DO', 1),
+  (DEFAULT, 'Apartment', 'TO DO', 1),
+  (DEFAULT, 'Apartment', 'TO DO', 1);
 
 INSERT INTO public.home_params
-VALUES (DEFAULT, 1, 'Address', 'address', 1),
-  (DEFAULT, 1, 'Link', 'http://www.outlink.com', 2);
+VALUES  (DEFAULT, 1, 'Address', 'Pl. Lenina 15, ap. 10', 1),
+        (DEFAULT, 1, 'Home page', 'http://localhost:8083/', 2);
 
 -- add social services
 ALTER TABLE public.social_servicies
@@ -219,6 +218,7 @@ VALUES
 --add metrics,objects
 INSERT INTO public.object_types
 VALUES
+  (DEFAULT, 'RootController', 'RootController'),
   (DEFAULT, 'Controller', 'Controller'),
   (DEFAULT, 'Sensor', 'Sensor');
 

@@ -10,19 +10,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class TaskManager implements IListener{
     private static final Logger LOG = LoggerFactory.getLogger(PoliciesController.class);
     private Map<Long, List<HomeTask>> taskMap;
+    private Map<Long, Set<String>> updateMap;
 
     @PostConstruct
     private void init() {
         taskMap = new HashMap<Long, List<HomeTask>>();
+        updateMap = new HashMap<Long, Set<String>>();
+    }
+
+    public void addUpdateEvent(Long houseId, String updateEvent){
+        if(updateMap.get(houseId)!=null){
+            updateMap.get(houseId).add(updateEvent);
+        } else {
+            updateMap.put(houseId,new HashSet<>());
+            updateMap.get(houseId).add(updateEvent);
+        }
     }
 
     public void addHomeTask(Long smartHouseId, HomeTask homeTask) {
@@ -68,4 +76,12 @@ public class TaskManager implements IListener{
         this.taskMap = taskMap;
     }
 
+
+    public Map<Long, Set<String>> getUpdateMap() {
+        return updateMap;
+    }
+
+    public void setUpdateMap(Map<Long, Set<String>> updateMap) {
+        this.updateMap = updateMap;
+    }
 }
