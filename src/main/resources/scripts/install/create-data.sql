@@ -177,10 +177,10 @@ VALUES
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)
 VALUES
-  ('alarmSpec1', 'type1', 46),
-  ('alarmSpec2', 'type1', 46),
-  ('alarmSpec3', 'type1', 46),
-  ('alarmSpec4', 'type1', 47),
+  ('On', 'ON event object', 46),
+  ('Off', 'OFF event object', 46),
+  ('Open', 'OPEN event object', 46),
+  ('Close', 'CLOSE event object', 47),
   ('alarmSpec5', 'type1', 47),
   ('alarmSpec6', 'type2', 47),
   ('alarmSpec7', 'type2', 48),

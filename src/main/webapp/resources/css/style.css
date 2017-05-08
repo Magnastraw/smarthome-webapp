@@ -150,7 +150,7 @@
 .filter-select {
     min-width: 50px !important;
     width: 60% !important;
-    margin-top: 3px;
+    /*margin-top: 3px; !*<===*!*/
 }
 
 .filter-date input {
@@ -158,16 +158,16 @@
     max-width: 150px;
 }
 
-.ui-datatable th.ui-state-default {
-    text-align: center;
-    padding: 5px 2px !important;
-    position: relative;
-}
-
-.ui-sortable-column-icon {
-     position: absolute;
-     top: 5px;
- }
+/*.ui-datatable th.ui-state-default {*/
+    /*text-align: center;*/
+    /*padding: 5px 2px !important;*/
+    /*position: relative;*/
+/*}*/
+/*^^^^*/
+/*.ui-sortable-column-icon {*/
+     /*position: absolute;*/
+     /*top: 5px;*/
+ /*}*/
 
 .ui-datatable th.ui-state-active {
     background-color: #ebedf0;
