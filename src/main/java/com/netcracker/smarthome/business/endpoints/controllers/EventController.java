@@ -67,18 +67,11 @@ public class EventController {
             }*/
             item.setSmartHomeId(home.getSmartHomeId());
             Event event = eventTransformator.fromJsonEntity(item);
-            LOG.info("NORMAL:"+event.getEventType());
             Event existingEvent = eventService.getEvent(home.getSmartHomeId(), event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, event.getEventType());
-            LOG.info("EXIST:"+event.getEventType());
-
             try {
                 if (existingEvent != null) {
                     event.setEventId(existingEvent.getEventId());
-                    LOG.info("123::");
-
                 } else {
-                    LOG.info("321::");
-
                     eventService.saveEvent(event);
                 }
 
@@ -87,8 +80,6 @@ public class EventController {
 
                 EventEvent policyEvent = policyEventTransformator.fromJsonEntity(item);
                 policyEvent.setDbEvent(event);
-                LOG.info("456");
-
                 /* */
             } catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);
