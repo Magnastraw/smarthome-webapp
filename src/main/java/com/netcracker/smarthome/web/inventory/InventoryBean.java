@@ -6,6 +6,7 @@ import com.netcracker.smarthome.business.endpoints.jsonentities.HomeTask;
 import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.services.CatalogService;
 import com.netcracker.smarthome.model.entities.*;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import org.primefaces.event.organigram.OrganigramNodeSelectEvent;
@@ -17,7 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @ManagedBean(name="inventoryBean")
-@SessionScoped
+@ViewScoped
 public class InventoryBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(InventoryBean.class);
     private OrganigramNode rootNode;
@@ -39,6 +40,7 @@ public class InventoryBean implements Serializable {
     private List<Catalog> objectsCatalogs;
     private Catalog addedCatalog;
     private boolean adding;
+    String selectedMaxSeverity;
 
     @ManagedProperty(value = "#{smartObjectService}")
     private SmartObjectService smartObjectService;
@@ -86,7 +88,7 @@ public class InventoryBean implements Serializable {
     private void reset() {
         objectsCatalogs = new ArrayList<Catalog>();
         rootCatalog = new Catalog();
-        addedCatalog = new Catalog("New catalog", null, getHome());
+        addedCatalog = new Catalog("New catalog", catalogService.getRootCatalog("objectsRootCatalog", getHome().getSmartHomeId()), getHome());
         setAdding(false);
     }
 
@@ -111,20 +113,20 @@ public class InventoryBean implements Serializable {
 
     public void onSelectNode(OrganigramNodeSelectEvent event) {
         setSelectedObject((SmartObject)event.getOrganigramNode().getData());
-        FacesMessage message = new FacesMessage();
+        /*FacesMessage message = new FacesMessage();
         message.setSummary("Node '" + selectedObject.getName() + "' selected." +
                 "\nParent: " + selectedObject.getParentObject().getName());
         message.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        FacesContext.getCurrentInstance().addMessage(null, message);*/
     }
 
     public void onClickContextMenu(OrganigramNodeSelectEvent event) {
         setSelectedObject((SmartObject)event.getOrganigramNode().getData());
-        FacesMessage message = new FacesMessage();
+        setSelectedObjectAlarms(alarmService.getRootAlarmsByObject(selectedObject.getSmartObjectId()));
+        /*FacesMessage message = new FacesMessage();
         message.setSummary("Node '" + selectedObject.getName() + "' selected. " + selectedObject.getCatalog().getCatalogName());
         message.setSeverity(FacesMessage.SEVERITY_INFO);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        setSelectedObjectAlarms(alarmService.getRootAlarmsByObject(selectedObject.getSmartObjectId()));
+        FacesContext.getCurrentInstance().addMessage(null, message);*/
     }
 
     public List<Alarm> getObjectAlarms() {
@@ -134,18 +136,6 @@ public class InventoryBean implements Serializable {
         return alarms;
     }
 
-    public Long getSelectedObjectId() {
-        if (selectedNode != null)
-            return ((SmartObject)selectedNode.getData()).getSmartObjectId();
-        else
-            return null;
-    }
-
-    public void onChangeCatalog(String label) {
-        if (label.equals("+ Add catalog"))
-            setAdding(true);
-    }
-
     public void saveChanges() {
         try {
             smartObjectService.updateInventory((SmartObject)selectedNode.getData());
@@ -153,6 +143,32 @@ public class InventoryBean implements Serializable {
         } catch (Exception ex) {
             LOG.error("Error during saving:", ex);
             ContextUtils.addErrorSummaryToContext("Error during saving");
+        }
+    }
+
+    public void setMaxSeverity() {
+        AlarmSeverity severity = alarmService.getMaxSeverity(selectedObject.getSmartObjectId());
+        if (severity == null)
+            setSelectedMaxSeverity("");
+        else
+            setSelectedMaxSeverity(severity.name());
+    }
+
+    public String getStyleBySeverity(long smartObjectId) {
+        AlarmSeverity maxSeverity = alarmService.getMaxSeverity(smartObjectId);
+        if (maxSeverity == null)
+            return "";
+        switch (maxSeverity.ordinal()) {
+            case 5:
+                return "severity-critical";
+            case 4:
+                return "severity-major";
+            case 3:
+                return "severity-warn";
+            case 2:
+                return "severity-info";
+            default:
+                return "severity-normal";
         }
     }
 
@@ -259,5 +275,13 @@ public class InventoryBean implements Serializable {
 
     public void setTaskManager(TaskManager taskManager) {
         this.taskManager = taskManager;
+    }
+
+    public String getSelectedMaxSeverity() {
+        return selectedMaxSeverity;
+    }
+
+    public void setSelectedMaxSeverity(String selectedMaxSeverity) {
+        this.selectedMaxSeverity = selectedMaxSeverity;
     }
 }

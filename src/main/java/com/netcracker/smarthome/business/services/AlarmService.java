@@ -2,6 +2,7 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,4 +68,8 @@ public class AlarmService {
         return alarmRepository.getRootAlarmsByObject(objectId);
     }
 
+    @Transactional(readOnly = true)
+    public AlarmSeverity getMaxSeverity(long objectId) {
+        return alarmRepository.getMaxSeverity(objectId);
+    }
 }

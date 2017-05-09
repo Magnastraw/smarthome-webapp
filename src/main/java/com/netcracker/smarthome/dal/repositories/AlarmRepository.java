@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.util.LinkedList;
@@ -77,5 +78,12 @@ public class AlarmRepository extends EntityRepository<Alarm> {
                 "(a.severity > 1) and (a.parentAlarm.alarmId is null)");
         query.setParameter("objectId", objectId);
         return query.getResultList();
+    }
+
+    public AlarmSeverity getMaxSeverity(long objectId) {
+        Query query = getManager().createQuery("select max(a.severity) from Alarm a where a.object.smartObjectId = :objectId or a.subobject.smartObjectId = :objectId");
+        query.setParameter("objectId", objectId);
+        List<AlarmSeverity> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 }

@@ -3,6 +3,7 @@ package com.netcracker.smarthome.web.alarm;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
@@ -27,7 +28,7 @@ public class AlarmListBean implements Serializable {
     private List<Alarm> filteredAlarms;
     private List<AlarmSeverity> severities;
     private List<Alarm> selectedAlarms;
-    private Long currentObjectId;
+    private SmartObject currentObject;
 
     @ManagedProperty(value = "#{alarmService}")
     private AlarmService alarmService;
@@ -41,7 +42,7 @@ public class AlarmListBean implements Serializable {
 
     public void changeCurrentHome() {
         alarmPath = new ArrayList<Alarm>();
-        currentObjectId = null;
+        currentObject = null;
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -51,17 +52,17 @@ public class AlarmListBean implements Serializable {
     }
 
     public void getRootAlarms() {
-        if (currentObjectId != null)
-            currentAlarms = alarmService.getRootAlarmsByObject(currentObjectId);
+        if (currentObject != null)
+            currentAlarms = alarmService.getRootAlarmsByObject(currentObject.getSmartObjectId());
         else
             currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
         clearAlarmPath();
         setSubAlarms();
     }
 
-    public void showObjectAlarms(Long objectId) {
-        currentObjectId = objectId;
-        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObjectId));
+    public void showObjectAlarms(SmartObject object) {
+        currentObject = object;
+        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObject.getSmartObjectId()));
         setSubAlarms();
     }
 
@@ -200,11 +201,11 @@ public class AlarmListBean implements Serializable {
         this.selectedAlarms = selectedAlarms;
     }
 
-    public Long getCurrentObjectId() {
-        return currentObjectId;
+    public SmartObject getCurrentObject() {
+        return currentObject;
     }
 
-    public void setCurrentObjectId(Long currentObjectId) {
-        this.currentObjectId = currentObjectId;
+    public void setCurrentObject(SmartObject currentObject) {
+        this.currentObject = currentObject;
     }
 }

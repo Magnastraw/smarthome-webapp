@@ -10,9 +10,8 @@
 
     <h2>Inventory</h2>
     <p:growl id="growl"/>
-    <h:outputLabel rendered="#{empty inventoryBean.rootNode}" value="Data is not received"/>
-    <br/>
-    <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn"/>
+    <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn" icon="fa fa-refresh"
+                     onstart="PF('waitingDialog').show()"/>
     <p:outputPanel id="inventory" rendered="#{not empty inventoryBean.rootNode}">
         <p:organigram id="organigram" widgetVar="organigram" value="#{inventoryBean.rootNode}" var="node"
                       selection="#{inventoryBean.selectedNode}">
@@ -21,7 +20,7 @@
                 <c:forEach items="#{inventoryBean.objectTypes}" var="type">
                     <p:organigramNode type="#{type}"
                                       styleClass="#{type} #{(node.isLeaf())? 'leaf' : ''}"
-                                      icon="#{type}"
+                                      icon="#{inventoryBean.getStyleBySeverity(node.data.smartObjectId)} ui-organigram-icon ui-icon-#{type}"
                                       iconPos="left"
                                       skipLeafHandling="true">
                         <h:outputText value="#{node.data.name}"/>
@@ -31,16 +30,17 @@
 
         <c:forEach items="#{inventoryBean.objectTypes}" var="type">
             <p:contextMenu for="organigram" nodeType="#{type}">
-                <p:menuitem value="View detail" icon="ui-icon-search"
+                <p:menuitem value="View details" icon="fa fa-search" action="#{inventoryBean.setMaxSeverity()}"
                             update="@form:info" oncomplete="PF('infoDialog').show()"/>
-                <p:menuitem value="Alarms" action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm"
-                            actionListener="#{alarmListBean.showObjectAlarms(inventoryBean.getSelectedObjectId())}">
-
-                </p:menuitem>
+                <p:menuitem value="Move to catalog" icon="fa fa-folder-open" onclick="PF('moveDialog').show()"/>
+                <p:menuitem value="Alarms" icon="fa fa-exclamation-circle" action="#{navigationBean.setPageName('alarms/alarmlist')}" update="@form"
+                            actionListener="#{alarmListBean.showObjectAlarms(inventoryBean.selectedObject)}"/>
+                <p:menuitem value="Dashboards" icon="fa fa-line-chart" action="#{navigationBean.setPageName('charts/dashboardManagement')}" update="@form"/>
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
-    <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
+    <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true"
+              styleClass="dialog-device-info">
         <p:outputPanel id="info">
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <f:facet name="header">
@@ -51,38 +51,37 @@
                 <p:outputLabel value="#{inventoryBean.selectedObject.name}"/>
                 <p:outputLabel value="Description:" styleClass="label"/>
                 <p:outputLabel value="#{inventoryBean.selectedObject.description}"/>
-                <p:outputLabel value="Current alarms:" styleClass="label"/>
-                <p:row>
-                    <c:if test="#{inventoryBean.selectedObjectAlarms == null}">
-                        <p:outputLabel/>
-                    </c:if>
-                    <c:forEach items="#{inventoryBean.selectedObjectAlarms}" var="alarm">
-                        <p:commandLink value="#{alarm.alarmName}"
-                                       action="#{navigationBean.setPageName('alarms/alarm')}"
-                                       update=":centerForm" oncomplete="PF('infoDialog').hide(); return true;">
-                            <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
-                        </p:commandLink>
-                        <h:outputText value="  "/>
-                    </c:forEach>
-                </p:row>
-                <p:outputLabel value="Catalog" styleClass="label"/>
-                <p:outputLabel value="#{inventoryBean.selectedObject.catalog.catalogName}"/>
-                <!--<p:selectOneMenu binding="#{catalogSelect}" value="#{inventoryBean.selectedObject.catalog}"
-                                     filter="true" filterMatchMode="startsWith" converter="catalogConverter" styleClass="inventory-dialog-select">
-                        <p:ajax event="change" updatePolicy="@form:info" listener="#{inventoryBean.onChangeCatalog(catalogSelect.label)}"/>
-                        <f:selectItem itemLabel="+ Add catalog"/>
-                        <f:selectItem itemLabel="/" itemValue="#{inventoryBean.rootCatalog}"/>
-                        <f:selectItems var="item" value="#{inventoryBean.objectsCatalogs}"
-                                       itemLabel="#{item.catalogName}" itemValue="#{item}"/>
-                    </p:selectOneMenu>
-
-                <p:outputLabel rendered="#{(inventoryBean.adding == true)}" value="New catalog name:" styleClass="label"/>
-                <p:inputText rendered="#{(inventoryBean.adding == true)}" value="#{inventoryBean.addedCatalog.catalogName}"/>
-               -->
+                <p:outputLabel value="Severity: " styleClass="label"/>
+                <p:outputLabel value="#{inventoryBean.selectedMaxSeverity}"/>
             </p:panelGrid>
         </p:outputPanel>
         <br/>
         <p:commandButton value="Save" action="#{inventoryBean.saveChanges}" update=":centerForm" styleClass="btn" icon="fa fa-save"/>
 
+    </p:dialog>
+
+
+    <p:dialog position="center" header="Move to catalog" id="moveDialog" widgetVar="moveDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true">
+        <p:outputPanel id="move">
+            <p:panelGrid columns="2" styleClass="ui-noborder">
+                <p:outputLabel value="Catalog" styleClass="label"/>
+                <p:selectOneMenu value="#{inventoryBean.selectedObject.catalog}"
+                                 filter="true" filterMatchMode="startsWith" converter="catalogConverter" styleClass="inventory-dialog-select">
+                    <f:selectItem itemLabel="+ Add catalog" itemValue="#{null}"/>
+                    <f:selectItem itemLabel="/" itemValue="#{inventoryBean.rootCatalog}"/>
+                    <f:selectItems var="item" value="#{inventoryBean.objectsCatalogs}"
+                                   itemLabel="#{item.catalogName}" itemValue="#{item}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel rendered="#{(inventoryBean.adding == true)}" value="Catalog name:" styleClass="label"/>
+                <p:inputText rendered="#{(inventoryBean.adding == true)}" value="#{inventoryBean.addedCatalog.catalogName}"/>
+            </p:panelGrid>
+        </p:outputPanel>
+        <br/>
+        <p:commandButton value="Save" action="#{inventoryBean.saveChanges}" update=":centerForm" styleClass="btn" icon="fa fa-save"/>
+    </p:dialog>
+
+    <p:dialog widgetVar="waitingDialog" draggable="false" closable="false" resizable="false" showHeader="false" styleClass="dialog-waiting">
+        <p:graphicImage name="images/ajax-loader.gif"/>
     </p:dialog>
 </html>
