@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html/js; charset=utf-8"/>
     <title>Smarthome</title>
     <h:outputStylesheet name="css/style.css"/>
-    <h:outputStylesheet name="css/charts.css"  />
+    <h:outputStylesheet name="css/charts.css"/>
     <h:outputStylesheet name="css/jquery.gridster.min.css"/>
 
 </h:head>
@@ -24,13 +24,19 @@
                 <ui:include src="menu.xhtml"/>
             </h:form>
         </p:layoutUnit>
-        <p:layoutUnit id="center" style="border: none;" position="center">
+        <p:layoutUnit id="center" style="border: none;" position="center" styleClass="z-index-centr">
             <h:form id="centerForm">
+                <h:outputScript>
+                    intervalId.map(clearInterval);
+                    intervalId.length=0;
+                </h:outputScript>
                 <ui:include src="#{navigationBean.pageName}.xhtml"/>
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                     <div style="text-align: center">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                         icon="ui-icon-close"/>
                     </div>
                 </p:confirmDialog>
             </h:form>
@@ -47,6 +53,7 @@
     <h:outputScript name="js/jquery.gridster.min.js"/>
     <h:outputScript name="js/moment.js"/>
     <h:outputScript name="js/moment-timezone-with-data.js"/>
+    <h:outputScript name="js/update_content.js"/>
 
 
 </h:body>

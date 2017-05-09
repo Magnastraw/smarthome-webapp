@@ -1,6 +1,6 @@
+var intervalId = [];
 function createNewChart(configurationJson, requestDataOptions, refreshInterval, inputDiv, id) {
     var chart,
-        intervalId,
         options = $.parseJSON(configurationJson),
         dataSource = $.parseJSON(requestDataOptions);
 
@@ -17,19 +17,19 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                 chart.reflow();
                 chart.hideLoading();
             });
-            intervalId = setInterval(function () {
+            intervalId.push( setInterval(function () {
                 requestLiveData(function () {
                 });
-            }, refreshInterval);
+            }, refreshInterval));
         } else {
             requestData(function () {
                 chart.reflow();
                 chart.hideLoading();
             });
-            intervalId = setInterval(function () {
+            intervalId.push ( setInterval(function () {
                 requestData(function () {
                 });
-            }, refreshInterval);
+            }, refreshInterval));
         }
     });
 
@@ -50,6 +50,8 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
                     // console.log(moment.tz(series.data[0].x, moment.tz.guess()).utcOffset());
                     // console.log(moment.tz(moment.tz.guess()).utcOffset());
                     // console.log(series.data[0].x);
+                    console.log(series.data);
+
                     chart.series[pos].addPoint({
                         x: series.data[0].x,
                         y: series.data[0].y
@@ -120,7 +122,7 @@ function createNewChart(configurationJson, requestDataOptions, refreshInterval, 
             $('#' + inputDiv).toggleClass('chart-container chart-border modal chart-in ');
             $('header').toggleClass("x-tree-icon-leaf");
             $("#centerForm\\:button_"+id).toggleClass("delete-chart-button");
-
+            $("#center").toggleClass('z-index-centr');
             chart.reflow();
         };
 

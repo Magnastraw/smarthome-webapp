@@ -3,18 +3,17 @@ INSERT INTO public.users
 VALUES (DEFAULT, 'mymail@mail.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE);
 
 INSERT INTO public.data_types
-VALUES (DEFAULT, 'String', 0),
-  (DEFAULT, 'Link', 1),
-  (DEFAULT , 'Time',2);
+  VALUES  (DEFAULT, 'String', 0),
+          (DEFAULT, 'Link', 1);
 
 INSERT INTO public.smart_homes
-VALUES (DEFAULT, 'default home', '', 1),
-  (DEFAULT, 'Smart home 1', '', 1),
-  (DEFAULT, 'Smart home 2', '', 1);
+VALUES (DEFAULT, 'Apartment in the central district', 'TO DO', 1),
+  (DEFAULT, 'Apartment', 'TO DO', 1),
+  (DEFAULT, 'Apartment', 'TO DO', 1);
 
 INSERT INTO public.home_params
-VALUES (DEFAULT, 1, 'Address', 'address', 1),
-  (DEFAULT, 1, 'Link', 'http://www.outlink.com', 2);
+VALUES  (DEFAULT, 1, 'Address', 'Pl. Lenina 15, ap. 10', 1),
+        (DEFAULT, 1, 'Home page', 'http://localhost:8083/', 2);
 
 -- add social services
 ALTER TABLE public.social_servicies
@@ -178,10 +177,10 @@ VALUES
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)
 VALUES
-  ('alarmSpec1', 'type1', 46),
-  ('alarmSpec2', 'type1', 46),
-  ('alarmSpec3', 'type1', 46),
-  ('alarmSpec4', 'type1', 47),
+  ('On', 'ON event object', 46),
+  ('Off', 'OFF event object', 46),
+  ('Open', 'OPEN event object', 46),
+  ('Close', 'CLOSE event object', 47),
   ('alarmSpec5', 'type1', 47),
   ('alarmSpec6', 'type2', 47),
   ('alarmSpec7', 'type2', 48),

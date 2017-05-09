@@ -45,6 +45,19 @@ public class DashboardBean {
         return isFromDashboard;
     }
 
+    public boolean checkBack() {
+        switch (navigationBean.getOldPage()) {
+            case "/faces/alarms/alarmlist":
+            case "/faces/monitoring/monitoring":
+                return true;
+            default:
+                return false;
+
+        }
+    }
+
+
+
     public void setFromDashboard(boolean fromDashboard) {
         isFromDashboard = fromDashboard;
     }
@@ -61,13 +74,13 @@ public class DashboardBean {
         return update;
     }
 
-    public void setUpdateDialog(boolean update,Dashboard dashboard) {
+    public void setUpdateDialog(boolean update, Dashboard dashboard) {
         this.update = update;
         this.currentDashboard = dashboard;
         setDashboardName(currentDashboard.getDashboardName());
     }
 
-    public void setSaveDialog(boolean update){
+    public void setSaveDialog(boolean update) {
         this.update = update;
         setDashboardName("");
     }

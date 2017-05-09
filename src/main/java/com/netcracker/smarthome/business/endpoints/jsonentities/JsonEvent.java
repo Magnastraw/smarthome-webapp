@@ -9,6 +9,7 @@ public class JsonEvent implements Serializable {
     private long objectId;
     private long subobjectId;
     private String severity;
+    private long eventType;
     @JsonFormat(timezone = "Europe/Moscow")
     private Timestamp registryDate;
     private String eventParameters;
@@ -17,12 +18,13 @@ public class JsonEvent implements Serializable {
 
     public JsonEvent() {}
 
-    public JsonEvent(long objectId, long subobjectId, String severity, Timestamp registryDate, String eventParameterse) {
+    public JsonEvent(long objectId, long subobjectId, String severity, long eventType, Timestamp registryDate, String eventParameters) {
         this.objectId = objectId;
         this.subobjectId = subobjectId;
         this.severity = severity;
         this.registryDate = registryDate;
         this.eventParameters = eventParameters;
+        this.eventType = eventType;
     }
 
     public long getObjectId() {
@@ -47,6 +49,14 @@ public class JsonEvent implements Serializable {
 
     public void setSeverity(String severity) {
         this.severity = severity;
+    }
+
+    public long getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(long eventType) {
+        this.eventType = eventType;
     }
 
     public Timestamp getRegistryDate() {

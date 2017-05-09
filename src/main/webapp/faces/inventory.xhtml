@@ -16,7 +16,8 @@
         <p:organigram id="organigram" widgetVar="organigram" value="#{inventoryBean.rootNode}" var="node"
                       selection="#{inventoryBean.selectedNode}">
             <p:ajax event="select" process="@this" update="@form:growl" listener="#{inventoryBean.onSelectNode}"/>
-            <p:ajax event="contextmenu" process="@this" update="@form:growl" listener="#{inventoryBean.onClickContextMenu}"/>
+            <p:ajax event="contextmenu" process="@this" update="@form:growl"
+                    listener="#{inventoryBean.onClickContextMenu}"/>
                 <c:forEach items="#{inventoryBean.objectTypes}" var="type">
                     <p:organigramNode type="#{type}"
                                       styleClass="#{type} #{(node.isLeaf())? 'leaf' : ''}"
@@ -39,8 +40,8 @@
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
-    <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade" hideEffect="fade" resizable="false" autoUpdate="true"
-              styleClass="dialog-device-info">
+    <p:dialog position="center" header="Device info" id="infoDialog" widgetVar="infoDialog" showEffect="fade"
+              hideEffect="fade" resizable="false" autoUpdate="true" styleClass="dialog-device-info">
         <p:outputPanel id="info">
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <f:facet name="header">
@@ -84,4 +85,10 @@
     <p:dialog widgetVar="waitingDialog" draggable="false" closable="false" resizable="false" showHeader="false" styleClass="dialog-waiting">
         <p:graphicImage name="images/ajax-loader.gif"/>
     </p:dialog>
+
+    <p:remoteCommand name="updateInventory" update="centerForm:inventory" actionListener="#{inventoryBean.init}"/>
+    <script type="text/javascript">
+        updateContent(window.location+'updateInventory?houseId='+'${currentUserHomesBean.currentHome.smartHomeId}',"updateInventory");
+    </script>
+
 </html>

@@ -41,6 +41,7 @@ public class EventController {
             consumes = "application/json")
     public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) String houseId,
                                      @RequestBody String json) {
+        LOG.info("Body /event:"+json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -52,6 +53,7 @@ public class EventController {
             LOG.error("Error during parsing", e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        LOG.info(String.valueOf(events.get(0).getEventType()));
         if (events.size() == 0)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         EventTransformator eventTransformator = new EventTransformator(smartObjectService);
@@ -65,7 +67,7 @@ public class EventController {
             }*/
             item.setSmartHomeId(home.getSmartHomeId());
             Event event = eventTransformator.fromJsonEntity(item);
-            Event existingEvent = eventService.getEvent(home.getSmartHomeId(), event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, null);
+            Event existingEvent = eventService.getEvent(home.getSmartHomeId(), event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, event.getEventType());
             try {
                 if (existingEvent != null) {
                     event.setEventId(existingEvent.getEventId());

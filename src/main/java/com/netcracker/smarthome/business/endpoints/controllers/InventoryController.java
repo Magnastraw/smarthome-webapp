@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
+import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonInventoryObject;
@@ -32,6 +33,9 @@ public class InventoryController {
 
     @Autowired
     private DataTypeService dataTypeService;
+
+    @Autowired
+    private TaskManager taskManager;
 
     @RequestMapping(value = "/inventories",
                     method = RequestMethod.POST,
@@ -85,6 +89,7 @@ public class InventoryController {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
+        taskManager.addUpdateEvent(home.getSmartHomeId(),"updateInventory");
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -129,6 +134,7 @@ public class InventoryController {
                     smartObjectService.saveObjectParam(objectParam);
                 }
             }
+            taskManager.addUpdateEvent(home.getSmartHomeId(),"updateInventory");
         }
         catch (Exception ex) {
             LOG.error("Error during saving of data", ex);
@@ -147,11 +153,21 @@ public class InventoryController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         try {
             smartObjectService.deleteObject(smartObjectService.getObjectByExternalKey(home.getSmartHomeId(), objectId).getSmartObjectId());
+            taskManager.addUpdateEvent(home.getSmartHomeId(),"updateInventory");
         }
         catch (Exception ex) {
             LOG.error("Error during deleting of object", ex);
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/updateInventory",
+            method = RequestMethod.GET)
+    public Boolean updateInventory(@RequestParam(value = "houseId",required = true) long houseId){
+        if(taskManager.getUpdateMap().get(houseId)!=null) {
+            LOG.info(taskManager.getUpdateMap().get(houseId).toString());
+        }
+        return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateInventory");
     }
 }
