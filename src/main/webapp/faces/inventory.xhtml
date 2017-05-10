@@ -10,11 +10,15 @@
 
 <h2>Inventory</h2>
 <p:growl id="growl"/>
-<h:outputLabel rendered="#{empty inventoryBean.rootNode}" value="Data is not received"/>
+<p:outputPanel id="renderInventoryMsg">
+    <h:outputLabel rendered="#{empty inventoryBean.rootNode}" value="Data is not received"/>
+</p:outputPanel>
 <br/>
 <p:commandButton value="Get inventory" action="#{inventoryBean.addTaskInventory}" styleClass="btn"/>
-<p:outputPanel id="inventory" rendered="#{not empty inventoryBean.rootNode}">
-    <p:organigram id="organigram" widgetVar="organigram" value="#{inventoryBean.rootNode}" var="node"
+
+<p:outputPanel id="inventory">
+    <p:organigram id="organigram" rendered="#{not empty inventoryBean.rootNode}" widgetVar="organigram"
+                  value="#{inventoryBean.rootNode}" var="node"
                   selection="#{inventoryBean.selectedNode}">
         <p:ajax event="select" process="@this" update="@form:growl" listener="#{inventoryBean.onSelectNode}"/>
         <p:ajax event="contextmenu" process="@this" update="@form:growl"
@@ -89,9 +93,10 @@
 
 </p:dialog>
 
-<p:remoteCommand name="updateInventory" update="centerForm:inventory" actionListener="#{inventoryBean.init}"/>
+<p:remoteCommand name="updateInventory" update="centerForm:inventory centerForm:renderInventoryMsg"
+                 actionListener="#{inventoryBean.init}"/>
 <script type="text/javascript">
-    updateContent(window.location+'updateInventory?houseId='+'${currentUserHomesBean.currentHome.smartHomeId}',"updateInventory");
+    updateContent(window.location + 'updateInventory?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateInventory");
 </script>
 
 

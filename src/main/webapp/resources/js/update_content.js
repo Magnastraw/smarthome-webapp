@@ -1,3 +1,4 @@
+var intervalId = [];
 function updateContent(url,remoteName){
     intervalId.push(setInterval(function () {
         requestUpdate(url,remoteName);
