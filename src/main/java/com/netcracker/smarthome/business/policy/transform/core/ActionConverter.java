@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ class ActionConverter {
                 .collect(Collectors.toMap(ActionParam::getName, ActionParam::getValue));
         PolicyAction actionClassInst = null;
         try {
-            Constructor constructor = Class.forName(action.getActionClass()).getConstructor(HashMap.class);
+            Constructor constructor = Class.forName(action.getActionClass()).getConstructor(Map.class);
             actionClassInst = (PolicyAction) constructor.newInstance(params);
         } catch (Exception e) {
             log.error("Error during instantiate action class", e);

@@ -25,10 +25,6 @@ public class RaiseAlarmAction implements PolicyAction {
     private EventService eventService;
     private PolicyEngine policyEngine;
 
-    public RaiseAlarmAction() {
-        initBeans();
-    }
-
     public RaiseAlarmAction(Map<String, String> params) {
         initBeans();
         this.spec = alarmService.getSpecById(Long.parseLong(params.get("spec")));
@@ -44,34 +40,38 @@ public class RaiseAlarmAction implements PolicyAction {
 
     public void execute(PolicyEvent causalEvent) {
         Timestamp regDate = Timestamp.valueOf(LocalDateTime.now());
-        if (severity.equals(AlarmSeverity.CLEAR)) {
-            clearAlarm(causalEvent);
-        } else
-            saveAlarm(causalEvent, regDate);
-        sendToEngine(causalEvent, regDate);
+        if (severity.equals(AlarmSeverity.CLEAR))
+            clearAlarm(causalEvent, regDate);
+        else
+            raiseAlarm(causalEvent, regDate);
     }
 
-    private void clearAlarm(PolicyEvent causalEvent) {
+    private void clearAlarm(PolicyEvent causalEvent, Timestamp clearTime) {
         Alarm alarmProps = new Alarm();
         alarmProps.setObject(causalEvent.getObject());
         alarmProps.setSubobject(causalEvent.getSubobject());
         alarmProps.setAlarmSpec(spec);
-        alarmService.clearAlarm(alarmProps, false, true);
+        alarmProps.setEndTime(clearTime);
+        if (alarmService.clearAlarm(alarmProps, false, true))
+            sendToEngine(causalEvent, causalEvent.getDbEvent(), clearTime);
     }
 
-    private void saveAlarm(PolicyEvent causalEvent, Timestamp regDate) {
-        Event dbEvent = causalEvent.getType().equals(EventType.METRIC) ? saveMetricEvent(causalEvent, regDate) : causalEvent.getDbEvent();
-        Alarm alarm = new Alarm(-1L, "", "", regDate, null, severity, regDate, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
-        alarmService.saveRaisedAlarm(alarm);
+    private void raiseAlarm(PolicyEvent causalEvent, Timestamp raiseTime) {
+        Event dbEvent = causalEvent.getType().equals(EventType.METRIC) ? saveMetricEvent(causalEvent) : causalEvent.getDbEvent();
+        Alarm alarm = new Alarm(-1L, "", "", raiseTime, null, severity, raiseTime, dbEvent, causalEvent.getObject(), causalEvent.getSubobject(), spec, null);
+        if (alarmService.saveRaisedAlarm(alarm))
+            sendToEngine(causalEvent, dbEvent, raiseTime);
     }
 
-    private Event saveMetricEvent(PolicyEvent event, Timestamp regDate) {
-        Event dbEvent = new Event(null, event.getObject(), event.getSubobject(), event.getObject().getSmartHome());
-        return eventService.saveWithHistory(dbEvent, regDate, severity);
+    private Event saveMetricEvent(PolicyEvent event) {
+        Event metricEvent = eventService.getEvent(event.getObject().getSmartHome(), event.getObject(), event.getSubobject(), null);
+        if (metricEvent == null)
+            metricEvent = eventService.updateEvent(new Event(null, event.getObject(), event.getSubobject(), event.getObject().getSmartHome()));
+        return metricEvent;
     }
 
-    private void sendToEngine(PolicyEvent causalEvent, Timestamp regTime) {
-        AlarmEvent alarmEvent = new AlarmEvent(causalEvent, spec, severity, regTime, -1);
+    private void sendToEngine(PolicyEvent causalEvent, Event dbEvent, Timestamp changeTime) {
+        AlarmEvent alarmEvent = new AlarmEvent(causalEvent, spec, dbEvent, severity, changeTime, -1);
         policyEngine.handleEvent(alarmEvent);
     }
 }

@@ -16,7 +16,7 @@ public class PolicyTransformer implements ITransformator<Policy, JsonPolicy> {
 
     @Override
     public Policy fromJsonEntity(JsonPolicy jsonPolicy) {
-        throw new UnsupportedOperationException("Not supported operation!");
+        throw new UnsupportedOperationException("Conversion from JSON is not supported!");
     }
 
     @Override

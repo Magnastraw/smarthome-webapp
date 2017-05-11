@@ -18,7 +18,7 @@ public class EventTransformator implements ITransformator<Event,JsonEvent> {
         event.setObject(smartObjectService.getObjectByExternalKey(jsonEntity.getSmartHomeId(), jsonEntity.getObjectId()));
         event.setSubobject(smartObjectService.getObjectByExternalKey(jsonEntity.getSmartHomeId(), jsonEntity.getSubobjectId()));
         event.setSmartHome(event.getObject().getSmartHome());
-        //event.setEventType(EventType.EVENT);
+        event.setEventType(jsonEntity.getEventType());
         return event;
     }
 

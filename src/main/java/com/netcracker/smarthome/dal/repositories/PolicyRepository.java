@@ -39,30 +39,25 @@ public class PolicyRepository extends EntityRepository<Policy> {
         return nonInitializedPolicies.isEmpty() ? nonInitializedPolicies : initializeWithAssignments(nonInitializedPolicies);
     }
 
-    public List<SmartObject> getObjectsWithActivePolicies() {
-        Query query = getManager().createQuery("select distinct obj from SmartObject obj join fetch obj.assignedPolicies p join fetch p.rules r join fetch r.conditions c join fetch r.actions where c.parentNode is null and p.status=:status");
+    public List<Policy> getAssignedActivePolicies() {
+        Query query = getManager().createQuery("select distinct p from Policy p join fetch p.assignedObjects obj join fetch p.rules r join fetch r.conditions c join fetch r.actions where c.parentNode is null and p.status=:status");
         query.setParameter("status", PolicyStatus.ACTIVE);
         return query.getResultList();
     }
 
-    public List<SmartObject> getActiveInlineObjects() {
-        Query query = getManager().createQuery("select obj from ConditionParam cp join SmartObject obj on cp.name='object' and cp.value=trim(function('to_char', obj.smartObjectId, '9')) and cp.condition.rule.policy.status=:status");
+    public List<Policy> getInlineActivePolicies() {
+        Query query = getManager().createQuery("select distinct p from Policy p join p.rules r join r.conditions c join c.conditionParams cp where p.status=:status and lower(cp.name)='object'");
         query.setParameter("status", PolicyStatus.ACTIVE);
-        return query.getResultList();
-    }
-
-    public List<Policy> getActivePoliciesByInlineObject(long objectId) {
-        Query query = getManager().createQuery("select distinct p from Policy p join p.rules r join r.conditions c join c.conditionParams cp on cp.name='object' and cp.value=:obj where p.status=:status");
-        query.setParameter("status", PolicyStatus.ACTIVE);
-        query.setParameter("obj", ((Long)objectId).toString());
         List<Policy> nonInitializedPolicies = query.getResultList();
-        return nonInitializedPolicies.isEmpty() ? nonInitializedPolicies : initializeWithoutAssignments(nonInitializedPolicies);
+        return nonInitializedPolicies.isEmpty() ? nonInitializedPolicies : initializeWithAssignments(nonInitializedPolicies);
     }
 
-    public List<Policy> getPoliciesByCatalog(Catalog catalog) {
-        Query query = getManager().createQuery("select p from Policy p where p.catalog.catalogId=:catalog");
-        query.setParameter("catalog", catalog.getCatalogId());
-        return query.getResultList();
+    public List<Policy> getInlineActivePolicies(List<Policy> excluded) {
+        Query query = getManager().createQuery("select distinct p from Policy p join p.rules r join r.conditions c join c.conditionParams cp where p not in :excluded and p.status=:status and lower(cp.name)='object'");
+        query.setParameter("status", PolicyStatus.ACTIVE);
+        query.setParameter("excluded", excluded);
+        List<Policy> nonInitializedPolicies = query.getResultList();
+        return nonInitializedPolicies.isEmpty() ? nonInitializedPolicies : initializeWithAssignments(nonInitializedPolicies);
     }
 
     public Policy getInitializedPolicy(long policyId) {
@@ -73,7 +68,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
     }
 
     public List<SmartObject> getInlineObjects(Policy policy) {
-        Query query = getManager().createQuery("select obj from ConditionParam cp join SmartObject obj on cp.name='object' and cp.value=function('to_char', obj.smartObjectId, '9') and cp.condition.rule.policy=:policy");
+        Query query = getManager().createQuery("select obj from ConditionParam cp join SmartObject obj on cp.name='object' and cp.value=trim(function('to_char', obj.smartObjectId, '999')) and cp.condition.rule.policy=:policy");
         query.setParameter("policy", policy);
         return query.getResultList();
     }
@@ -87,6 +82,12 @@ public class PolicyRepository extends EntityRepository<Policy> {
     private List<Policy> initializeWithAssignments(List<Policy> nonInitializedPolicies) {
         Query query = getManager().createQuery("select distinct p from Policy p left join fetch p.assignedObjects join fetch p.rules r join fetch r.actions join fetch r.conditions c where p in :policies and c.parentNode is null");
         query.setParameter("policies", nonInitializedPolicies);
+        return query.getResultList();
+    }
+
+    public List<Policy> getPoliciesByCatalog(Catalog catalog) {
+        Query query = getManager().createQuery("select p from Policy p where p.catalog.catalogId=:catalog");
+        query.setParameter("catalog", catalog.getCatalogId());
         return query.getResultList();
     }
 }

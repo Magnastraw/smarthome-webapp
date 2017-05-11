@@ -5,7 +5,6 @@ import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.business.policy.events.MetricEvent;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.services.MetricService;
-import com.netcracker.smarthome.model.entities.SmartObject;
 
 import java.util.Map;
 
@@ -16,10 +15,6 @@ public abstract class MetricCondition implements PolicyCondition {
 
     private MetricService metricService;
 
-    public MetricCondition() {
-        metricService = ApplicationContextHolder.getApplicationContext().getBean(MetricService.class);
-    }
-
     public MetricCondition(Map<String, String> params) {
         this.metric = Long.parseLong(params.get("metric"));
         this.object = params.containsKey("object") ? Long.parseLong(params.get("object")) : -1;
@@ -27,20 +22,21 @@ public abstract class MetricCondition implements PolicyCondition {
         metricService = ApplicationContextHolder.getApplicationContext().getBean(MetricService.class);
     }
 
-    public boolean evaluate(PolicyEvent event) {
-        if (!checkMatching(event)) {
-            double lastValue = loadLastMetricValue();
-            return evaluate(lastValue);
-        }
-        return evaluate(((MetricEvent) event).getValue());
+    public Boolean evaluate(PolicyEvent event) {
+        if (event.getType() != EventType.METRIC)
+            return null;
+        if (checkMatching(event))
+            return evaluate(((MetricEvent) event).getValue());
+        Double lastValue = loadLastMetricValue();
+        return lastValue != null && evaluate(lastValue);
     }
 
     private boolean checkMatching(PolicyEvent event) {
         long eventObject = event.getSubobject() == null ? event.getObject().getSmartObjectId() : event.getSubobject().getSmartObjectId();
-        return event.getType().equals(EventType.METRIC) && metric == event.getSpec().getSpecId() && (!isInline() || object == eventObject);
+        return metric == event.getSpec().getSpecId() && (!isInline() || object == eventObject);
     }
 
-    private double loadLastMetricValue() {
+    private Double loadLastMetricValue() {
         if (isInline())
             return metricService.getLastMetricValueByObject(object, metric);
         return metricService.getLastMetricValueByPolicy(policy, metric);

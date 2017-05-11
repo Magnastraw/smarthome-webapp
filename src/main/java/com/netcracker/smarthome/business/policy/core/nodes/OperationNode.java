@@ -24,7 +24,7 @@ public class OperationNode implements ConditionCompletionListener, CancellableNo
     private Map<Long, Boolean> childrenStatuses;
     private PolicyEvent event;
     private Boolean nodeResult;
-    private volatile int incompleteChildrenCount;
+    private int incompleteChildrenCount;
     private volatile boolean cancelled;
 
     public OperationNode(long identifier, BooleanOperator operator, ConditionCompletionListener completionListener, Collection<Long> childNodes, PolicyNodesHolder nodesHolder) {
@@ -32,46 +32,46 @@ public class OperationNode implements ConditionCompletionListener, CancellableNo
         this.operator = operator;
         this.childrenStatuses = new ConcurrentHashMap<>();
         this.nodesHolder = nodesHolder;
+        this.incompleteChildrenCount = childNodes.size();
         this.completionListener = completionListener;
         for (Long node : childNodes)
             childrenStatuses.put(node, false);
     }
 
-    public synchronized void onConditionComplete(long conditionId, Boolean result, PolicyEvent event) {
-        childrenStatuses.put(conditionId, true);
-        incompleteChildrenCount--;
-        if (!cancelled) {
-            if (nodeResult == null) {
-                nodeResult = result;
-                this.event = event;
-            } else
-                nodeResult = operator.evaluate(nodeResult, result);
-            if (nodeResult.equals(operator.completeValue()))
-                interrupt();
+    public void onConditionComplete(long conditionId, Boolean result, PolicyEvent event) {
+        synchronized (this) {
+            childrenStatuses.put(conditionId, true);
+            incompleteChildrenCount--;
+            if (!cancelled && result != null) {
+                if (nodeResult == null) {
+                    nodeResult = result;
+                    this.event = event;
+                } else
+                    nodeResult = operator.evaluate(result, nodeResult);
+                if (nodeResult.equals(operator.completeValue()))
+                    interrupt();
+            }
+            if (incompleteChildrenCount == 0)
+                complete();
         }
-        if (incompleteChildrenCount == 0)
-            complete();
     }
 
-    private synchronized void interrupt() {
-        cancelled = true;
-        completionListener.onConditionComplete(identifier, nodeResult, event);
-        if (incompleteChildrenCount > 0)
+    private void interrupt() {
+        if (incompleteChildrenCount > 0) {
+            cancelled = true;
             cancelChildren();
+        }
     }
 
     private void cancelChildren() {
         for (Long key : childrenStatuses.keySet())
             if (!childrenStatuses.get(key))
                 ((CancellableNode) nodesHolder.getNode(key)).cancel();
-        log.debug("Cancel incomplete child tasks of operation node #%d", identifier);
     }
 
     private void complete() {
-        if (!cancelled)
-            completionListener.onConditionComplete(identifier, nodeResult, event);
+        completionListener.onConditionComplete(identifier, nodeResult, event);
         reset();
-        log.debug("Operation node #%d completed", identifier);
     }
 
     private void reset() {
@@ -85,7 +85,9 @@ public class OperationNode implements ConditionCompletionListener, CancellableNo
 
     @Override
     public void cancel() {
-        interrupt();
+        synchronized (this) {
+            interrupt();
+        }
     }
 
     @Override

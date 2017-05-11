@@ -20,7 +20,6 @@ public class ActionNode implements EngineNode {
 
     public void execute(PolicyEvent event) {
         action.execute(event);
-        log.debug("Start action node #%d execution", identifier);
     }
 
     @Override

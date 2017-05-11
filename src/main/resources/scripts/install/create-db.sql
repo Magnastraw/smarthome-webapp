@@ -183,7 +183,7 @@ CREATE TABLE public.rules (
 CREATE TABLE public.actions (
   action_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   rule_id BIGINT NOT NULL,
-  type BIT NOT NULL,
+  type BOOLEAN NOT NULL,
   action_class VARCHAR NOT NULL,
   action_order BIGINT NOT NULL,
   CONSTRAINT actions_pk PRIMARY KEY (action_id)

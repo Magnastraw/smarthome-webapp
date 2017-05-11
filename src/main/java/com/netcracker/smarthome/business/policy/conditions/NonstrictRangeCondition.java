@@ -5,18 +5,10 @@ import java.util.Map;
 public class NonstrictRangeCondition extends MetricCondition {
     private double minValue, maxValue;
 
-    public NonstrictRangeCondition() {
-    }
-
     public NonstrictRangeCondition(Map<String, String> params) {
         super(params);
         this.minValue = Double.parseDouble(params.get("minValue"));
         this.maxValue = Double.parseDouble(params.get("maxValue"));
-    }
-
-    public NonstrictRangeCondition(double minValue, double maxValue) {
-        this.minValue = minValue;
-        this.maxValue = maxValue;
     }
 
     protected boolean evaluate(double value) {

@@ -2,23 +2,20 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
 import com.netcracker.smarthome.business.endpoints.IListener;
+import com.netcracker.smarthome.dal.repositories.ActionRepository;
+import com.netcracker.smarthome.dal.repositories.ConditionRepository;
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
-import com.netcracker.smarthome.model.entities.Catalog;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import com.netcracker.smarthome.dal.repositories.RuleRepository;
+import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
-import com.netcracker.smarthome.dal.repositories.*;
-import com.netcracker.smarthome.model.entities.Action;
-import com.netcracker.smarthome.model.entities.Condition;
-import com.netcracker.smarthome.model.entities.Rule;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.HashSet;
-import java.util.Set;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PolicyService {
@@ -29,7 +26,7 @@ public class PolicyService {
     private ConditionRepository conditionRepository;
 
     @Autowired
-    public PolicyService (PolicyRepository policyRepository, RuleRepository ruleRepository, ActionRepository actionRepository, ConditionRepository conditionRepository) {
+    public PolicyService(PolicyRepository policyRepository, RuleRepository ruleRepository, ActionRepository actionRepository, ConditionRepository conditionRepository) {
         this.policyRepository = policyRepository;
         this.ruleRepository = ruleRepository;
         this.actionRepository = actionRepository;
@@ -38,15 +35,16 @@ public class PolicyService {
     }
 
     private void initListeners() {
-        listeners = new HashSet<IListener>();
+        listeners = new HashSet<>();
         Reflections reflections = new Reflections("com.netcracker.smarthome");
         Set<Class<? extends IListener>> subTypes = reflections.getSubTypesOf(IListener.class);
         for (Class cl : subTypes) {
             String[] name = cl.getName().split("(?<=\\.)");
-            String beanName = name[name.length-1].substring(0,1).toLowerCase()+name[name.length-1].substring(1);
+            String beanName = name[name.length - 1].substring(0, 1).toLowerCase() + name[name.length - 1].substring(1);
             try {
                 listeners.add((IListener) ApplicationContextHolder.getApplicationContext().getBean(beanName));
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
     }
 
@@ -64,21 +62,7 @@ public class PolicyService {
         }
     }
 
-    @Transactional
-    public List<SmartObject> getObjectsWithActivePolicies() {
-        List<SmartObject> objects = policyRepository.getObjectsWithActivePolicies(),
-                inlineObjects = policyRepository.getActiveInlineObjects();
-        for (SmartObject object : inlineObjects)
-            if (objects.contains(object))
-                objects.get(objects.indexOf(object)).getAssignedPolicies().addAll(policyRepository.getActivePoliciesByInlineObject(object.getSmartObjectId()));
-            else {
-                object.setAssignedPolicies(new HashSet<>(policyRepository.getActivePoliciesByInlineObject(object.getSmartObjectId())));
-                objects.add(object);
-            }
-        return objects;
-    }
-
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Policy> getActivePoliciesByHome(long homeId) {
         List<Policy> assignedPolicies = policyRepository.getAssignedActivePoliciesByHome(homeId),
                 inlinePolicies;
@@ -89,7 +73,18 @@ public class PolicyService {
         return assignedPolicies;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    public List<Policy> getActivePolicies() {
+        List<Policy> assignedPolicies = policyRepository.getAssignedActivePolicies(),
+                inlinePolicies;
+        inlinePolicies = assignedPolicies.isEmpty() ? policyRepository.getInlineActivePolicies() : policyRepository.getInlineActivePolicies(assignedPolicies);
+        for (Policy policy : inlinePolicies)
+            policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
+        assignedPolicies.addAll(inlinePolicies);
+        return assignedPolicies;
+    }
+
+    @Transactional(readOnly = true)
     public List<Policy> getPoliciesByCatalog(Catalog catalog) {
         return policyRepository.getPoliciesByCatalog(catalog);
     }
@@ -97,9 +92,9 @@ public class PolicyService {
     @Transactional(readOnly = true)
     public Policy getActiveInitializedPolicy(long policyId) {
         Policy policy = policyRepository.getInitializedPolicy(policyId);
-        if (policy != null && policy.getStatus() == PolicyStatus.ACTIVE) {
-            policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
-        }
+        if (policy == null || policy.getStatus() != PolicyStatus.ACTIVE)
+            return null;
+        policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
         if (policy.getAssignedObjects().isEmpty())
             return null;
         return policy;

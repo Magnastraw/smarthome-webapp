@@ -17,7 +17,7 @@ public class RuleTransformer implements ITransformator<Rule, JsonRule> {
 
     @Override
     public Rule fromJsonEntity(JsonRule jsonRule) {
-        throw new UnsupportedOperationException("Not supported operation!");
+        throw new UnsupportedOperationException("Conversion from JSON is not supported!");
     }
 
     @Override

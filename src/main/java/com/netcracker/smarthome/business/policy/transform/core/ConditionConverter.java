@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,7 @@ class ConditionConverter {
                 .collect(Collectors.toMap(ConditionParam::getName, ConditionParam::getValue));
         PolicyCondition conditionClassInst = null;
         try {
-            Constructor constructor = Class.forName(condition.getConditionType().getConditionClass()).getConstructor(HashMap.class);
+            Constructor constructor = Class.forName(condition.getConditionType().getConditionClass()).getConstructor(Map.class);
             conditionClassInst = (PolicyCondition) constructor.newInstance(params);
         } catch (Exception e) {
             log.error("Error during instantiate condition class", e);

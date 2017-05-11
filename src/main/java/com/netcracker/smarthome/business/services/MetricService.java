@@ -37,8 +37,8 @@ public class MetricService {
     }
 
     @Transactional(readOnly = true)
-    public Metric getMetric(SmartObject object, SmartObject subobject, MetricSpec spec, Timestamp regDate) {
-        return metricRepository.get(object, subobject, spec, regDate);
+    public Metric getMetric(SmartObject object, SmartObject subobject, MetricSpec spec) {
+        return metricRepository.get(object, subobject, spec);
     }
 
     @Transactional
@@ -58,6 +58,6 @@ public class MetricService {
 
     @Transactional
     public Double getLastMetricValueByPolicy(long policyId, long specId) {
-        return metricRepository.getLastMetricValueByObject(policyId, specId);
+        return metricRepository.getLastMetricValueByPolicy(policyId, specId);
     }
 }

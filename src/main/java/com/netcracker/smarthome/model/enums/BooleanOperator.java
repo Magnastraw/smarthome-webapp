@@ -2,8 +2,9 @@ package com.netcracker.smarthome.model.enums;
 
 public enum BooleanOperator {
     AND {
-        public boolean evaluate(boolean arg1, boolean arg2) {
-            return arg1 && arg2;
+        @Override
+        public boolean evaluate(Boolean... args) {
+            return args[0] && args[1];
         }
 
         public Boolean completeValue() {
@@ -11,15 +12,27 @@ public enum BooleanOperator {
         }
     },
     OR {
-        public boolean evaluate(boolean arg1, boolean arg2) {
-            return arg1 || arg2;
+        @Override
+        public boolean evaluate(Boolean... args) {
+            return args[0] || args[1];
         }
 
         public Boolean completeValue() {
             return true;
         }
+    },
+    NOT {
+        @Override
+        public boolean evaluate(Boolean... args) {
+            return !args[0];
+        }
+
+        @Override
+        public Boolean completeValue() {
+            return null;
+        }
     };
 
-    public abstract boolean evaluate(boolean arg1, boolean arg2);
+    public abstract boolean evaluate(Boolean... args);
     public abstract Boolean completeValue();
 }

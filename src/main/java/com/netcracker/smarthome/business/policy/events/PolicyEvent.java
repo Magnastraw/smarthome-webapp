@@ -5,6 +5,7 @@ import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.entities.Spec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -68,12 +69,16 @@ public abstract class PolicyEvent implements Serializable {
         this.spec = spec;
     }
 
-    public com.netcracker.smarthome.model.entities.Event getDbEvent() {
+    public Event getDbEvent() {
         return dbEvent;
     }
 
-    public void setDbEvent(com.netcracker.smarthome.model.entities.Event dbEvent) {
+    public void setDbEvent(Event dbEvent) {
         this.dbEvent = dbEvent;
+    }
+
+    public String getShortDescription() {
+        return String.format("%s(%s, %s)", type.toString().toLowerCase(), object.getSmartObjectId(), subobject == null ? "null" : subobject.getSmartObjectId());
     }
 
     @Override

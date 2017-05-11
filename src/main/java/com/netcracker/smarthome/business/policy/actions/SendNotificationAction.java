@@ -9,6 +9,8 @@ import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
@@ -21,14 +23,10 @@ public class SendNotificationAction implements PolicyAction {
     private AlarmService alarmService;
     private MetricService metricService;
 
-    public SendNotificationAction() {
-        initBeans();
-    }
-
     public SendNotificationAction(Map<String, String> params) {
         initBeans();
         this.message = params.get("message");
-        this.preferredChannel = params.containsKey("preferredChannel") ? Channel.valueOf(params.get("preferredChannel")) : null;
+        this.preferredChannel = params.containsKey("preferredChannel") ? Channel.valueOf(StringUtils.capitalize(params.get("preferredChannel").toLowerCase())) : null;
     }
 
     private void initBeans() {
@@ -39,10 +37,11 @@ public class SendNotificationAction implements PolicyAction {
     }
 
     public void execute(PolicyEvent causalEvent) {
+        String messageToSend = String.format("%s\n--\nCausal event description:\n%s", message, causalEvent.toString());
         if (preferredChannel != null)
-            notificationService.sendNotification(message, causalEvent.getObject().getSmartHome(), preferredChannel, getNotificationObject(causalEvent));
+            notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), preferredChannel, getNotificationObject(causalEvent));
         else
-            notificationService.sendNotification(message, causalEvent.getObject().getSmartHome(), getNotificationObject(causalEvent));
+            notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), getNotificationObject(causalEvent));
     }
 
     private NotificationObject getNotificationObject(PolicyEvent event) {
@@ -50,9 +49,9 @@ public class SendNotificationAction implements PolicyAction {
             case EVENT:
                 return event.getDbEvent();
             case ALARM:
-                return alarmService.getAlarm(event.getObject(), event.getSubobject(), (AlarmSpec)event.getSpec());
+                return alarmService.getAlarm(event.getObject(), event.getSubobject(), (AlarmSpec) event.getSpec());
             case METRIC:
-                return metricService.getMetric(event.getObject(), event.getSubobject(), (MetricSpec) event.getSpec(), event.getRegistryDate());
+                return metricService.getMetric(event.getObject(), event.getSubobject(), (MetricSpec) event.getSpec());
             default:
                 return null;
         }

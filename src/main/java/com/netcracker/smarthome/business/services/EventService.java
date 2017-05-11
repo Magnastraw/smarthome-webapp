@@ -3,15 +3,14 @@ package com.netcracker.smarthome.business.services;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.EventHistoryRepository;
 import com.netcracker.smarthome.dal.repositories.EventRepository;
-import com.netcracker.smarthome.model.entities.Alarm;
-import com.netcracker.smarthome.model.entities.Event;
-import com.netcracker.smarthome.model.entities.EventHistory;
+import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +27,8 @@ public class EventService {
     }
 
     @Transactional
-    public Event saveEvent(Event event) {
-        return eventRepository.update(event);
+    public void saveEvent(Event event) {
+        eventRepository.save(event);
     }
 
     @Transactional
@@ -38,8 +37,8 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Event getEvent(long smartHomeId, long objectId,  Long subobjectId, Long eventType) {
-        return eventRepository.getEvent(smartHomeId, objectId, subobjectId, eventType);
+    public Event getEvent(SmartHome smartHome, SmartObject object, SmartObject subobject, Long eventType) {
+        return eventRepository.getEvent(smartHome, object, subobject, eventType);
     }
 
     @Transactional(readOnly = true)
@@ -63,9 +62,7 @@ public class EventService {
     }
 
     @Transactional
-    public Event saveWithHistory(Event event, Timestamp regDate, AlarmSeverity severity) {
-        EventHistory historyRecord = new EventHistory(regDate, event, severity, "");
-        event.getEventHistory().add(historyRecord);
+    public Event updateEvent(Event event) {
         return eventRepository.update(event);
     }
 }

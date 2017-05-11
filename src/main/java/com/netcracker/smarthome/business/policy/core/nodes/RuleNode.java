@@ -32,9 +32,14 @@ public class RuleNode implements ConditionCompletionListener, RunnableNode {
     }
 
     public void onConditionComplete(long conditionId, Boolean result, PolicyEvent event) {
-        actionsToExecute = result ? thenActions : elseActions;
-        this.event = event;
-        executionManager.execute(this);
+        if (result != null) {
+            actionsToExecute = result ? thenActions : elseActions;
+            this.event = event;
+            log.info("Rule #{} execute. Condition result: {}, actions to execute: {}", identifier, result, actionsToExecute.size());
+            executionManager.execute(this);
+        }
+        else
+            complete();
     }
 
     @Override
@@ -45,10 +50,9 @@ public class RuleNode implements ConditionCompletionListener, RunnableNode {
     }
 
     private void complete() {
-        completionListener.onRuleComplete(identifier);
         actionsToExecute = null;
         event = null;
-        log.debug("Rule #%d complete execution!", identifier);
+        completionListener.onRuleComplete(identifier);
     }
 
     @Override
@@ -72,6 +76,4 @@ public class RuleNode implements ConditionCompletionListener, RunnableNode {
                 .append(identifier)
                 .toHashCode();
     }
-
-
 }

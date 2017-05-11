@@ -5,9 +5,6 @@ import java.util.Map;
 public class EqualsOrLessThanCondition extends MetricCondition {
     private double value;
 
-    public EqualsOrLessThanCondition() {
-    }
-
     public EqualsOrLessThanCondition(Map<String, String> params) {
         super(params);
         this.value = Double.parseDouble(params.get("value"));

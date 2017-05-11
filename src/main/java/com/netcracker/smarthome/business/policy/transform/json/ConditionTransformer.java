@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ConditionTransformer implements ITransformator<Condition, JsonCondition> {
     @Override
     public Condition fromJsonEntity(JsonCondition jsonCondition) {
-        throw new UnsupportedOperationException("Not supported operation!");
+        throw new UnsupportedOperationException("Conversion from JSON is not supported!");
     }
 
     @Override

@@ -11,10 +11,10 @@ public class ExecutionManager {
     private ExecutorService executor;
 
     public ExecutionManager() {
-        this.executor = Executors.newFixedThreadPool(100);
+        this.executor = Executors.newFixedThreadPool(500);
     }
 
-    public synchronized void execute(Runnable task) {
+    public void execute(Runnable task) {
         executor.execute(task);
     }
 

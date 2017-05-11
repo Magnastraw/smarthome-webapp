@@ -2,9 +2,11 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.AlarmSpecRepository;
+import com.netcracker.smarthome.dal.repositories.EventHistoryRepository;
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
+import com.netcracker.smarthome.model.entities.EventHistory;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,12 +24,14 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final UserRepository userRepository;
     private final AlarmSpecRepository alarmSpecRepository;
+    private final EventHistoryRepository eventHistoryRepository;
 
     @Autowired
-    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, AlarmSpecRepository alarmSpecRepository) {
+    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, AlarmSpecRepository alarmSpecRepository, EventHistoryRepository eventHistoryRepository) {
         this.alarmRepository = alarmRepository;
         this.userRepository = userRepository;
         this.alarmSpecRepository = alarmSpecRepository;
+        this.eventHistoryRepository = eventHistoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -49,23 +54,13 @@ public class AlarmService {
         return alarmRepository.get(object, subobject, spec);
     }
 
-    @Transactional
-    public void createAlarm(Alarm alarm) {
-        alarmRepository.save(alarm);
-    }
-
-    /*@Transactional
-    public boolean checkAlarmName(String alarmName, long parentAlarmId) {
-        return alarmRepository.checkAlarmName(alarmName, parentAlarmId);
-    }*/
-
     @Transactional(readOnly = true)
     public List<Alarm> getPathToAlarm(Alarm alarm) {
         return alarmRepository.getPathToAlarm(alarm);
     }
 
     @Transactional(readOnly = true)
-    public List<Alarm> getChildrenAlarmsRecursively(Alarm rootAlarm) {
+    public List<Alarm> getChildAlarmsRecursively(Alarm rootAlarm) {
         return alarmRepository.getChildAlarmsRecursively(rootAlarm);
     }
 
@@ -80,42 +75,52 @@ public class AlarmService {
     }
 
     @Transactional
-    public void saveRaisedAlarm(Alarm alarm) {
+    public boolean saveRaisedAlarm(Alarm alarm) {
+        EventHistory eventHistory = new EventHistory(alarm.getSeverityChangeTime(), alarm.getEvent(), alarm.getSeverity(), "");
+        eventHistoryRepository.save(eventHistory);
         Alarm existingAlarm = alarmRepository.get(alarm.getObject(), alarm.getSubobject(), alarm.getAlarmSpec());
+        boolean newAlarm = true;
         if (existingAlarm != null) {
             alarm.setAlarmId(existingAlarm.getAlarmId());
             if (existingAlarm.getSeverity() != AlarmSeverity.CLEAR) {
                 alarm.setStartTime(existingAlarm.getStartTime());
+                newAlarm = false;
             }
         }
         alarmRepository.update(alarm);
+        return newAlarm;
     }
 
     @Transactional
-    public void clearAll(List<Alarm> alarms, long clearedUserId) {
+    public List<Alarm> clearAll(List<Alarm> alarms, long clearedUserId) {
         Timestamp clearTime = Timestamp.valueOf(LocalDateTime.now());
+        List<Alarm> clearedAlarms = new ArrayList<>();
         for (Alarm alarm : alarms)
-            clear(alarm, clearedUserId, clearTime);
+            clearedAlarms.add(clear(alarm, clearedUserId, clearTime));
+        return clearedAlarms;
     }
 
     @Transactional
-    public void clearAlarm(Alarm alarmProps, boolean withChildren, boolean bySystem) {
+    public boolean clearAlarm(Alarm alarmProps, boolean withChildren, boolean bySystem) {
         Alarm existingAlarm = alarmRepository.get(alarmProps.getObject(), alarmProps.getSubobject(), alarmProps.getAlarmSpec());
-        if (existingAlarm == null)
-            return;
+        if (existingAlarm == null || existingAlarm.getSeverity() == AlarmSeverity.CLEAR)
+            return false;
         long clearedUserId = bySystem ? userRepository.getByEmail("system@system.com").getUserId() : alarmProps.getClearedUserId();
-        Timestamp clearTime = Timestamp.valueOf(LocalDateTime.now());
         if (withChildren)
-            clearWithChildren(existingAlarm, clearedUserId, clearTime);
+            clearWithChildren(existingAlarm, clearedUserId, alarmProps.getEndTime());
         else
-            clear(existingAlarm, clearedUserId, clearTime);
+            clear(existingAlarm, clearedUserId, alarmProps.getEndTime());
+        return true;
     }
 
-    private void clear(Alarm alarm, long clearedUserId, Timestamp clearTime) {
+    private Alarm clear(Alarm alarm, long clearedUserId, Timestamp clearTime) {
+        EventHistory eventHistory = new EventHistory(clearTime, alarm.getEvent(), AlarmSeverity.CLEAR, "");
+        eventHistoryRepository.save(eventHistory);
         alarm.setClearedUserId(clearedUserId);
         alarm.setSeverity(AlarmSeverity.CLEAR);
+        alarm.setSeverityChangeTime(clearTime);
         alarm.setEndTime(clearTime);
-        alarmRepository.update(alarm);
+        return alarmRepository.update(alarm);
     }
 
     private void clearWithChildren(Alarm alarmToClear, long clearedUserId, Timestamp clearTime) {

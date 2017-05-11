@@ -7,7 +7,7 @@ Database username: ***postgres***
 
 Database password: ***12345***
 
-Auth login: ***mymail@mail.ru***
+Auth login: ***smarthome.user@yandex.ru***
 
 Auth password: ***123456d***
 

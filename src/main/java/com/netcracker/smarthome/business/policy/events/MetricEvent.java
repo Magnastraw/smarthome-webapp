@@ -23,4 +23,15 @@ public class MetricEvent extends PolicyEvent {
     public void setValue(double value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Metric event [\n\tregistry time: %s\n\tobject: %s;\n\tsubobject: %s;\n\tmetric type: %s;\n\tvalue: %s\n]",
+                getRegistryDate(),
+                getObject().getName(),
+                getSubobject() == null ? "none" : getSubobject().getName(),
+                getSpec().getSpecName(),
+                getValue()
+        );
+    }
 }

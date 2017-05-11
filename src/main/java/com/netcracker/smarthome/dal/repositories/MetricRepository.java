@@ -5,8 +5,9 @@ import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -39,9 +40,8 @@ public class MetricRepository extends EntityRepository<Metric> {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    public Metric get(SmartObject object, SmartObject subobject, MetricSpec spec, Timestamp regDate) {
-        Query query = getManager().createQuery("select mh.metric from MetricHistory mh where mh.readDate=:regDate and mh.metric.object=:object and mh.metric.subobject=:subobject and mh.metric.metricSpec=:spec");
-        query.setParameter("regDate", regDate);
+    public Metric get(SmartObject object, SmartObject subobject, MetricSpec spec) {
+        Query query = getManager().createQuery("select m from Metric m where m.object=:object and m.subobject=:subobject and m.metricSpec=:spec");
         query.setParameter("object", object);
         query.setParameter("subobject", subobject);
         query.setParameter("spec", spec);
@@ -50,11 +50,15 @@ public class MetricRepository extends EntityRepository<Metric> {
     }
 
     public Double getLastMetricValueByObject(long objectId, long specId) {
-        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject.smartObjectId=:object or m.object.smartObjectId=:object)");
+        Query query = getManager().createQuery("select mh.value from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject.smartObjectId=:object or m.object.smartObjectId=:object) and mh.readDate >= all (select mh.readDate from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject.smartObjectId=:object or m.object.smartObjectId=:object))");
         query.setParameter("spec", specId);
         query.setParameter("object", objectId);
-        Object result = query.getSingleResult();
-        return (Double) result;
+        Object result = null;
+        try {
+            result = query.getSingleResult();
+        }
+        catch (NoResultException e) {}
+        return result == null ? null : ((BigDecimal) result).doubleValue();
     }
 
     public Double getLastMetricValueByPolicy(long policyId, long specId) {
@@ -65,10 +69,10 @@ public class MetricRepository extends EntityRepository<Metric> {
     }
 
     private Double getLastMetricValue(List<SmartObject> objects, long spec) {
-        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject in :objects or m.object in :objects)");
+        Query query = getManager().createQuery("select max(mh.value) from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject in :objects or m.object in :objects) and mh.readDate >= all (select mh.readDate from Metric m join m.metricHistory mh on m.metricSpec.specId=:spec and (m.subobject in :objects or m.object in :objects))");
         query.setParameter("spec", spec);
         query.setParameter("objects", objects);
         Object result = query.getSingleResult();
-        return (Double) result;
+        return result == null ? null : ((BigDecimal) result).doubleValue();
     }
 }

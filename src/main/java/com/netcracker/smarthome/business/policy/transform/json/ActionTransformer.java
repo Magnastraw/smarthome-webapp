@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ActionTransformer implements ITransformator<Action, JsonAction> {
     @Override
     public Action fromJsonEntity(JsonAction jsonAction) {
-        throw new UnsupportedOperationException("Not supported operation!");
+        throw new UnsupportedOperationException("Conversion from JSON is not supported!");
     }
 
     @Override

@@ -6,6 +6,8 @@ import com.netcracker.smarthome.business.policy.core.nodes.ifaces.PolicyNodesHol
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PolicyNode implements RuleCompletionListener, PolicyNodesHolder, EngineNode {
+    private static final Logger log = LoggerFactory.getLogger(PolicyNode.class);
     private long identifier;
     private int rulesCount;
     private List<ConditionNode> leafConditions;
@@ -26,23 +29,28 @@ public class PolicyNode implements RuleCompletionListener, PolicyNodesHolder, En
     public PolicyNode(long identifier, int rulesCount) {
         this.identifier = identifier;
         this.rulesCount = rulesCount;
+        this.incompleteRulesCount = rulesCount;
         this.eventQueue = new ConcurrentLinkedQueue<>();
     }
 
     public synchronized void onRuleComplete(long ruleId) {
-        incompleteRulesCount--;
-        if (incompleteRulesCount == 0) {
-            unlock();
-            handleNextEvent();
+        synchronized (this) {
+            incompleteRulesCount--;
+            if (incompleteRulesCount == 0) {
+                unlock();
+                handleNextEvent();
+            }
         }
     }
 
     public void handle(PolicyEvent event) {
         eventQueue.add(event);
-        handleNextEvent();
+        synchronized (this) {
+            handleNextEvent();
+        }
     }
 
-    private synchronized void handleNextEvent() {
+    private void handleNextEvent() {
         if (!locked && !eventQueue.isEmpty()) {
             locked = true;
             launchConditions(eventQueue.poll());
@@ -50,12 +58,14 @@ public class PolicyNode implements RuleCompletionListener, PolicyNodesHolder, En
     }
 
     private void launchConditions(PolicyEvent event) {
+        log.info("Policy #{} handle next event [{}]", identifier, event.getShortDescription());
         for (ConditionNode condition : leafConditions)
             condition.execute(event);
     }
 
     private void unlock() {
         locked = false;
+        log.info("Policy #{} complete handle event. Events in queue: {}", identifier, eventQueue.size());
         reset();
     }
 
@@ -64,13 +74,12 @@ public class PolicyNode implements RuleCompletionListener, PolicyNodesHolder, En
     }
 
     public void setChildren(Map<Long, EngineNode> children) {
-        if (this.children != null) {
+        if (this.children == null) {
             this.children = children;
             leafConditions = new ArrayList<>();
             for (EngineNode executionNode : children.values())
                 if (executionNode instanceof ConditionNode)
                     leafConditions.add((ConditionNode) executionNode);
-
         }
     }
 

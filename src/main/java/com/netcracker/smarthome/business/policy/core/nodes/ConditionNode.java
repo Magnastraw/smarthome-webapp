@@ -32,7 +32,6 @@ public class ConditionNode implements RunnableNode, CancellableNode {
     public void execute(PolicyEvent event) {
         this.event = event;
         cancelled = false;
-        log.debug("Start execution of condition #%d via ExecutorManager", identifier);
         executionManager.execute(this);
     }
 

@@ -7,33 +7,23 @@ import com.netcracker.smarthome.model.enums.AlarmSeverity;
 
 import java.sql.Timestamp;
 
-public class AlarmEvent extends PolicyEvent {
-    private AlarmSeverity severity;
+public class AlarmEvent extends EventEvent {
     private Timestamp severityChangeTime;
     private long clearedUserId;
 
     public AlarmEvent() {
     }
 
-    public AlarmEvent(PolicyEvent causalEvent, AlarmSpec spec, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(EventType.ALARM, causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, causalEvent.getDbEvent());
-        this.severity = severity;
+    public AlarmEvent(PolicyEvent causalEvent, AlarmSpec spec, Event dbEvent, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
+        super(EventType.ALARM, causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, dbEvent, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }
 
     public AlarmEvent(SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, Event dbEvent, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(EventType.ALARM, object, subobject, registryDate, spec, dbEvent);
+        super(EventType.ALARM, object, subobject, registryDate, spec, dbEvent,severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
-    }
-
-    public AlarmSeverity getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(AlarmSeverity severity) {
-        this.severity = severity;
     }
 
     public Timestamp getSeverityChangeTime() {
@@ -50,5 +40,17 @@ public class AlarmEvent extends PolicyEvent {
 
     public void setClearedUserId(long clearedUserId) {
         this.clearedUserId = clearedUserId;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Alarm event [\n\tregistry time: %s\n\tobject: %s;\n\tsubobject: %s;\n\tspecification: %s;\n\tseverity: %s;\n\tseverity change time: %s\n]",
+                getRegistryDate(),
+                getObject().getName(),
+                getSubobject() == null ? "none" : getSubobject().getName(),
+                getSpec().getSpecName(),
+                getSeverity().toString(),
+                getSeverityChangeTime()
+        );
     }
 }
