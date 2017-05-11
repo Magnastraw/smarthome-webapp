@@ -111,7 +111,7 @@ public class Alarm implements Serializable, NotificationObject {
         this.endTime = endTime;
     }
 
-    @Basic
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "severity", nullable = false)
     public AlarmSeverity getSeverity() {
         return severity;

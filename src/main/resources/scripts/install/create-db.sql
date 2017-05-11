@@ -63,18 +63,20 @@ CREATE TABLE public.groups (
 
 ALTER SEQUENCE public.groups_group_id_seq OWNED BY public.groups.group_id;
 
-CREATE SEQUENCE public.social_servicies_service_id_seq;
+CREATE SEQUENCE public.social_services_service_id_seq;
 
-CREATE TABLE public.social_servicies (
-  service_id BIGINT NOT NULL DEFAULT nextval('public.social_servicies_service_id_seq'),
+CREATE TABLE public.social_services (
+  service_id BIGINT NOT NULL DEFAULT nextval('public.social_services_service_id_seq'),
   service_name VARCHAR NOT NULL,
   client_id VARCHAR NOT NULL,
   secret_key VARCHAR NOT NULL,
-  CONSTRAINT social_servicies_pk PRIMARY KEY (service_id)
+  service_type BIGINT NOT NULL,
+  CONSTRAINT social_services_pk PRIMARY KEY (service_id),
+  CONSTRAINT service_uk UNIQUE (service_type)
 );
 
 
-ALTER SEQUENCE public.social_servicies_service_id_seq OWNED BY public.social_servicies.service_id;
+ALTER SEQUENCE public.social_services_service_id_seq OWNED BY public.social_services.service_id;
 
 CREATE SEQUENCE public.users_user_id_seq;
 
@@ -88,7 +90,6 @@ CREATE TABLE public.users (
   is_two_factor_auth BOOLEAN DEFAULT false NOT NULL,
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
-COMMENT ON COLUMN public.users.email IS 'unique';
 
 CREATE UNIQUE INDEX users_uk
   ON public.users (email);
@@ -160,10 +161,11 @@ CREATE TABLE public.metric_specs (
 
 ALTER SEQUENCE public.metric_specs_spec_id_seq OWNED BY public.metric_specs.spec_id;
 
-CREATE SEQUENCE public.policies_policy_id_seq;
+
+CREATE SEQUENCE public.policies_policy_seq;
 
 CREATE TABLE public.policies (
-  policy_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_id_seq'),
+  policy_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   name VARCHAR NOT NULL,
   status INTEGER NOT NULL,
   description VARCHAR,
@@ -171,34 +173,21 @@ CREATE TABLE public.policies (
   CONSTRAINT policies_pk PRIMARY KEY (policy_id)
 );
 
-
-ALTER SEQUENCE public.policies_policy_id_seq OWNED BY public.policies.policy_id;
-
-CREATE SEQUENCE public.rules_rule_id_seq;
-
 CREATE TABLE public.rules (
-  rule_id BIGINT NOT NULL DEFAULT nextval('public.rules_rule_id_seq'),
+  rule_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   name VARCHAR NOT NULL,
   policy_id BIGINT NOT NULL,
   CONSTRAINT rules_pk PRIMARY KEY (rule_id)
 );
 
-
-ALTER SEQUENCE public.rules_rule_id_seq OWNED BY public.rules.rule_id;
-
-CREATE SEQUENCE public.actions_action_id_seq;
-
 CREATE TABLE public.actions (
-  action_id BIGINT NOT NULL DEFAULT nextval('public.actions_action_id_seq'),
+  action_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   rule_id BIGINT NOT NULL,
-  type BIT NOT NULL,
+  type BOOLEAN NOT NULL,
   action_class VARCHAR NOT NULL,
   action_order BIGINT NOT NULL,
   CONSTRAINT actions_pk PRIMARY KEY (action_id)
 );
-
-
-ALTER SEQUENCE public.actions_action_id_seq OWNED BY public.actions.action_id;
 
 CREATE SEQUENCE public.action_params_param_id_seq;
 
@@ -213,19 +202,15 @@ CREATE TABLE public.action_params (
 
 ALTER SEQUENCE public.action_params_param_id_seq OWNED BY public.action_params.param_id;
 
-CREATE SEQUENCE public.conditions_condition_id_seq;
-
 CREATE TABLE public.conditions (
-  condition_id BIGINT NOT NULL DEFAULT nextval('public.conditions_condition_id_seq'),
+  node_id BIGINT NOT NULL DEFAULT nextval('public.policies_policy_seq'),
   rule_id BIGINT NOT NULL,
-  type_id BIGINT NOT NULL,
-  next_condition_id BIGINT,
+  type_id BIGINT,
+  parent_node_id BIGINT,
   operator INTEGER,
-  CONSTRAINT conditions_pk PRIMARY KEY (condition_id)
+  CONSTRAINT conditions_pk PRIMARY KEY (node_id)
 );
 
-
-ALTER SEQUENCE public.conditions_condition_id_seq OWNED BY public.conditions.condition_id;
 
 CREATE SEQUENCE public.condition_params_param_id_seq;
 
@@ -423,7 +408,6 @@ CREATE TABLE public.charts (
 );
 
 
-
 ALTER SEQUENCE public.charts_chart_id_seq OWNED BY public.charts.chart_id;
 
 CREATE TABLE public.social_profiles (
@@ -433,10 +417,15 @@ CREATE TABLE public.social_profiles (
   CONSTRAINT social_profiles_pk PRIMARY KEY (user_id, service_id)
 );
 
-
 CREATE UNIQUE INDEX sp_profile_uk
   ON public.social_profiles
   ( user_social_id, service_id );
+
+CREATE TABLE public.assignments (
+  policy_id BIGINT NOT NULL,
+  object_id BIGINT NOT NULL,
+  CONSTRAINT assignments_pk PRIMARY KEY (policy_id, object_id)
+);
 
 ALTER TABLE public.conditions ADD CONSTRAINT condition_types_conditions_fk
 FOREIGN KEY (type_id)
@@ -494,9 +483,9 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE public.social_profiles ADD CONSTRAINT servicies_profiles_fk
+ALTER TABLE public.social_profiles ADD CONSTRAINT services_profiles_fk
 FOREIGN KEY (service_id)
-REFERENCES public.social_servicies (service_id)
+REFERENCES public.social_services (service_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
@@ -650,14 +639,14 @@ DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE public.condition_params ADD CONSTRAINT conditions_condition_params_fk
 FOREIGN KEY (condition_id)
-REFERENCES public.conditions (condition_id)
+REFERENCES public.conditions (node_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE public.conditions ADD CONSTRAINT conditions_conditions_fk
-FOREIGN KEY (next_condition_id)
-REFERENCES public.conditions (condition_id)
+FOREIGN KEY (parent_node_id)
+REFERENCES public.conditions (node_id)
 ON DELETE SET NULL
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
@@ -788,6 +777,21 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 DEFERRABLE INITIALLY IMMEDIATE;
 
+ALTER TABLE public.assignments ADD CONSTRAINT assignments_policies_fk
+FOREIGN KEY (policy_id)
+REFERENCES public.policies (policy_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE public.assignments ADD CONSTRAINT assignments_objects_fk
+FOREIGN KEY (object_id)
+REFERENCES public.objects (smart_object_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+DEFERRABLE INITIALLY IMMEDIATE;
+
+
 CREATE EXTENSION pgcrypto;
 
 CREATE OR REPLACE FUNCTION insert_secret_key() RETURNS TRIGGER AS $$
@@ -808,6 +812,3 @@ CREATE TRIGGER insert_sec_key_trig
 AFTER INSERT ON smart_homes
 FOR EACH ROW
 EXECUTE PROCEDURE insert_secret_key();
-
-
-

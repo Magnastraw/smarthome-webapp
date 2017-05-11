@@ -1,7 +1,10 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Alarm;
+import com.netcracker.smarthome.model.entities.AlarmSpec;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,18 +16,27 @@ public class AlarmRepository extends EntityRepository<Alarm> {
         super(Alarm.class);
     }
 
-    public List<Alarm> getChildrenAlarms(Alarm alarm) {
+    public Alarm get(SmartObject object, SmartObject subobject, AlarmSpec spec) {
+        Query query = getManager().createQuery("select al from Alarm al where al.object = :object and al.subobject=:subobject and al.alarmSpec=:spec");
+        query.setParameter("object", object);
+        query.setParameter("subobject", subobject);
+        query.setParameter("spec", spec);
+        List<Alarm> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    public List<Alarm> getChildAlarms(Alarm alarm) {
         Query query = getManager().createQuery("select al from Alarm al where al.parentAlarm.alarmId = :alarmId order by al.alarmName");
         query.setParameter("alarmId", alarm.getAlarmId());
         return query.getResultList();
     }
 
-    public List<Alarm> getChildrenAlarmsRecursively(Alarm rootAlarm) {
-        List<Alarm> listAlarms = getChildrenAlarms(rootAlarm), tmp;
+    public List<Alarm> getChildAlarmsRecursively(Alarm rootAlarm) {
+        List<Alarm> listAlarms = getChildAlarms(rootAlarm), tmp;
         Queue<Alarm> queueAlarms = new LinkedList<Alarm>();
         queueAlarms.addAll(listAlarms);
         while (!queueAlarms.isEmpty()) {
-            tmp = getChildrenAlarms(queueAlarms.poll());
+            tmp = getChildAlarms(queueAlarms.poll());
             listAlarms.addAll(tmp);
             queueAlarms.addAll(tmp);
         }
@@ -57,8 +69,7 @@ public class AlarmRepository extends EntityRepository<Alarm> {
             query.setParameter("objectId", objectId);
             query.setParameter("subobjectId", subobjectId);
             query.setParameter("specId", specId);
-        }
-        else {
+        } else {
             query = getManager().createQuery("select a from Alarm a where " +
                     "(a.object.smartObjectId = :objectId and " +
                     "a.subobject.smartObjectId is null and " +

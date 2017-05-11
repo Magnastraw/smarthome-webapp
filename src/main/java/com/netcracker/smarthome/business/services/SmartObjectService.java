@@ -10,18 +10,18 @@ import java.util.List;
 
 @Service
 public class SmartObjectService {
+    private final SmartObjectRepository smartObjectRepository;
+    private final ObjectTypeRepository objectTypeRepository;
+    private final ObjectParamRepository objectParamRepository;
+    private final CatalogRepository catalogRepository;
 
     @Autowired
-    private SmartObjectRepository smartObjectRepository;
-
-    @Autowired
-    private ObjectTypeRepository objectTypeRepository;
-
-    @Autowired
-    private ObjectParamRepository objectParamRepository;
-
-    @Autowired
-    private CatalogRepository catalogRepository;
+    public SmartObjectService(SmartObjectRepository smartObjectRepository, ObjectTypeRepository objectTypeRepository, ObjectParamRepository objectParamRepository, CatalogRepository catalogRepository) {
+        this.smartObjectRepository = smartObjectRepository;
+        this.objectTypeRepository = objectTypeRepository;
+        this.objectParamRepository = objectParamRepository;
+        this.catalogRepository = catalogRepository;
+    }
 
     @Transactional(readOnly = true)
     public SmartObject getObjectById(long objectId) {

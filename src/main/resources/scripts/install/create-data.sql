@@ -1,6 +1,8 @@
 --create user,homes
 INSERT INTO public.users
-VALUES (DEFAULT, 'mymail@mail.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE);
+VALUES
+  (0, 'system@system.com', md5('system'), 'system', null, null, FALSE),
+  (DEFAULT, 'smarthome.user@yandex.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE);
 
 INSERT INTO public.data_types
   VALUES  (DEFAULT, 'String', 0),
@@ -16,11 +18,7 @@ VALUES  (DEFAULT, 1, 'Address', 'Pl. Lenina 15, ap. 10', 1),
         (DEFAULT, 1, 'Home page', 'http://localhost:8083/', 2);
 
 -- add social services
-ALTER TABLE public.social_servicies
-  ADD COLUMN service_type BIGINT NOT NULL,
-  ADD CONSTRAINT service_uk UNIQUE (service_type);
-
-INSERT INTO public.social_servicies (service_name, client_id, secret_key, service_type)
+INSERT INTO public.social_services (service_name, client_id, secret_key, service_type)
 VALUES (
   'Google',
   '1073989536255-nbsn86e8818oianfu5dq8cod9kj4opin.apps.googleusercontent.com',
@@ -28,7 +26,7 @@ VALUES (
   0
 );
 
-INSERT INTO public.social_servicies (service_name, client_id, secret_key, service_type)
+INSERT INTO public.social_services (service_name, client_id, secret_key, service_type)
 VALUES (
   'Facebook',
   '140634186455346',
@@ -36,7 +34,7 @@ VALUES (
   1
 );
 
-INSERT INTO public.social_servicies (service_name, client_id, secret_key, service_type)
+INSERT INTO public.social_services (service_name, client_id, secret_key, service_type)
 VALUES (
   'VK',
   '5899113',
@@ -92,8 +90,8 @@ VALUES
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('d_alarmCat1', 2, 1),
-  ('d_alarmCat2', 2, 1),
+  ('d_event_alarm_specs', 2, 1),
+  ('d_metric_alarm_specs', 2, 1),
   ('d_alarmCat3', 2, 1),
   ('h1_alarmCat1', 6, 2),
   ('h1_alarmCat2', 6, 2),
@@ -120,15 +118,17 @@ VALUES
   ('h2_alarmSubcat2_2', 44, 3),
   ('h2_alarmSubcat3_1', 45, 3);
 
+INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
+VALUES ('test', 3, 1);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('object_catalog',null,1),
-  ('room_catalog',61,1),
-  ('kitchen_catalog',61,1);
+  ('object_catalog', null, 1),
+  ('room_catalog', 62, 1),
+  ('kitchen_catalog', 62, 1);
 
 
-  INSERT INTO public.units (unit_name, base_factor, label)
+INSERT INTO public.units (unit_name, base_factor, label)
 VALUES
   ('Celsius', 1, '°C'),
   ('Percent', 1, '%'),
@@ -177,12 +177,12 @@ VALUES
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)
 VALUES
-  ('On', 'ON event object', 46),
-  ('Off', 'OFF event object', 46),
-  ('Open', 'OPEN event object', 46),
-  ('Close', 'CLOSE event object', 47),
-  ('alarmSpec5', 'type1', 47),
-  ('alarmSpec6', 'type2', 47),
+  ('On', 'ON event object', 37),
+  ('Off', 'OFF event object', 37),
+  ('Open', 'OPEN event object', 37),
+  ('Close', 'CLOSE event object', 37),
+  ('Abnormal temperature', 'temperature sensor', 38),
+  ('Abnormal humidity', 'humidity sensor', 38),
   ('alarmSpec7', 'type2', 48),
   ('alarmSpec8', 'type2', 48),
   ('alarmSpec9', 'type2', 49),
@@ -214,6 +214,180 @@ VALUES
   ('alarmSpec11', 'type3', 60),
   ('alarmSpec12', 'type3', 60);
 
+-- add condition types
+insert into public.condition_types(name, description, condition_class)
+values
+  ('Equals or greater than', '>= value', 'com.netcracker.smarthome.business.policy.conditions.EqualsOrGreaterThanCondition'),
+  ('Equals or less than', '<= value', 'com.netcracker.smarthome.business.policy.conditions.EqualsOrLessThanCondition'),
+  ('Greater than', '> value', 'com.netcracker.smarthome.business.policy.conditions.GreaterThanCondition'),
+  ('Less than', '< value', 'com.netcracker.smarthome.business.policy.conditions.LessThanCondition'),
+  ('Exclusive between', 'value1 < … < value2', 'com.netcracker.smarthome.business.policy.conditions.StrictRangeCondition'),
+  ('Inclusive between', 'value1 <= … <= value2', 'com.netcracker.smarthome.business.policy.conditions.NonstrictRangeCondition'),
+  ('Is', 'Match event type', 'com.netcracker.smarthome.business.policy.conditions.EventCondition')
+;
+
+-- add policies
+insert into public.policies(name, description, catalog_id, status)
+values
+  ('High temperature checks template', '', 61, 1),
+  ('Humidity inline checks', '', 61, 1),
+  ('Signalization', '', 61, 1),
+  ('Complex', '', 61, 0)
+;
+
+insert into public.rules(policy_id, name)
+values
+  (1, 'Raise WARN'),
+  (1, 'Raise CRITICAL'),
+  (1, 'Clear'),
+  (1, 'Notify when raise'),
+  (1, 'Notify when clear'),
+  (2, 'Raise WARN and notify'),
+  (2, 'Clear'),
+  (2, 'Notify when clear'),
+  (3, 'Raise CRITICAL and notify when open'),
+  (3, 'Notify when clear'),
+  (4, 'Complex condition')
+;
+
+insert into public.conditions(rule_id, type_id, parent_node_id, operator)
+values
+  (5, 6, null, null),
+  (6, 3, null, null),
+  (7, 6, null, null),
+  (8, null, null, 1),
+  (8, 7, 19, null),
+  (8, 7, 19, null),
+  (9, 7, null, null),
+  (10, 3, null, null),
+  (11, 6, null, null),
+  (12, 7, null, null),
+  (13, 7, null, null),
+  (14, 7, null, null),
+  (15, null, null, 0),
+  (15, 5, 28, null),
+  (15, 5, 28, null),
+  (15, null, 28, 0),
+  (15, 1, 31, null),
+  (15, 4, 31, null)
+;
+
+insert into public.condition_params(condition_id, name, value)
+values
+  (16, 'policy', '1'),
+  (16, 'metric', '1'),
+  (16, 'minValue', '40'),
+  (16, 'maxValue', '45'),
+  (17, 'policy', '1'),
+  (17, 'metric', '1'),
+  (17, 'value', '45'),
+  (18, 'policy', '1'),
+  (18, 'metric', '1'),
+  (18, 'minValue', '20'),
+  (18, 'maxValue', '30'),
+  (20, 'type', 'alarm'),
+  (20, 'spec', '5'),
+  (20, 'severity', 'WARN'),
+  (21, 'type', 'alarm'),
+  (21, 'spec', '5'),
+  (21, 'severity', 'CRITICAL'),
+  (22, 'type', 'alarm'),
+  (22, 'spec', '5'),
+  (22, 'severity', 'CLEAR'),
+  (23, 'policy', '2'),
+  (23, 'metric', '2'),
+  (23, 'value', '70'),
+  (23, 'object', '3'),
+  (24, 'policy', '2'),
+  (24, 'metric', '2'),
+  (24, 'minValue', '68'),
+  (24, 'maxValue', '70'),
+  (24, 'object', '3'),
+  (25, 'type', 'alarm'),
+  (25, 'spec', '6'),
+  (25, 'severity', 'CLEAR'),
+  (26, 'type', 'event'),
+  (26, 'spec', '3'),
+  (27, 'type', 'alarm'),
+  (27, 'spec', '3'),
+  (27, 'severity', 'CLEAR'),
+  (29, 'policy', '4'),
+  (29, 'metric', '1'),
+  (29, 'minValue', '20'),
+  (29, 'maxValue', '30'),
+  (29, 'object', '13'),
+  (30, 'policy', '4'),
+  (30, 'metric', '1'),
+  (30, 'minValue', '20'),
+  (30, 'maxValue', '30'),
+  (30, 'object', '18'),
+  (32, 'policy', '4'),
+  (32, 'metric', '1'),
+  (32, 'value', '20'),
+  (32, 'object', '20'),
+  (33, 'policy', '4'),
+  (33, 'metric', '1'),
+  (33, 'value', '30'),
+  (33, 'object', '20')
+;
+
+insert into public.actions(rule_id, type, action_class, action_order)
+values
+  (5, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (6, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (7, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (8, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1),
+  (9, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1),
+  (10, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (10, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 2),
+  (11, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (12, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1),
+  (13, 'true', 'com.netcracker.smarthome.business.policy.actions.RaiseAlarmAction', 1),
+  (13, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 2),
+  (14, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1),
+  (15, 'true', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1),
+  (15, 'false', 'com.netcracker.smarthome.business.policy.actions.SendNotificationAction', 1)
+;
+
+insert into public.action_params(action_id, name, value)
+values
+  (34, 'spec', '5'),
+  (34, 'severity', 'WARN'),
+  (35, 'spec', '5'),
+  (35, 'severity', 'CRITICAL'),
+  (36, 'spec', '5'),
+  (36, 'severity', 'CLEAR'),
+  (37, 'message', 'High temperature!'),
+  (37, 'preferredChannel', 'Email'),
+  (38, 'message', 'Temperature normalized.'),
+  (38, 'preferredChannel', 'Email'),
+  (39, 'spec', '6'),
+  (39, 'severity', 'WARN'),
+  (40, 'message', 'Abnormal humidity!'),
+  (40, 'preferredChannel', 'Email'),
+  (41, 'spec', '6'),
+  (41, 'severity', 'CLEAR'),
+  (42, 'message', 'Humidity normalized.'),
+  (42, 'preferredChannel', 'Email'),
+  (43, 'spec', '3'),
+  (43, 'severity', 'CRITICAL'),
+  (44, 'message', 'Break-in attempt!'),
+  (44, 'preferredChannel', 'Email'),
+  (45, 'message', 'Alarm caused by break-in attempt cleared.'),
+  (45, 'preferredChannel', 'Email'),
+  (46, 'message', 'Temperature in house is normal.'),
+  (47, 'message', 'Temperature in the house is not complied with the specified norms!')
+;
+
+-- add assignments
+-- insert into public.assignments(policy_id, object_id)
+-- values
+--   (1, 13),
+--   (1, 18),
+--   (1, 20),
+--   (3, 7),
+--   (3, 11)
+-- ;
 
 --add metrics,objects
 INSERT INTO public.object_types
@@ -224,17 +398,17 @@ VALUES
 
 -- INSERT INTO objects
 -- VALUES
---   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
---   (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1),
---   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2),
---   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
---   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3),
---   (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1),
---   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1),
---   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1);
+--   (DEFAULT, 'Kitchen Temperature/Humidity Sensor', 'Temperature/Humidity sensor', 1, NULL, 1, 1, 1),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 1, 2),
+--   (DEFAULT, 'Kitchen humidity sensor', 'Humidity sensor', 2, NULL, 1, 1, 3),
+--   (DEFAULT, 'Room humidity sensor', 'Humidity sensor', 2, NULL, 1, 1,4),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2, 5),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 2, 6),
+--   (DEFAULT, 'Kitchen Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3, 7),
+--   (DEFAULT, 'Room Temperature Sensor', 'Temperature sensor', 1, NULL, 1, 3, 8),
+--   (DEFAULT, 'Complex sensor', 'Complex sensor', 1, NULL, 1, 1, 9),
+--   (DEFAULT, 'Sensor 1', 'Complex sensor', 1, 9, 1, 1, 10),
+--   (DEFAULT, 'Sensor 2', 'Complex sensor', 1, 9, 1, 1, 11);
 --
 -- INSERT INTO metrics
 -- VALUES

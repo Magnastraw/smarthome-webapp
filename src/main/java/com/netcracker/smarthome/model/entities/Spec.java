@@ -42,5 +42,4 @@ public class Spec implements Serializable {
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }
-
 }

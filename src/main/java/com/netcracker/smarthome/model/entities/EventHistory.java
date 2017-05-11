@@ -31,8 +31,8 @@ public class EventHistory implements Serializable {
 
     @Id
     @Column(name = "history_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_histiory_seq")
-    @SequenceGenerator(name = "ev_histiory_seq", sequenceName = "events_history_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ev_history_seq")
+    @SequenceGenerator(name = "ev_history_seq", sequenceName = "events_history_id_seq", allocationSize = 1)
     public long getHistoryId() {
         return historyId;
     }

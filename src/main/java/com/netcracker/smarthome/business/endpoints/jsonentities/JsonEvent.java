@@ -51,14 +51,6 @@ public class JsonEvent implements Serializable {
         this.severity = severity;
     }
 
-    public long getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(long eventType) {
-        this.eventType = eventType;
-    }
-
     public Timestamp getRegistryDate() {
         return registryDate;
     }
@@ -81,5 +73,13 @@ public class JsonEvent implements Serializable {
 
     public void setSmartHomeId(long smartHomeId) {
         this.smartHomeId = smartHomeId;
+    }
+
+    public long getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(long eventType) {
+        this.eventType = eventType;
     }
 }

@@ -46,6 +46,7 @@
 
 .btn {
     margin-top: 5px;
+    display: block;
     margin-right: 5px;
 }
 
@@ -267,7 +268,7 @@ h3 {
     margin-bottom: 15px;
 }
 
-.param-item {
+.icon-item {
     margin-right: 7px;
 }
 
@@ -279,6 +280,60 @@ h3 {
     padding: 4px !important;
     width: 100% !important;
     font-size: smaller !important;
+}
+
+.policies-table .status-column {
+    text-align: center;
+    width: 90px;
+}
+
+.page-header {
+
+}
+
+.policies-table .btns-column {
+    width: 75px;
+    text-align: center;
+    padding: 5px 0 5px 5px;
+}
+
+.policies-table .name-column {
+    width: 30%;
+}
+
+.policies-table .descr-column {
+    width: 70%;
+}
+
+.fa-item {
+    margin-right: 5px;
+}
+
+.policy-btns {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.policy-btns .left-btn {
+    float: left;
+    margin-right: 5px;
+}
+
+.policies-header {
+    width: 100%;
+    display: inline-block;
+    margin-right: 7px; margin-bottom: 5px; float: left
+}
+
+.policies-header .page-name {
+    margin-right: 7px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+.policies-header .assign-btn {
+    float: right;
 }
 
 .severity-normal {

@@ -1,11 +1,9 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
-import com.netcracker.smarthome.business.services.HomeService;
-import com.netcracker.smarthome.business.services.AlarmService;
+import com.netcracker.smarthome.business.policy.core.PolicyEngine;
+import com.netcracker.smarthome.business.services.*;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonEvent;
-import com.netcracker.smarthome.business.services.EventService;
-import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.business.endpoints.transformators.EventTransformator;
 import com.netcracker.smarthome.business.endpoints.transformators.policyframework.PolicyEventTransformator;
 import com.netcracker.smarthome.business.policy.events.EventEvent;
@@ -26,7 +24,6 @@ import java.util.List;
 @RestController
 public class EventController {
     private static final Logger LOG = LoggerFactory.getLogger(EventController.class);
-
     @Autowired
     private HomeService homeService;
     @Autowired
@@ -35,13 +32,15 @@ public class EventController {
     private EventService eventService;
     @Autowired
     AlarmService alarmService;
+    @Autowired
+    PolicyEngine policyEngine;
 
     @RequestMapping(value = "/event",
             method = RequestMethod.POST,
             consumes = "application/json")
     public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) String houseId,
                                      @RequestBody String json) {
-        LOG.info("Body /event:"+json);
+        LOG.info("POST /event\nBody:\n" + json);
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -53,21 +52,15 @@ public class EventController {
             LOG.error("Error during parsing", e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        LOG.info(String.valueOf(events.get(0).getEventType()));
         if (events.size() == 0)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
         EventTransformator eventTransformator = new EventTransformator(smartObjectService);
-        PolicyEventTransformator policyEventTransformator = new PolicyEventTransformator(smartObjectService);
+        PolicyEventTransformator policyEventTransformator = new PolicyEventTransformator(smartObjectService, alarmService);
         for (JsonEvent item : events) {
-            /*Event event = eventService.getEvent(houseId, item.getObjectId(), item.getSubobjectId(), EventType.valueOf(item.getEventType().toUpperCase()).ordinal());
-            if (event == null) {
-                item.setSmartHomeId(houseId);
-                event = eventTransformator.fromJsonEntity(item);
-                eventService.saveEvent(event);
-            }*/
             item.setSmartHomeId(home.getSmartHomeId());
             Event event = eventTransformator.fromJsonEntity(item);
-            Event existingEvent = eventService.getEvent(home.getSmartHomeId(), event.getObject().getSmartObjectId(), event.getSubobject()!=null ? event.getSubobject().getSmartObjectId() : null, event.getEventType());
+            Event existingEvent = eventService.getEvent(home, event.getObject(), event.getSubobject(), event.getEventType());
             try {
                 if (existingEvent != null) {
                     event.setEventId(existingEvent.getEventId());
@@ -79,8 +72,9 @@ public class EventController {
                 eventService.saveEventHistory(eventHistory);
 
                 EventEvent policyEvent = policyEventTransformator.fromJsonEntity(item);
-                policyEvent.setDbEvent(event);
-                /* */
+                policyEvent.setDbEvent(eventService.getEvent(home, event.getObject(), event.getSubobject(), event.getEventType()));
+                policyEngine.handleEvent(policyEvent);
+
             } catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);

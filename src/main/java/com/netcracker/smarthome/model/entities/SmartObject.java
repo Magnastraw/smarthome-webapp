@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "objects", schema = "public", catalog = "smarthome_db")
@@ -28,6 +29,7 @@ public class SmartObject implements Serializable {
     private Catalog catalog;
     private SmartHome smartHome;
     private long externalKey;
+    private Set<Policy> assignedPolicies;
 
     public SmartObject() {
     }
@@ -145,6 +147,15 @@ public class SmartObject implements Serializable {
 
     public void setObjectParams(List<ObjectParam> objectParams) {
         this.objectParams = objectParams;
+    }
+
+    @ManyToMany(mappedBy = "assignedObjects")
+    public Set<Policy> getAssignedPolicies() {
+        return assignedPolicies;
+    }
+
+    public void setAssignedPolicies(Set<Policy> assignedPolicies) {
+        this.assignedPolicies = assignedPolicies;
     }
 
     @ManyToOne
