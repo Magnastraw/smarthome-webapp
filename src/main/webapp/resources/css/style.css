@@ -146,18 +146,19 @@
 .filter {
     width: 90% !important;
     max-width: 150px;
-    vertical-align: bottom;
-    display: table-cell;
+    /*vertical-align: bottom;
+    display: table-cell;*/
     text-align: center;
 }
 
 .filter-select {
-    min-width: 50px !important;
-    width: 60% !important;
-    /*margin-top: 3px; !*<===*!*/
-    vertical-align: bottom;
-    display: table-cell;
+    min-width: 44px !important;
+    width: 65% !important;
+    margin-top: 3px;
+    /*vertical-align: bottom;
+    display: table-cell;*/
     text-align: center;
+    bottom: -2px;
 }
 
 .filter-date input {
@@ -165,16 +166,16 @@
     max-width: 150px;
 }
 
-/*.ui-datatable th.ui-state-default {*/
-    /*text-align: center;*/
-    /*padding: 5px 2px !important;*/
-    /*position: relative;*/
-/*}*/
-/*^^^^*/
-/*.ui-sortable-column-icon {*/
-     /*position: absolute;*/
-     /*top: 5px;*/
- /*}*/
+/*.ui-datatable th.ui-state-default {
+    text-align: center;
+    padding: 5px 2px !important;
+    position: relative;
+}
+
+.ui-sortable-column-icon {
+     position: absolute;
+     top: 5px;
+ }*/
 
 .ui-datatable th.ui-state-active {
     background-color: #ebedf0;
@@ -219,7 +220,9 @@
 }
 
 .column-detail {
-    width: 60px;
+    /*width: 60px;*/
+    width: 30px;
+    padding: 2px !important;
     text-align: center;
 }
 
@@ -661,7 +664,7 @@ div.severity-critical {
 /* */
 
 
-.wrap {
+/*.wrap {
     display: table;
     height: 100%;
     margin-left: auto;
@@ -678,4 +681,39 @@ div.severity-critical {
     display: table-cell;
     text-align: center;
     vertical-align: top;
+}*/
+
+.ui-filter-column {
+    position: relative;
+    height: 70px;
+}
+
+.ui-filter-column .ui-column-title {
+    position: absolute;
+    top: 3%;
+    left: 0;
+    right: 0;
+    text-overflow: clip;
+    white-space: nowrap;
+    /*overflow-wrap: break-word;*/
+}
+
+.ui-sortable-column-icon {
+    /*position: absolute;
+    top: 30%;
+    left: 3%;
+    right: 3%;*/
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 5% !important;
+}
+
+.ui-column-customfilter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
