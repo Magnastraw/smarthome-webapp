@@ -40,7 +40,7 @@
                     </p:calendar>
                 </f:facet>
                 <h:outputText value="#{notification.time}">
-                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                 </h:outputText>
             </p:column>
             <p:column headerText="Object" style="width: 20%" filterBy="#{notification.notificationObject}"
@@ -130,7 +130,7 @@
                     </p:calendar>
                 </f:facet>
                 <h:outputText value="#{alarm.startTime}">
-                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                 </h:outputText>
             </p:column>
             <p:column headerText="End time" styleClass="column-time" sortBy="#{alarm.endTime}"
@@ -144,7 +144,7 @@
                     </p:calendar>
                 </f:facet>
                 <h:outputText value="#{alarm.endTime}">
-                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                 </h:outputText>
             </p:column>
             <p:column headerText="Severity"
@@ -172,4 +172,14 @@
         </p:dataTable>
     </p:panel>
 </p:outputPanel>
+
+<p:remoteCommand name="updateEvent" update="centerForm:notificationsDT" actionListener="#{notificationBean.init()}"/>
+<p:remoteCommand name="updateAlarm" update="centerForm:alarmsDT" actionListener="#{alarmListBean.init()}"/>
+
+<script type="text/javascript">
+    updateContent(window.location + 'updateEvent?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateEvent");
+    updateContent(window.location + 'updateAlarm?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateAlarm");
+
+</script>
+
 </html>

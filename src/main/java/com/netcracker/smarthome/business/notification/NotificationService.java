@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.notification;
 
+import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.dal.repositories.NotificationRepository;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import com.netcracker.smarthome.model.entities.*;
@@ -18,6 +19,8 @@ public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private TaskManager taskManager;
 
     private Notification createNotification(String notificationText, SmartHome home, Channel preferenceChannel,
                                             NotificationObject notificationObject) {
@@ -66,5 +69,6 @@ public class NotificationService {
             e.printStackTrace();
         }
         notificationSender.sendNotification(notification);
+        taskManager.addUpdateEvent(smartHome.getSmartHomeId(),"updateEvent");
     }
 }

@@ -83,7 +83,7 @@
                     </p:calendar>
                 </f:facet>
                 <h:outputText value="#{alarm.startTime}">
-                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                 </h:outputText>
             </p:column>
             <p:column styleClass="column" sortBy="#{alarm.endTime}" filterBy="#{alarm.endTime}" filterFunction="#{alarmListBean.filterByDate}">
@@ -97,7 +97,7 @@
                     </p:calendar>
                 </f:facet>
                 <h:outputText value="#{alarm.endTime}">
-                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}" />
                 </h:outputText>
             </p:column>
             <p:column styleClass="column #{alarmListBean.setStyleClass(alarm.severity.ordinal())}" sortBy="#{alarm.severity.ordinal()}" filterBy="#{alarm.severity.name()}">

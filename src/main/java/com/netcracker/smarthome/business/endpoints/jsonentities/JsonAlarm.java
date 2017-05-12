@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.endpoints.jsonentities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ public class JsonAlarm implements Serializable {
     private long objectId;
     private long subobjectId;
     private String severity;
+    @JsonFormat(timezone = "Europe/Moscow")
     private Timestamp registryDate;
     private String alarmParameters;
     private long specId;

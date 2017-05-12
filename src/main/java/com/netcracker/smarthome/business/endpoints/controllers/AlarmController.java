@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
+import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
 import com.netcracker.smarthome.business.endpoints.jsonentities.JsonAlarm;
@@ -29,6 +30,8 @@ public class AlarmController {
     private AlarmSpecService alarmSpecService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private TaskManager taskManager;
 
     @RequestMapping(value = "/alarm",
                     method = RequestMethod.POST,
@@ -87,5 +90,11 @@ public class AlarmController {
             }
         }*/
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/updateAlarm",
+            method = RequestMethod.GET)
+    public Boolean updateInventory(@RequestParam(value = "houseId",required = true) long houseId){
+        return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateAlarm");
     }
 }

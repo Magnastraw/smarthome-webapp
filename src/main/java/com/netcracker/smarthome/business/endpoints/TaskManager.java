@@ -28,7 +28,7 @@ public class TaskManager implements IListener{
         if(updateMap.get(houseId)!=null){
             updateMap.get(houseId).add(updateEvent);
         } else {
-            updateMap.put(houseId,new HashSet<>());
+            updateMap.put(houseId,new HashSet<String>());
             updateMap.get(houseId).add(updateEvent);
         }
     }

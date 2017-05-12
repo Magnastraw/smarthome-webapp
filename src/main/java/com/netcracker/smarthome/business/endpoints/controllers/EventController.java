@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.endpoints.controllers;
 
+import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.policy.core.PolicyEngine;
 import com.netcracker.smarthome.business.services.*;
 import com.netcracker.smarthome.business.endpoints.JsonRestParser;
@@ -34,6 +35,9 @@ public class EventController {
     AlarmService alarmService;
     @Autowired
     PolicyEngine policyEngine;
+    @Autowired
+    TaskManager taskManager;
+
 
     @RequestMapping(value = "/event",
             method = RequestMethod.POST,
@@ -74,12 +78,17 @@ public class EventController {
                 EventEvent policyEvent = policyEventTransformator.fromJsonEntity(item);
                 policyEvent.setDbEvent(eventService.getEvent(home, event.getObject(), event.getSubobject(), event.getEventType()));
                 policyEngine.handleEvent(policyEvent);
-
             } catch (Exception ex) {
                 LOG.error("Error during saving of data", ex);
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/updateEvent",
+            method = RequestMethod.GET)
+    public Boolean updateInventory(@RequestParam(value = "houseId",required = true) long houseId){
+        return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateEvent");
     }
 }

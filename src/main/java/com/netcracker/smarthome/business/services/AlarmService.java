@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.business.services;
 
+import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.AlarmSpecRepository;
 import com.netcracker.smarthome.dal.repositories.EventHistoryRepository;
@@ -10,6 +11,7 @@ import com.netcracker.smarthome.model.entities.EventHistory;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
+import com.netcracker.smarthome.web.common.ContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +28,15 @@ public class AlarmService {
     private final UserRepository userRepository;
     private final AlarmSpecRepository alarmSpecRepository;
     private final EventHistoryRepository eventHistoryRepository;
+    private final TaskManager taskManager;
 
     @Autowired
-    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, AlarmSpecRepository alarmSpecRepository, EventHistoryRepository eventHistoryRepository) {
+    public AlarmService(AlarmRepository alarmRepository, UserRepository userRepository, AlarmSpecRepository alarmSpecRepository, EventHistoryRepository eventHistoryRepository, TaskManager taskManager) {
         this.alarmRepository = alarmRepository;
         this.userRepository = userRepository;
         this.alarmSpecRepository = alarmSpecRepository;
         this.eventHistoryRepository = eventHistoryRepository;
+        this.taskManager = taskManager;
     }
 
     @Transactional(readOnly = true)
@@ -89,6 +93,7 @@ public class AlarmService {
             }
         }
         alarmRepository.update(alarm);
+        taskManager.addUpdateEvent(alarm.getEvent().getSmartHome().getSmartHomeId(),"updateAlarm");
         return newAlarm;
     }
 

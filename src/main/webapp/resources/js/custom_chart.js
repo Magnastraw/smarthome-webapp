@@ -160,6 +160,6 @@ function clearHighchartsContainer() {
 
 Highcharts.setOptions({
     global: {
-        useUTC: false
+        timezone: moment.tz.guess()
     }
 });
