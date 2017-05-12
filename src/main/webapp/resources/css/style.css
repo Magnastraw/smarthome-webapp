@@ -342,8 +342,6 @@ h3 {
     float: right;
 }
 
-.severity-normal {
-    background-color: green;
 td.severity-normal {
     background-color: green !important;
 }
