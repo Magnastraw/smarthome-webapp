@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "policies", schema = "public", catalog = "smarthome_db")
@@ -18,12 +18,13 @@ public class Policy implements Serializable {
     private PolicyStatus status;
     private String description;
     private Catalog catalog;
-    private List<Rule> rule;
+    private Set<Rule> rules;
+    private Set<SmartObject> assignedObjects;
 
     public Policy() {
     }
 
-    public Policy(String name, PolicyStatus status, String description, Catalog catalog) {
+    public Policy(String name, PolicyStatus status, Catalog catalog, String description) {
         this.name = name;
         this.status = status;
         this.description = description;
@@ -33,7 +34,7 @@ public class Policy implements Serializable {
     @Id
     @Column(name = "policy_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "policy_seq")
-    @SequenceGenerator(name = "policy_seq", sequenceName = "policies_policy_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "policy_seq", sequenceName = "policies_policy_seq", allocationSize = 1)
     public long getPolicyId() {
         return policyId;
     }
@@ -83,12 +84,25 @@ public class Policy implements Serializable {
     }
 
     @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
-    public List<Rule> getRule() {
-        return rule;
+    public Set<Rule> getRules() {
+        return rules;
     }
 
-    public void setRule(List<Rule> rule) {
-        this.rule = rule;
+    public void setRules(Set<Rule> rules) {
+        this.rules = rules;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "assignments", joinColumns = {
+            @JoinColumn(name = "policy_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "object_id",
+                    nullable = false, updatable = false)})
+    public Set<SmartObject> getAssignedObjects() {
+        return assignedObjects;
+    }
+
+    public void setAssignedObjects(Set<SmartObject> assignedObjects) {
+        this.assignedObjects = assignedObjects;
     }
 
     @Override

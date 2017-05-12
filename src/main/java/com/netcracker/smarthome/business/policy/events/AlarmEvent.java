@@ -1,8 +1,10 @@
 package com.netcracker.smarthome.business.policy.events;
 
 import com.netcracker.smarthome.model.entities.AlarmSpec;
+import com.netcracker.smarthome.model.entities.Event;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
+
 import java.sql.Timestamp;
 
 public class AlarmEvent extends EventEvent {
@@ -12,14 +14,14 @@ public class AlarmEvent extends EventEvent {
     public AlarmEvent() {
     }
 
-    public AlarmEvent(Event causalEvent, AlarmSpec spec, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
-        super(causalEvent.getType(), causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, severity, causalEvent.getDbEvent());
+    public AlarmEvent(PolicyEvent causalEvent, AlarmSpec spec, Event dbEvent, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
+        super(EventType.ALARM, causalEvent.getObject(), causalEvent.getSubobject(), causalEvent.getRegistryDate(), spec, dbEvent, severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }
 
-    public AlarmEvent(EventType type, SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId, com.netcracker.smarthome.model.entities.Event dbEvent) {
-        super(type, object, subobject, registryDate, spec, severity, dbEvent);
+    public AlarmEvent(SmartObject object, SmartObject subobject, Timestamp registryDate, AlarmSpec spec, Event dbEvent, AlarmSeverity severity, Timestamp severityChangeTime, long clearedUserId) {
+        super(EventType.ALARM, object, subobject, registryDate, spec, dbEvent,severity);
         this.severityChangeTime = severityChangeTime;
         this.clearedUserId = clearedUserId;
     }
@@ -36,7 +38,19 @@ public class AlarmEvent extends EventEvent {
         return clearedUserId;
     }
 
-    public void setClearedUser(long clearedUserId) {
+    public void setClearedUserId(long clearedUserId) {
         this.clearedUserId = clearedUserId;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Alarm event [\n\tregistry time: %s\n\tobject: %s;\n\tsubobject: %s;\n\tspecification: %s;\n\tseverity: %s;\n\tseverity change time: %s\n]",
+                getRegistryDate(),
+                getObject().getName(),
+                getSubobject() == null ? "none" : getSubobject().getName(),
+                getSpec().getSpecName(),
+                getSeverity().toString(),
+                getSeverityChangeTime()
+        );
     }
 }

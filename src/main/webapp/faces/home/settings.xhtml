@@ -36,21 +36,21 @@
         <h:outputText rendered="#{homeSettingsBean.homeParams.size()==0}" value="No parameters."/>
         <h:panelGrid columns="4" cellpadding="0" rendered="#{homeSettingsBean.homeParams.size()>0}">
             <c:forEach items="#{homeSettingsBean.homeParams}" var="param">
-                <h:outputText style="font-weight: bold" value="#{param.name}:" styleClass="param-item"/>
+                <h:outputText style="font-weight: bold" value="#{param.name}:" styleClass="icon-item"/>
                 <h:outputText value="#{param.value}" rendered="#{param.dataType.type.ordinal()==0}"
-                              styleClass="param-item"/>
+                              styleClass="icon-item"/>
                 <h:outputLink value="#{param.value}"
                               rendered="#{param.dataType.type.ordinal()==1}"
-                              target="_blank" styleClass="param-item">#{param.value}</h:outputLink>
+                              target="_blank" styleClass="icon-item">#{param.value}</h:outputLink>
                 <p:commandLink update=":centerForm:paramSave" oncomplete="PF('saveParamDialog').show()"
                                title="Edit"
-                               styleClass="fa fa-edit param-item">
+                               styleClass="fa fa-edit icon-item">
                     <f:setPropertyActionListener value="#{param}" target="#{homeSettingsBean.selectedParam}"/>
                 </p:commandLink>
                 <p:commandLink action="#{homeSettingsBean.deleteParam}"
                                update=":centerForm:homeParams"
                                title="Delete"
-                               styleClass="fa fa-remove param-item">
+                               styleClass="fa fa-remove icon-item">
                     <p:confirm header="Confirmation" message="Are you sure want to delete parameter?"/>
                     <f:setPropertyActionListener value="#{param}" target="#{homeSettingsBean.selectedParam}"/>
                 </p:commandLink>

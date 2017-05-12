@@ -1,27 +1,30 @@
 package com.netcracker.smarthome.business.services;
 
-import com.netcracker.smarthome.business.policy.events.EventType;
 import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.EventHistoryRepository;
 import com.netcracker.smarthome.dal.repositories.EventRepository;
-import com.netcracker.smarthome.model.entities.Alarm;
-import com.netcracker.smarthome.model.entities.Event;
-import com.netcracker.smarthome.model.entities.EventHistory;
+import com.netcracker.smarthome.model.entities.*;
+import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EventService {
-    @Autowired
-    private EventRepository eventRepository;
-    @Autowired
-    private AlarmRepository alarmRepository;
+    private final EventRepository eventRepository;
+    private final AlarmRepository alarmRepository;
+    private final EventHistoryRepository eventHistoryRepository;
 
     @Autowired
-    private EventHistoryRepository eventHistoryRepository;
+    public EventService(EventRepository eventRepository, AlarmRepository alarmRepository, EventHistoryRepository eventHistoryRepository) {
+        this.eventRepository = eventRepository;
+        this.alarmRepository = alarmRepository;
+        this.eventHistoryRepository = eventHistoryRepository;
+    }
 
     @Transactional
     public void saveEvent(Event event) {
@@ -34,8 +37,8 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public Event getEvent(long smartHomeId, long objectId,  Long subobjectId, Long eventType) {
-        return eventRepository.getEvent(smartHomeId, objectId, subobjectId, eventType);
+    public Event getEvent(SmartHome smartHome, SmartObject object, SmartObject subobject, Long eventType) {
+        return eventRepository.getEvent(smartHome, object, subobject, eventType);
     }
 
     @Transactional(readOnly = true)
@@ -58,4 +61,8 @@ public class EventService {
         return eventHistoryRepository.getEventHistory(eventId);
     }
 
+    @Transactional
+    public Event updateEvent(Event event) {
+        return eventRepository.update(event);
+    }
 }

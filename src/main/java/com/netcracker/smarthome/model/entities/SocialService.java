@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "social_servicies", schema = "public", catalog = "smarthome_db")
+@Table(name = "social_services", schema = "public", catalog = "smarthome_db")
 public class SocialService implements Serializable {
     private long serviceId;
     private AuthService serviceType;
@@ -33,7 +33,7 @@ public class SocialService implements Serializable {
     @Id
     @Column(name = "service_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ss_seq")
-    @SequenceGenerator(name = "ss_seq", sequenceName = "social_servicies_service_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "ss_seq", sequenceName = "social_services_service_id_seq", allocationSize = 1)
     public long getServiceId() {
         return serviceId;
     }

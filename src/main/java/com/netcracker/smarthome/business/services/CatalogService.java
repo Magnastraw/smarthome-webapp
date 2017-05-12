@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class CatalogService {
     private final CatalogRepository catalogRepository;
-    
+
     @Autowired
     public  CatalogService (CatalogRepository catalogRepository) {
         this.catalogRepository = catalogRepository;
@@ -22,17 +22,17 @@ public class CatalogService {
     public List<Catalog> getSubcatalogs(Catalog catalog) {
         return this.catalogRepository.getSubcatalogs(catalog);
     }
-    
+
     @Transactional
     public void deleteCatalog(Object primaryKey) {
         catalogRepository.delete(primaryKey);
     }
-    
+
     @Transactional(readOnly = true)
     public Catalog getCatalogById(long catalogId) {
         return catalogRepository.get(catalogId);
     }
-    
+
     @Transactional
     public void createCatalog(Catalog catalog) {
         catalogRepository.save(catalog);
@@ -51,6 +51,11 @@ public class CatalogService {
     @Transactional(readOnly = true)
     public List<Catalog> getSubcatalogsRecursively(Catalog catalog) {
         return catalogRepository.getSubcatalogsRecursively(catalog);
+    }
+
+    @Transactional
+    public List<Catalog> getSubcatalogsRecursively(Catalog rootCatalog, Catalog explicitCatalogTreeRoot) {
+        return catalogRepository.getSubcatalogsRecursively(rootCatalog, explicitCatalogTreeRoot);
     }
 
     @Transactional

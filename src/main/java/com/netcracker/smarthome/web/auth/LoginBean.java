@@ -3,18 +3,15 @@ package com.netcracker.smarthome.web.auth;
 import com.netcracker.smarthome.business.auth.social.SocialServiceClient;
 import com.netcracker.smarthome.business.notification.NotificationService;
 import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
-import com.netcracker.smarthome.model.entities.SmartHome;
-import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
-import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
@@ -23,14 +20,14 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @ManagedBean
-@Scope(value = "request")
-@Component
+@ViewScoped
 public class LoginBean implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
 
-    @Autowired
+    @ManagedProperty(value = "#{smartHomeRepository}")
     private SmartHomeRepository smartHomeRepository;
-    @Autowired
+
+    @ManagedProperty(value = "#{notificationService}")
     private NotificationService notificationService;
 
     private boolean remember = true;
@@ -92,5 +89,13 @@ public class LoginBean implements Serializable {
                 context.getRequestServerPort(),
                 context.getRequestContextPath(),
                 serviceName);
+    }
+
+    public void setSmartHomeRepository(SmartHomeRepository smartHomeRepository) {
+        this.smartHomeRepository = smartHomeRepository;
+    }
+
+    public void setNotificationService(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 }

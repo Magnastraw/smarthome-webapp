@@ -1,10 +1,13 @@
 package com.netcracker.smarthome.web.alarm;
 
+import com.netcracker.smarthome.business.policy.core.PolicyEngine;
+import com.netcracker.smarthome.business.policy.events.AlarmEvent;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
+import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
 import org.primefaces.component.calendar.Calendar;
@@ -13,6 +16,7 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.data.FilterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -20,8 +24,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
-@ManagedBean(name="alarmListBean")
+@ManagedBean(name = "alarmListBean")
 @ViewScoped
 public class AlarmListBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AlarmListBean.class);
@@ -36,6 +41,8 @@ public class AlarmListBean implements Serializable {
     private AlarmService alarmService;
     @ManagedProperty(value = "#{currentUserHomesBean}")
     private CurrentUserHomesBean userHomesBean;
+    @ManagedProperty(value = "#{policyEngine}")
+    private PolicyEngine policyEngine;
 
     @PostConstruct
     public void init() {
@@ -44,7 +51,7 @@ public class AlarmListBean implements Serializable {
 
     public void changeCurrentHome() {
         currentObject = null;
-        alarmPath = new ArrayList<Alarm>();
+        alarmPath = new ArrayList<>();
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -63,25 +70,24 @@ public class AlarmListBean implements Serializable {
     }
 
     private void setSubAlarms() {
-        for (int i=0; i<currentAlarms.size(); i++) {
+        for (int i = 0; i < currentAlarms.size(); i++) {
             Alarm alarm = currentAlarms.get(i);
             alarm.setSubAlarms(alarmService.getChildrenAlarms(alarm));
         }
     }
 
     public void expand(Alarm alarm) {
-        if(alarm != null) {
+        if (alarm != null) {
             clearAlarmPath();
             alarmPath = alarmService.getPathToAlarm(alarm);
-            currentAlarms = alarm.getSubAlarms();
+            currentAlarms = alarmService.getChildrenAlarms(alarm);
             setSubAlarms();
-        }
-        else
+        } else
             getRootAlarms();
     }
 
     public void onSelect(Alarm alarm) {
-        if (alarm.getSubAlarms() != null) {
+        if (alarmService.getChildrenAlarms(alarm) != null) {
             expand(alarm);
         }
     }
@@ -103,7 +109,12 @@ public class AlarmListBean implements Serializable {
 
     public void setClearSeverity() {
         if (selectedAlarms != null) {
-            LOG.info("Send selected alarms to policy engine" + selectedAlarms);
+            selectedAlarms = selectedAlarms.stream().filter(alarm -> alarm.getSeverity() != AlarmSeverity.CLEAR).collect(Collectors.toList());
+            AlarmEvent alarmEvent;
+            for (Alarm alarm : alarmService.clearAll(selectedAlarms, ContextUtils.getCurrentUser().getUserId())) {
+                alarmEvent = new AlarmEvent(alarm.getObject(), alarm.getSubobject(), alarm.getStartTime(), alarm.getAlarmSpec(), alarm.getEvent(), alarm.getSeverity(), alarm.getSeverityChangeTime(), alarm.getClearedUserId());
+                policyEngine.handleEvent(alarmEvent);
+            }
         }
     }
 
@@ -112,10 +123,10 @@ public class AlarmListBean implements Serializable {
     }
 
     public void onChange(String id) {
-        String selector = "centerForm:alarmsDT:"+id;
+        String selector = "centerForm:alarmsDT:" + id;
         //Calendar time = (Calendar)events.getComponent();
         Calendar time = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent(selector);
-        if(time.getValue() == null) {
+        if (time.getValue() == null) {
             //events.getNewValue() == null || events.getNewValue().equals("")) {
             DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
             dataTable.resetValue();
@@ -224,5 +235,9 @@ public class AlarmListBean implements Serializable {
 
     public void setCurrentObject(SmartObject currentObject) {
         this.currentObject = currentObject;
+    }
+
+    public void setPolicyEngine(PolicyEngine policyEngine) {
+        this.policyEngine = policyEngine;
     }
 }

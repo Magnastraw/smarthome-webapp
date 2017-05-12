@@ -32,7 +32,7 @@ public class Action implements Serializable {
     @Id
     @Column(name = "action_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "action_seq")
-    @SequenceGenerator(name = "action_seq", sequenceName = "actions_action_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "action_seq", sequenceName = "policies_policy_seq", allocationSize = 1)
     public long getActionId() {
         return actionId;
     }
@@ -71,7 +71,7 @@ public class Action implements Serializable {
         this.order = order;
     }
 
-    @OneToMany(mappedBy = "action", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "action", cascade = CascadeType.ALL)
     public List<ActionParam> getActionParams() {
         return actionParams;
     }

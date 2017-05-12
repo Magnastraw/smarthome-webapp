@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<div class="policies-header">
+    <h2 class="page-name">Policies</h2>
+    <p:commandButton value="Assignments" icon="fa fa-external-link"
+                     styleClass="assign-btn">
+    </p:commandButton>
+</div>
+<p:breadCrumb id="catalogsPath" style="display: block">
+    <p:menuitem icon="fa fa-home"
+                actionListener="#{policiesBean.changeCatalog(policiesBean.rootCatalog)}"
+                update=":centerForm"/>
+    <c:forEach items="#{policiesBean.catalogPath}" var="catalog">
+        <p:menuitem value="#{catalog.catalogName}"
+                    actionListener="#{policiesBean.changeCatalog(catalog)}"
+                    update=":centerForm"/>
+    </c:forEach>
+</p:breadCrumb>
+<p:dataTable id="policiesTable" var="item" value="#{policiesBean.tableItems}" widgetVar="policiesTable"
+             paginator="true" rows="10" rowsPerPageTemplate="5,10"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+             emptyMessage="No items."
+             styleClass="policies-table">
+    <f:facet name="header">
+        <div class="policy-btns">
+            <p:commandButton value="New policy" icon="fa fa-plus"
+                             update=":centerForm"
+                             oncomplete="PF('saveItemDialog').show()"
+                             styleClass="left-btn">
+                <f:setPropertyActionListener value="#{policiesBean.defaultPolicyItem}"
+                                             target="#{policiesBean.selectedItem}"/>
+            </p:commandButton>
+            <p:commandButton value="New catalog" icon="fa fa-plus"
+                             update=":centerForm"
+                             oncomplete="PF('saveItemDialog').show()"
+                             styleClass="left-btn">
+                <f:setPropertyActionListener value="#{policiesBean.defaultCatalogItem}"
+                                             target="#{policiesBean.selectedItem}"/>
+            </p:commandButton>
+        </div>
+    </f:facet>
+    <p:column headerText="Actions" styleClass="btns-column"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <p:commandLink rendered="#{!item.catalog}"
+                       title="Details"
+                       styleClass="fa fa-eye icon-item"/>
+        <p:commandLink update=":centerForm"
+                       oncomplete="PF('saveItemDialog').show()"
+                       title="Edit"
+                       styleClass="fa fa-edit icon-item">
+            <f:setPropertyActionListener value="#{item}" target="#{policiesBean.selectedItem}"/>
+        </p:commandLink>
+        <p:commandLink action="#{policiesBean.deleteItem}"
+                       update=":centerForm"
+                       title="Delete"
+                       styleClass="fa fa-remove icon-item">
+            <p:confirm header="Confirmation" message="Are you sure want to delete item?"/>
+            <f:setPropertyActionListener value="#{item}" target="#{policiesBean.selectedItem}"/>
+        </p:commandLink>
+    </p:column>
+    <p:column headerText="Name" styleClass="name-column"
+              sortBy="#{item.name}"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <h:outputText value="#{item.name}" rendered="#{!item.catalog}"/>
+        <h:outputText styleClass="fa fa-folder-open icon-item" rendered="#{item.catalog}"/>
+        <p:commandLink value="#{item.name}"
+                       actionListener="#{policiesBean.changeCatalog(item.item)}"
+                       update=":centerForm"
+                       rendered="#{item.catalog}"
+                       style="text-decoration: none;"/>
+    </p:column>
+    <p:column headerText="Description" styleClass="descr-column"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <h:outputText value="#{item.description}"/>
+    </p:column>
+    <p:column headerText="Status" styleClass="status-column"
+              sortBy="#{item.status.toString()}"
+              style="background-color: #{item.status == null ? '' : policiesBean.getStatusColor(item.status)}">
+        <h:outputText value="#{item.status.toString()}"/>
+    </p:column>
+</p:dataTable>
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+    <div style="text-align: center">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </div>
+</p:confirmDialog>
+<p:dialog header="#{policiesBean.selectedItem.catalog ? 'Catalog' : 'Policy'} properties" widgetVar="saveItemDialog"
+          resizable="false" position="center" id="saveItem">
+    <p:panel styleClass="dialog">
+        <div class="alert-block">
+            <p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"
+                        styleClass="alert"/>
+            <p:message for="name" display="text" styleClass="alert"/>
+        </div>
+        <p:panelGrid columns="2" style="border: none">
+            <h:outputLabel for="name" value="Name:"/>
+            <p:inputText id="name" value="#{policiesBean.selectedItem.name}"
+                         validatorMessage="The name must not be empty!"
+                         styleClass="dialog-input">
+                <f:validateRegex pattern="^.*\S.*$"/>
+                <p:clientValidator/>
+            </p:inputText>
+            <h:outputLabel for="status" value="Status:" rendered="#{!policiesBean.selectedItem.catalog}"/>
+            <p:selectOneMenu id="status" value="#{policiesBean.selectedItem.status}"
+                             converter="policyStatusConverter"
+                             styleClass="dialog-select"
+                             rendered="#{!policiesBean.selectedItem.catalog}">
+                <f:selectItems value="#{policiesBean.statuses}" var="status" itemLabel="#{status.toString()}"
+                               itemValue="#{status}"/>
+            </p:selectOneMenu>
+            <p:outputLabel for="description" value="Description:" rendered="#{!policiesBean.selectedItem.catalog}"/>
+            <p:inputTextarea id="description"
+                             rendered="#{!policiesBean.selectedItem.catalog}"
+                             value="#{policiesBean.selectedItem.description}"
+                             styleClass="dialog-input"
+                             rows="3"/>
+            <h:outputLabel for="parentCatalog" value="Parent catalog:"/>
+            <p:selectOneMenu id="parentCatalog" styleClass="dialog-select"
+                             value="#{policiesBean.selectedItem.parentCatalog}"
+                             valueChangeListener="#{policiesBean.dialogCatalogChanged}"
+                             filter="true" filterMatchMode="startsWith" converter="catalogConverter">
+                <f:selectItem itemLabel="/" itemValue="#{policiesBean.rootCatalog}"/>
+                <f:selectItems var="catalog" value="#{policiesBean.possibleParentCatalogs}"
+                               itemLabel="#{catalog.catalogName}" itemValue="#{catalog}"/>
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:commandButton value="Save"
+                         update="messages,:centerForm:catalogsPath,:centerForm:policiesTable"
+                         actionListener="#{policiesBean.saveItem}"
+                         validateClient="true"
+                         icon="fa fa-save"
+                         oncomplete="handleRequest(xhr, status, args, 'saveItemDialog')" styleClass="btn"/>
+    </p:panel>
+</p:dialog>
+<script type="text/javascript">
+    function handleRequest(xhr, status, args, dialogName) {
+        if (!args.correct) {
+            PF(dialogName).jq.effect("shake", {times: 5}, 100);
+        }
+        else {
+            PF(dialogName).hide();
+        }
+    }
+</script>
+</html>
