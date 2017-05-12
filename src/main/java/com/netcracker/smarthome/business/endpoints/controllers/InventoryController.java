@@ -165,9 +165,6 @@ public class InventoryController {
     @RequestMapping(value = "/updateInventory",
             method = RequestMethod.GET)
     public Boolean updateInventory(@RequestParam(value = "houseId",required = true) long houseId){
-        if(taskManager.getUpdateMap().get(houseId)!=null) {
-            LOG.info(taskManager.getUpdateMap().get(houseId).toString());
-        }
         return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateInventory");
     }
 }

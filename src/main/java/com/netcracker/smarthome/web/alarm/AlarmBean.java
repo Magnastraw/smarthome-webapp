@@ -9,13 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name="alarmBean")
-@SessionScoped
+@ViewScoped
 public class AlarmBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AlarmListBean.class);
     private Alarm selectedAlarm;

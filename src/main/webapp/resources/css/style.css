@@ -145,12 +145,18 @@
 .filter {
     width: 90% !important;
     max-width: 150px;
+    vertical-align: bottom;
+    display: table-cell;
+    text-align: center;
 }
 
 .filter-select {
     min-width: 50px !important;
     width: 60% !important;
     /*margin-top: 3px; !*<===*!*/
+    vertical-align: bottom;
+    display: table-cell;
+    text-align: center;
 }
 
 .filter-date input {
@@ -305,6 +311,7 @@ td.severity-critical {
     width: 120px;
     height: 50px;
     margin-right: 5px !important;
+    vertical-align: middle;
 }
 
 .to-dashboard .ui-icon {
@@ -525,7 +532,19 @@ div.severity-critical {
 }
 
 .dialog-device-info {
-    vertical-align: middle !important;
+    vertical-align: middle;
+    min-height: 400px !important;
+}
+
+.dialog-device-info .ui-dialog-content .ui-widget-header {
+    background: white !important;
+    min-height: 140px;
+}
+
+.device-image {
+    width: 200px;
+    min-height: 140px;
+    text-align: center !important;
 }
 
 .ui-menuitem-text {
@@ -536,3 +555,23 @@ div.severity-critical {
     width: 18px;
 }
 /* */
+
+
+.wrap {
+    display: table;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ui-column-custom-filter {
+    display: table;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-header {
+    display: table-cell;
+    text-align: center;
+    vertical-align: top;
+}

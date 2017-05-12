@@ -9,18 +9,20 @@ import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.data.FilterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.*;
 
 @ManagedBean(name="alarmListBean")
-@SessionScoped
+@ViewScoped
 public class AlarmListBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AlarmListBean.class);
     private List<Alarm> currentAlarms;
@@ -41,8 +43,8 @@ public class AlarmListBean implements Serializable {
     }
 
     public void changeCurrentHome() {
-        alarmPath = new ArrayList<Alarm>();
         currentObject = null;
+        alarmPath = new ArrayList<Alarm>();
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -60,12 +62,6 @@ public class AlarmListBean implements Serializable {
         setSubAlarms();
     }
 
-    public void showObjectAlarms(SmartObject object) {
-        currentObject = object;
-        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObject.getSmartObjectId()));
-        setSubAlarms();
-    }
-
     private void setSubAlarms() {
         for (int i=0; i<currentAlarms.size(); i++) {
             Alarm alarm = currentAlarms.get(i);
@@ -77,7 +73,7 @@ public class AlarmListBean implements Serializable {
         if(alarm != null) {
             clearAlarmPath();
             alarmPath = alarmService.getPathToAlarm(alarm);
-            currentAlarms = alarmService.getChildrenAlarms(alarm);
+            currentAlarms = alarm.getSubAlarms();
             setSubAlarms();
         }
         else
@@ -85,7 +81,7 @@ public class AlarmListBean implements Serializable {
     }
 
     public void onSelect(Alarm alarm) {
-        if (alarmService.getChildrenAlarms(alarm) != null) {
+        if (alarm.getSubAlarms() != null) {
             expand(alarm);
         }
     }
@@ -135,6 +131,27 @@ public class AlarmListBean implements Serializable {
             dataTable.reset();
         }
     }*/
+
+    public void showSelectedObjectAlarms(SmartObject object) {
+        setCurrentObject(object);
+        getRootAlarms();
+    }
+
+    public void onFilter(FilterEvent event) {
+        if (((DataTable) event.getComponent()).getFilters().size() == 0) {
+            ((DataTable) event.getComponent()).reset();
+            ((DataTable) event.getComponent()).resetValue();
+            ((DataTable) event.getComponent()).clearLazyCache();
+            event.getComponent().clearInitialState();
+            /*if (alarmPath.size() != 0)
+                expand(alarmPath.get(alarmPath.size()-1));
+            else
+                getRootAlarms();*/
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(event.getComponent().getClientId());
+
+            //RequestContext.getCurrentInstance().update(":centerForm:alarmsDT");
+        }
+    }
 
     public void clearAlarmPath() {
         alarmPath.clear();

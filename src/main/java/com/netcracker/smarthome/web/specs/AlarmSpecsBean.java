@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.*;
 
 @ManagedBean(name="alarmSpecsBean")
-@SessionScoped
+@ViewScoped
 public class AlarmSpecsBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AlarmSpecsBean.class);
     private List<TableEntity> tableEntities;

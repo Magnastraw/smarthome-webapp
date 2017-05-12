@@ -19,4 +19,10 @@ public class ObjectParamRepository extends EntityRepository<ObjectParam> {
         List<ObjectParam> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
+
+    public List<ObjectParam> getObjectParams(long smartObjectId) {
+        Query query = getManager().createQuery("select op from ObjectParam op where op.object.smartObjectId = :smartObjectId");
+        query.setParameter("smartObjectId", smartObjectId);
+        return query.getResultList();
+    }
 }

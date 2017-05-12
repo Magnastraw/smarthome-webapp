@@ -75,7 +75,8 @@ public class AlarmRepository extends EntityRepository<Alarm> {
         Query query = getManager().createQuery("select a from Alarm a where " +
                 "(a.object.smartObjectId = :objectId or " +
                 "a.subobject.smartObjectId = :objectId) and " +
-                "(a.severity > 1) and (a.parentAlarm.alarmId is null)");
+                "(a.parentAlarm.alarmId is null) " /*+
+                "and (a.severity > 1)"*/);
         query.setParameter("objectId", objectId);
         return query.getResultList();
     }

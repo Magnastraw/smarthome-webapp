@@ -1,4 +1,3 @@
-var intervalId = [];
 function createNewChart(configurationJson, requestDataOptions, refreshInterval, inputDiv, id) {
     var chart,
         options = $.parseJSON(configurationJson),

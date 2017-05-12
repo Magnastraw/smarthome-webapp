@@ -9,8 +9,8 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <p:outputPanel id="alarm">
         <h2>Alarm properties</h2>
-        <p:commandButton action="#{navigationBean.setPageName('alarms/alarmlist')}" update=":centerForm"
-                         value="To Alarms page" icon="fa fa-level-up" styleClass="btn fieldset"/>
+        <p:commandButton action="#{navigationBean.toPrevPage()}" update=":centerForm"
+                         value="Back" icon="fa fa-level-up" styleClass="btn fieldset"/>
         <p:fieldset legend="Parameters" toggleable="true" styleClass="fieldset">
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <h:outputLabel value="Name:" styleClass="ui-accordion-header"/>

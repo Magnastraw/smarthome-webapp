@@ -9,13 +9,13 @@ import org.primefaces.context.RequestContext;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class HomeSettingsBean implements Serializable {
     @ManagedProperty(value = "#{homeService}")
     private HomeService homeService;
