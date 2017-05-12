@@ -284,7 +284,7 @@ h3 {
 
 .policies-table .status-column {
     text-align: center;
-    width: 90px;
+    width: 120px;
 }
 
 .page-header {
@@ -307,6 +307,10 @@ h3 {
 
 .fa-item {
     margin-right: 5px;
+}
+
+.fa-item-left {
+    margin-left: 5px;
 }
 
 .policy-btns {
@@ -336,8 +340,52 @@ h3 {
     float: right;
 }
 
+.policy-created {
+    color: orange;
+}
+
+.policy-active {
+   color: green;
+}
+
+.policy-inactive {
+    color: gray;
+}
+
+.policy-error {
+    color: red;
+}
+
+.assign-tree {
+    width: 100% !important;
+    border: none;
+}
+
+.assign-panel {
+    min-height: 175px;
+}
+
+.assign-panel.obj {
+    width: 35%;
+    float: left;
+}
+
+.assign-panel.policy {
+    width: 64%;
+    float: right;
+    margin-right: 3px;
+}
+
+.assign-container {
+    width: 100%;
+    display: inline-block;
+}
+
+.assign-header button {
+    margin-bottom: 15px;
+}
 .severity-normal {
-    background-color: green;
+    color: green;
 }
 
 .severity-info {

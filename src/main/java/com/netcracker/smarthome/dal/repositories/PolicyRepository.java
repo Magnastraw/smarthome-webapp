@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class PolicyRepository extends EntityRepository<Policy> {
@@ -89,5 +90,26 @@ public class PolicyRepository extends EntityRepository<Policy> {
         Query query = getManager().createQuery("select p from Policy p where p.catalog.catalogId=:catalog");
         query.setParameter("catalog", catalog.getCatalogId());
         return query.getResultList();
+    }
+
+    public Set<Policy> getPoliciesByObject(SmartObject object) {
+        Query query = getManager().createQuery("select obj from SmartObject obj left join fetch obj.assignedPolicies p where obj=:object");
+        query.setParameter("object", object);
+        List<SmartObject> result = query.getResultList();
+        return result.get(0).getAssignedPolicies();
+    }
+
+    public void saveAssignment(Policy policy, SmartObject object) {
+        Query query = getManager().createNativeQuery("INSERT INTO assignments (policy_id, object_id) VALUES (:policy, :object)");
+        query.setParameter("policy", policy.getPolicyId());
+        query.setParameter("object", object.getSmartObjectId());
+        query.executeUpdate();
+    }
+
+    public void deleteAssignment(Policy policy, SmartObject object) {
+        Query query = getManager().createNativeQuery("DELETE FROM assignments WHERE policy_id=:policy AND object_id=:object");
+        query.setParameter("policy", policy.getPolicyId());
+        query.setParameter("object", object.getSmartObjectId());
+        query.executeUpdate();
     }
 }

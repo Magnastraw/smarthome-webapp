@@ -2,10 +2,7 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
 import com.netcracker.smarthome.business.endpoints.IListener;
-import com.netcracker.smarthome.dal.repositories.ActionRepository;
-import com.netcracker.smarthome.dal.repositories.ConditionRepository;
-import com.netcracker.smarthome.dal.repositories.PolicyRepository;
-import com.netcracker.smarthome.dal.repositories.RuleRepository;
+import com.netcracker.smarthome.dal.repositories.*;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.reflections.Reflections;
@@ -100,55 +97,78 @@ public class PolicyService {
         return policy;
     }
 
+    @Transactional(readOnly = true)
+    public Set<Policy> getPoliciesByObject(SmartObject object) {
+        return policyRepository.getPoliciesByObject(object);
+    }
+
+    @Transactional
+    public void saveAssignment(SmartObject object, Policy policy) {
+        policyRepository.saveAssignment(policy, object);
+        Policy activePolicy = getActiveInitializedPolicy(policy.getPolicyId());
+        if (activePolicy != null)
+            onSaveOrUpdate(activePolicy);
+    }
+
+    @Transactional
+    public void deleteAssignment(SmartObject object, Policy policy) {
+        policyRepository.deleteAssignment(policy, object);
+        Policy activePolicy = getActiveInitializedPolicy(policy.getPolicyId());
+        if (activePolicy != null)
+            onSaveOrUpdate(activePolicy);
+        else
+            onSaveOrUpdate(policy.getPolicyId());
+    }
+
     @Transactional
     public Policy savePolicy(Policy policy) {
-        Policy policyToSave = policyRepository.update(policy);
-        onSaveOrUpdate(policyToSave.getPolicyId());
-        return policyToSave;
+        Policy updatedPolicy = policyRepository.update(policy);
+        Policy activePolicy = getActiveInitializedPolicy(updatedPolicy.getPolicyId());
+        if (activePolicy == null)
+            onSaveOrUpdate(policy.getPolicyId());
+        else
+            onSaveOrUpdate(activePolicy);
+        return updatedPolicy;
     }
 
     @Transactional
     public void deletePolicy(long policyId) {
+        Policy activePolicy = getActiveInitializedPolicy(policyId);
         policyRepository.delete(policyId);
-        onSaveOrUpdate(policyId);
+        if (activePolicy != null)
+            onSaveOrUpdate(policyId);
     }
 
     @Transactional
     public Rule saveRule(Rule rule) {
         Rule updatedRule = ruleRepository.update(rule);
-        onSaveOrUpdate(updatedRule.getPolicy().getPolicyId());
         return updatedRule;
     }
 
     @Transactional
     public void deleteRule(Rule rule) {
         ruleRepository.delete(rule.getRuleId());
-        onSaveOrUpdate(rule.getPolicy().getPolicyId());
     }
 
     @Transactional
     public Action saveAction(Action action) {
         Action savedAction = actionRepository.update(action);
-        onSaveOrUpdate(savedAction.getRule().getPolicy().getPolicyId());
         return savedAction;
     }
 
     @Transactional
     public void deleteAction(Action action) {
         ruleRepository.delete(action.getActionId());
-        onSaveOrUpdate(action.getRule().getPolicy().getPolicyId());
     }
 
     @Transactional
     public Condition saveCondition(Condition cndition) {
         Condition savedCondition = conditionRepository.update(cndition);
-        onSaveOrUpdate(savedCondition.getRule().getPolicy().getPolicyId());
         return savedCondition;
     }
 
     @Transactional
     public void deleteCondition(Condition condition) {
         ruleRepository.delete(condition.getNodeId());
-        onSaveOrUpdate(condition.getRule().getPolicy().getPolicyId());
     }
 }
