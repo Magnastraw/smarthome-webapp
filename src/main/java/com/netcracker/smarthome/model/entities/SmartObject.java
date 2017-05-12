@@ -149,7 +149,11 @@ public class SmartObject implements Serializable {
         this.objectParams = objectParams;
     }
 
-    @ManyToMany(mappedBy = "assignedObjects")
+    @ManyToMany
+    @JoinTable(name = "assignments", joinColumns = {
+            @JoinColumn(name = "object_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "policy_id",
+                    nullable = false, updatable = false)})
     public Set<Policy> getAssignedPolicies() {
         return assignedPolicies;
     }

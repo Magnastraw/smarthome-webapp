@@ -48,24 +48,31 @@ public class PolicyEngine implements IListener {
 
     @Override
     public void onSaveOrUpdate(Object object) {
-        reinitialize((Long) object);
+        if (object instanceof Policy)
+            reinitialize((Policy) object);
+        else if (object instanceof Long)
+            reinitialize((Long) object);
     }
 
-    private void reinitialize(long policyId) {
-        Policy policy = policyService.getActiveInitializedPolicy(policyId);
-        PolicyNode newNode = null;
-        Set<Long> assignedObjects = null;
-        if (policy != null) {
-            PolicyConverter converter = new PolicyConverter();
-            newNode = converter.convert(policy);
-            assignedObjects = policy.getAssignedObjects().stream().map(SmartObject::getSmartObjectId).collect(Collectors.toSet());
-        }
+    private void reinitialize(long policyToRemove) {
         lock.writeLock().lock();
         try {
-            PolicyNode oldNode = policies.keySet().stream().filter(node -> node.getIdentifier() == policyId).findFirst().orElse(null);
+            PolicyNode oldNode = policies.keySet().stream().filter(node -> node.getIdentifier() == policyToRemove).findFirst().orElse(null);
             policies.remove(oldNode);
-            if (newNode != null)
-                policies.put(newNode, assignedObjects);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void reinitialize(Policy activePolicy) {
+        PolicyConverter converter = new PolicyConverter();
+        PolicyNode newNode = converter.convert(activePolicy);
+        Set<Long> assignedObjects = activePolicy.getAssignedObjects().stream().map(SmartObject::getSmartObjectId).collect(Collectors.toSet());
+        lock.writeLock().lock();
+        try {
+            PolicyNode oldNode = policies.keySet().stream().filter(node -> node.getIdentifier() == activePolicy.getPolicyId()).findFirst().orElse(null);
+            policies.remove(oldNode);
+            policies.put(newNode, assignedObjects);
         } finally {
             lock.writeLock().unlock();
         }

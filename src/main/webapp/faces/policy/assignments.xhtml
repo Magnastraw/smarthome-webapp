@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<div class="assign-header">
+    <h2 class="page-name">Assignments</h2>
+    <p:commandButton value="Policies" icon="fa fa-arrow-left"
+                     action="#{navigationBean.setPageName('policy/policies')}"
+                     update=":centerForm">
+    </p:commandButton>
+</div>
+<div class="assign-container">
+    <p:panel id="objectsPanel"
+             header="Inventory objects"
+             styleClass="assign-panel obj">
+        <p:tree id="objectsTree"
+                value="#{assignmentsBean.objectsRoot}" var="obj"
+                selectionMode="single"
+                selection="#{assignmentsBean.selectedObject}"
+                styleClass="assign-tree">
+            <p:ajax event="select" update="centerForm:policiesTree" listener="#{assignmentsBean.onObjectSelect}"/>
+            <p:treeNode type="sensor" icon="ui-icon-sensor">
+                <h:outputText value="#{obj.name}"/>
+            </p:treeNode>
+            <p:treeNode type="controller" icon="ui-icon-controller">
+                <h:outputText value="#{obj.name}"/>
+            </p:treeNode>
+        </p:tree>
+    </p:panel>
+    <p:panel id="policiesPanel"
+             header="Assigned policies"
+             styleClass="assign-panel policy">
+        <p:tree id="policiesTree"
+                value="#{assignmentsBean.policiesRoot}" var="item"
+                selectionMode="checkbox"
+                selection="#{assignmentsBean.selectedPolicies}"
+                styleClass="assign-tree">
+            <p:ajax event="select" listener="#{assignmentsBean.onPolicySelect}"/>
+            <p:ajax event="unselect" listener="#{assignmentsBean.onPolicyUnselect}"/>
+            <p:treeNode type="catalog" collapsedIcon="fa fa-folder fa-item-left"
+                        expandedIcon="fa fa-folder-open fa-item-left">
+                <h:outputText value="#{item.catalogName}"/>
+            </p:treeNode>
+            <p:treeNode type="policy"
+                        icon="fa fa-circle-o fa-item-left policy-#{item.status.toString().toLowerCase()}">
+                <h:outputText value="#{item.name}"/>
+            </p:treeNode>
+        </p:tree>
+    </p:panel>
+</div>
+</html>

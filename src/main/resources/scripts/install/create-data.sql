@@ -119,7 +119,7 @@ VALUES
   ('h2_alarmSubcat3_1', 45, 3);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
-VALUES ('test', 3, 1);
+VALUES ('Test policies', 3, 1);
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES

@@ -50,19 +50,6 @@ public class PoliciesBean {
         return catalogPath.isEmpty() ? rootCatalog : catalogPath.get(catalogPath.size() - 1);
     }
 
-    public String getStatusColor(PolicyStatus status) {
-        switch (status) {
-            case CREATED:
-                return "lightyellow";
-            case ACTIVE:
-                return "lightgreen";
-            case INACTIVE:
-                return "lightgray";
-            default:
-                return "lightcoral";
-        }
-    }
-
     private void resetCatalogItems(Catalog currentCatalog) {
         tableItems = new LinkedList<PoliciesTableItem>();
         List<Catalog> subcatalogs = catalogService.getSubcatalogs(currentCatalog);
