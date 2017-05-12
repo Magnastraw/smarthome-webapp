@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.*;
 
 @ManagedBean(name="metricSpecsBean")
-@SessionScoped
+@ViewScoped
 public class MetricSpecsBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(MetricSpecsBean.class);
     private List<TableEntity> tableEntities;

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @ManagedBean(name="unitsBean")
-@SessionScoped
+@ViewScoped
 public class UnitsBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(UnitsBean.class);
     private List<Unit> units;

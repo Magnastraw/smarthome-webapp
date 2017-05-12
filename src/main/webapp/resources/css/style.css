@@ -146,12 +146,18 @@
 .filter {
     width: 90% !important;
     max-width: 150px;
+    vertical-align: bottom;
+    display: table-cell;
+    text-align: center;
 }
 
 .filter-select {
     min-width: 50px !important;
     width: 60% !important;
     /*margin-top: 3px; !*<===*!*/
+    vertical-align: bottom;
+    display: table-cell;
+    text-align: center;
 }
 
 .filter-date input {
@@ -384,33 +390,40 @@ h3 {
 .assign-header button {
     margin-bottom: 15px;
 }
-.severity-normal {
-    color: green;
+
+td.severity-normal {
+    background-color: green !important;
 }
 
-.severity-info {
-    background-color: darkgray;
+td.severity-info {
+    background-color: gray !important;
 }
 
-.severity-warn {
-    background-color: yellow;
+td.severity-warn {
+    background-color: yellow !important;
 }
 
-.severity-major {
-    background-color: darkorange;
+td.severity-major {
+    background-color: darkorange !important;
 }
 
-.severity-critical {
-    background-color: firebrick;
+td.severity-critical {
+    background-color: #f71818 !important;
 }
 
 .to-dashboard {
     width: 120px;
     height: 50px;
     margin-right: 5px !important;
+    vertical-align: middle;
+}
+
+.to-dashboard .ui-icon {
+    width: 18px !important;
 }
 
 .button-panel {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -516,30 +529,39 @@ h3 {
 
 
 /* inventory */
-.ui-organigram {
-}
-
 .ui-organigram .ui-organigram-node {
     border-radius: 10px;
     margin-left: 20px !important;
     margin-right: 20px !important;
     width: 130px !important;
-    min-height: 74px;
+    /*min-height: 74px;*/
+    /*background: #AACD4B !important;*/
+    border: 1px solid #1F89CE;
+    color: black !important;
+}
+
+.ui-organigram .ui-organigram-node.rootcontroller {
+    background: #eaf6ff !important;
+}
+
+.ui-organigram .ui-organigram-node.controller {
+    background: #d2e8f7 !important;
+}
+
+.ui-organigram .ui-organigram-node.sensor {
+    background: #9dd3f9 !important;
 }
 
 .ui-organigram .ui-organigram-node-content {
     text-align: center;
     font-size: 16px;
 }
-
+/*
 .ui-organigram .ui-organigram-node.rootcontroller {
     background: #dda0dd !important;
     background: -moz-linear-gradient(top, #dda0dd 0%, #8a2be2 100%) !important;
     background: -webkit-linear-gradient(top, #dda0dd 0%,#8a2be2 100%) !important;
     background: linear-gradient(to bottom, #dda0dd 0%,#8a2be2 100%) !important;
-}
-.ui-organigram-icon.ui-icon.rootcontroller {
-    background-image: url("https://cdn4.iconfinder.com/data/icons/6x16-free-application-icons/16/Home.png");
 }
 
 .ui-organigram .ui-organigram-node.controller {
@@ -548,19 +570,13 @@ h3 {
     background: -webkit-linear-gradient(top, #93e7ff 0%,#007efc 100%) !important;
     background: linear-gradient(to bottom, #93e7ff 0%,#007efc 100%) !important;
 }
-.ui-organigram-icon.ui-icon.controller {
-    background-image: url("https://cdn2.iconfinder.com/data/icons/aspneticons_v1.0_Nov2006/disconnect2_16x16.gif");
-}
 
 .ui-organigram .ui-organigram-node.sensor {
     background: #88c080 !important;
     background: -moz-linear-gradient(top, #88c080 0%, #69a038 100%) !important;
     background: -webkit-linear-gradient(top, #88c080 0%,#69a038 100%) !important;
     background: linear-gradient(to bottom, #88c080 0%,#69a038 100%) !important;
-}
-.ui-organigram-icon.ui-icon.sensor {
-    background-image: url("https://cdn2.iconfinder.com/data/icons/aspneticons_v1.0_Nov2006/turn-off_16x16.gif");
-}
+}*/
 
 .ui-organigram .ui-organigram-node.leaf {
     margin-left: 2px !important;
@@ -571,14 +587,9 @@ h3 {
     font-weight: bold;
 }
 
-.btn-dialog {
-    text-align: center;
-}
-
 .inventory-dialog-select {
     min-width: 100px !important;
 }
-/* */
 
 .ui-icon-sensor{
     background: transparent url("#{resource['images/Transistor-16.png']}") no-repeat top !important;
@@ -586,4 +597,85 @@ h3 {
 
 .ui-icon-controller{
     background: transparent url("#{resource['images/Electronics-16.png']}") no-repeat top !important;
+}
+
+.ui-icon-rootcontroller{
+    background: transparent url("#{resource['images/house.png']}") no-repeat top !important;
+}
+
+div.severity-normal {
+    background-color: green !important;
+}
+
+div.severity-info {
+    background-color: gray !important;
+}
+
+div.severity-warn {
+    background-color: yellow !important;
+}
+
+div.severity-major {
+    background-color: darkorange !important;
+}
+
+div.severity-critical {
+    background-color: #f71818 !important;
+}
+
+.ui-organigram-icon {
+    height: 20px !important;
+    width: 20px !important;
+    background-position: center !important;
+    border-radius: 7px;
+}
+
+.dialog-waiting {
+    background: transparent;
+    box-shadow: 0 0 !important;
+}
+
+.dialog-device-info {
+    vertical-align: middle;
+    min-height: 400px !important;
+}
+
+.dialog-device-info .ui-dialog-content .ui-widget-header {
+    background: white !important;
+    min-height: 140px;
+}
+
+.device-image {
+    width: 200px;
+    min-height: 140px;
+    text-align: center !important;
+}
+
+.ui-menuitem-text {
+    padding-left: 4px;
+}
+
+.ui-menuitem-icon {
+    width: 18px;
+}
+/* */
+
+
+.wrap {
+    display: table;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.ui-column-custom-filter {
+    display: table;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-header {
+    display: table-cell;
+    text-align: center;
+    vertical-align: top;
 }

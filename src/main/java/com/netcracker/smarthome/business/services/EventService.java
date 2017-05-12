@@ -56,7 +56,7 @@ public class EventService {
         alarmRepository.update(alarm);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EventHistory> getEventHistory(long eventId) {
         return eventHistoryRepository.getEventHistory(eventId);
     }

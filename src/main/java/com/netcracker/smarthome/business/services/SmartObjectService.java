@@ -88,4 +88,8 @@ public class SmartObjectService {
         return objectTypeRepository.getObjectTypes();
     }
 
+    @Transactional(readOnly = true)
+    public List<ObjectParam> getObjectParams(long smartObjectId) {
+        return objectParamRepository.getObjectParams(smartObjectId);
+    }
 }

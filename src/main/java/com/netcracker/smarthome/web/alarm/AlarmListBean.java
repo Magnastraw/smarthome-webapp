@@ -5,26 +5,29 @@ import com.netcracker.smarthome.business.policy.events.AlarmEvent;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.model.entities.Alarm;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.data.FilterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @ManagedBean(name = "alarmListBean")
-@SessionScoped
+@ViewScoped
 public class AlarmListBean implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(AlarmListBean.class);
     private List<Alarm> currentAlarms;
@@ -32,7 +35,7 @@ public class AlarmListBean implements Serializable {
     private List<Alarm> filteredAlarms;
     private List<AlarmSeverity> severities;
     private List<Alarm> selectedAlarms;
-    private Long currentObjectId;
+    private SmartObject currentObject;
 
     @ManagedProperty(value = "#{alarmService}")
     private AlarmService alarmService;
@@ -47,8 +50,8 @@ public class AlarmListBean implements Serializable {
     }
 
     public void changeCurrentHome() {
+        currentObject = null;
         alarmPath = new ArrayList<>();
-        currentObjectId = null;
         getRootAlarms();
         severities = Arrays.asList(AlarmSeverity.values());
     }
@@ -58,17 +61,11 @@ public class AlarmListBean implements Serializable {
     }
 
     public void getRootAlarms() {
-        if (currentObjectId != null)
-            currentAlarms = alarmService.getRootAlarmsByObject(currentObjectId);
+        if (currentObject != null)
+            currentAlarms = alarmService.getRootAlarmsByObject(currentObject.getSmartObjectId());
         else
             currentAlarms = alarmService.getRootAlarms(getHome().getSmartHomeId());
         clearAlarmPath();
-        setSubAlarms();
-    }
-
-    public void showObjectAlarms(Long objectId) {
-        currentObjectId = objectId;
-        setCurrentAlarms(alarmService.getRootAlarmsByObject(currentObjectId));
         setSubAlarms();
     }
 
@@ -146,6 +143,27 @@ public class AlarmListBean implements Serializable {
         }
     }*/
 
+    public void showSelectedObjectAlarms(SmartObject object) {
+        setCurrentObject(object);
+        getRootAlarms();
+    }
+
+    public void onFilter(FilterEvent event) {
+        if (((DataTable) event.getComponent()).getFilters().size() == 0) {
+            ((DataTable) event.getComponent()).reset();
+            ((DataTable) event.getComponent()).resetValue();
+            ((DataTable) event.getComponent()).clearLazyCache();
+            event.getComponent().clearInitialState();
+            /*if (alarmPath.size() != 0)
+                expand(alarmPath.get(alarmPath.size()-1));
+            else
+                getRootAlarms();*/
+            FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(event.getComponent().getClientId());
+
+            //RequestContext.getCurrentInstance().update(":centerForm:alarmsDT");
+        }
+    }
+
     public void clearAlarmPath() {
         alarmPath.clear();
     }
@@ -211,12 +229,12 @@ public class AlarmListBean implements Serializable {
         this.selectedAlarms = selectedAlarms;
     }
 
-    public Long getCurrentObjectId() {
-        return currentObjectId;
+    public SmartObject getCurrentObject() {
+        return currentObject;
     }
 
-    public void setCurrentObjectId(Long currentObjectId) {
-        this.currentObjectId = currentObjectId;
+    public void setCurrentObject(SmartObject currentObject) {
+        this.currentObject = currentObject;
     }
 
     public void setPolicyEngine(PolicyEngine policyEngine) {
