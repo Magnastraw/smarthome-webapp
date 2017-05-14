@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <p:outputPanel id="monitoring">
+        <h2>Profile</h2>
+
+        <h:panelGrid columns="2" cellpadding="5">
+            <h3>Personal data</h3>
+            <p:commandLink title="Edit" styleClass="fa fa-edit param-item"/>
+
+            <h:outputText style="font-weight: bold" value="First name: " styleClass="param-item"/>
+            <h:outputText value="#{profileBean.firstName}"/>
+
+            <h:outputText style="font-weight: bold" value="Phone number: " styleClass="param-item"/>
+            <h:outputText value="#{profileBean.phoneNumber}"/>
+        </h:panelGrid>
+
+
+        <p:separator />
+        <h3>Password settings</h3>
+        <h:panelGrid columns="2" cellpadding="5">
+            <h:outputText style="font-weight: bold" value="Edit password: " styleClass="param-item"/>
+            <p:commandLink oncomplete="PF('editPasswordDialog').show()"
+                           title="Edit password" styleClass="fa fa-edit param-item"/>
+        </h:panelGrid>
+
+        <p:growl widgetVar="growl" life="2000" /> 
+
+        <p:dialog header="Edit password" widgetVar="editPasswordDialog"
+                  resizable="false" position="center">
+            <h:panelGrid columns="2" id="editGrid" cellpadding="5">
+                <h:outputText value="Current password: " />
+                <p:password id="pwdOld" value="#{profileBean.oldPassword}" 
+                            required="true" title="#{component.valid ? '' : 'Passwords cannot be empty'}"/>
+
+                <h:outputLabel for="pwd1" value="New password: " />
+                <p:password id="pwd1" value="#{profileBean.newPassword}"
+                            required="true" match="pwd2"
+                            title="#{component.valid ? '' : 'Passwords cannot be empty'}"
+                            feedback="true" inline="true" />
+
+                <h:outputLabel for="pwd2" value="Retype new password: " />
+                <p:password id="pwd2" value="#{profileBean.newPasswordRetype}"
+                            required="true" title="#{component.valid ? '' : 'Passwords must be equals'}"/>
+            </h:panelGrid>
+            <p:commandButton value="Save" actionListener="#{profileBean.changePassword}"
+                             update="editGrid" 
+                             icon="fa fa-save" styleClass="btn"
+                             oncomplete="handleEditPasswordRequest(xhr, status, args)"/> 
+        </p:dialog>
+
+        <script type="text/javascript">
+            function handleEditPasswordRequest(xhr, status, args) {
+                if (!args.ok) {
+                    PF('editPasswordDialog').jq.effect("shake", {times: 2}, 100);
+                    PF('growl').renderMessage({"summary": "Error",
+                        "detail": "Incorrect password",
+                        "severity": "error"})
+                } else {
+                    PF('growl').renderMessage({"summary": "Success",
+                        "detail": "Password was changed",
+                        "severity": "info"})
+                    PF('editPasswordDialog').hide();
+                }
+            }
+        </script>
+
+    </p:outputPanel>
+</html>

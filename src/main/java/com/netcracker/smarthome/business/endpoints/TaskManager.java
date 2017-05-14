@@ -16,12 +16,12 @@ import java.util.*;
 public class TaskManager implements IListener{
     private static final Logger LOG = LoggerFactory.getLogger(PoliciesController.class);
     private Map<Long, List<HomeTask>> taskMap;
-    private Map<Long, Set<String>> updateMap;
+    private Map<Long, HashSet<Object>> updateMap;
 
     @PostConstruct
     private void init() {
         taskMap = new HashMap<Long, List<HomeTask>>();
-        updateMap = new HashMap<Long, Set<String>>();
+        updateMap = new HashMap<Long, HashSet<Object>>();
     }
 
     public void addUpdateEvent(Long houseId, String updateEvent){
@@ -77,11 +77,11 @@ public class TaskManager implements IListener{
     }
 
 
-    public Map<Long, Set<String>> getUpdateMap() {
+    public Map<Long, HashSet<Object>> getUpdateMap() {
         return updateMap;
     }
 
-    public void setUpdateMap(Map<Long, Set<String>> updateMap) {
+    public void setUpdateMap(Map<Long, HashSet<Object>> updateMap) {
         this.updateMap = updateMap;
     }
 }

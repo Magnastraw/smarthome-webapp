@@ -1,7 +1,7 @@
 package com.netcracker.smarthome.web.auth;
 
 import com.netcracker.smarthome.business.auth.social.SocialServiceClient;
-import com.netcracker.smarthome.business.notification.NotificationService;
+import com.netcracker.smarthome.business.services.NotificationService;
 import com.netcracker.smarthome.dal.repositories.SmartHomeRepository;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.enums.Channel;
