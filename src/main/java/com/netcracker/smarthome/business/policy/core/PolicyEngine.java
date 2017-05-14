@@ -28,30 +28,37 @@ public class PolicyEngine implements IListener {
     @Autowired
     public PolicyEngine(PolicyService policyService) {
         this.policyService = policyService;
-        lock = new ReentrantReadWriteLock();
+        this.lock = new ReentrantReadWriteLock();
     }
 
     @PostConstruct
-    private void initialize() {
+    public void initialize() {
         PolicyConverter converter = new PolicyConverter();
-        policies = new HashMap<>();
         PolicyNode policyNode;
         List<Policy> policyList = policyService.getActivePolicies();
         Set<Long> assignedObjects;
-        for (Policy policy : policyList) {
-            policyNode = converter.convert(policy);
-            assignedObjects = policy.getAssignedObjects().stream().map(SmartObject::getSmartObjectId).collect(Collectors.toSet());
-            policies.put(policyNode, assignedObjects);
+        lock.writeLock().lock();
+        try {
+            policies = new HashMap<>();
+            for (Policy policy : policyList) {
+                policyNode = converter.convert(policy);
+                assignedObjects = policy.getAssignedObjects().stream().map(SmartObject::getSmartObjectId).collect(Collectors.toSet());
+                policies.put(policyNode, assignedObjects);
+            }
+        } finally {
+            lock.writeLock().unlock();
         }
         policyService.addListener(this);
     }
 
     @Override
     public void onSaveOrUpdate(Object object) {
-        if (object instanceof Policy)
-            reinitialize((Policy) object);
-        else if (object instanceof Long)
-            reinitialize((Long) object);
+        Policy policy = (Policy) object;
+        Policy activePolicy = policyService.getActiveInitializedPolicy(policy.getPolicyId());
+        if (activePolicy != null)
+            reinitialize(activePolicy);
+        else
+            reinitialize(policy.getPolicyId());
     }
 
     private void reinitialize(long policyToRemove) {

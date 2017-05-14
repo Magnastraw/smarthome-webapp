@@ -2,7 +2,10 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
 import com.netcracker.smarthome.business.endpoints.IListener;
-import com.netcracker.smarthome.dal.repositories.*;
+import com.netcracker.smarthome.dal.repositories.ActionRepository;
+import com.netcracker.smarthome.dal.repositories.ConditionRepository;
+import com.netcracker.smarthome.dal.repositories.PolicyRepository;
+import com.netcracker.smarthome.dal.repositories.RuleRepository;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.reflections.Reflections;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PolicyService {
@@ -61,23 +65,25 @@ public class PolicyService {
 
     @Transactional(readOnly = true)
     public List<Policy> getActivePoliciesByHome(long homeId) {
-        List<Policy> assignedPolicies = policyRepository.getAssignedActivePoliciesByHome(homeId),
-                inlinePolicies;
-        inlinePolicies = assignedPolicies.isEmpty() ? policyRepository.getInlineActivePoliciesByHome(homeId) : policyRepository.getInlineActivePoliciesByHome(homeId, assignedPolicies);
-        for (Policy policy : inlinePolicies)
+        List<Policy> inlinePolicies = policyRepository.getInlineActivePoliciesByHome(homeId),
+                assignedPolicies;
+        assignedPolicies = inlinePolicies.isEmpty() ? policyRepository.getAssignedActivePoliciesByHome(homeId) : policyRepository.getAssignedActivePoliciesByHome(homeId, inlinePolicies);
+        for (Policy policy : inlinePolicies) {
             policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
-        assignedPolicies.addAll(inlinePolicies);
+        }
+        assignedPolicies.addAll(inlinePolicies.stream().filter(policy -> !policy.getAssignedObjects().isEmpty()).collect(Collectors.toSet()));
         return assignedPolicies;
     }
 
     @Transactional(readOnly = true)
     public List<Policy> getActivePolicies() {
-        List<Policy> assignedPolicies = policyRepository.getAssignedActivePolicies(),
-                inlinePolicies;
-        inlinePolicies = assignedPolicies.isEmpty() ? policyRepository.getInlineActivePolicies() : policyRepository.getInlineActivePolicies(assignedPolicies);
-        for (Policy policy : inlinePolicies)
+        List<Policy> inlinePolicies = policyRepository.getInlineActivePolicies(),
+                assignedPolicies;
+        assignedPolicies = inlinePolicies.isEmpty() ? policyRepository.getAssignedActivePolicies() : policyRepository.getAssignedActivePolicies(inlinePolicies);
+        for (Policy policy : inlinePolicies) {
             policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
-        assignedPolicies.addAll(inlinePolicies);
+        }
+        assignedPolicies.addAll(inlinePolicies.stream().filter(policy -> !policy.getAssignedObjects().isEmpty()).collect(Collectors.toSet()));
         return assignedPolicies;
     }
 
@@ -98,6 +104,19 @@ public class PolicyService {
     }
 
     @Transactional(readOnly = true)
+    public List<Policy> getActiveInlinePolicies(List<SmartObject> inlineAssignedObjects) {
+        return policyRepository.getInlineActivePolicies(inlineAssignedObjects.stream().map(object -> ((Long) object.getSmartObjectId()).toString()).collect(Collectors.toSet()), false);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Policy> getActivePoliciesByObject(SmartObject object) {
+        List<Policy> inlinePolicies = policyRepository.getActivePoliciesByInlineObject(object),
+                assignedPolicies = inlinePolicies.isEmpty() ? policyRepository.getActivePoliciesByAssignedObject(object) : policyRepository.getActivePoliciesByAssignedObject(object, inlinePolicies);
+        inlinePolicies.addAll(assignedPolicies);
+        return inlinePolicies;
+    }
+
+    @Transactional(readOnly = true)
     public Set<Policy> getPoliciesByObject(SmartObject object) {
         return policyRepository.getPoliciesByObject(object);
     }
@@ -113,30 +132,21 @@ public class PolicyService {
     @Transactional
     public void deleteAssignment(SmartObject object, Policy policy) {
         policyRepository.deleteAssignment(policy, object);
-        Policy activePolicy = getActiveInitializedPolicy(policy.getPolicyId());
-        if (activePolicy != null)
-            onSaveOrUpdate(activePolicy);
-        else
-            onSaveOrUpdate(policy.getPolicyId());
+        onSaveOrUpdate(policy);
     }
 
     @Transactional
     public Policy savePolicy(Policy policy) {
         Policy updatedPolicy = policyRepository.update(policy);
-        Policy activePolicy = getActiveInitializedPolicy(updatedPolicy.getPolicyId());
-        if (activePolicy == null)
-            onSaveOrUpdate(policy.getPolicyId());
-        else
-            onSaveOrUpdate(activePolicy);
+        onSaveOrUpdate(updatedPolicy);
         return updatedPolicy;
     }
 
     @Transactional
     public void deletePolicy(long policyId) {
-        Policy activePolicy = getActiveInitializedPolicy(policyId);
+        Policy oldPolicy = policyRepository.get(policyId);
         policyRepository.delete(policyId);
-        if (activePolicy != null)
-            onSaveOrUpdate(policyId);
+        onSaveOrUpdate(oldPolicy);
     }
 
     @Transactional
@@ -162,8 +172,8 @@ public class PolicyService {
     }
 
     @Transactional
-    public Condition saveCondition(Condition cndition) {
-        Condition savedCondition = conditionRepository.update(cndition);
+    public Condition saveCondition(Condition condition) {
+        Condition savedCondition = conditionRepository.update(condition);
         return savedCondition;
     }
 
