@@ -4,16 +4,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <p:outputPanel id="monitoring">
+    <p:outputPanel id="profile">
         <h2>Profile</h2>
 
+        <h3>Personal data</h3>
         <h:panelGrid columns="2" cellpadding="5">
-            <h3>Personal data</h3>
-            <p:commandLink title="Edit" styleClass="fa fa-edit param-item"/>
+            <h:outputText style="font-weight: bold" value="Edit personal data: " styleClass="param-item"/>
+            <p:commandLink oncomplete="PF('editPersonalDataDialog').show()"
+                           title="Edit password" styleClass="fa fa-edit param-item"/>
 
             <h:outputText style="font-weight: bold" value="First name: " styleClass="param-item"/>
             <h:outputText value="#{profileBean.firstName}"/>
@@ -33,12 +34,17 @@
 
         <p:growl widgetVar="growl" life="2000" /> 
 
-        <p:dialog header="Edit password" widgetVar="editPasswordDialog"
+        <p:dialog header="Edit password" widgetVar="editPersonalDataDialog"
+                  resizable="false" position="center">
+            <h:outputText value="будет" />
+        </p:dialog>
+
+        <p:dialog id="editDialog" header="Edit password" widgetVar="editPasswordDialog"
                   resizable="false" position="center">
             <h:panelGrid columns="2" id="editGrid" cellpadding="5">
                 <h:outputText value="Current password: " />
-                <p:password id="pwdOld" value="#{profileBean.oldPassword}" 
-                            required="true" title="#{component.valid ? '' : 'Passwords cannot be empty'}"/>
+                <p:password id="pwdOld" value="#{profileBean.oldPassword}"
+                            required="true" title="#{component.valid ? '' : 'Password cannot be empty'}"/>
 
                 <h:outputLabel for="pwd1" value="New password: " />
                 <p:password id="pwd1" value="#{profileBean.newPassword}"

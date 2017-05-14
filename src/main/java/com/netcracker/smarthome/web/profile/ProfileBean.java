@@ -75,7 +75,7 @@ public class ProfileBean {
     }
 
     public void changePassword() {
-        boolean ok = false;
+        boolean ok;
         String pwd = DigestUtils.md5Hex(oldPassword);
         if (pwd.equals(user.getEncrPassword())) {
             ok = true;
