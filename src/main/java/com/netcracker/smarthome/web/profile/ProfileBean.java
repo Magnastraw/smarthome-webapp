@@ -2,8 +2,10 @@ package com.netcracker.smarthome.web.profile;
 
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.User;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -22,6 +24,8 @@ public class ProfileBean {
     private String newPassword;
     private String newPasswordRetype;
     private User user;
+    private HashMap<String, String> params;
+    private List<String> keys;
 
     public UserRepository getUserRepository() {
         return userRepository;
@@ -55,16 +59,19 @@ public class ProfileBean {
         this.newPasswordRetype = newPasswordRetype;
     }
 
-    public String getFirstName() {
-        return user.getFirstName();
+    public HashMap<String, String> getParams() {
+        return params;
     }
 
-    public String getLastName() {
-        return user.getLastName();
+    public List<String> getKeys() {
+        return keys;
     }
 
-    public String getPhoneNumber() {
-        return user.getPhoneNumber();
+    private void createMapParams() {
+        params = new HashMap<>();
+        params.put("First name", user.getFirstName());
+        params.put("Last name", user.getLastName());
+        params.put("Phone number", user.getPhoneNumber());
     }
 
     @PostConstruct
@@ -72,6 +79,8 @@ public class ProfileBean {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String userLogin = facesContext.getExternalContext().getRemoteUser();
         user = userRepository.getByEmail(userLogin);
+        createMapParams();
+        keys = new ArrayList<String>(params.keySet());
     }
 
     public void changePassword() {
