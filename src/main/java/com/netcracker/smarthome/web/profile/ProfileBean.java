@@ -25,6 +25,7 @@ public class ProfileBean {
     private String newPasswordRetype;
     private User user;
     private HashMap<String, String> params;
+    private HashMap<String, String> editParams;
     private List<String> keys;
 
     public UserRepository getUserRepository() {
@@ -63,6 +64,10 @@ public class ProfileBean {
         return params;
     }
 
+    public HashMap<String, String> getEditedParams() {
+        return editParams;
+    }
+
     public List<String> getKeys() {
         return keys;
     }
@@ -74,13 +79,29 @@ public class ProfileBean {
         params.put("Phone number", user.getPhoneNumber());
     }
 
+    private void createMapEditParams() {
+        editParams = new HashMap<>();
+        editParams.put("First name", "");
+        editParams.put("Last name", "");
+        editParams.put("Phone number", "");
+    }
+
     @PostConstruct
     public void init() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String userLogin = facesContext.getExternalContext().getRemoteUser();
         user = userRepository.getByEmail(userLogin);
         createMapParams();
+        createMapEditParams();
         keys = new ArrayList<String>(params.keySet());
+    }
+
+    public void editPersonalData() {
+        boolean tmp;
+        int k = 0;
+        tmp = k == 0;
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("tmp", tmp);
     }
 
     public void changePassword() {
