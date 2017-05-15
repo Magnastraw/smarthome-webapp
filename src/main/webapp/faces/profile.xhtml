@@ -10,12 +10,13 @@
     <p:outputPanel id="profile">
         <h2>Profile</h2>
 
+        <p:growl widgetVar="growl" life="3000" /> 
+
         <h3>Personal data</h3>
         <h:panelGrid columns="2" cellpadding="5">
             <h:outputText style="font-weight: bold" value="Edit personal data: " styleClass="param-item"/>
             <p:commandLink oncomplete="PF('editPersonalDataDialog').show()"
                            title="Edit password" styleClass="fa fa-edit param-item"/>
-
             <c:forEach items="#{profileBean.keys}" var="key">
                 <h:outputText styleClass="profile-param-item"
                               rendered="#{!profileBean.params[key].equals('')}"
@@ -24,6 +25,35 @@
                               rendered="#{!profileBean.params[key].equals('')}"/>
             </c:forEach>
         </h:panelGrid>
+        <p:dialog header="Edit personal data" widgetVar="editPersonalDataDialog"
+                  resizable="false" position="center">
+            <h:panelGrid id="editPersonalDataGrid" columns="2" cellpadding="5"> 
+                <c:forEach items="#{profileBean.keys}" var="key"> 
+                    <h:outputText styleClass="profile-param-item" 
+                                  value="#{key}:" /> 
+                    <p:inputText placeholder="#{profileBean.params[key]}" 
+                                 value="#{profileBean.editedParams[key]}"/> 
+                </c:forEach> 
+            </h:panelGrid>
+            <p:commandButton value="Save" actionListener="#{profileBean.editPersonalData}"
+                             icon="fa fa-save" styleClass="btn"
+                             oncomplete="handleEditPersonalDataRequest(xhr, status, args)"/>
+        </p:dialog>
+        <script type="text/javascript">
+            function handleEditPersonalDataRequest(xhr, status, args) {
+                if (!args.tmp) {
+                    PF('editPersonalDataDialog').jq.effect("shake", {times: 2}, 100);
+                    PF('growl').renderMessage({"summary": "Warning",
+                        "detail": "Smth was wrong. Please, try again",
+                        "severity": "warn"})
+                } else {
+                    PF('growl').renderMessage({"summary": "Success",
+                        "detail": "Personal data was changed",
+                        "severity": "info"})
+                    PF('editPersonalDataDialog').hide();
+                }
+            }
+        </script>
 
 
         <p:separator />
@@ -34,22 +64,9 @@
                            title="Edit password" styleClass="fa fa-edit param-item"/>
         </h:panelGrid>
 
-        <p:growl widgetVar="growl" life="2000" /> 
-
-        <p:dialog header="Edit password" widgetVar="editPersonalDataDialog"
+        <p:dialog header="Edit password" widgetVar="editPasswordDialog"
                   resizable="false" position="center">
-            <h:panelGrid columns="2" cellpadding="5">
-                <c:forEach items="#{profileBean.keys}" var="key">
-                    <h:outputText styleClass="profile-param-item"
-                                  value="#{key}:" />
-                    <p:inputText placeholder="#{profileBean.params[key]}"/>
-                </c:forEach>
-            </h:panelGrid>
-        </p:dialog>
-
-        <p:dialog id="editDialog" header="Edit password" widgetVar="editPasswordDialog"
-                  resizable="false" position="center">
-            <h:panelGrid columns="2" id="editGrid" cellpadding="5">
+            <h:panelGrid columns="2" id="editPasswordGrid" cellpadding="5">
                 <h:outputText id="tmp" value="Current password: " />
                 <p:password id="pwdOld" value="#{profileBean.oldPassword}" 
                             required="true" title="#{component.valid ? '' : 'Password cannot be empty'}"/>
@@ -65,11 +82,10 @@
                             required="true" title="#{component.valid ? '' : 'Passwords must be equals'}"/>
             </h:panelGrid>
             <p:commandButton value="Save" actionListener="#{profileBean.changePassword}"
-                             update="editGrid" 
+                             update="editPasswordGrid" 
                              icon="fa fa-save" styleClass="btn"
                              oncomplete="handleEditPasswordRequest(xhr, status, args)"/> 
         </p:dialog>
-
         <script type="text/javascript">
             function handleEditPasswordRequest(xhr, status, args) {
                 if (!args.ok) {
@@ -85,6 +101,5 @@
                 }
             }
         </script>
-
     </p:outputPanel>
 </html>
