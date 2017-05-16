@@ -14,8 +14,15 @@
         <p:submenu label="Help" icon="fa fa-question">
             <p:menuitem value="Contents" url="#"/>
         </p:submenu>
+        <f:facet name="options">
+            <p:inputText style="margin-right:10px" placeholder="Search"/>
+        </f:facet>
         <p:submenu label="Profile" style="float: right" icon="fa fa-user">
-            <p:menuitem value="Settings" url="#" icon="fa fa-gear"/>
+            <p:menuitem value="Settings"
+                        action="#{navigationBean.setPageName('profile')}"
+                        update=":centerForm"
+                        ajax="true"
+                        icon="fa fa-gear"/>
             <p:menuitem value="Logout" url="/logout" icon="fa fa-sign-out"/>
         </p:submenu>
     </p:menubar>

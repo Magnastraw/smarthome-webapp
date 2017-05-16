@@ -281,6 +281,10 @@ h3 {
     margin-right: 7px;
 }
 
+.profile-param-item {
+    margin-left: 14px;
+}
+
 .reg table td {
     vertical-align: top;
 }

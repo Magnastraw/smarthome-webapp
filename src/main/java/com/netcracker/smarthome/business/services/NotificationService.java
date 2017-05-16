@@ -1,6 +1,8 @@
 package com.netcracker.smarthome.business.notification;
 
 import com.netcracker.smarthome.business.endpoints.TaskManager;
+import com.netcracker.smarthome.business.notification.Email;
+import com.netcracker.smarthome.business.notification.NotificationSender;
 import com.netcracker.smarthome.dal.repositories.NotificationRepository;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import com.netcracker.smarthome.model.entities.*;

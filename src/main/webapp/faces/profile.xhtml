@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:form id="mainForm" prependId="false">
+    <h2>Profile</h2>
+    <p:growl widgetVar="growl" life="3000"/>
+
+    <h3>Personal data</h3>
+    <h:panelGrid columns="2" cellpadding="5" id="personalDataGrid">
+        <c:forEach items="#{profileBean.keys}" var="key">
+            <h:outputLabel styleClass="profile-param-item"
+                           value="#{key}:"/>
+            <p:inplace editor="true" style="#{profileBean.params[key] == 'Type here' ? 'color:Grey;' : 'color:Black;'}">
+                <p:ajax event="save" listener="#{profileBean.editPersonalData}"/>
+                <p:inputText value="#{profileBean.params[key]}"
+                             label="text"/>
+            </p:inplace>
+        </c:forEach>
+        <h:outputText styleClass="profile-param-item"
+                      value="Prefer channel:"/>
+        <p:selectOneRadio value="#{profileBean.preferChannel}" layout="grid" columns="1">
+            <c:forEach items="#{profileBean.channels}" var="channel">
+                <f:selectItem itemLabel="#{channel}" itemValue="#{channel}"/>
+            </c:forEach>
+            <f:ajax listener="#{profileBean.changePreferChannel}"/>
+        </p:selectOneRadio>
+    </h:panelGrid>
+    <p:separator/>
+    <h3>Password settings</h3>
+    <h:panelGrid columns="2" cellpadding="5">
+        <h:outputText value="Edit password: " styleClass="profile-param-item"/>
+        <p:commandLink oncomplete="PF('editPasswordDialog').show()"
+                       title="Edit password" styleClass="fa fa-edit param-item"/>
+    </h:panelGrid>
+
+    <p:dialog header="Edit password" widgetVar="editPasswordDialog"
+              resizable="false" position="center">
+        <h:panelGrid columns="2" id="editPasswordGrid" cellpadding="5">
+            <h:outputText id="tmp" value="Current password: "/>
+            <p:password id="pwdOld" value="#{profileBean.oldPassword}"
+                        required="true" title="#{component.valid ? '' : 'Password cannot be empty'}"/>
+            <h:outputLabel for="pwd1" value="New password: "/>
+            <p:password id="pwd1" value="#{profileBean.newPassword}"
+                        required="true" match="pwd2"
+                        title="#{component.valid ? '' : 'Passwords cannot be empty'}"
+                        feedback="true" inline="true"/>
+            <h:outputLabel for="pwd2" value="Retype new password: "/>
+            <p:password id="pwd2" value="#{profileBean.newPasswordRetype}"
+                        required="true" title="#{component.valid ? '' : 'Passwords must be equals'}"/>
+        </h:panelGrid>
+        <p:commandButton id="savePassword" value="Save" actionListener="#{profileBean.changePassword}"
+                         icon="fa fa-save"
+                         oncomplete="handleEditPasswordRequest(xhr, status, args)"/>
+    </p:dialog>
+    <script type="text/javascript">
+        function handleEditPasswordRequest(xhr, status, args) {
+            if (!args.ok_pwd) {
+                PF('editPasswordDialog').jq.effect("shake", {times: 2}, 100);
+                PF('growl').renderMessage({
+                    "summary": "Error",
+                    "detail": "Incorrect password",
+                    "severity": "error"
+                })
+            } else {
+                PF('growl').renderMessage({
+                    "summary": "Success",
+                    "detail": "Password was changed",
+                    "severity": "info"
+                })
+                PF('editPasswordDialog').hide();
+            }
+        }
+    </script>
+</h:form>
+</html>
