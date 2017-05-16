@@ -26,6 +26,7 @@ import java.util.Map;
 @Scope(value = "request")
 @Component
 public class LoginBean implements Serializable {
+
     private static final Logger logger = LoggerFactory.getLogger(LoginBean.class);
 
     @Autowired
@@ -57,9 +58,6 @@ public class LoginBean implements Serializable {
         try {
             FacesContext.getCurrentInstance().getExternalContext().dispatch("/login");
             FacesContext.getCurrentInstance().responseComplete();
-            //пример отправки оповещения
-            //SmartHome home = smartHomeRepository.getHomeByEmail("noullex@gmail.com");
-           // notificationService.sendNotification("Signed in,"+ContextUtils.getCurrentUser().getLastName()+" "+ ContextUtils.getCurrentUser().getFirstName(), smartHomeRepository.getHomeByEmail(ContextUtils.getCurrentUser().getEmail()), Channel.Email,null);
         } catch (IOException e) {
             logger.error("Error during dispatching login request", e);
         }

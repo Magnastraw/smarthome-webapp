@@ -6,6 +6,7 @@ import com.netcracker.smarthome.business.services.UserService;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.User;
 import com.netcracker.smarthome.model.enums.AuthService;
+import com.netcracker.smarthome.model.enums.Channel;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class RegistryService {
         if (userService.userExists(user.getEmail()))
             throw new UserExistsException(String.format("User with email '%s' already exists!", user.getEmail()));
         user.setEncrPassword(DigestUtils.md5Hex(user.getEncrPassword()));
+        user.setPreferChannel(Channel.Email);
         user = userService.saveUser(user);
         homeService.createHome(new SmartHome("Default home", " ", user));
     }
@@ -39,6 +41,7 @@ public class RegistryService {
             userService.createSocialProfile((user = userService.getUserByEmail(user.getEmail())), socialId, service);
         } else {
             user.setEncrPassword(DigestUtils.md5Hex(user.getEncrPassword()));
+            user.setPreferChannel(Channel.Email);
             user = userService.createUserWithSocialProfile(user, socialId, service);
             homeService.createHome(new SmartHome("Default home", " ", user));
         }

@@ -1,5 +1,6 @@
 package com.netcracker.smarthome.model.entities;
 
+import com.netcracker.smarthome.model.enums.Channel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "users", schema = "public", catalog = "smarthome_db")
 public class User implements Serializable {
+
     private long userId;
     private String email;
     private String encrPassword;
@@ -24,17 +26,19 @@ public class User implements Serializable {
     private List<Permission> permissions;
     private List<SmartHome> smartHomes;
     private List<SocialProfile> socialProfiles;
+    private Channel preferChannel;
 
     public User() {
     }
 
-    public User(String email, String encrPassword, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth) {
+    public User(String email, String encrPassword, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth, Channel preferChannel) {
         this.email = email == null ? email : email.toLowerCase();
         this.encrPassword = encrPassword;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.isTwoFactorAuth = isTwoFactorAuth;
+        this.preferChannel = preferChannel;
     }
 
     @Id
@@ -150,15 +154,29 @@ public class User implements Serializable {
         return socialProfiles;
     }
 
+    @Column(name = "prefer_channel", nullable = true)
+    @Enumerated(EnumType.ORDINAL)
+    public Channel getPreferChannel() {
+        return preferChannel;
+    }
+
+    public void setPreferChannel(Channel preferChannel) {
+        this.preferChannel = preferChannel;
+    }
+    
     public void setSocialProfiles(List<SocialProfile> socialProfile) {
         this.socialProfiles = socialProfile;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (!(o instanceof User)) return false;
+        if (!(o instanceof User)) {
+            return false;
+        }
 
         User user = (User) o;
 
@@ -183,6 +201,7 @@ public class User implements Serializable {
                 .append("phoneNumber", getPhoneNumber())
                 .append("email", getEmail())
                 .append("isTwoFactorAuth", isTwoFactorAuth())
+                .append("preferChannel", getPreferChannel())
                 .toString();
     }
 }

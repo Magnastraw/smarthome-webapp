@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.business.auth.principal;
 
 import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.enums.Channel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,8 +10,8 @@ import java.util.Collection;
 public class SimpleUserDetails extends User implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public SimpleUserDetails(long id, String username, String password, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, firstName, lastName, phoneNumber, isTwoFactorAuth);
+    public SimpleUserDetails(long id, String username, String password, String firstName, String lastName, String phoneNumber, boolean isTwoFactorAuth, Channel preferChannel, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, firstName, lastName, phoneNumber, isTwoFactorAuth, preferChannel);
         setUserId(id);
         this.authorities = authorities;
     }

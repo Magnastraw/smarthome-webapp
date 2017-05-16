@@ -42,6 +42,7 @@ public class SimpleUserDetailsService implements UserDetailsService {
                 user.getLastName(),
                 user.getPhoneNumber(),
                 user.isTwoFactorAuth(),
+                user.getPreferChannel(),
                 buildAuthorities());
     }
 }

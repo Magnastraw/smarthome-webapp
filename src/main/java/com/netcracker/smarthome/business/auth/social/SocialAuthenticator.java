@@ -46,7 +46,7 @@ public class SocialAuthenticator {
     private User loadOrRegisterUser(SocialProfileInfo profileInfo) throws UserExistsException {
         User user = userService.getUserBySocialId(profileInfo.getSocialId(), profileInfo.getService());
         if (user == null)
-            user = registryService.socialRegister(new User(profileInfo.getEmail(), "newpass123", profileInfo.getFirstName(), profileInfo.getLastName(), null, false), profileInfo.getSocialId(), profileInfo.getService());
+            user = registryService.socialRegister(new User(profileInfo.getEmail(), "newpass123", profileInfo.getFirstName(), profileInfo.getLastName(), null, false, null), profileInfo.getSocialId(), profileInfo.getService());
         return user;
     }
 
