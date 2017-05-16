@@ -2,6 +2,7 @@ package com.netcracker.smarthome.web.profile;
 
 import com.netcracker.smarthome.dal.repositories.UserRepository;
 import com.netcracker.smarthome.model.entities.User;
+import com.netcracker.smarthome.model.enums.Channel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +23,14 @@ public class ProfileBean {
     @ManagedProperty("#{userRepository}")
     private UserRepository userRepository;
 
+    private String oldPassword;
+    private String newPassword;
+    private String newPasswordRetype;
     private User user;
     private Map<String, String> params;
-    private List<String> keysData;
-    private Map<String, String> pwdParams;
-    private List<String> keysPwd;
-    private Map<String, String> editedParams;
     private List<String> keys;
-    private int typeDlg;
+    private String preferChannel;
+    private List<String> channels;
 
     public UserRepository getUserRepository() {
         return userRepository;
@@ -39,46 +40,73 @@ public class ProfileBean {
         this.userRepository = userRepository;
     }
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getNewPasswordRetype() {
+        return newPasswordRetype;
+    }
+
+    public void setNewPasswordRetype(String newPasswordRetype) {
+        this.newPasswordRetype = newPasswordRetype;
+    }
+
     public Map<String, String> getParams() {
         return params;
     }
 
-    public Map<String, String> getEditedParams() {
-        return editedParams;
-    }
-
-    public Map<String, String> getPwdParams() {
-        return pwdParams;
-    }
-
-    public List<String> getKeysData() {
-        return keysData;
-    }
-    
-    public List<String> getKeysPwd() {
-        return keysPwd;
-    }
-    
     public List<String> getKeys() {
         return keys;
     }
 
     public String getPreferChannel() {
-        return user.getPreferChannel().toString();
+        return preferChannel;
+    }
+
+    public void setPreferChannel(String preferChannel) {
+        this.preferChannel = preferChannel;
+    }
+
+    public List<String> getChannels() {
+        return channels;
     }
 
     private void createMapParams() {
+        String firstName;
+        String lastName;
+        String phoneNumber;
+        if (user.getFirstName() != null && !user.getFirstName().equals("")) {
+            firstName = user.getFirstName();
+        } else {
+            firstName = "Type here";
+        }
+        if (user.getLastName() != null && !user.getLastName().equals("")) {
+            lastName = user.getLastName();
+        } else {
+            lastName = "Type here";
+        }
+        if (user.getPhoneNumber() != null && !user.getPhoneNumber().equals("")) {
+            phoneNumber = user.getPhoneNumber();
+        } else {
+            phoneNumber = "Type here";
+        }
         params = new HashMap<>();
-        params.put("First name", user.getFirstName());
-        params.put("Last name", user.getLastName());
-        params.put("Phone number", user.getPhoneNumber());
-    }
-
-    private void createMapPwdParams() {
-        pwdParams = new HashMap<>();
-        pwdParams.put("Current password", "");
-        pwdParams.put("New password", "");
-        pwdParams.put("Retype new password", "");
+        params.put("First name", firstName);
+        params.put("Last name", lastName);
+        params.put("Phone number", phoneNumber);
     }
 
     @PostConstruct
@@ -87,61 +115,47 @@ public class ProfileBean {
         String userLogin = facesContext.getExternalContext().getRemoteUser();
         user = userRepository.getByEmail(userLogin);
         createMapParams();
-        keysData = new ArrayList<String>(params.keySet());
-        createMapPwdParams();
-        keysPwd = new ArrayList<String>(pwdParams.keySet());
-        keys = new ArrayList<String>();
-    }
-
-    public void openDialogForData() {
-        typeDlg = 0;
-        editedParams = new HashMap<>(params);
-        keys = keysData;
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('editDlg').show();");
-    }
-    
-    public void openDialogForPwd() {
-        typeDlg = 1;
-        editedParams = new HashMap<>(pwdParams);
-        keys = keysPwd;
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('editDlg').show();");
-    }
-    
-    public void onDlgBtnClick(){
-        switch(typeDlg){
-            case 0:
-                editPersonalData();
-                break;
-            case 1:
-                changePassword();
-                break;
+        keys = new ArrayList<String>(params.keySet());
+        preferChannel = user.getPreferChannel().toString();
+        channels = new ArrayList<>();
+        for (Channel channel : Channel.values()) {
+            channels.add(channel.toString());
         }
     }
 
-    private void editPersonalData() {
-        boolean ok_data;
-        try {
-            user.setFirstName(editedParams.get("First name"));
-            user.setLastName(editedParams.get("Last name"));
-            user.setPhoneNumber(editedParams.get("Phone number"));
-            userRepository.update(user);
-            ok_data = true;
-        } catch (Exception e) {
-            ok_data = false;
+    public void editPersonalData() {
+        if (!params.get("First name").equals("Type here")) {
+            user.setFirstName(params.get("First name"));
+        } else {
+            user.setFirstName("");
+            params.put("First name", "Type here");
         }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.addCallbackParam("ok_data", ok_data);
+        if (!params.get("Last name").equals("Type here")) {
+            user.setLastName(params.get("Last name"));
+        } else {
+            user.setLastName("");
+            params.put("Last name", "Type here");
+        }
+        if (!params.get("Phone number").equals("Type here")) {
+            user.setPhoneNumber(params.get("Phone number"));
+        } else {
+            user.setPhoneNumber("");
+            params.put("Phone number", "Type here");
+        }
+        userRepository.update(user);
     }
 
-    private void changePassword() {
+    public void changePreferChannel() {
+        user.setPreferChannel(Channel.valueOf(preferChannel));
+        userRepository.update(user);
+    }
+
+    public void changePassword(ActionEvent actionEvent) {
         boolean ok_pwd;
-        String pwd = DigestUtils.md5Hex(pwdParams.get("Current password"));
-        if (pwdParams.get("New password").equals(pwdParams.get("Retype new password"))
-                && pwd.equals(user.getEncrPassword())) {
+        String pwd = DigestUtils.md5Hex(oldPassword);
+        if (pwd.equals(user.getEncrPassword())) {
             ok_pwd = true;
-            user.setEncrPassword(DigestUtils.md5Hex(pwdParams.get("Current password")));
+            user.setEncrPassword(DigestUtils.md5Hex(newPassword));
             userRepository.update(user);
         } else {
             ok_pwd = false;
