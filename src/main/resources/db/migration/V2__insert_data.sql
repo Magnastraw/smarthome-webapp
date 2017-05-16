@@ -1,8 +1,8 @@
 --create user,homes
 INSERT INTO public.users
 VALUES
-  (0, 'system@system.com', md5('system'), 'system', null, null, FALSE),
-  (DEFAULT, 'smarthome.user@yandex.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE);
+  (0, 'system@system.com', md5('system'), 'system', null, null, FALSE, DEFAULT ),
+  (DEFAULT, 'smarthome.user@yandex.ru', md5('123456d'), 'firstname', 'lastname', +79876543210, FALSE, 1);
 
 INSERT INTO public.data_types
   VALUES  (DEFAULT, 'String', 0),
