@@ -7,6 +7,7 @@ import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -102,7 +103,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
         query.setParameter("status", PolicyStatus.ACTIVE);
         query.setParameter("object", object);
         List<Policy> policies = query.getResultList();
-        return initializeWithAssignments(policies);
+        return policies.isEmpty() ? policies : initializeWithAssignments(policies);
     }
 
     public List<Policy> getActivePoliciesByAssignedObject(SmartObject object, List<Policy> excluded) {
@@ -111,7 +112,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
         query.setParameter("object", object);
         query.setParameter("excluded", excluded);
         List<Policy> policies = query.getResultList();
-        return initializeWithAssignments(policies);
+        return policies.isEmpty() ? policies : initializeWithAssignments(policies);
     }
 
     public List<Policy> getActivePoliciesByInlineObject(SmartObject object) {
@@ -143,7 +144,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
         Query query = getManager().createQuery("select obj from SmartObject obj left join fetch obj.assignedPolicies p where obj=:object");
         query.setParameter("object", object);
         List<SmartObject> result = query.getResultList();
-        return result.get(0).getAssignedPolicies();
+        return result.isEmpty() ? new HashSet<>() : result.get(0).getAssignedPolicies();
     }
 
     public void saveAssignment(Policy policy, SmartObject object) {

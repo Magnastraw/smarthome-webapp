@@ -71,7 +71,10 @@
         <p:graphicImage name="images/ajax-loader.gif"/>
     </p:dialog>
 
-    <p:remoteCommand name="updateInventory" update="centerForm:inventory" actionListener="#{inventoryBean.init}" onsuccess="PF('waitingDialog').hide()"/>
+    <p:remoteCommand name="updateInventory" update="centerForm:inventory" actionListener="#{inventoryBean.init}" onsuccess="PF('waitingDialog').hide()">
+        <f:actionListener binding="#{assignmentsBean.createObjectsTree()}"/>
+    </p:remoteCommand>
+
     <script type="text/javascript">
         updateContent(window.location + 'updateInventory?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateInventory");
     </script>

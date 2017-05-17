@@ -1,11 +1,13 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Notification;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.enums.NotificationStatus;
 import com.netcracker.smarthome.web.notification.NotificationForView;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,8 @@ public class NotificationRepository extends EntityRepository<Notification> {
         super(Notification.class);
     }
 
-    public List<NotificationForView> getNotifications() {
-        List<Notification> notifications = getAll();
+    public List<NotificationForView> getNotifications(SmartHome smartHome) {
+        List<Notification> notifications = getByHome(smartHome);
         List<NotificationForView> notificationsForView = new ArrayList<NotificationForView>();
         for (Notification notification : notifications) {
             if (notification.getAlarm() != null) {
@@ -54,5 +56,11 @@ public class NotificationRepository extends EntityRepository<Notification> {
             statuses.add(s.name());
         }
         return statuses;
+    }
+
+    public List<Notification> getByHome(SmartHome smartHome) {
+        Query query = getManager().createQuery("select n from Notification n where n.smartHome = :home");
+        query.setParameter("home", smartHome);
+        return query.getResultList();
     }
 }

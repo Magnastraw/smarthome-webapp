@@ -7,6 +7,8 @@ import com.netcracker.smarthome.business.policy.transform.core.PolicyConverter;
 import com.netcracker.smarthome.business.services.PolicyService;
 import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.model.entities.SmartObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class PolicyEngine implements IListener {
+    private static final Logger log = LoggerFactory.getLogger(PolicyEngine.class);
+
     private final PolicyService policyService;
     private Map<PolicyNode, Set<Long>> policies;
     private ReadWriteLock lock;
@@ -62,13 +66,16 @@ public class PolicyEngine implements IListener {
     }
 
     private void reinitialize(long policyToRemove) {
+        PolicyNode oldNode;
         lock.writeLock().lock();
         try {
-            PolicyNode oldNode = policies.keySet().stream().filter(node -> node.getIdentifier() == policyToRemove).findFirst().orElse(null);
+            oldNode = policies.keySet().stream().filter(node -> node.getIdentifier() == policyToRemove).findFirst().orElse(null);
             policies.remove(oldNode);
         } finally {
             lock.writeLock().unlock();
         }
+        if (oldNode != null)
+            log.info("Policy #{} removed from engine.", policyToRemove);
     }
 
     private void reinitialize(Policy activePolicy) {
@@ -83,6 +90,7 @@ public class PolicyEngine implements IListener {
         } finally {
             lock.writeLock().unlock();
         }
+        log.info("Policy #{} (re)loaded.", activePolicy.getPolicyId());
     }
 
     public void handleEvent(PolicyEvent event) {

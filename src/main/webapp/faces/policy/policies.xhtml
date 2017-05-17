@@ -27,6 +27,7 @@
 </p:breadCrumb>
 <p:dataTable id="policiesTable" var="item" value="#{policiesBean.tableItems}" widgetVar="policiesTable"
              paginator="true" rows="10" rowsPerPageTemplate="5,10"
+             paginatorPosition="bottom"
              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
              emptyMessage="No items."
              styleClass="policies-table">
@@ -69,7 +70,7 @@
     <p:column headerText="Name" styleClass="name-column"
               sortBy="#{item.name}">
         <h:outputText value="#{item.name}" rendered="#{!item.catalog}"/>
-        <h:outputText styleClass="fa fa-folder-open icon-item" rendered="#{item.catalog}"/>
+        <h:outputText styleClass="fa fa-folder icon-item" rendered="#{item.catalog}"/>
         <p:commandLink value="#{item.name}"
                        actionListener="#{policiesBean.changeCatalog(item.item)}"
                        update=":centerForm"
@@ -79,7 +80,8 @@
     <p:column headerText="Description" styleClass="descr-column">
         <h:outputText value="#{item.description}"/>
     </p:column>
-    <p:column headerText="Status" styleClass="status-column policy-#{item.status.toString().toLowerCase()}"
+    <p:column headerText="Status"
+              styleClass="status-column policy-#{item.status.toString().toLowerCase()}"
               sortBy="#{item.status.toString()}">
         <h:outputText value="#{item.status.toString()}"/>
     </p:column>
