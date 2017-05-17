@@ -9,300 +9,201 @@
 <p:outputPanel>
     <h2>Information</h2>
 
-        <p:accordionPanel id="monitoring" multiple="true" activeIndex="-1">
-            <p:tab title="Event history">
-                <p:dataTable id="eventHistoryDT" widgetVar="eventHistoryTable" var="history"
-                             value="#{eventHistoryBean.history}" paginator="true" paginatorPosition="bottom"
-                             rows="5" rowsPerPageTemplate="5,10,15"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             filteredValue="#{eventHistoryBean.filteredHistory}"
-                             emptyMessage="No objects found with given criteria"
-                             sortBy="#{history.readDate}" sortOrder="descending">
-                    <p:column filterBy="#{history.event.eventId}" style="width: 10%"
-                              filterMatchMode="startsWith"
-                              sortBy="#{history.event.eventId}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Event ID" title="Event ID"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('eventHistoryTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{history.event.eventId}"/>
-                    </p:column>
-                    <p:column styleClass="column-time" filterBy="#{history.readDate}"
-                              filterFunction="#{eventHistoryBean.filterByDate}"
-                              sortBy="#{history.readDate}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Date" title="Date"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:calendar id="historyTimeFilter" pattern="dd.MM.yy HH:mm:ss" readonly="false"
-                                        styleClass="filter-date"
-                                        timeInput="true" navigator="true" mask="true" showButtonPanel="true">
-                                <p:ajax event="dateSelect" oncomplete="PF('eventHistoryTable').filter()"/>
-                                <p:ajax event="change" listener="#{eventHistoryBean.onChange('historyTimeFilter')}"
-                                        oncomplete="PF('eventHistoryTable').filter()"/>
-                            </p:calendar>
-                        </f:facet>
-                        <h:outputText value="#{history.readDate}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Severity" filterBy="#{history.severity.name()}"
-                              sortBy="#{history.severity.ordinal()}" style="width: 15%"
-                              styleClass="#{alarmListBean.setStyleClass(history.severity.ordinal())}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Severity" title="Severity"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('eventHistoryTable').filter()" styleClass="filter-select">
-                                <f:selectItem/>
-                                <f:selectItems value="#{alarmListBean.severities}"/>
-                            </p:selectOneMenu>
-                        </f:facet>
-                        <h:outputText value="#{history.severity}"/>
-                    </p:column>
-                    <p:column filterBy="#{history.eventParameters}"
-                              filterMatchMode="contains"
-                              sortBy="#{history.eventParameters}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Event parameters" title="Event parameters"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('eventHistoryTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{history.eventParameters}"/>
-                    </p:column>
-                    <p:column filterBy="#{history.eventDescription}"
-                              filterMatchMode="contains"
-                              sortBy="#{history.eventDescription}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Event description" title="Event description"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('eventHistoryTable').filter()"/>
-                        </f:facet>
+    <p:accordionPanel id="monitoring" multiple="true" activeIndex="-1">
+        <p:tab title="Event history">
+            <p:dataTable id="eventHistoryDT" widgetVar="eventHistoryTable" var="history"
+                         value="#{eventHistoryBean.history}" paginator="true" paginatorPosition="bottom"
+                         rows="5" rowsPerPageTemplate="5,10,15"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{eventHistoryBean.filteredHistory}"
+                         emptyMessage="No objects found with given criteria">
+                <p:column headerText="Event ID" filterBy="#{history.event}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{history.event.eventId}"/>
+                </p:column>
+                <p:column headerText="Date" styleClass="column-time" filterBy="#{history.readDate}"
+                          filterFunction="#{eventHistoryBean.filterByDate}">
+                    <f:facet name="filter">
+                        <p:calendar id="historyTimeFilter" pattern="dd.MM.yy HH:mm:ss" readonly="false"
+                                    styleClass="filter-date"
+                                    timeInput="true" navigator="true" mask="true" showButtonPanel="true">
+                            <p:ajax event="dateSelect" oncomplete="PF('eventHistoryTable').filter()"/>
+                            <p:ajax event="change" listener="#{eventHistoryBean.onChange('historyTimeFilter')}"
+                                    oncomplete="PF('eventHistoryTable').filter()"/>
+                        </p:calendar>
+                    </f:facet>
+                    <h:outputText value="#{history.readDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Event description" filterBy="#{history.eventDescription}"
+                          filterMatchMode="contains" filterStyleClass="filter">
                     <h:outputText value="#{history.eventDescription}"/>
                 </p:column>
-                </p:dataTable>
-            </p:tab>
+                <p:column headerText="Severity" filterBy="#{history.severity}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{history.severity}"/>
+                </p:column>
+                <p:column headerText="Event parameters" filterBy="#{history.eventParameters}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{history.eventParameters}"/>
+                </p:column>
+            </p:dataTable>
+        </p:tab>
 
-            <p:tab title="Notifications">
-                <p:dataTable id="notificationsDT" widgetVar="notificationsTable" var="notification"
-                             value="#{notificationBean.notifications}" paginator="true" paginatorPosition="bottom"
-                             rows="5" rowsPerPageTemplate="5,10,15"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             filteredValue="#{notificationBean.filteredNotifications}"
-                             emptyMessage="No objects found with given criteria">
-                    <p:column style="width: 21%" filterBy="#{notification.notificationName}"
-                              filterMatchMode="contains"
-                              sortBy="#{notification.notificationName}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Text" title="Text"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('notificationsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{notification.notificationName}"/>
-                    </p:column>
-                    <p:column style="width: 15%" styleClass="column-time" filterBy="#{notification.time}"
-                              filterFunction="#{notificationBean.filterByDate}"
-                              sortBy="#{notification.time}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Time" title="Time"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:calendar id="notificationTimeFilter" pattern="dd.MM.yy HH:mm:ss" readonly="false"
-                                        styleClass="filter-date"
-                                        timeInput="true" navigator="true" mask="true" showButtonPanel="true">
-                                <p:ajax event="dateSelect" oncomplete="PF('notificationsTable').filter()"/>
-                                <p:ajax event="change" listener="#{notificationBean.onChange('notificationTimeFilter')}"
-                                        oncomplete="PF('notificationsTable').filter()"/>
-                            </p:calendar>
-                        </f:facet>
-                        <h:outputText value="#{notification.time}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column style="width: 20%" filterBy="#{notification.notificationObject}"
-                              filterMatchMode="startsWith"
-                              sortBy="#{notification.notificationObject}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Object" title="Object"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('notificationsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{notification.notificationObject}"/>
-                    </p:column>
-                    <p:column style="width: 20%" filterBy="#{notification.smartHome}"
-                              filterMatchMode="startsWith"
-                              sortBy="#{notification.smartHome}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Home" title="Home"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('notificationsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{notification.smartHome}"/>
-                    </p:column>
-                    <p:column style="width: 12%" filterBy="#{notification.channel}" filterMatchMode="exact"
-                              sortBy="#{notification.channel}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Channel" title="Channel"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('notificationsTable').filter()" styleClass="filter-select">
-                                <f:selectItem itemValue="#{null}" noSelectionOption="true"/>
-                                <f:selectItems value="#{notificationBean.channels}"/>
-                            </p:selectOneMenu>
-                        </f:facet>
-                        <h:outputText value="#{notification.channel}"/>
-                    </p:column>
-                    <p:column style="width: 12%" filterBy="#{notification.notificationStatus}" filterMatchMode="exact"
-                              sortBy="#{notification.notificationStatus}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Status" title="Status"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('notificationsTable').filter()" styleClass="filter-select">
-                                <f:selectItem itemValue="#{null}" noSelectionOption="true"/>
-                                <f:selectItems value="#{notificationBean.statuses}"/>
-                            </p:selectOneMenu>
-                        </f:facet>
-                        <h:outputText value="#{notification.notificationStatus}"/>
-                    </p:column>
-                </p:dataTable>
-            </p:tab>
-
-
-            <p:tab title="Alarms">
-                <p:outputPanel styleClass="button-panel ui-noborder">
-                    <p:commandButton action="#{alarmListBean.setClearSeverity}"
-                                     oncomplete="PF('alarmsTable').unselectAllRows()"
-                                     update="monitoring:alarmsDT"
-                                     value="Clear alarms" styleClass="to-dashboard"
-                                     icon="fa fa-check-square-o"/>
-                    </p:outputPanel>
-                <p:dataTable id="alarmsDT" widgetVar="alarmsTable" value="#{alarmListBean.currentAlarms}" var="alarm"
-                             sortBy="#{alarm.startTime}" sortOrder="descending" rowKey="#{alarm.alarmId}"
-                             selection="#{alarmListBean.selectedAlarms}" paginator="true" rows="5" rowsPerPageTemplate="5,10,15"
-                             paginatorPosition="bottom"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             filteredValue="#{alarmListBean.filteredAlarms}"
-                             emptyMessage="No objects found with given criteria">
-                    <p:column selectionMode="multiple" styleClass="column-checkbox"/>
-                    <p:column sortBy="#{alarm.alarmName}" filterBy="#{alarm.alarmName}"
-                              filterMatchMode="startsWith">
-                        <f:facet name="header">
-                            <h:outputLabel value="Name" title="Name"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>
-                        </f:facet>
-                        <p:commandLink rendered="#{alarm.subAlarms.size() != 0}" styleClass="fa table-name arrow expanded"
-                                       title="#{alarm.alarmName}"
-                                       value="#{alarm.alarmName}" action="#{alarmListBean.onSelect(alarm)}"
-                                       update=":centerForm"/>
-                        <p:commandLink rendered="#{alarm.subAlarms.size() == 0}"
-                                       styleClass="fa table-name"
-                                       value="#{alarm.alarmName}"
-                                       title="#{alarm.alarmName}"/>
-                    </p:column>
-                    <p:column styleClass="column" sortBy="#{alarm.alarmDescription}"
-                              filterBy="#{alarm.alarmDescription}" filterMatchMode="startsWith">
-                        <f:facet name="header">
-                            <h:outputLabel value="Description" title="Description"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{alarm.alarmDescription}"/>
-                    </p:column>
-                    <p:column styleClass="column" sortBy="#{alarm.object.name}"
-                              filterBy="#{alarm.object.name}" filterMatchMode="startsWith">
-                        <f:facet name="header">
-                        <h:outputLabel value="Object" title="Object"/>
+        <p:tab title="Notifications">
+            <p:dataTable id="notificationsDT" widgetVar="notificationsTable" var="notification"
+                         value="#{notificationBean.notifications}" paginator="true" paginatorPosition="bottom"
+                         rows="5" rowsPerPageTemplate="5,10,15"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{notificationBean.filteredNotifications}"
+                         emptyMessage="No objects found with given criteria">
+                <p:column headerText="Text" style="width: 21%" filterBy="#{notification.notificationName}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{notification.notificationName}"/>
+                </p:column>
+                <p:column headerText="Time" style="width: 15%" styleClass="column-time" filterBy="#{notification.time}"
+                          filterFunction="#{notificationBean.filterByDate}">
+                    <f:facet name="filter">
+                        <p:calendar id="notificationTimeFilter" pattern="dd.MM.yy HH:mm:ss" readonly="false"
+                                    styleClass="filter-date"
+                                    timeInput="true" navigator="true" mask="true" showButtonPanel="true">
+                            <p:ajax event="dateSelect" oncomplete="PF('notificationsTable').filter()"/>
+                            <p:ajax event="change" listener="#{notificationBean.onChange('notificationTimeFilter')}"
+                                    oncomplete="PF('notificationsTable').filter()"/>
+                        </p:calendar>
                     </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{alarm.object.name}" title="#{alarm.object.name}"/>
-                    </p:column>
-                    <p:column styleClass="column" sortBy="#{alarm.subobject.name}"
-                              filterBy="#{alarm.subobject.name}" filterMatchMode="startsWith">
-                        <f:facet name="header">
-                            <h:outputLabel value="Subobject" title="Subobject"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{alarm.subobject.name}"/>
-                    </p:column>
-                    <p:column styleClass="column-time" sortBy="#{alarm.startTime}"
-                              filterBy="#{alarm.startTime}" filterFunction="#{alarmListBean.filterByDate}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Start time" title="Start time"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:calendar id="startTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date"
-                                        timeInput="true" navigator="true" mask="true" showButtonPanel="true">
-                                <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
-                                <p:ajax event="change" listener="#{alarmListBean.onChange('startTimeFilter')}"
-                                        oncomplete="PF('alarmsTable').filter()"/>
-                            </p:calendar>
-                        </f:facet>
-                        <h:outputText value="#{alarm.startTime}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column styleClass="column-time" sortBy="#{alarm.endTime}"
-                              filterBy="#{alarm.endTime}" filterFunction="#{alarmListBean.filterByDate}">
-                        <f:facet name="header">
-                            <h:outputLabel value="End time" title="End time"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:calendar id="endTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date"
-                                        timeInput="true" navigator="true" mask="true" showButtonPanel="true">
-                                <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
-                                <p:ajax event="change" listener="#{alarmListBean.onChange('endTimeFilter')}"
-                                        oncomplete="PF('alarmsTable').filter()"/>
-                            </p:calendar>
-                        </f:facet>
-                        <h:outputText value="#{alarm.endTime}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column styleClass="column-time #{alarmListBean.setStyleClass(alarm.severity.ordinal())}"
-                              sortBy="#{alarm.severity.ordinal()}" filterBy="#{alarm.severity.name()}">
-                        <f:facet name="header">
-                            <h:outputLabel value="Severity" title="Severity"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:selectOneMenu onchange="PF('alarmsTable').filter()" styleClass="filter-select">
-                                <f:selectItem/>
-                                <f:selectItems value="#{alarmListBean.severities}"/>
-                            </p:selectOneMenu>
-                        </f:facet>
-                        <h:outputText value="#{alarm.severity.name()}"/>
-                    </p:column>
-                    <p:column styleClass="column-detail">
-                        <p:commandLink title="Details" styleClass="fa fa-eye"
-                                       action="#{navigationBean.setPageName('alarms/alarm')}"
-                                       update=":centerForm">
-                            <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
-                        </p:commandLink>
-                    </p:column>
-                </p:dataTable>
-            </p:tab>
-        </p:accordionPanel>
-    </p:outputPanel>
-    <p:remoteCommand name="updateEvent" update="monitoring:notificationsDT,monitoring:eventHistoryDT"
-                     actionListener="#{notificationBean.init()}"/>
-    <p:remoteCommand name="updateAlarm" update="monitoring:alarmsDT,monitoring:eventHistoryDT"
-                     actionListener="#{alarmListBean.init()}"/>
-    <script type="text/javascript">
-        updateContent(window.location + 'updateEvent?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateEvent");
-        updateContent(window.location + 'updateAlarm?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateAlarm");
-    </script>
+                    <h:outputText value="#{notification.time}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Object" style="width: 20%" filterBy="#{notification.notificationObject}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{notification.notificationObject}"/>
+                </p:column>
+                <p:column headerText="Home" style="width: 20%" filterBy="#{notification.smartHome}"
+                          filterMatchMode="contains" filterStyleClass="filter">
+                    <h:outputText value="#{notification.smartHome}"/>
+                </p:column>
+                <p:column headerText="Channel" style="width: 12%" filterBy="#{notification.channel}" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('notificationsTable').filter()">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{notificationBean.channels}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{notification.channel}"/>
+                </p:column>
+                <p:column headerText="Status" style="width: 12%" filterBy="#{notification.notificationStatus}" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('notificationsTable').filter()">
+                            <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{notificationBean.statuses}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{notification.notificationStatus}"/>
+                </p:column>
+            </p:dataTable>
+        </p:tab>
+
+
+        <p:tab title="Alarms">
+            <p:outputPanel styleClass="button-panel ui-noborder">
+                <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                                 update=":centerForm"
+                                 value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-bar-chart">
+                    <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
+                </p:commandButton>
+                <p:commandButton action="#{alarmListBean.setClearSeverity}"
+                                 oncomplete="PF('alarmsTable').unselectAllRows()"
+                                 update="monitoring:alarmsDT"
+                                 value="Clear alarms" styleClass="to-dashboard"/>
+            </p:outputPanel>
+            <p:dataTable id="alarmsDT" widgetVar="alarmsTable" value="#{alarmListBean.currentAlarms}" var="alarm"
+                         sortBy="#{alarm.startTime}" sortOrder="descending" rowKey="#{alarm.alarmId}"
+                         selection="#{alarmListBean.selectedAlarms}" paginator="true" rows="5" rowsPerPageTemplate="5,10,15"
+                         paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{alarmListBean.filteredAlarms}"
+                         emptyMessage="No objects found with given criteria">
+                <p:column selectionMode="multiple" styleClass="column-checkbox"/>
+                <p:column headerText="Name" sortBy="#{alarm.alarmName}" filterBy="#{alarm.alarmName}"
+                          filterMatchMode="startsWith" filterStyleClass="filter">
+                    <p:commandLink rendered="#{alarm.subAlarms.size() != 0}" styleClass="fa table-name arrow"
+                                   title="#{tableEntity.name}"
+                                   value="#{tableEntity.name}" action="#{alarmSpecsBean.onSelect(tableEntity)}"
+                                   update=":centerForm"/>
+                    <p:commandLink styleClass="fa table-name" value="#{alarm.alarmName}"
+                                   action="#{alarmListBean.onSelect(alarm)}" update=":centerForm"
+                                   title="#{alarm.alarmName}"/>
+                </p:column>
+                <p:column headerText="Description" styleClass="column" sortBy="#{alarm.alarmDescription}"
+                          filterBy="#{alarm.alarmDescription}" filterMatchMode="startsWith" filterStyleClass="filter">
+                    <h:outputText value="#{alarm.alarmDescription}"/>
+                </p:column>
+                <p:column headerText="Object" styleClass="column" sortBy="#{alarm.object.name}"
+                          filterBy="#{alarm.object.name}" filterMatchMode="startsWith" filterStyleClass="filter">
+                    <h:outputText value="#{alarm.object.name}" title="#{alarm.object.name}"/>
+                </p:column>
+                <p:column headerText="Subobject" styleClass="column" sortBy="#{alarm.subobject.name}"
+                          filterBy="#{alarm.subobject.name}" filterMatchMode="startsWith" filterStyleClass="filter">
+                    <h:outputText value="#{alarm.subobject.name}"/>
+                </p:column>
+                <p:column headerText="Start time" styleClass="column-time" sortBy="#{alarm.startTime}"
+                          filterBy="#{alarm.startTime}" filterFunction="#{alarmListBean.filterByDate}">
+                    <f:facet name="filter">
+                        <p:calendar id="startTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date"
+                                    timeInput="true" navigator="true" mask="true" showButtonPanel="true">
+                            <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
+                            <p:ajax event="change" listener="#{alarmListBean.onChange('startTimeFilter')}"
+                                    oncomplete="PF('alarmsTable').filter()"/>
+                        </p:calendar>
+                    </f:facet>
+                    <h:outputText value="#{alarm.startTime}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="End time" styleClass="column-time" sortBy="#{alarm.endTime}"
+                          filterBy="#{alarm.endTime}" filterFunction="#{alarmListBean.filterByDate}">
+                    <f:facet name="filter">
+                        <p:calendar id="endTimeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date"
+                                    timeInput="true" navigator="true" mask="true" showButtonPanel="true">
+                            <p:ajax event="dateSelect" oncomplete="PF('alarmsTable').filter()"/>
+                            <p:ajax event="change" listener="#{alarmListBean.onChange('endTimeFilter')}"
+                                    oncomplete="PF('alarmsTable').filter()"/>
+                        </p:calendar>
+                    </f:facet>
+                    <h:outputText value="#{alarm.endTime}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Severity"
+                          styleClass="column-time #{alarmListBean.setStyleClass(alarm.severity.ordinal())}"
+                          sortBy="#{alarm.severity}" filterBy="#{alarm.severity}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('alarmsTable').filter()" styleClass="filter-select">
+                            <f:selectItem/>
+                            <f:selectItems value="#{alarmListBean.severities}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{alarm.severity}"/>
+                </p:column>
+                <p:column styleClass="column-detail">
+                    <p:commandLink title="Details" styleClass="fa fa-eye"
+                                   action="#{navigationBean.setPageName('alarms/alarm')}" update=":centerForm">
+                        <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+        </p:tab>
+    </p:accordionPanel>
+</p:outputPanel>
+<p:remoteCommand name="updateEvent" update="monitoring:notificationsDT,monitoring:eventHistoryDT"
+                 actionListener="#{notificationBean.init()}"/>
+<p:remoteCommand name="updateAlarm" update="monitoring:alarmsDT,monitoring:eventHistoryDT"
+                 actionListener="#{alarmListBean.init()}"/>
+<script type="text/javascript">
+    updateContent(window.location + 'updateEvent?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateEvent");
+    updateContent(window.location + 'updateAlarm?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateAlarm");
+</script>
 </html>

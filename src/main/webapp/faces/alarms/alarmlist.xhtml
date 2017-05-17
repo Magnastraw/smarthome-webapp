@@ -16,7 +16,9 @@
             <p:commandButton action="#{navigationBean.toPrevPage()}" update=":centerForm"
                              value="Back" styleClass="to-dashboard" icon="fa fa-level-up"/>
             <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}" update=":centerForm"
-                             value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-line-chart"/>
+                             value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-line-chart">
+                <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
+            </p:commandButton>
             <p:commandButton action="#{alarmListBean.setClearSeverity}" oncomplete="PF('alarmsTable').unselectAllRows()" update=":centerForm:alarmsDT"
                              value="Clear alarms" styleClass="to-dashboard" icon="fa fa-check-square-o"/>
 
