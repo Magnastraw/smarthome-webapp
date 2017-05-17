@@ -26,7 +26,7 @@
     </c:forEach>
 </p:breadCrumb>
 <p:dataTable id="policiesTable" var="item" value="#{policiesBean.tableItems}" widgetVar="policiesTable"
-             paginator="true" rows="10" rowsPerPageTemplate="5,10"
+             paginator="true" rows="10" rowsPerPageTemplate="5,10" paginatorPosition="bottom"
              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
              emptyMessage="No items."
              styleClass="policies-table">

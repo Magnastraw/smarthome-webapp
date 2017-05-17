@@ -14,7 +14,7 @@
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      rowsPerPageTemplate="5,10,15" emptyMessage="No units found with given criteria">
             <p:ajax event="rowSelect" listener="#{unitsBean.onRowSelect}"/>
-            <p:column styleClass="column-delete">
+            <p:column headerText="Actions" styleClass="column-delete">
                 <p:commandLink update=":centerForm:unitDlg" oncomplete="PF('unitDialog').show()" action="#{unitsBean.setCurrentUnit(unit)}"
                                title="Edit" styleClass="fa fa-edit">
                 </p:commandLink>
@@ -24,16 +24,40 @@
                     <f:setPropertyActionListener value="#{unit}" target="#{unitsBean.removedUnit}"/>
                 </p:commandLink>
             </p:column>
-            <p:column headerText="Name" sortBy="#{unit.unitName}" filterBy="#{unit.unitName}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column sortBy="#{unit.unitName}" filterBy="#{unit.unitName}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Name" title="Name"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('unitsDataTable').filter()"/>
+                </f:facet>
                 <h:outputText value="#{unit.unitName}"/>
             </p:column>
-            <p:column headerText="Parent unit" sortBy="#{unit.parentUnit.unitName}" filterBy="#{unit.parentUnit.unitName}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column sortBy="#{unit.parentUnit.unitName}" filterBy="#{unit.parentUnit.unitName}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Parent unit" title="Parent unit"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('unitsDataTable').filter()"/>
+                </f:facet>
                 <h:outputText value="#{unit.parentUnit.unitName}"/>
             </p:column>
-            <p:column headerText="Base factor" sortBy="#{unit.baseFactor}" filterBy="#{unit.baseFactor}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column sortBy="#{unit.baseFactor}" filterBy="#{unit.baseFactor}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Base factor" title="Base factor"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('unitsDataTable').filter()"/>
+                </f:facet>
                 <h:outputText value="#{unit.baseFactor}"/>
             </p:column>
-            <p:column headerText="Label" sortBy="#{unit.label}" filterBy="#{unit.label}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column sortBy="#{unit.label}" filterBy="#{unit.label}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Label" title="Label"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('unitsDataTable').filter()"/>
+                </f:facet>
                 <h:outputText value="#{unit.label}"/>
             </p:column>
         </p:dataTable>

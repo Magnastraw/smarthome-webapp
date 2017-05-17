@@ -4,13 +4,10 @@ import com.netcracker.smarthome.dal.repositories.AlarmRepository;
 import com.netcracker.smarthome.dal.repositories.EventHistoryRepository;
 import com.netcracker.smarthome.dal.repositories.EventRepository;
 import com.netcracker.smarthome.model.entities.*;
-import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

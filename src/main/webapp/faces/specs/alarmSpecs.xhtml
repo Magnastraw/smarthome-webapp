@@ -20,7 +20,7 @@
                      paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{alarmSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria">
-            <p:column styleClass="column-delete">
+            <p:column headerText="Actions" styleClass="column-delete">
                 <p:commandLink update=":centerForm:alarmDlg" oncomplete="PF('alarmDialog').show()" action="#{alarmSpecsBean.setCurrentTableEntity(tableEntity)}"
                                title="Edit" styleClass="fa fa-edit"/>
                 <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{alarmSpecsBean.setCurrentTableEntity(tableEntity)}"
@@ -32,12 +32,24 @@
                     <f:setPropertyActionListener value="#{tableEntity}" target="#{alarmSpecsBean.removed}"/>
                 </p:commandLink>
             </p:column>
-            <p:column headerText="Name" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Name" title="Name"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('alarmSpecTable').filter()"/>
+                </f:facet>
                 <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon" title="#{tableEntity.name}"
                                value="#{tableEntity.name}" action="#{alarmSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
                 <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}" title="#{tableEntity.name}"/>
             </p:column>
-            <p:column headerText="Object type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByObjectType}" filterBy="#{tableEntity}" filterFunction="#{alarmSpecsBean.filterByObjectType}" filterStyleClass="filter">
+            <p:column styleClass="column" sortBy="#{tableEntity}" sortFunction="#{alarmSpecsBean.sortByObjectType}" filterBy="#{tableEntity}" filterFunction="#{alarmSpecsBean.filterByObjectType}">
+                <f:facet name="header">
+                    <h:outputLabel value="Object type" title="Object type"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('alarmSpecTable').filter()"/>
+                </f:facet>
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.alarmSpec.objectType}"/>
             </p:column>
         </p:dataTable>

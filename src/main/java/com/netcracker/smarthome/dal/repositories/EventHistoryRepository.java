@@ -12,7 +12,7 @@ public class EventHistoryRepository extends EntityRepository<EventHistory> {
     }
 
     public List<EventHistory> getEventHistory(long eventId) {
-        Query query = getManager().createNativeQuery("select * from events_history where event_id = :eventId limit 1000", EventHistory.class);
+        Query query = getManager().createQuery("select eh from EventHistory eh where eh.event.eventId = :eventId");
         query.setParameter("eventId", eventId);
         return query.getResultList();
     }

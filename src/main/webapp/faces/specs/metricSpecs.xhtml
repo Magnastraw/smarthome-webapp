@@ -20,7 +20,7 @@
                      paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{metricSpecsBean.filteredTableEntities}" emptyMessage="No objects found with given criteria">
-            <p:column styleClass="column-delete">
+            <p:column headerText="Actions" styleClass="column-delete">
                 <p:commandLink update=":centerForm:metricDlg" oncomplete="PF('metricDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
                                title="Edit" styleClass="fa fa-edit"/>
                 <p:commandLink update=":centerForm" oncomplete="PF('moveDialog').show()" action="#{metricSpecsBean.setCurrentTableEntity(tableEntity)}"
@@ -32,21 +32,51 @@
                     <f:setPropertyActionListener value="#{tableEntity}" target="#{metricSpecsBean.removed}"/>
                 </p:commandLink>
             </p:column>
-            <p:column headerText="Name" styleClass="column-name" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith" filterStyleClass="filter">
+            <p:column styleClass="column-name" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByName}" filterBy="#{tableEntity.name}" filterMatchMode="startsWith">
+                <f:facet name="header">
+                    <h:outputLabel value="Name" title="Name"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('metricSpecTable').filter()"/>
+                </f:facet>
                 <p:commandLink rendered="#{tableEntity.typeCatalog}" styleClass="fa table-name icon" title="#{tableEntity.name}"
                                value="#{tableEntity.name}" action="#{metricSpecsBean.onSelect(tableEntity)}" update=":centerForm"/>
                 <p:commandLink rendered="#{!tableEntity.typeCatalog}" styleClass="fa table-name" value="#{tableEntity.name}" title="#{tableEntity.name}"/>
             </p:column>
-            <p:column headerText="Metric type" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMetricType}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMetricType}" filterStyleClass="filter">
+            <p:column styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMetricType}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMetricType}">
+                <f:facet name="header">
+                    <h:outputLabel value="Metric type" title="Metric type"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('metricSpecTable').filter()"/>
+                </f:facet>
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.metricType}"/>
             </p:column>
-            <p:column headerText="Unit name" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByUnit}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByUnit}" filterStyleClass="filter">
+            <p:column styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByUnit}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByUnit}">
+                <f:facet name="header">
+                    <h:outputLabel value="Unit name" title="Unit name"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('metricSpecTable').filter()"/>
+                </f:facet>
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.unit.unitName}"/>
             </p:column>
-            <p:column headerText="Min value" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMinValue}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMinValue}" filterStyleClass="filter">
+            <p:column styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMinValue}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMinValue}">
+                <f:facet name="header">
+                    <h:outputLabel value="Min value" title="Min value"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('metricSpecTable').filter()"/>
+                </f:facet>
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.minValue}"/>
             </p:column>
-            <p:column headerText="Max value" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMaxValue}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMaxValue}" filterStyleClass="filter">
+            <p:column headerText="Max value" styleClass="column" sortBy="#{tableEntity}" sortFunction="#{metricSpecsBean.sortByMaxValue}" filterBy="#{tableEntity}" filterFunction="#{metricSpecsBean.filterByMaxValue}">
+                <f:facet name="header">
+                    <h:outputLabel value="Max value" title="Max value"/>
+                </f:facet>
+                <f:facet name="filter">
+                    <p:inputText styleClass="filter" onkeyup="PF('metricSpecTable').filter()"/>
+                </f:facet>
                 <h:outputText rendered="#{!tableEntity.typeCatalog}" value="#{tableEntity.metricSpec.maxValue}"/>
             </p:column>
 
