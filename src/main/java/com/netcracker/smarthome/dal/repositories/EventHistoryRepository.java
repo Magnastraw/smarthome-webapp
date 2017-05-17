@@ -1,7 +1,9 @@
 package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.EventHistory;
+import com.netcracker.smarthome.model.entities.SmartHome;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.Query;
 import java.util.List;
 
@@ -14,6 +16,12 @@ public class EventHistoryRepository extends EntityRepository<EventHistory> {
     public List<EventHistory> getEventHistory(long eventId) {
         Query query = getManager().createQuery("select eh from EventHistory eh where eh.event.eventId = :eventId");
         query.setParameter("eventId", eventId);
+        return query.getResultList();
+    }
+
+    public List<EventHistory> getHistoryByHome(SmartHome smartHome) {
+        Query query = getManager().createQuery("select eh from EventHistory eh where eh.event.smartHome=:home");
+        query.setParameter("home", smartHome);
         return query.getResultList();
     }
 }

@@ -92,7 +92,11 @@ public class Policy implements Serializable {
         this.rules = rules;
     }
 
-    @ManyToMany(mappedBy = "assignedPolicies")
+    @ManyToMany
+    @JoinTable(name = "assignments", joinColumns = {
+            @JoinColumn(name = "policy_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "object_id",
+                    nullable = false, updatable = false)})
     public Set<SmartObject> getAssignedObjects() {
         return assignedObjects;
     }

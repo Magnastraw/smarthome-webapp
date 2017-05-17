@@ -116,6 +116,7 @@ public class AlarmService {
             clearWithChildren(existingAlarm, clearedUserId, alarmProps.getEndTime());
         else
             clear(existingAlarm, clearedUserId, alarmProps.getEndTime());
+        taskManager.addUpdateEvent(existingAlarm.getEvent().getSmartHome().getSmartHomeId(),"updateAlarm");
         return true;
     }
 

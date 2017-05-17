@@ -1,16 +1,15 @@
 package com.netcracker.smarthome.business.policy.actions;
 
 import com.netcracker.smarthome.ApplicationContextHolder;
-import com.netcracker.smarthome.business.notification.NotificationService;
 import com.netcracker.smarthome.business.policy.events.PolicyEvent;
 import com.netcracker.smarthome.business.services.AlarmService;
 import com.netcracker.smarthome.business.services.MetricService;
+import com.netcracker.smarthome.business.services.NotificationService;
 import com.netcracker.smarthome.model.entities.AlarmSpec;
 import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Map;

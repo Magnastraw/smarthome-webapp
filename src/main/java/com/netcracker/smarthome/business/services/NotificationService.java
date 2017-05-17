@@ -1,13 +1,13 @@
-package com.netcracker.smarthome.business.notification;
+package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.notification.Email;
 import com.netcracker.smarthome.business.notification.NotificationSender;
 import com.netcracker.smarthome.dal.repositories.NotificationRepository;
-import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.enums.NotificationStatus;
+import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,6 +71,6 @@ public class NotificationService {
             e.printStackTrace();
         }
         notificationSender.sendNotification(notification);
-        taskManager.addUpdateEvent(smartHome.getSmartHomeId(),"updateEvent");
+        taskManager.addUpdateEvent(smartHome.getSmartHomeId(), "updateEvent");
     }
 }

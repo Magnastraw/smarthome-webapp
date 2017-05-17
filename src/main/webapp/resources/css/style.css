@@ -353,20 +353,40 @@ h3 {
     float: right;
 }
 
+.ui-icon-status-created {
+    margin-left: 5px;
+    background: transparent url("#{resource['images/status/created.png']}") no-repeat top !important;
+}
+
+.ui-icon-status-active {
+    margin-left: 5px;
+    background: transparent url("#{resource['images/status/active.png']}") no-repeat top !important;
+}
+
+.ui-icon-status-inactive {
+    margin-left: 5px;
+    background: transparent url("#{resource['images/status/inactive.png']}") no-repeat top !important;
+}
+
+.ui-icon-status-error {
+    margin-left: 5px;
+    background: transparent url("#{resource['images/status/error.png']}") no-repeat top !important;
+}
+
 .policy-created {
-    color: orange;
+    background-color: yellow;
 }
 
 .policy-active {
-   color: green;
+   background-color:green;
 }
 
 .policy-inactive {
-    color: gray;
+    background-color: gray;
 }
 
 .policy-error {
-    color: red;
+    background-color: red;
 }
 
 .assign-tree {
@@ -390,6 +410,7 @@ h3 {
 }
 
 .assign-container {
+    margin-top: 10px;
     width: 100%;
     display: inline-block;
 }

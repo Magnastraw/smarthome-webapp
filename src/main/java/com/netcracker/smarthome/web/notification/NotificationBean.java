@@ -1,6 +1,7 @@
 package com.netcracker.smarthome.web.notification;
 
 import com.netcracker.smarthome.dal.repositories.NotificationRepository;
+import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
@@ -21,6 +22,9 @@ public class NotificationBean {
 
     @ManagedProperty("#{notificationRepository}")
     private NotificationRepository notificationRepository;
+
+    @ManagedProperty("#{currentUserHomesBean}")
+    private CurrentUserHomesBean userHomesBean;
 
     private List<NotificationForView> notifications;
     private List<NotificationForView> filteredNotifications;
@@ -72,11 +76,15 @@ public class NotificationBean {
 
     @PostConstruct
     public void init() {
-        notifications = notificationRepository.getNotifications();
+        notifications = notificationRepository.getNotifications(userHomesBean.getCurrentHome());
     }
 
     public void onToggle(ToggleEvent event) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, event.getComponent().getId() + " toggled", "Status:" + event.getVisibility().name());
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void setUserHomesBean(CurrentUserHomesBean userHomesBean) {
+        this.userHomesBean = userHomesBean;
     }
 }

@@ -16,14 +16,14 @@ import org.primefaces.model.TreeNode;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class AssignmentsBean {
     private TreeNode policiesRoot;
     private TreeNode objectsRoot;
