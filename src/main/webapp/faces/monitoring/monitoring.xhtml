@@ -187,8 +187,11 @@
 
             <p:tab title="Alarms">
                 <p:outputPanel styleClass="button-panel ui-noborder">
-                    <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}" update=":centerForm"
-                                     value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-line-chart"/>
+                    <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}"
+                                     update=":centerForm"
+                                     value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-bar-chart">
+                        <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
+                    </p:commandButton>
                     <p:commandButton action="#{alarmListBean.setClearSeverity}"
                                      oncomplete="PF('alarmsTable').unselectAllRows()"
                                      update="monitoring:alarmsDT"

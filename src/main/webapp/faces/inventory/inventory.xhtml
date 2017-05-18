@@ -35,10 +35,10 @@
                 <p:menuitem value="View details" icon="fa fa-search" action="#{inventoryBean.setMaxSeverity()}"
                             update="@form:info" onclick="PF('infoDialog').initPosition()" oncomplete="PF('infoDialog').show()"/>
                 <p:menuitem value="Alarms" icon="fa fa-exclamation-circle" action="#{navigationBean.setPageName('alarms/alarmlist')}" update="@form"
-                            >
-                    <f:actionListener binding="#{alarmListBean.showSelectedObjectAlarms(inventoryBean.selectedObject)}"/>
+                            actionListener="#{alarmListBean.showSelectedObjectAlarms(inventoryBean.selectedObject)}"/>
+                <p:menuitem value="Dashboards" icon="fa fa-line-chart" action="#{navigationBean.setPageName('charts/dashboardManagement')}" update="@form">
+                    <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
                 </p:menuitem>
-                <p:menuitem value="Dashboards" icon="fa fa-line-chart" action="#{navigationBean.setPageName('charts/dashboardManagement')}" update="@form"/>
             </p:contextMenu>
         </c:forEach>
     </p:outputPanel>
@@ -77,6 +77,7 @@
     <p:remoteCommand name="updateInventory" update="centerForm:inventory" actionListener="#{inventoryBean.init}">
         <f:actionListener binding="#{assignmentsBean.createObjectsTree()}"/>
     </p:remoteCommand>
+
     <script type="text/javascript">
         updateContent(window.location + 'updateInventory?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateInventory");
 

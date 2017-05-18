@@ -53,7 +53,9 @@
             <p:menuitem value="Dashboard manager"
                         action="#{navigationBean.setPageName('charts/dashboardManagement')}"
                         update=":centerForm"
-                        ajax="true"/>
+                        ajax="true">
+                <f:setPropertyActionListener value="false" target="#{dashboardBean.fromExternal}"/>
+            </p:menuitem>
             <p:submenu label="Dashboards" rendered="#{dashboardBean.dashboardMenuList.size()>0}">
                 <c:forEach items="#{dashboardBean.dashboardMenuList}" var="dashboard">
                     <p:menuitem value="#{dashboard.dashboardName}"

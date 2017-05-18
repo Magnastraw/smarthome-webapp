@@ -35,6 +35,7 @@ public class DashboardBean {
     private Dashboard currentDashboard;
     private boolean isFromDashboard;
     private boolean update;
+    private boolean isFromExternal;
 
     @PostConstruct
     public void init() {
@@ -44,19 +45,6 @@ public class DashboardBean {
     public boolean isFromDashboard() {
         return isFromDashboard;
     }
-
-    public boolean checkBack() {
-        switch (navigationBean.getOldPage()) {
-            case "/faces/alarms/alarmlist":
-            case "/faces/monitoring/monitoring":
-                return true;
-            default:
-                return false;
-
-        }
-    }
-
-
 
     public void setFromDashboard(boolean fromDashboard) {
         isFromDashboard = fromDashboard;
@@ -212,4 +200,11 @@ public class DashboardBean {
         }
     }
 
+    public boolean isFromExternal() {
+        return isFromExternal;
+    }
+
+    public void setFromExternal(boolean fromExternal) {
+        isFromExternal = fromExternal;
+    }
 }
