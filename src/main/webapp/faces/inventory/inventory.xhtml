@@ -36,7 +36,7 @@
                             update="@form:info" onclick="PF('infoDialog').initPosition()" oncomplete="PF('infoDialog').show()"/>
                 <p:menuitem value="Alarms" icon="fa fa-exclamation-circle" action="#{navigationBean.setPageName('alarms/alarmlist')}" update="@form"
                             actionListener="#{alarmListBean.showSelectedObjectAlarms(inventoryBean.selectedObject)}"/>
-                <p:menuitem value="Dashboards" icon="fa fa-line-chart" action="#{navigationBean.setPageName('charts/dashboardManagement')}" update="@form">
+                <p:menuitem value="Dashboards" icon="fa fa-bar-chart" action="#{navigationBean.setPageName('charts/dashboardManagement')}" update="@form">
                     <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
                 </p:menuitem>
             </p:contextMenu>

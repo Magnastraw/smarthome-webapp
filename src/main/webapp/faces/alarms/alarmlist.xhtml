@@ -4,7 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <p:outputPanel id="alarms">
         <c:if test="#{alarmListBean.currentObject != null}">
             <h2>#{alarmListBean.currentObject.name}</h2>
@@ -14,7 +16,7 @@
             <p:commandButton action="#{navigationBean.setPageName('inventory/inventory')}" update=":centerForm"
                              value="Back" styleClass="to-dashboard" icon="fa fa-level-up"/>
             <p:commandButton action="#{navigationBean.setPageName('charts/dashboardManagement')}" update=":centerForm"
-                             value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-line-chart">
+                             value="Metric dashboard" styleClass="to-dashboard" icon="fa fa-bar-chart">
                 <f:actionListener binding="#{dashboardBean.setFromExternal(true)}" />
             </p:commandButton>
             <p:commandButton action="#{alarmListBean.setClearSeverity}" oncomplete="PF('alarmsTable').unselectAllRows()" update=":centerForm:alarmsDT"
