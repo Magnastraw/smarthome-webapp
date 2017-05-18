@@ -10,9 +10,8 @@ import com.netcracker.smarthome.model.enums.NotificationStatus;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.sql.Time;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Component
 public class NotificationService {
@@ -31,20 +30,20 @@ public class NotificationService {
             String typeNotificationObject = notificationObject.getClass().getSimpleName();
             if (typeNotificationObject.equals("Alarm")) {
                 notification = new Notification(notificationText, NotificationStatus.CREATE,
-                        Time.valueOf(LocalTime.now()), false, preferenceChannel, home,
+                        Timestamp.from(ZonedDateTime.now().toInstant()), false, preferenceChannel, home,
                         (Alarm) notificationObject, null, null);
             } else if (typeNotificationObject.equals("Event")) {
                 notification = new Notification(notificationText, NotificationStatus.CREATE,
-                        Time.valueOf(LocalTime.now()), false, preferenceChannel, home, null,
+                        Timestamp.from(ZonedDateTime.now().toInstant()), false, preferenceChannel, home, null,
                         (Event) notificationObject, null);
             } else {
                 notification = new Notification(notificationText, NotificationStatus.CREATE,
-                        Time.valueOf(LocalTime.now()), false, preferenceChannel, home,
+                        Timestamp.from(ZonedDateTime.now().toInstant()), false, preferenceChannel, home,
                         null, null, (Metric) notificationObject);
             }
         } else {
             notification = new Notification(notificationText, NotificationStatus.CREATE,
-                    Time.valueOf(LocalTime.now()), false, preferenceChannel, home,
+                    Timestamp.from(ZonedDateTime.now().toInstant()), false, preferenceChannel, home,
                     null, null, null);
         }
         notificationRepository.save(notification);

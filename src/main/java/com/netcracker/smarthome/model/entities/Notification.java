@@ -6,11 +6,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.*;
-import java.io.CharArrayReader;
 import java.io.Serializable;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notifications", schema = "public", catalog = "smarthome_db")
@@ -18,7 +16,7 @@ public class Notification implements Serializable {
     private long notificationId;
     private String notificationName;
     private NotificationStatus notificationStatus;
-    private Time time;
+    private Timestamp time;
     private boolean requireConfirm;
     private Channel channel;
     private SmartHome smartHome;
@@ -29,7 +27,7 @@ public class Notification implements Serializable {
     public Notification() {
     }
 
-    public Notification(String notificationName, NotificationStatus notificationStatus, Time time, boolean requireConfirm, Channel channel, SmartHome smartHome, Alarm alarm, Event event, Metric metric) {
+    public Notification(String notificationName, NotificationStatus notificationStatus, Timestamp time, boolean requireConfirm, Channel channel, SmartHome smartHome, Alarm alarm, Event event, Metric metric) {
         this.notificationName = notificationName;
         this.notificationStatus = notificationStatus;
         this.time = time;
@@ -75,11 +73,11 @@ public class Notification implements Serializable {
 
     @Basic
     @Column(name = "time", nullable = false)
-    public Time getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 

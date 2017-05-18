@@ -9,6 +9,9 @@ import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
+import javafx.scene.input.MouseEvent;
+import org.primefaces.behavior.ajax.AjaxBehavior;
+import org.primefaces.event.MoveEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.organigram.OrganigramNodeSelectEvent;
 import org.primefaces.model.DefaultOrganigramNode;
@@ -21,6 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,6 +101,10 @@ public class InventoryBean implements Serializable {
         taskManager.addHomeTask(getHome().getSmartHomeId(), new HomeTask("GetInventory"));
         LOG.info("GetInventory: home=" + getHome().getSmartHomeId()+
                 ".\n" + taskManager.getTaskMap().toString());
+        FacesMessage message = new FacesMessage();
+        message.setSummary("Inventory will be received at the next session with the house");
+        message.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     protected void addSubobjects(OrganigramNode parent) {

@@ -45,8 +45,11 @@
                          sortBy="#{eventHistory.readDate}" sortOrder="descending" rowKey="#{eventHistory.historyId}"
                          paginator="true" rows="5" rowsPerPageTemplate="5,10,15" paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                          emptyMessage="No objects found with given criteria">
-                <p:column headerText="Date" styleClass="column" sortBy="#{eventHistory.readDate}" filterBy="#{eventHistory.readDate}" filterFunction="#{alarmListBean.filterByDate}">
+                         emptyMessage="No objects found with given criteria">
+                <p:column styleClass="column" sortBy="#{eventHistory.readDate}" filterBy="#{eventHistory.readDate}" filterFunction="#{alarmListBean.filterByDate}">
+                    <f:facet name="header">
+                        <h:outputLabel value="Date" title="Date"/>
+                    </f:facet>
                     <f:facet name="filter">
                         <p:calendar id="timeFilter" widgetVar="timeFilter" pattern="dd.MM.yy" readonly="false" styleClass="filter-date" timeInput="true" navigator="true" mask="true" showButtonPanel="true">
                             <p:ajax event="dateSelect" oncomplete="PF('eventsTable').filter()"/>
@@ -57,13 +60,12 @@
                         <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Description" styleClass="column" sortBy="#{eventHistory.eventDescription}" filterBy="#{eventHistory.eventDescription}" filterMatchMode="startsWith" filterStyleClass="filter">
-                    <h:outputText value="#{eventHistory.eventDescription}"/>
-                </p:column>
-                <p:column headerText="Parameters" styleClass="column" sortBy="#{eventHistory.eventParameters}" filterBy="#{eventHistory.eventParameters}" filterMatchMode="startsWith" filterStyleClass="filter">
-                    <h:outputText value="#{eventHistory.eventParameters}"/>
-                </p:column>
-                <p:column headerText="Severity" styleClass="column #{alarmListBean.setStyleClass(eventHistory.severity.ordinal())}" sortBy="#{eventHistory.severity.ordinal()}" filterBy="#{eventHistory.severity.name()}">
+                <p:column styleClass="column #{alarmListBean.setStyleClass(eventHistory.severity.ordinal())}"
+                          sortBy="#{eventHistory.severity.ordinal()}"
+                          filterBy="#{eventHistory.severity.name()}">
+                    <f:facet name="header">
+                        <h:outputLabel value="Severity" title="Severity"/>
+                    </f:facet>
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('eventsTable').filter()" styleClass="filter-select">
                             <f:selectItem/>
@@ -71,6 +73,24 @@
                         </p:selectOneMenu>
                     </f:facet>
                     <h:outputText value="#{eventHistory.severity.name()}"/>
+                </p:column>
+                <p:column styleClass="column" sortBy="#{eventHistory.eventParameters}" filterBy="#{eventHistory.eventParameters}" filterMatchMode="startsWith">
+                    <f:facet name="header">
+                        <h:outputLabel value="Parameters" title="Parameters"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:inputText styleClass="filter" onkeyup="PF('eventsTable').filter()"/>
+                    </f:facet>
+                    <h:outputText value="#{eventHistory.eventParameters}"/>
+                </p:column>
+                <p:column styleClass="column" sortBy="#{eventHistory.eventDescription}" filterBy="#{eventHistory.eventDescription}" filterMatchMode="startsWith">
+                    <f:facet name="header">
+                        <h:outputLabel value="Description" title="Description"/>
+                    </f:facet>
+                    <f:facet name="filter">
+                        <p:inputText styleClass="filter" onkeyup="PF('eventsTable').filter()"/>
+                    </f:facet>
+                    <h:outputText value="#{eventHistory.eventDescription}"/>
                 </p:column>
             </p:dataTable>
         </p:fieldset>

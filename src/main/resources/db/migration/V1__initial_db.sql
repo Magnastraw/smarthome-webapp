@@ -338,7 +338,7 @@ CREATE TABLE public.notifications (
   smart_home_id BIGINT NOT NULL,
   notification_name VARCHAR NOT NULL,
   notification_status INTEGER NOT NULL,
-  time TIME NOT NULL,
+  time TIMESTAMP NOT NULL,
   require_confirm BOOLEAN NOT NULL,
   channel INTEGER NOT NULL,
   alarm_id BIGINT,

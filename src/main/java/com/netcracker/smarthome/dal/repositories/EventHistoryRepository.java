@@ -20,8 +20,9 @@ public class EventHistoryRepository extends EntityRepository<EventHistory> {
     }
 
     public List<EventHistory> getHistoryByHome(SmartHome smartHome) {
-        Query query = getManager().createQuery("select eh from EventHistory eh where eh.event.smartHome=:home");
+        Query query = getManager().createQuery("select eh from EventHistory eh where eh.event.smartHome=:home order by eh.readDate desc");
         query.setParameter("home", smartHome);
+        query.setMaxResults(1000);
         return query.getResultList();
     }
 }

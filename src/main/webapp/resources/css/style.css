@@ -760,3 +760,9 @@ div.severity-critical {
     vertical-align: middle;
     border-spacing: 1px 1px;
 }*/
+
+.notification-text {
+    width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

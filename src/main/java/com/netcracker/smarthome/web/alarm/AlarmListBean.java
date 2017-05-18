@@ -12,17 +12,14 @@ import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 import com.netcracker.smarthome.web.specs.table.Filter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.data.FilterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,7 +84,7 @@ public class AlarmListBean implements Serializable {
             getRootAlarms();
     }
 
-    public void onSelect(Alarm alarm) {
+    public void onSelectAlarm(Alarm alarm) {
         if (alarmService.getChildrenAlarms(alarm) != null) {
             expand(alarm);
         }
@@ -133,16 +130,6 @@ public class AlarmListBean implements Serializable {
             dataTable.resetValue();
         }
     }
-
-    /*public void onChange() {
-        Calendar startTime = (Calendar) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT:startTimeFilter");
-        if(startTime.getValue() == null) {
-        //events.getNewValue() == null || events.getNewValue().equals("")) {
-            DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent("centerForm:alarmsDT");
-            dataTable.resetValue();
-            dataTable.reset();
-        }
-    }*/
 
     public void showSelectedObjectAlarms(SmartObject object) {
         setCurrentObject(object);

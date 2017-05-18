@@ -2,19 +2,18 @@ package com.netcracker.smarthome.web.notification;
 
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.enums.NotificationStatus;
-
-import java.sql.Time;
+import java.sql.Timestamp;
 
 public class NotificationForView {
 
     private String notificationName;
     private NotificationStatus notificationStatus;
-    private Time time;
+    private Timestamp time;
     private Channel channel;
     private String smartHome;
     private String notificationObject;
 
-    public NotificationForView(String notificationName, NotificationStatus notificationStatus, Time time,
+    public NotificationForView(String notificationName, NotificationStatus notificationStatus, Timestamp time,
                                Channel channel, String smartHome, String notificationObject) {
         this.notificationName = notificationName;
         this.notificationStatus = notificationStatus;
@@ -40,11 +39,11 @@ public class NotificationForView {
         this.notificationStatus = notificationStatus;
     }
 
-    public Time getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
