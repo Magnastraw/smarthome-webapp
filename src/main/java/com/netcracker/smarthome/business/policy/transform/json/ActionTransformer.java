@@ -19,7 +19,7 @@ public class ActionTransformer implements ITransformator<Action, JsonAction> {
         JsonAction jsonAction = new JsonAction();
         jsonAction.setId(action.getActionId());
         jsonAction.setOrder(action.getOrder());
-        jsonAction.setActionClass(action.getActionClass());
+        jsonAction.setActionClass(action.getCoreClass().getName());
         jsonAction.setParams(new JsonParams(action.getActionParams()
                 .stream()
                 .collect(Collectors.toMap(ActionParam::getName, ActionParam::getValue))));

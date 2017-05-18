@@ -29,7 +29,7 @@ class ConditionConverter {
                 .collect(Collectors.toMap(ConditionParam::getName, ConditionParam::getValue));
         PolicyCondition conditionClassInst = null;
         try {
-            Constructor constructor = Class.forName(condition.getConditionType().getConditionClass()).getConstructor(Map.class);
+            Constructor constructor = Class.forName(condition.getCoreClass().getName()).getConstructor(Map.class);
             conditionClassInst = (PolicyCondition) constructor.newInstance(params);
         } catch (Exception e) {
             log.error("Error during instantiate condition class", e);

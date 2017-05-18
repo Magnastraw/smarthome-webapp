@@ -22,7 +22,7 @@ public class ConditionTransformer implements ITransformator<Condition, JsonCondi
     private JsonCondition conditionToJson(Condition condition) {
         JsonCondition jsonCondition = new JsonCondition();
         jsonCondition.setId(condition.getNodeId());
-        jsonCondition.setConditionClass(condition.getConditionType().getConditionClass());
+        jsonCondition.setConditionClass(condition.getCoreClass().getName());
         jsonCondition.setParams(new JsonParams(condition.getConditionParams()
                 .stream()
                 .collect(Collectors.toMap(ConditionParam::getName, ConditionParam::getValue)))

@@ -2,9 +2,11 @@ package com.netcracker.smarthome.dal.repositories;
 
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.entities.Policy;
+import com.netcracker.smarthome.model.entities.Rule;
 import com.netcracker.smarthome.model.entities.SmartObject;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import java.util.HashSet;
@@ -85,9 +87,10 @@ public class PolicyRepository extends EntityRepository<Policy> {
         return nonInitializedPolicies.isEmpty() || !withInitialization ? nonInitializedPolicies : initializeWithAssignments(nonInitializedPolicies);
     }
 
-    public Policy getInitializedPolicy(long policyId) {
-        Query query = getManager().createQuery("select distinct p from Policy p left join fetch p.assignedObjects join fetch p.rules r join fetch r.actions join fetch r.conditions c where p.policyId=:id and c.parentNode is null");
+    public Policy getActiveInitializedPolicy(long policyId) {
+        Query query = getManager().createQuery("select distinct p from Policy p left join fetch p.assignedObjects join fetch p.rules r join fetch r.actions join fetch r.conditions c where p.policyId=:id and p.status=:status and c.parentNode is null");
         query.setParameter("id", policyId);
+        query.setParameter("status", PolicyStatus.ACTIVE);
         List<Policy> result = query.getResultList();
         return result.isEmpty() ? null : result.get(0);
     }
@@ -147,6 +150,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
         return result.isEmpty() ? new HashSet<>() : result.get(0).getAssignedPolicies();
     }
 
+    @Transactional
     public void saveAssignment(Policy policy, SmartObject object) {
         Query query = getManager().createNativeQuery("INSERT INTO assignments (policy_id, object_id) VALUES (:policy, :object)");
         query.setParameter("policy", policy.getPolicyId());
@@ -154,10 +158,24 @@ public class PolicyRepository extends EntityRepository<Policy> {
         query.executeUpdate();
     }
 
+    @Transactional
     public void deleteAssignment(Policy policy, SmartObject object) {
         Query query = getManager().createNativeQuery("DELETE FROM assignments WHERE policy_id=:policy AND object_id=:object");
         query.setParameter("policy", policy.getPolicyId());
         query.setParameter("object", object.getSmartObjectId());
         query.executeUpdate();
+    }
+
+    public List<Rule> gitInitializedRules(long policyId) {
+        Query query = getManager().createQuery("select distinct r from Rule r left join fetch r.actions left join fetch r.conditions c where r.policy.policyId=:id and c.parentNode is null");
+        query.setParameter("id", policyId);
+        return query.getResultList();
+    }
+
+    public Rule gitInitializedRule(long ruleId) {
+        Query query = getManager().createQuery("select distinct r from Rule r left join fetch r.actions left join fetch r.conditions c where r.ruleId=:id and c.parentNode is null");
+        query.setParameter("id", ruleId);
+        List<Rule> result = query.getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 }
