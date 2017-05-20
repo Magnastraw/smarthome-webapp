@@ -18,17 +18,16 @@ public class Condition implements Serializable {
     private BooleanOperator operator;
     private Set<ConditionParam> conditionParams;
     private Rule rule;
-    private ConditionType conditionType;
     private Condition parentNode;
     private Set<Condition> childNodes;
+    private Set<ConditionClass> conditionClasses;
 
     public Condition() {
     }
 
-    public Condition(BooleanOperator operator, Rule rule, ConditionType conditionType, Condition nextCondition) {
+    public Condition(BooleanOperator operator, Rule rule, Condition nextCondition) {
         this.operator = operator;
         this.rule = rule;
-        this.conditionType = conditionType;
         this.parentNode = nextCondition;
     }
 
@@ -75,16 +74,6 @@ public class Condition implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "type_id", nullable = true)
-    public ConditionType getConditionType() {
-        return conditionType;
-    }
-
-    public void setConditionType(ConditionType conditionType) {
-        this.conditionType = conditionType;
-    }
-
-    @ManyToOne
     @JoinColumn(name = "parent_node_id", referencedColumnName = "node_id")
     public Condition getParentNode() {
         return parentNode;
@@ -103,14 +92,30 @@ public class Condition implements Serializable {
         this.childNodes = childNodes;
     }
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "condition")
+    public Set<ConditionClass> getConditionClasses() {
+        return conditionClasses;
+    }
+
+    public void setConditionClasses(Set<ConditionClass> conditionClasses) {
+        this.conditionClasses = conditionClasses;
+    }
+
+    @Transient
+    public ConditionClass getCoreClass() {
+        return conditionClasses == null ? null : conditionClasses.stream().filter(actionClass -> actionClass.getContext().equalsIgnoreCase("core")).findAny().orElse(null);
+    }
+
+    @Transient
+    public ConditionClass getUiClass() {
+        return conditionClasses == null ? null : conditionClasses.stream().filter(actionClass -> actionClass.getContext().equalsIgnoreCase("ui")).findAny().orElse(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof Condition)) return false;
-
         Condition condition = (Condition) o;
-
         return new EqualsBuilder()
                 .append(getNodeId(), condition.getNodeId())
                 .isEquals();
@@ -129,7 +134,6 @@ public class Condition implements Serializable {
                 .append("nodeId", getNodeId())
                 .append("operator", getOperator())
                 .append("rule", getRule())
-                .append("conditionType", getConditionType())
                 .append("parentNode", getParentNode())
                 .toString();
     }

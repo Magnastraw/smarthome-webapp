@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<div class="rules-header">
+    <h2>Policy "#{rulesBean.policy.name}"</h2>
+    <p:commandButton value="All policies" icon="fa fa-arrow-left"
+                     action="#{navigationBean.setPageName('policy/policies')}"
+                     update=":centerForm">
+    </p:commandButton>
+</div>
+<h:outputText styleClass="fa fa-arrow-down fa-item"/>
+<h:outputText value="Select rule in the left part and its details will appear in the right."/>
+<div class="rule-container">
+    <p:menu id="rules" styleClass="rules">
+        <c:forEach var="rule" items="#{rulesBean.rules}">
+            <p:menuitem value="#{rule.name}"
+                        styleClass="#{rule.name eq rulesBean.currentRule.name ? 'cur-rule-item' : 'rule-item' }"
+                        update="@form" ajax="true">
+                <f:setPropertyActionListener value="#{rule}" target="#{rulesBean.currentRule}"/>
+            </p:menuitem>
+        </c:forEach>
+        <p:separator rendered="#{not rulesBean.rules.isEmpty()}" style="margin-bottom: 5px;"/>
+        <p:menuitem value="Add rule" icon="fa fa-plus"/>
+        <p:menuitem value="Remove selected" icon="fa fa-remove" rendered="#{not rulesBean.rules.isEmpty()}"/>
+    </p:menu>
+    <p:outputPanel styleClass="rule-options" rendered="#{not rulesBean.rules.isEmpty()}">
+        <p:outputPanel styleClass="rule-part">
+            <h4>IF</h4>
+            <p:separator/>
+            <p:organigram id="conditionTree"
+                          widgetVar="conditionTree"
+                          value="#{rulesBean.currentRuleRootNode}"
+                          selection="#{rulesBean.selectedNode}"
+                          var="node"
+                          rendered="#{rulesBean.currentRule.conditionTreeRoot!=null}">
+                <p:ajax event="contextmenu" process="@this"/>
+                <p:organigramNode type="operator"
+                                  styleClass="operator"
+                                  skipLeafHandling="true">
+                    <h:outputText escape="false" value="#{node.text}"/>
+                </p:organigramNode>
+                <p:organigramNode type="condition"
+                                  styleClass="condition"
+                                  skipLeafHandling="true">
+                    <h:outputText escape="false" value="#{node.text}"/>
+                </p:organigramNode>
+            </p:organigram>
+            <p:commandLink styleClass="add-link" value="+ add new condition..."
+                           rendered="#{rulesBean.currentRuleRootNode==null}"/>
+        </p:outputPanel>
+        <p:outputPanel styleClass="rule-part">
+            <h4>THEN</h4>
+            <p:separator/>
+            <p:panelGrid columns="3" id="thenActions" styleClass="rule-actions"
+                         rendered="#{not rulesBean.currentRule.thenActions.isEmpty()}">
+                <c:forEach items="#{rulesBean.currentRule.thenActions}" var="action">
+                    <h:outputText escape="false" value="#{rulesBean.getContent(action)}"/>
+                    <p:commandLink styleClass="fa fa-edit" title="Edit"/>
+                    <p:commandLink styleClass="fa fa-remove" title="Remove"/>
+                </c:forEach>
+            </p:panelGrid>
+            <p:commandLink styleClass="add-link" value="+ add new action..."/>
+        </p:outputPanel>
+        <p:outputPanel styleClass="rule-part">
+            <h4>ELSE</h4>
+            <p:separator/>
+            <p:panelGrid columns="3" id="elseActions" styleClass="rule-actions"
+                         rendered="#{not rulesBean.currentRule.elseActions.isEmpty()}">
+                <c:forEach items="#{rulesBean.currentRule.elseActions}" var="action">
+                    <h:outputText escape="false" value="#{rulesBean.getContent(action)}"/>
+                    <p:commandLink styleClass="fa fa-edit" title="Edit"/>
+                    <p:commandLink styleClass="fa fa-remove" title="Remove"/>
+                </c:forEach>
+            </p:panelGrid>
+            <p:commandLink styleClass="add-link" value="+ add new action..."/>
+        </p:outputPanel>
+        <p:contextMenu for="conditionTree" nodeType="operator">
+            <p:menuitem value="Edit"
+                        icon="fa fa-edit"/>
+            <p:menuitem value="Add child"
+                        icon="fa fa-plus"/>
+            <p:menuitem value="Remove"
+                        icon="fa fa-remove"/>
+        </p:contextMenu>
+        <p:contextMenu for="conditionTree" nodeType="condition">
+            <p:menuitem value="Details"
+                        ajax="true"
+                        icon="fa fa-search"
+                        update="@form:detailInfo"
+                        onclick="PF('detailsDialog').show()"/>
+            <p:separator/>
+            <p:menuitem value="Remove"
+                        icon="fa fa-remove"/>
+        </p:contextMenu>
+    </p:outputPanel>
+    <p:dialog id="detailsDialog"
+              widgetVar="detailsDialog"
+              header="Node details"
+              resizable="false"
+              styleClass="node-details-dialog">
+        <p:outputPanel id="detailInfo">
+            <p:panelGrid columns="1" style="margin-bottom: 5px">
+                <h:outputText escape="false" value="#{rulesBean.selectedNode.text}"/>
+            </p:panelGrid>
+            <p:commandButton value="Edit" icon="fa fa-edit" styleClass="btn"/>
+        </p:outputPanel>
+    </p:dialog>
+</div>
+</html>

@@ -28,7 +28,7 @@ class ActionConverter {
                 .collect(Collectors.toMap(ActionParam::getName, ActionParam::getValue));
         PolicyAction actionClassInst = null;
         try {
-            Constructor constructor = Class.forName(action.getActionClass()).getConstructor(Map.class);
+            Constructor constructor = Class.forName(action.getCoreClass().getName()).getConstructor(Map.class);
             actionClassInst = (PolicyAction) constructor.newInstance(params);
         } catch (Exception e) {
             log.error("Error during instantiate action class", e);

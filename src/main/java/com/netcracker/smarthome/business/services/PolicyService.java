@@ -7,7 +7,6 @@ import com.netcracker.smarthome.dal.repositories.ConditionRepository;
 import com.netcracker.smarthome.dal.repositories.PolicyRepository;
 import com.netcracker.smarthome.dal.repositories.RuleRepository;
 import com.netcracker.smarthome.model.entities.*;
-import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +62,14 @@ public class PolicyService {
         }
     }
 
+    public List<Rule> getRules(long policyId) {
+        return policyRepository.gitRules(policyId);
+    }
+
+    public Rule getRule(long ruleId) {
+        return policyRepository.gitInitializedRule(ruleId);
+    }
+
     @Transactional(readOnly = true)
     public List<Policy> getActivePoliciesByHome(long homeId) {
         List<Policy> inlinePolicies = policyRepository.getInlineActivePoliciesByHome(homeId),
@@ -94,8 +101,8 @@ public class PolicyService {
 
     @Transactional(readOnly = true)
     public Policy getActiveInitializedPolicy(long policyId) {
-        Policy policy = policyRepository.getInitializedPolicy(policyId);
-        if (policy == null || policy.getStatus() != PolicyStatus.ACTIVE)
+        Policy policy = policyRepository.getActiveInitializedPolicy(policyId);
+        if (policy == null)
             return null;
         policy.getAssignedObjects().addAll(policyRepository.getInlineObjects(policy));
         if (policy.getAssignedObjects().isEmpty())
@@ -121,63 +128,51 @@ public class PolicyService {
         return policyRepository.getPoliciesByObject(object);
     }
 
-    @Transactional
     public void saveAssignment(SmartObject object, Policy policy) {
         policyRepository.saveAssignment(policy, object);
-        Policy activePolicy = getActiveInitializedPolicy(policy.getPolicyId());
-        if (activePolicy != null)
-            onSaveOrUpdate(activePolicy);
+        onSaveOrUpdate(policy);
     }
 
-    @Transactional
     public void deleteAssignment(SmartObject object, Policy policy) {
         policyRepository.deleteAssignment(policy, object);
         onSaveOrUpdate(policy);
     }
 
-    @Transactional
     public Policy savePolicy(Policy policy) {
         Policy updatedPolicy = policyRepository.update(policy);
         onSaveOrUpdate(updatedPolicy);
         return updatedPolicy;
     }
 
-    @Transactional
     public void deletePolicy(long policyId) {
         Policy oldPolicy = policyRepository.get(policyId);
         policyRepository.delete(policyId);
         onSaveOrUpdate(oldPolicy);
     }
 
-    @Transactional
     public Rule saveRule(Rule rule) {
         Rule updatedRule = ruleRepository.update(rule);
         return updatedRule;
     }
 
-    @Transactional
     public void deleteRule(Rule rule) {
         ruleRepository.delete(rule.getRuleId());
     }
 
-    @Transactional
     public Action saveAction(Action action) {
         Action savedAction = actionRepository.update(action);
         return savedAction;
     }
 
-    @Transactional
     public void deleteAction(Action action) {
         ruleRepository.delete(action.getActionId());
     }
 
-    @Transactional
     public Condition saveCondition(Condition condition) {
         Condition savedCondition = conditionRepository.update(condition);
         return savedCondition;
     }
 
-    @Transactional
     public void deleteCondition(Condition condition) {
         ruleRepository.delete(condition.getNodeId());
     }

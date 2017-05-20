@@ -8,23 +8,23 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "actions", schema = "public", catalog = "smarthome_db")
 public class Action implements Serializable {
     private long actionId;
     private boolean type;
-    private String actionClass;
     private long order;
-    private List<ActionParam> actionParams;
     private Rule rule;
+    private Set<ActionParam> actionParams;
+    private Set<ActionClass> actionClasses;
 
     public Action() {
     }
 
-    public Action(boolean type, String actionClass, long order, Rule rule) {
+    public Action(boolean type, long order, Rule rule) {
         this.type = type;
-        this.actionClass = actionClass;
         this.order = order;
         this.rule = rule;
     }
@@ -52,16 +52,6 @@ public class Action implements Serializable {
     }
 
     @Basic
-    @Column(name = "action_class", nullable = false)
-    public String getActionClass() {
-        return actionClass;
-    }
-
-    public void setActionClass(String actionClass) {
-        this.actionClass = actionClass;
-    }
-
-    @Basic
     @Column(name = "action_order", nullable = false)
     public long getOrder() {
         return order;
@@ -72,11 +62,11 @@ public class Action implements Serializable {
     }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "action", cascade = CascadeType.ALL)
-    public List<ActionParam> getActionParams() {
+    public Set<ActionParam> getActionParams() {
         return actionParams;
     }
 
-    public void setActionParams(List<ActionParam> actionParams) {
+    public void setActionParams(Set<ActionParam> actionParams) {
         this.actionParams = actionParams;
     }
 
@@ -90,14 +80,30 @@ public class Action implements Serializable {
         this.rule = rule;
     }
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "action", cascade = CascadeType.ALL)
+    public Set<ActionClass> getActionClasses() {
+        return actionClasses;
+    }
+
+    public void setActionClasses(Set<ActionClass> actionClasses) {
+        this.actionClasses = actionClasses;
+    }
+
+    @Transient
+    public ActionClass getCoreClass() {
+        return actionClasses == null ? null : actionClasses.stream().filter(actionClass -> actionClass.getContext().equalsIgnoreCase("core")).findAny().orElse(null);
+    }
+
+    @Transient
+    public ActionClass getUiClass() {
+        return actionClasses == null ? null : actionClasses.stream().filter(actionClass -> actionClass.getContext().equalsIgnoreCase("ui")).findAny().orElse(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-
         if (!(o instanceof Action)) return false;
-
         Action action = (Action) o;
-
         return new EqualsBuilder()
                 .append(getActionId(), action.getActionId())
                 .isEquals();
@@ -115,7 +121,6 @@ public class Action implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("actionId", getActionId())
                 .append("type", getType())
-                .append("actionClass", getActionClass())
                 .append("order", getOrder())
                 .append("rule", getRule())
                 .toString();

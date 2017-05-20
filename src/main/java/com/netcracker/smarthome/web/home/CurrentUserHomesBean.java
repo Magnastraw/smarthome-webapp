@@ -1,7 +1,6 @@
 package com.netcracker.smarthome.web.home;
 
 import com.netcracker.smarthome.business.services.HomeService;
-import com.netcracker.smarthome.model.entities.EventHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.web.NavigationBean;
 import com.netcracker.smarthome.web.alarm.AlarmListBean;
@@ -9,8 +8,8 @@ import com.netcracker.smarthome.web.chart.DashboardBean;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.eventhistory.EventHistoryBean;
 import com.netcracker.smarthome.web.notification.NotificationBean;
-import com.netcracker.smarthome.web.policy.AssignmentsBean;
-import com.netcracker.smarthome.web.policy.PoliciesBean;
+import com.netcracker.smarthome.web.policy.jsf.AssignmentsBean;
+import com.netcracker.smarthome.web.policy.jsf.PoliciesBean;
 import com.netcracker.smarthome.web.inventory.InventoryBean;
 import com.netcracker.smarthome.web.specs.AlarmSpecsBean;
 import com.netcracker.smarthome.web.specs.MetricSpecsBean;
@@ -62,6 +61,8 @@ public class CurrentUserHomesBean {
         NavigationBean navigation = (NavigationBean)ContextUtils.getBean("navigationBean");
         if (navigation.getPageName().equals("/faces/alarms/alarm"))
             navigation.setPageName("alarms/alarmlist");
+        if (navigation.getPageName().equals("/faces/policy/rules"))
+            navigation.setPageName("policy/policies");
         ((DashboardBean)ContextUtils.getBean("dashboardBean")).homeChangeListener(home);
     }
 }

@@ -1,4 +1,4 @@
-package com.netcracker.smarthome.web.policy;
+package com.netcracker.smarthome.web.policy.jsf;
 
 import com.netcracker.smarthome.model.entities.Catalog;
 import com.netcracker.smarthome.model.enums.PolicyStatus;

@@ -52,7 +52,11 @@
     <p:column headerText="Actions" styleClass="btns-column">
         <p:commandLink rendered="#{!item.catalog}"
                        title="Details"
-                       styleClass="fa fa-eye icon-item"/>
+                       action="#{navigationBean.setPageName('policy/rules')}"
+                       actionListener="#{rulesBean.setPolicy(item.item)}"
+                       update=":centerForm"
+                       styleClass="fa fa-eye icon-item">
+        </p:commandLink>
         <p:commandLink update=":centerForm"
                        oncomplete="PF('saveItemDialog').show()"
                        title="Edit"
