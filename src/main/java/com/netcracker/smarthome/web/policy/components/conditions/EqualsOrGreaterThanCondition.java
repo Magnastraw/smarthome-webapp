@@ -17,6 +17,6 @@ public class EqualsOrGreaterThanCondition extends MetricCondition {
 
     @Override
     public String getTemplate() {
-        return "@spec >= @value";
+        return "@metric >= @value";
     }
 }

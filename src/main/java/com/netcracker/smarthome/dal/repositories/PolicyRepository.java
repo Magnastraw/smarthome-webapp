@@ -1,9 +1,6 @@
 package com.netcracker.smarthome.dal.repositories;
 
-import com.netcracker.smarthome.model.entities.Catalog;
-import com.netcracker.smarthome.model.entities.Policy;
-import com.netcracker.smarthome.model.entities.Rule;
-import com.netcracker.smarthome.model.entities.SmartObject;
+import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.PolicyStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,8 +163,8 @@ public class PolicyRepository extends EntityRepository<Policy> {
         query.executeUpdate();
     }
 
-    public List<Rule> gitInitializedRules(long policyId) {
-        Query query = getManager().createQuery("select distinct r from Rule r left join fetch r.actions left join fetch r.conditions c where r.policy.policyId=:id and c.parentNode is null");
+    public List<Rule> gitRules(long policyId) {
+        Query query = getManager().createQuery("select distinct r from Rule r where r.policy.policyId=:id");
         query.setParameter("id", policyId);
         return query.getResultList();
     }

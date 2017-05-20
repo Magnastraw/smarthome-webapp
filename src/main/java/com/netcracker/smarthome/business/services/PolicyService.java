@@ -10,7 +10,6 @@ import com.netcracker.smarthome.model.entities.*;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -64,7 +63,7 @@ public class PolicyService {
     }
 
     public List<Rule> getRules(long policyId) {
-        return policyRepository.gitInitializedRules(policyId);
+        return policyRepository.gitRules(policyId);
     }
 
     public Rule getRule(long ruleId) {

@@ -61,6 +61,8 @@ public class CurrentUserHomesBean {
         NavigationBean navigation = (NavigationBean)ContextUtils.getBean("navigationBean");
         if (navigation.getPageName().equals("/faces/alarms/alarm"))
             navigation.setPageName("alarms/alarmlist");
+        if (navigation.getPageName().equals("/faces/policy/rules"))
+            navigation.setPageName("policy/policies");
         ((DashboardBean)ContextUtils.getBean("dashboardBean")).homeChangeListener(home);
     }
 }

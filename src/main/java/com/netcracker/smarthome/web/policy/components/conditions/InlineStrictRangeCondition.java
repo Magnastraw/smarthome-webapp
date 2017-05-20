@@ -22,6 +22,6 @@ public class InlineStrictRangeCondition extends StrictRangeCondition {
 
     @Override
     public String getTemplate() {
-        return "@min < @spec on object @object < @max";
+        return "@min < @metric on object @object < @max";
     }
 }

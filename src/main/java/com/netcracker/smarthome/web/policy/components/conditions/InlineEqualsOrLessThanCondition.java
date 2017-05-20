@@ -22,6 +22,6 @@ public class InlineEqualsOrLessThanCondition extends EqualsOrLessThanCondition {
 
     @Override
     public String getTemplate() {
-        return "@spec on object @object <= @value";
+        return "@metric on object @object <= @value";
     }
 }

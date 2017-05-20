@@ -84,6 +84,7 @@ public class Policy implements Serializable {
     }
 
     @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
+    @OrderBy(value = "ruleId asc")
     public Set<Rule> getRules() {
         return rules;
     }

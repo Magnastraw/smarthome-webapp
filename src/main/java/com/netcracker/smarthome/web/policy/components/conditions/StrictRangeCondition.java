@@ -18,6 +18,6 @@ public class StrictRangeCondition extends MetricCondition {
 
     @Override
     public String getTemplate() {
-        return "@min < @spec < @max";
+        return "@min < @metric < @max";
     }
 }

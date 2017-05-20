@@ -45,7 +45,7 @@
 }
 
 .btn {
-    margin-top: 5px;
+    margin-top: 7px;
     display: block;
     margin-right: 5px;
 }
@@ -106,16 +106,20 @@
 }
 
 .dialog-input {
-    width: 200px; !important;
+    width: 200px;
+!important;
     margin: 0px !important;
 }
 
 .dialog-input-chart {
-    width: auto; !important;
+    width: auto;
+!important;
     margin: 0px !important;
 }
+
 .dialog-input-catalog {
-    width: 200px; !important;
+    width: 200px;
+!important;
     margin-left: 40px !important;
 }
 
@@ -340,7 +344,9 @@ h3 {
 .policies-header {
     width: 100%;
     display: inline-block;
-    margin-right: 7px; margin-bottom: 5px; float: left
+    margin-right: 7px;
+    margin-bottom: 5px;
+    float: left;
 }
 
 .policies-header .page-name {
@@ -378,7 +384,7 @@ h3 {
 }
 
 .policy-active {
-   background-color:green;
+    background-color: green;
 }
 
 .policy-inactive {
@@ -515,12 +521,12 @@ td.severity-critical {
     z-index: 1000;
 }
 
-.chart-border{
+.chart-border {
     border: 2px solid #CCC;
     border-right-width: 3px;
 }
 
-.one-dialog-select{
+.one-dialog-select {
     width: 145px !important;
     height: 29px;
 }
@@ -538,30 +544,28 @@ td.severity-critical {
     width: 100% !important;
 }
 
-.top-aligned-columns td{
+.top-aligned-columns td {
     vertical-align: top;
-    padding: 2px 5px ;
+    padding: 2px 5px;
 }
 
-
-.z-index-centr{
+.z-index-centr {
     z-index: auto !important;
 }
 
-.chartDialogInput{
+.chartDialogInput {
     width: 101%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
-
 /* inventory */
 .ui-organigram .ui-organigram-node {
     border-radius: 10px;
     margin-left: 20px !important;
     margin-right: 20px !important;
-    width: 130px !important;
+    width: 160px !important;
     /*min-height: 74px;*/
     /*background: #AACD4B !important;*/
     border: 1px solid #1F89CE;
@@ -584,6 +588,7 @@ td.severity-critical {
     text-align: center;
     font-size: 16px;
 }
+
 /*
 .ui-organigram .ui-organigram-node.rootcontroller {
     background: #dda0dd !important;
@@ -619,15 +624,15 @@ td.severity-critical {
     min-width: 100px !important;
 }
 
-.ui-icon-sensor{
+.ui-icon-sensor {
     background: transparent url("#{resource['images/Transistor-16.png']}") no-repeat top !important;
 }
 
-.ui-icon-controller{
+.ui-icon-controller {
     background: transparent url("#{resource['images/Electronics-16.png']}") no-repeat top !important;
 }
 
-.ui-icon-rootcontroller{
+.ui-icon-rootcontroller {
     background: transparent url("#{resource['images/house.png']}") no-repeat top !important;
 }
 
@@ -686,8 +691,8 @@ div.severity-critical {
 .ui-menuitem-icon {
     width: 18px;
 }
-/* */
 
+/* */
 
 /*.wrap {
     display: table;
@@ -760,3 +765,101 @@ div.severity-critical {
     vertical-align: middle;
     border-spacing: 1px 1px;
 }*/
+
+.rules-header {
+    margin-bottom: 15px !important;
+}
+
+.rules-header .policy-name {
+    display: inline-block;
+}
+
+.rule-container {
+    margin-top: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.rule-container .rules {
+    float: left;
+    width: 20%;
+}
+
+.rule-container .rule-options {
+    float: right;
+    width: 77%;
+    padding-right: 5px;
+}
+
+.rule-container .rule-options h4 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.cur-rule-item {
+    font-weight: bold !important;
+}
+
+.rule-item {
+    font-weight: normal !important;
+}
+
+.rule-actions {
+    text-align: left;
+    margin-left: 40px;
+    border: none;
+    margin-bottom: 5px;
+}
+
+.rule-actions td {
+    padding-left: 0 !important;
+}
+
+.rule-actions tr, .rule-actions td {
+    border: none !important;
+}
+
+.rule-part {
+    margin-bottom: 20px !important;
+}
+
+.rule-part .ui-organigram {
+    margin-left: 40px !important;
+}
+
+.rule-part .ui-organigram .ui-organigram-node {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    color: black !important;
+}
+
+.rule-part .ui-organigram .ui-organigram-node.operator {
+    text-decoration: none !important;
+    width: 100px !important;
+    border: 1px solid #D3974E !important;
+    background: #FFB353 !important;
+}
+
+.rule-part .ui-organigram .ui-organigram-node.condition {
+    min-width: 150px !important;
+    max-width: 270px !important;
+    width: auto !important;
+    border: 1px solid #1F89CE !important;
+    background: #54ADE7 !important;
+}
+
+.node-details-dialog {
+    max-width: 350px;
+    text-align: center;
+    border: none;
+    padding: 10px !important;
+}
+
+.node-details-dialog td, .node-details-dialog tr {
+    border: none !important;
+}
+
+.add-link {
+    margin-left: 40px;
+}
