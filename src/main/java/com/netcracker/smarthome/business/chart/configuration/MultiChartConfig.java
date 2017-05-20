@@ -10,14 +10,12 @@ import com.netcracker.smarthome.business.chart.options.jsonfields.YAxisNumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiChartConfig extends DefaultChartConfig implements ChartConfigurator {
+public class MultiChartConfig extends DefaultChartConfig {
     private String title;
-    private ChartService chartService;
 
     public MultiChartConfig(SmartHome smartHome, long chartId, String chartTitle, ChartService chartService, long refreshInterval, String chartType, String chartInterval) {
-        super(smartHome, chartId, refreshInterval, chartType, chartInterval);
+        super(smartHome, chartId, refreshInterval, chartType, chartInterval,chartService);
         this.title = chartTitle;
-        this.chartService = chartService;
     }
 
     public String getTitle() {
@@ -28,8 +26,8 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
         this.title = title;
     }
 
-    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
-        super.getChartConfigImpl().getChartOptions().setChartTitle(getTitle());
+    public HighchartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
+        super.getHighchartConfig().getChartOptions().setChartTitle(getTitle());
         ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, selectedSmartObjects, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
@@ -47,12 +45,12 @@ public class MultiChartConfig extends DefaultChartConfig implements ChartConfigu
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
+                super.getHighchartConfig().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getHighchartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
 
-        return super.getChartConfigImpl();
+        return super.getHighchartConfig();
     }
 
     private boolean isChild(SmartObject smartObject) {

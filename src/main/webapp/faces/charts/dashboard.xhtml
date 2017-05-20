@@ -6,7 +6,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <f:event listener="#{chartBean.buildCatalog}" type="preRenderView" />
+
 
     <h2 style="text-align: center;width: 100%; height:100%; margin-bottom: 2px;">#{dashboardBean.currentDashboard.dashboardName}</h2>
 
@@ -55,12 +55,15 @@
                 </li>
             </c:forEach>
         </ul>
-    </div>
+    </div >
 
 
-    <p:dialog header="Chart settings" modal="true" widgetVar="chartSettingDialog" resizable="false" >
+    <p:dialog header="Chart settings" modal="true"  widgetVar="chartSettingDialog" resizable="false" >
         <h:form id="chartSettings">
-
+            <div class="alert-block">
+                <p:messages id="messages" showDetail="true" closable="true" globalOnly="true" showIcon="false"
+                            styleClass="alert"/>
+            </div>
             <h:panelGrid id="sub" columns="2" cellpadding="0" styleClass="top-aligned-columns" style=" display: block; overflow-y: auto; max-height: 600px; ">
 
                 <h:outputText value="Drag objects:"/>
@@ -175,18 +178,33 @@
 
                 <p:commandButton id="submitButton"
                                  value="Submit"
-                                 action="#{chartBean.addChart()}"
-                                 onclick="clearHighchartsContainer();"
-                                 update="centerForm"
+                                 actionListener="#{chartBean.addChart()}"
                                  validateClient="true"
-                                 disabled="#{!(chartBean.selectedSmartObjects.size()>0 and chartBean.selectedMetricSpecs.size()>0) }"
+                                 oncomplete="handleHomeRequest(xhr, status, args, 'chartSettingDialog')"
                                  style="margin-top:10px;"/>
             </h:panelGrid>
+            <script type="text/javascript">
+                function handleHomeRequest(xhr, status, args, dialogName) {
+                    console.log(args);
+                    if (!args.correct) {
+                        PF(dialogName).jq.effect("shake", {times: 5}, 100);
+                        updateErrorMsg();
+                    }
+                    else {
+                        PF(dialogName).hide();
+                        updateForms();
+
+                    }
+                }
+            </script>
         </h:form>
     </p:dialog>
+
     <h:outputScript name="js/custom_dnd.js"/>
     <h:outputScript name="js/custom_gridster.js"/>
 
+    <p:remoteCommand name="updateForms" update="centerForm"/>
+    <p:remoteCommand name="updateErrorMsg" update="centerForm:chartSettings"/>
     <p:remoteCommand name="treeToTable" actionListener="#{chartBean.treeToTable}" update="centerForm:chartSettings:selectedObjects chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
     <p:remoteCommand name="treeToMetric" actionListener="#{chartBean.treeToMetric}" update="centerForm:chartSettings:selectedMetrics chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
 

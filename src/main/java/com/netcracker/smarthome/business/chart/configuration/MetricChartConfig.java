@@ -10,32 +10,30 @@ import com.netcracker.smarthome.business.chart.options.jsonfields.SeriesConfig;
 
 import java.util.List;
 
-public class MetricChartConfig extends DefaultChartConfig implements ChartConfigurator {
-    private ChartService chartService;
+public class MetricChartConfig extends DefaultChartConfig {
 
     public MetricChartConfig(SmartHome smartHome, long chartId, ChartService chartService, long refreshInterval, String chartType, String chartInterval) {
-        super(smartHome, chartId, refreshInterval, chartType, chartInterval);
-        this.chartService = chartService;
+        super(smartHome, chartId, refreshInterval, chartType, chartInterval, chartService);
     }
 
-    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
+    public HighchartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
-        super.getChartConfigImpl().getChartOptions().setChartTitle(selectedMetricSpecs.get(0).getSpecName());
+        super.getHighchartConfig().getChartOptions().setChartTitle(selectedMetricSpecs.get(0).getSpecName());
         AxisConfig axisConfig = new AxisConfig();
         axisConfig.setTitle(selectedMetricSpecs.get(0).getSpecName());
-        axisConfig.setLabel(chartService.getUnitBySpecId(selectedMetricSpecs.get(0).getSpecId()).getLabel());
-        super.getChartConfigImpl().getChartOptions().getyAxis().add(axisConfig);
+        axisConfig.setLabel(selectedMetricSpecs.get(0).getUnit().getLabel());
+        super.getHighchartConfig().getChartOptions().getyAxis().add(axisConfig);
 
         for (SmartObject smartObject : selectedSmartObjects) {
             SeriesConfig seriesConfig = new SeriesConfig();
             seriesConfig.setData("");
             seriesConfig.setName(smartObject.getName());
             seriesConfig.setType(super.getChartType());
-            super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
-            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getHighchartConfig().getChartOptions().getSeries().add(seriesConfig);
+            super.getHighchartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
-        super.getChartConfigImpl().getRequestDataOptions().getMetricSpecId().add(selectedMetricSpecs.get(0).getSpecId());
+        super.getHighchartConfig().getRequestDataOptions().getMetricSpecId().add(selectedMetricSpecs.get(0).getSpecId());
 
-        return super.getChartConfigImpl();
+        return super.getHighchartConfig();
     }
 }

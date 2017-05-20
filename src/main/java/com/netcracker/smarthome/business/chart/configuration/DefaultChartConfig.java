@@ -15,27 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DefaultChartConfig {
+public abstract class DefaultChartConfig implements ChartConfigurator {
 
     private int yAxisNumber;
-    private ChartConfigImpl chartConfigImpl;
+    private HighchartConfig highchartConfig;
     private String chartType;
+    protected ChartService chartService;
 
-    public DefaultChartConfig(SmartHome smartHome, long chartId, long refreshInterval, String chartType, String chartInterval) {
+    public DefaultChartConfig(SmartHome smartHome, long chartId, long refreshInterval, String chartType, String chartInterval,ChartService chartService) {
+        this.chartService = chartService;
+        highchartConfig = new HighchartConfig(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
+        highchartConfig.setChartId(chartId);
+        highchartConfig.setRefreshInterval(refreshInterval);
 
-        chartConfigImpl = new ChartConfigImpl(new ChartOptions(new ArrayList<AxisConfig>(), new ArrayList<SeriesConfig>()), new RequestDataOptions(new ArrayList<Long>(), new ArrayList<Long>()));
-        chartConfigImpl.setChartId(chartId);
-        chartConfigImpl.setRefreshInterval(refreshInterval);
-
-        chartConfigImpl.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
-        chartConfigImpl.getRequestDataOptions().setChartInterval(chartInterval);
+        highchartConfig.getRequestDataOptions().setSmartHomeId(smartHome.getSmartHomeId());
+        highchartConfig.getRequestDataOptions().setChartInterval(chartInterval);
         setChartType(chartType);
 
-        chartConfigImpl.getChartOptions().setxAxisType("datetime");
-        chartConfigImpl.getChartOptions().setCredits("false");
-        chartConfigImpl.getChartOptions().setRenderTo("component" + chartId + "_chartDiv");
-        chartConfigImpl.getChartOptions().setType(chartType);
-        chartConfigImpl.getChartOptions().setZoomType("x");
+        highchartConfig.getChartOptions().setxAxisType("datetime");
+        highchartConfig.getChartOptions().setCredits("false");
+        highchartConfig.getChartOptions().setRenderTo("component" + chartId + "_chartDiv");
+        highchartConfig.getChartOptions().setType(chartType);
+        highchartConfig.getChartOptions().setZoomType("x");
     }
 
     public String getChartType() {
@@ -46,12 +47,12 @@ public class DefaultChartConfig {
         this.chartType = chartType;
     }
 
-    public ChartConfigImpl getChartConfigImpl() {
-        return chartConfigImpl;
+    public HighchartConfig getHighchartConfig() {
+        return highchartConfig;
     }
 
-    public void setChartConfigImpl(ChartConfigImpl chartConfigImpl) {
-        this.chartConfigImpl = chartConfigImpl;
+    public void setHighchartConfig(HighchartConfig chartConfigImpl) {
+        this.highchartConfig = chartConfigImpl;
     }
 
     public ArrayList<YAxisNumber> setAxisOptions(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObject, ChartService chartService) {
@@ -68,15 +69,16 @@ public class DefaultChartConfig {
                 yAxisNumbers.add(yAxisNumber);
 
                 axisConfig.setTitle(metricSpec.getSpecName());
-                axisConfig.setLabel(chartService.getUnitBySpecId(metricSpec.getSpecId()).getLabel());
+                axisConfig.setLabel(metricSpec.getUnit().getLabel());
 
+                highchartConfig.getChartOptions().getyAxis().add(axisConfig);
 
-                chartConfigImpl.getChartOptions().getyAxis().add(axisConfig);
-
-                chartConfigImpl.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
+                highchartConfig.getRequestDataOptions().getMetricSpecId().add(metricSpec.getSpecId());
             }
         }
         return yAxisNumbers;
     }
 
+    @Override
+    public abstract HighchartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects);
 }

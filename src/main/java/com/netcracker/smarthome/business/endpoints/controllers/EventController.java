@@ -88,7 +88,13 @@ public class EventController {
 
     @RequestMapping(value = "/updateEvent",
             method = RequestMethod.GET)
-    public Boolean updateInventory(@RequestParam(value = "houseId",required = true) long houseId){
+    public Boolean updateEventTable(@RequestParam(value = "houseId",required = true) long houseId){
         return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateEvent");
+    }
+
+    @RequestMapping(value = "/updateAlarm",
+            method = RequestMethod.GET)
+    public Boolean updateAlarmTable(@RequestParam(value = "houseId",required = true) long houseId){
+        return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateAlarm");
     }
 }

@@ -2,6 +2,7 @@ package com.netcracker.smarthome.web.chart;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netcracker.smarthome.business.chart.options.ChartOptions;
 import com.netcracker.smarthome.business.services.ChartService;
 import com.netcracker.smarthome.business.chart.tree.obj.wrapper.CatalogWrapper;
 import com.netcracker.smarthome.business.chart.tree.obj.wrapper.MetricSpecWrapper;
@@ -16,6 +17,7 @@ import com.netcracker.smarthome.business.chart.options.Position;
 import com.netcracker.smarthome.web.common.ContextUtils;
 import com.netcracker.smarthome.web.home.CurrentUserHomesBean;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -29,7 +31,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @ManagedBean(name = "chartBean")
-@SessionScoped
+@ViewScoped
 public class ChartBean implements Serializable{
     private static final Logger LOG = LoggerFactory.getLogger(ChartBean.class);
 
@@ -66,10 +68,13 @@ public class ChartBean implements Serializable{
     private TreeNode objectRoot;
     private TreeNode metricRoot;
 
+    private ChartTransformator chartTransformator;
+
 
     @PostConstruct
     public void init() {
         chartConfiguratorImpl = new ChartConfiguratorImpl();
+        chartTransformator = new ChartTransformator();
         selectedMetricSpecs = new ArrayList<MetricSpec>();
         selectedSmartObjects = new ArrayList<SmartObject>();
         objectMapper = new ObjectMapper();
@@ -117,7 +122,6 @@ public class ChartBean implements Serializable{
                     defaultTreeNodes.add(childObject);
                     treeObjectMap.put(parentObject.getRowKey(), parentObject);
                     treeObjectMap.put(childObject.getRowKey(), childObject);
-
                 } else {
                     TreeNode childObject = new DefaultTreeNode(smartObject.getObjectType().getName(), new SmartObjectWrapper(getParentNode(defaultTreeNodes, smartObject), smartObject), getParentNode(defaultTreeNodes, smartObject));
                     defaultTreeNodes.add(childObject);
@@ -219,6 +223,13 @@ public class ChartBean implements Serializable{
     }
 
     public void addChart() throws IOException {
+        RequestContext context = RequestContext.getCurrentInstance();
+        if(selectedSmartObjects.size()==0 || selectedMetricSpecs.size()==0){
+            ContextUtils.addErrorMessageToContext("Error during saving changes!");
+            context.addCallbackParam("correcy",false);
+            return;
+        }
+
         long chartIdLong = chartService.getChartId() + 1;
         String chartType = selectedChartType.toString().toLowerCase();
         String chartInterval = selectedChartInterval.toString();
@@ -230,9 +241,12 @@ public class ChartBean implements Serializable{
         } else {
             chartConfiguratorImpl.setChartConfigurator(new MultiChartConfig(getCurrentHome(), chartIdLong, getChartTitle(), chartService, refreshInterval, chartType, chartInterval));
         }
-        ChartConfigImpl chartConfigImpl = (ChartConfigImpl) chartConfiguratorImpl.getConfig(selectedMetricSpecs, selectedSmartObjects);
-        chartService.addChart(chartConfigImpl.getJsonChartConfig(), chartConfigImpl.getJsonRequestDataConfig(), chartConfigImpl.getRefreshInterval(), getCurrentDashBoard());
+        HighchartConfig chartConfigImpl = chartConfiguratorImpl.getConfig(selectedMetricSpecs, selectedSmartObjects);
+        ChartOptionsContainer chartOptionsContainer = chartTransformator.toJsonEntity(chartConfigImpl);
+        chartService.addChart(chartOptionsContainer.getJsonChartConfig(), chartOptionsContainer.getJsonRequestOptions(), chartConfigImpl.getRefreshInterval(), getCurrentDashBoard());
         setCharts(getCurrentDashBoard());
+        context.addCallbackParam("correct", true);
+
         setDefault();
     }
 

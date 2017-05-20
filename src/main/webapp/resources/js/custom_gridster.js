@@ -12,8 +12,10 @@ function resizeChart() {
 }
 $(function () {
     gridster = $(".gridster  ul").gridster({
-        widget_base_dimensions: [$(window).width() / 12, $(window).height() / 12],
+        widget_base_dimensions: [$(window).width() / 10, $(window).height() / 10],
         widget_margins: [8, 8],
+        minSizeY: 6,
+        minSizeX: 6,
         helper: 'clone',
         max_cols: ($(window).width() / 12) * 10,
         draggable: {
@@ -25,7 +27,7 @@ $(function () {
         resize: {
             enabled: true,
             max_size: [8, 8],
-            min_size: [2, 2],
+            min_size: [3, 3],
             resize: function (e, ui, $widget) {
                 resizeChart();
             },

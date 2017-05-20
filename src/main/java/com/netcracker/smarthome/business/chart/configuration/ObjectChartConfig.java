@@ -10,17 +10,15 @@ import com.netcracker.smarthome.business.chart.options.jsonfields.YAxisNumber;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectChartConfig extends DefaultChartConfig implements ChartConfigurator {
-    private ChartService chartService;
+public class ObjectChartConfig extends DefaultChartConfig {
 
     public ObjectChartConfig(SmartHome smartHome, long chartId, ChartService chartService, long refreshInterval, String chartType, String chartInterval) {
-        super(smartHome, chartId, refreshInterval, chartType, chartInterval);
-        this.chartService = chartService;
+        super(smartHome, chartId, refreshInterval, chartType, chartInterval,chartService);
     }
 
-    public ChartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
+    public HighchartConfig configure(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects) {
 
-        super.getChartConfigImpl().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
+        super.getHighchartConfig().getChartOptions().setChartTitle(selectedSmartObjects.get(0).getName());
         ArrayList<YAxisNumber> yAxisNumbers = super.setAxisOptions(selectedMetricSpecs, selectedSmartObjects, chartService);
 
         for (SmartObject smartObject : selectedSmartObjects) {
@@ -34,12 +32,12 @@ public class ObjectChartConfig extends DefaultChartConfig implements ChartConfig
                         seriesConfig.setyAxis(yAxisNumber.getNumber());
                     }
                 }
-                super.getChartConfigImpl().getChartOptions().getSeries().add(seriesConfig);
+                super.getHighchartConfig().getChartOptions().getSeries().add(seriesConfig);
             }
-            super.getChartConfigImpl().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
+            super.getHighchartConfig().getRequestDataOptions().getObjectId().add(smartObject.getSmartObjectId());
         }
 
-        return super.getChartConfigImpl();
+        return super.getHighchartConfig();
     }
 
 }

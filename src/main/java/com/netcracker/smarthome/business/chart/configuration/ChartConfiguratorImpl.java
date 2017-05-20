@@ -17,7 +17,7 @@ public class ChartConfiguratorImpl {
         this.chartConfigurator = chartConfigurator;
     }
 
-    public ChartConfig getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects){
+    public HighchartConfig getConfig(List<MetricSpec> selectedMetricSpecs, List<SmartObject> selectedSmartObjects){
         return chartConfigurator.configure(selectedMetricSpecs, selectedSmartObjects);
     }
 }

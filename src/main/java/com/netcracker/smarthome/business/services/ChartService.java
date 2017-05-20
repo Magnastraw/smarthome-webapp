@@ -46,10 +46,6 @@ public class ChartService {
         return metricSpecRepository.getSpecByObjectId(objectId);
     }
 
-    public Unit getUnitBySpecId(long specId) {
-        return unitRepository.getUnitByMetricSpecId(specId);
-    }
-
     public List<Chart> getCharts(long dashboardId) {
         return chartRepository.getChartByDashboardId(dashboardId);
     }

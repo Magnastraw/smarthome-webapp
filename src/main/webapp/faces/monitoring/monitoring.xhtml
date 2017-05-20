@@ -202,12 +202,12 @@
             </p:tab>
         </p:accordionPanel>
     </p:outputPanel>
-    <p:remoteCommand name="updateEvent" update="monitoring:notificationsDT,monitoring:eventHistoryDT"
-                     actionListener="#{notificationBean.init()}">
-        <f:actionListener binding="#{eventHistoryBean.init()}"/>
+    <p:remoteCommand name="updateEvent" update="monitoring:eventHistoryDT"
+                     actionListener="#{eventHistoryBean.init()}"/>
+    <p:remoteCommand name="updateAlarm" update="monitoring:alarmsDT,monitoring:notificationsDT"
+                     actionListener="#{alarmListBean.init()}">
+        <f:actionListener binding="#{notificationBean.init()}"/>
     </p:remoteCommand>
-    <p:remoteCommand name="updateAlarm" update="monitoring:alarmsDT,monitoring:eventHistoryDT"
-                     actionListener="#{alarmListBean.init()}"/>
 <script type="text/javascript">
         updateContent(window.location + 'updateEvent?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateEvent");
         updateContent(window.location + 'updateAlarm?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateAlarm");

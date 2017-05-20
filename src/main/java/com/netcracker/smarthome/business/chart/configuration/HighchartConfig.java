@@ -16,43 +16,15 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChartConfigImpl implements ChartConfig {
-    private static final Logger LOG = LoggerFactory.getLogger(ChartConfigImpl.class);
-
-    private String jsonChartConfig;
+public class HighchartConfig  {
     private long chartId;
     private ChartOptions chartOptions;
     private RequestDataOptions requestDataOptions;
     private long refreshInterval;
-    private ObjectMapper objectMapper;
-    private VelocityContext vc;
-    private Map<String,String> templateMap;
 
-    public ChartConfigImpl(ChartOptions chartOptions, RequestDataOptions requestDataOptions) {
+    public HighchartConfig(ChartOptions chartOptions, RequestDataOptions requestDataOptions) {
         this.chartOptions = chartOptions;
         this.requestDataOptions = requestDataOptions;
-        this.objectMapper = new ObjectMapper();
-        this.templateMap = new HashMap<String, String>();
-        templateMap.put("area","velocityTemplates/default.vm");
-        templateMap.put("line","velocityTemplates/default.vm");
-        templateMap.put("column","velocityTemplates/default.vm");
-        Velocity.init(this.getClass().getClassLoader().getResource("/velocity.properties").getPath());
-        vc = new VelocityContext();
-    }
-
-    public String getJsonChartConfig() throws IOException {
-        vc.put("chartOption", chartOptions);
-        Template t = Velocity.getTemplate(templateMap.get(chartOptions.getType()), "utf-8");
-        StringWriter sw = new StringWriter();
-        t.merge(vc, sw);
-        jsonChartConfig = sw.toString();
-        sw.close();
-        LOG.info("Chart options:" + jsonChartConfig);
-        return jsonChartConfig;
-    }
-
-    public String getJsonRequestDataConfig() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(requestDataOptions);
     }
 
     public long getChartId() {
