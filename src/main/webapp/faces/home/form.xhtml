@@ -25,8 +25,7 @@
         <p:clientValidator/>
     </p:inputText>
     <p:outputLabel for="description" value="Description:"/>
-    <p:inputTextarea id="description" value="#{homeFormBean.home.description}" autoResize="false" rows="10" required="true"
-                     requiredMessage="The description is required!"/>
+    <p:inputTextarea id="description" value="#{homeFormBean.home.description}" autoResize="false" rows="10"/>
     <p:commandButton value="Save" action="#{navigationBean.setPageName('home/settings')}"
                      actionListener="#{homeFormBean.save}" ajax="true" icon="fa fa-save"
                      styleClass="btn" validateClient="true" update="centerForm,header,menu">

@@ -19,17 +19,29 @@
                              filteredValue="#{eventHistoryBean.filteredHistory}"
                              emptyMessage="No objects found with given criteria"
                              sortBy="#{history.readDate}" sortOrder="descending">
-                    <p:column filterBy="#{history.event.eventId}" style="width: 10%"
+                    <p:column filterBy="#{history.event.object.name}"
                               filterMatchMode="startsWith"
-                              sortBy="#{history.event.eventId}"
+                              sortBy="#{history.event.object.name}"
                               styleClass="column">
                         <f:facet name="header">
-                            <h:outputLabel value="Event ID" title="Event ID"/>
+                            <h:outputLabel value="Object" title="Object"/>
                         </f:facet>
                         <f:facet name="filter">
                             <p:inputText styleClass="filter" onkeyup="PF('eventHistoryTable').filter()"/>
                         </f:facet>
-                        <h:outputText value="#{history.event.eventId}"/>
+                        <h:outputText value="#{history.event.object.name}"/>
+                    </p:column>
+                    <p:column filterBy="#{history.event.subobject.name}"
+                              filterMatchMode="startsWith"
+                              sortBy="#{history.event.subobject.name}"
+                              styleClass="column">
+                        <f:facet name="header">
+                            <h:outputLabel value="Subobject" title="Subobject"/>
+                        </f:facet>
+                        <f:facet name="filter">
+                            <p:inputText styleClass="filter" onkeyup="PF('eventHistoryTable').filter()"/>
+                        </f:facet>
+                        <h:outputText value="#{history.event.subobject.name}"/>
                     </p:column>
                     <p:column styleClass="column-time" filterBy="#{history.readDate}"
                               filterFunction="#{eventHistoryBean.filterByDate}"
@@ -208,7 +220,7 @@
                      actionListener="#{alarmListBean.init()}">
         <f:actionListener binding="#{notificationBean.init()}"/>
     </p:remoteCommand>
-<script type="text/javascript">
+    <script type="text/javascript">
         updateContent(window.location + 'updateEvent?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateEvent");
         updateContent(window.location + 'updateAlarm?houseId=' + '${currentUserHomesBean.currentHome.smartHomeId}', "updateAlarm");
     </script>

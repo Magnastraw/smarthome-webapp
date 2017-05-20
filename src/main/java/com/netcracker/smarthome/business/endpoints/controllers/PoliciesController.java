@@ -5,6 +5,7 @@ import com.netcracker.smarthome.business.policy.transform.json.entities.JsonPoli
 import com.netcracker.smarthome.business.services.HomeService;
 import com.netcracker.smarthome.business.services.PolicyService;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class PoliciesController {
     @RequestMapping(value = "/policies",
             method = RequestMethod.GET,
             produces = "application/json")
+    @ApiOperation(value = "Get policies")
     public ResponseEntity<List<JsonPolicy>> getPolicies(@RequestParam(value = "houseId", required = true) String houseId) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)

@@ -30,7 +30,7 @@ public class HomeService {
 
     @Transactional
     public void createHome(SmartHome home) {
-        setDefaultParams(home);
+        //setDefaultParams(home);
         homeRepository.save(home);
         createRootCatalogs(home);
     }
@@ -38,7 +38,7 @@ public class HomeService {
     private void setDefaultParams(SmartHome home) {
         ArrayList<HomeParam> params = new ArrayList<HomeParam>();
         params.add(new HomeParam("Address", "address", home, dataTypeRepository.getByType(Type.STRING)));
-        params.add(new HomeParam("Link", "http://www.outlink.com", home, dataTypeRepository.getByType(Type.LINK)));
+        params.add(new HomeParam("Home page", "http://localhost:8083/", home, dataTypeRepository.getByType(Type.LINK)));
         home.setHomeParams(params);
     }
 

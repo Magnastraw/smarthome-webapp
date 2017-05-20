@@ -10,6 +10,7 @@ import com.netcracker.smarthome.business.services.DataTypeService;
 import com.netcracker.smarthome.business.endpoints.transformators.HomeParamTransformator;
 import com.netcracker.smarthome.model.entities.HomeParam;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class HouseController {
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
+    @ApiOperation(value = "Initialise house, send parameters")
     public ResponseEntity<String> sendHomeParams(@RequestParam(value="houseId", required=true) String houseId,
                                          @RequestBody String json) {
         LOG.info("POST /house\nBody:\n" + json);
@@ -86,6 +88,7 @@ public class HouseController {
     @RequestMapping(value = "/house",
             method = RequestMethod.GET,
             produces = "application/json")
+    @ApiOperation(value = "Get commands to execute")
     public ResponseEntity<String> getCommands(@RequestParam(value="houseId", required=true) String houseId) {
         SmartHome home = homeService.getHomeBySecretKey(houseId);
         if (home == null)

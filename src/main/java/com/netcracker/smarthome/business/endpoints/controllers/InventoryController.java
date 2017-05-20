@@ -14,6 +14,7 @@ import com.netcracker.smarthome.model.entities.ObjectParam;
 import com.netcracker.smarthome.model.entities.Policy;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.entities.SmartObject;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class InventoryController {
     @RequestMapping(value = "/inventories",
             method = RequestMethod.POST,
             consumes = "application/json")
+    @ApiOperation(value = "Send list of inventory objects")
     public ResponseEntity sendInventories(@RequestParam(value = "houseId", required = true) String houseId,
                                           @RequestBody String json) {
         LOG.info("POST /inventories\nBody:\n" + json);
@@ -118,6 +120,7 @@ public class InventoryController {
     @RequestMapping(value = "/inventories/{objectId}",
             method = RequestMethod.PUT,
             consumes = "application/json")
+    @ApiOperation(value = "Update inventory object")
     public ResponseEntity updateInventory(@PathVariable(value = "objectId", required = true) long objectId,
                                           @RequestParam(value = "houseId", required = true) String houseId,
                                           @RequestBody String json) {
@@ -166,6 +169,7 @@ public class InventoryController {
 
     @RequestMapping(value = "/inventories/{objectId}",
             method = RequestMethod.DELETE)
+    @ApiOperation(value = "Delete inventory object")
     public ResponseEntity deleteInventory(@PathVariable(value = "objectId", required = true) long objectId,
                                           @RequestParam(value = "houseId", required = true) String houseId) {
         LOG.info("DELETE /inventories\nId:\n" + objectId);
@@ -189,6 +193,7 @@ public class InventoryController {
 
     @RequestMapping(value = "/updateInventory",
             method = RequestMethod.GET)
+    @ApiOperation(value = "Update inventory tree")
     public Boolean updateInventory(@RequestParam(value = "houseId", required = true) long houseId) {
         return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateInventory");
     }

@@ -9,7 +9,7 @@ INSERT INTO public.data_types
           (DEFAULT, 'Link', 1);
 
 INSERT INTO public.smart_homes
-VALUES (DEFAULT, 'Apartment in the central district', 'TO DO', 1),
+VALUES (DEFAULT, 'Apartment in the center', 'TO DO', 1),
   (DEFAULT, 'Apartment', 'TO DO', 1)
 ;
 
@@ -77,13 +77,13 @@ VALUES
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('New specs', 13, 1),
+  ('Current specs', 13, 1),
   ('Old specs', 13, 1),
-  ('New specs', 14, 1),
+  ('Current specs', 14, 1),
   ('Old specs', 14, 1),
-  ('New specs', 15, 1),
+  ('Current specs', 15, 1),
   ('Old specs', 15, 1),
-  ('New specs', 16, 1),
+  ('Current specs', 16, 1),
   ('Old specs', 16, 1)
 ;
 

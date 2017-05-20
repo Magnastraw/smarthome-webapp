@@ -149,7 +149,7 @@ CREATE TABLE public.metric_specs (
   unit_id BIGINT,
   max_value NUMERIC,
   min_value NUMERIC,
-  metric_type VARCHAR NOT NULL,
+  metric_type VARCHAR,
   assigned_to_object VARCHAR,
   catalog_id BIGINT NOT NULL,
   CONSTRAINT metric_specs_pk PRIMARY KEY (spec_id)

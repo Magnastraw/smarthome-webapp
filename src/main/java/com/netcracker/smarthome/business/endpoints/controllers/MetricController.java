@@ -13,6 +13,7 @@ import com.netcracker.smarthome.business.services.SmartObjectService;
 import com.netcracker.smarthome.model.entities.Metric;
 import com.netcracker.smarthome.model.entities.MetricHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class MetricController {
     @RequestMapping(value = "/metrics",
             method = RequestMethod.POST,
             consumes = "application/json")
+    @ApiOperation(value = "Send metrics")
     public ResponseEntity sendHomeParams(@RequestParam(value = "houseId", required = true) String houseId,
                                          @RequestBody String json) {
         LOG.info("POST /metrics\nBody:\n" + json);

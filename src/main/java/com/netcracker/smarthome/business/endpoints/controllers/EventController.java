@@ -12,6 +12,7 @@ import com.netcracker.smarthome.model.entities.Event;
 import com.netcracker.smarthome.model.entities.EventHistory;
 import com.netcracker.smarthome.model.entities.SmartHome;
 import com.netcracker.smarthome.model.enums.AlarmSeverity;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class EventController {
     @RequestMapping(value = "/event",
             method = RequestMethod.POST,
             consumes = "application/json")
+    @ApiOperation(value = "Send event")
     public ResponseEntity sendAlarms(@RequestParam(value="houseId", required=true) String houseId,
                                      @RequestBody String json) {
         LOG.info("POST /event\nBody:\n" + json);
@@ -88,12 +90,14 @@ public class EventController {
 
     @RequestMapping(value = "/updateEvent",
             method = RequestMethod.GET)
+    @ApiOperation(value = "Update event table")
     public Boolean updateEventTable(@RequestParam(value = "houseId",required = true) long houseId){
         return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateEvent");
     }
 
     @RequestMapping(value = "/updateAlarm",
             method = RequestMethod.GET)
+    @ApiOperation(value = "Update alarm table")
     public Boolean updateAlarmTable(@RequestParam(value = "houseId",required = true) long houseId){
         return taskManager.getUpdateMap().get(houseId) != null && taskManager.getUpdateMap().get(houseId).remove("updateAlarm");
     }
