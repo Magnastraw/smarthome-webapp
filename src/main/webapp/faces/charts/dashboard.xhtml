@@ -86,7 +86,7 @@
                 </p:tree>
 
 
-                <p:dataList id="selectedObjects" var="object" value="#{chartBean.selectedSmartObjects}" paginator="true" rows="8">
+                <p:dataList id="selectedObjects" var="object" value="#{chartBean.selectedSmartObjects}" paginator="true" rows="8" paginatorPosition="bottom">
                     <f:facet name="header">
                         Selected objects
                     </f:facet>
@@ -114,7 +114,7 @@
                 </p:tree>
 
 
-                <p:dataList id="selectedMetrics" var="metric" value="#{chartBean.selectedMetricSpecs}" paginator="true" rows="8">
+                <p:dataList id="selectedMetrics" var="metric" value="#{chartBean.selectedMetricSpecs}" paginator="true" rows="8" paginatorPosition="bottom">
                     <f:facet name="header">
                         Selected metrics
                     </f:facet>
@@ -207,6 +207,5 @@
     <p:remoteCommand name="updateErrorMsg" update="centerForm:chartSettings"/>
     <p:remoteCommand name="treeToTable" actionListener="#{chartBean.treeToTable}" update="centerForm:chartSettings:selectedObjects chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
     <p:remoteCommand name="treeToMetric" actionListener="#{chartBean.treeToMetric}" update="centerForm:chartSettings:selectedMetrics chartSettings:titleLabel chartSettings:titleInput chartSettings:submitButton" oncomplete="initDND()"/>
-
 
 </ui:composition>

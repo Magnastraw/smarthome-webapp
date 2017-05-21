@@ -177,6 +177,7 @@ public class DashboardBean {
             dashboardService.addDashboard(this.dashboard);
             setCurrentDashboard(this.dashboard);
         }
+        ((ChartBean)ContextUtils.getBean("chartBean")).init();
 
     }
 
