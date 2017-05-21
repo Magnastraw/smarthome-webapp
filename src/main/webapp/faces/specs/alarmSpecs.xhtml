@@ -96,7 +96,7 @@
         </p:panel>
         <p:ajax event="close" listener="#{alarmSpecsBean.setMode(false)}"/>
     </p:dialog>
-    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move '#{metricSpecsBean.editedTableEntity.name}' to another catalog" position="center">
+    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move to" position="center">
         <p:panel>
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>

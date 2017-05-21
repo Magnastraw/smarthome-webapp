@@ -25,14 +25,6 @@
 
 
             </f:facet>
-            <p:ajax event="rowSelect" listener="#{dashboardBean.onRowSelect}" update=":centerForm"/>
-            <p:column headerText="Name" styleClass="column" sortBy="#{dashboard.dashboardName}">
-                <h:outputText value="#{dashboard.dashboardName}"/>
-            </p:column>
-            <p:column headerText="Widgets quantity" styleClass="column"
-                      sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
-                <h:outputText value="#{dashboardBean.getWidgetsAmount(dashboard)}"/>
-            </p:column>
             <p:column styleClass="column-delete">
                 <p:commandLink actionListener="#{dashboardBean.setUpdateDialog(true, dashboard)}"
                                update=":centerForm:dialogDashboard"
@@ -46,6 +38,14 @@
                                title="Delete">
                     <p:confirm header="Confirmation" message="Are you want to remove this dashboard?"/>
                 </p:commandLink>
+            </p:column>
+            <p:ajax event="rowSelect" listener="#{dashboardBean.onRowSelect}" update=":centerForm"/>
+            <p:column headerText="Name" styleClass="column-name" sortBy="#{dashboard.dashboardName}">
+                <h:outputText value="#{dashboard.dashboardName}"/>
+            </p:column>
+            <p:column headerText="Widgets quantity" styleClass="column"
+                      sortBy="#{dashboardBean.getWidgetsAmount(dashboard)}">
+                <h:outputText value="#{dashboardBean.getWidgetsAmount(dashboard)}"/>
             </p:column>
         </p:dataTable>
         <p:commandButton value="Add dashboard"

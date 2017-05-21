@@ -36,8 +36,10 @@
                 </h:outputText>
                 <h:outputLabel value="Severity:" styleClass="ui-accordion-header"/>
                 <h:outputText value="#{alarmBean.selectedAlarm.severity.name()}"/>
-                <!--<h:outputLabel value="Event type:" styleClass="ui-accordion-header"/>
-                <h:outputText value="#{alarmBean.selectedAlarm.event.eventType}"/> -->
+                <h:outputLabel value="Severity change time:" styleClass="ui-accordion-header"/>
+                <h:outputText value="#{alarmBean.selectedAlarm.severityChangeTime}">
+                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
+                </h:outputText>
             </p:panelGrid>
         </p:fieldset>
         <p:fieldset id="events" legend="Event history" toggleable="true" styleClass="fieldset">

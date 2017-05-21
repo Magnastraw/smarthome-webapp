@@ -13,6 +13,13 @@
                  filteredValue="#{alarmListBean.filteredAlarms}"
                  emptyMessage="No objects found with given criteria">
         <p:column selectionMode="multiple" styleClass="column-checkbox"/>
+        <p:column styleClass="column-detail">
+            <p:commandLink title="Details" styleClass="fa fa-eye"
+                           action="#{navigationBean.setPageName('alarms/alarm')}"
+                           update=":centerForm">
+                <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
+            </p:commandLink>
+        </p:column>
         <p:column sortBy="#{alarm.alarmName}" filterBy="#{alarm.alarmName}"
                   filterMatchMode="startsWith">
             <f:facet name="header">
@@ -106,13 +113,6 @@
                 </p:selectOneMenu>
             </f:facet>
             <h:outputText value="#{alarm.severity.name()}"/>
-        </p:column>
-        <p:column styleClass="column-detail">
-            <p:commandLink title="Details" styleClass="fa fa-eye"
-                           action="#{navigationBean.setPageName('alarms/alarm')}"
-                           update=":centerForm">
-                <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
-            </p:commandLink>
         </p:column>
     </p:dataTable>
 </ui:composition>

@@ -110,27 +110,27 @@
 
             <p:panelGrid id="container" rendered="#{!metricSpecsBean.editedTableEntity.typeCatalog}"
                       columns="2" styleClass="ui-noborder">
-                <h:outputLabel for="metricType" value="Metric type:" styleClass="dialog-input"/>
+                <h:outputLabel for="metricType" value="Metric type*:" styleClass="dialog-input"/>
                 <p:inputText id="metricType" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.metricType}"
-                             validatorMessage="The field 'Metric type' must contain only letters" style="margin-left: 6px !important;">
+                             validatorMessage="The field 'Metric type' must contain only letters">
                     <f:validateRegex pattern="[A-Za-z]+"/>
                     <p:clientValidator/>
                 </p:inputText>
                 <h:outputLabel for="unit" value="Unit:" styleClass="dialog-input"/>
                 <p:selectOneMenu id="unit" styleClass="dialog-select" value="#{metricSpecsBean.editedTableEntity.metricSpec.unit}" effect="fade"
-                                 filter="true" filterMatchMode="startsWith" converter="unitConverter" style="margin-left: 6px !important;">
+                                 filter="true" filterMatchMode="startsWith" converter="unitConverter">
                     <f:selectItem/>
                     <f:selectItems var="unit" value="#{metricSpecsBean.units}" itemLabel="#{unit.unitName}" itemValue="#{unit}"/>
                 </p:selectOneMenu>
                 <h:outputLabel for="minValue" value="Min value:" styleClass="dialog-input"/>
                 <p:inputText id="minValue" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.minValue}"
-                             converterMessage="The field 'Min value' must contain only numbers (separator '.')" style="margin-left: 6px !important;">
+                             converterMessage="The field 'Min value' must contain only numbers (separator '.')">
                     <f:validateDoubleRange/>
                     <p:clientValidator/>
                 </p:inputText>
                 <h:outputLabel for="maxValue" value="Max value:" styleClass="dialog-input"/>
                 <p:inputText id="maxValue" styleClass="dialog-input" value="#{metricSpecsBean.editedTableEntity.metricSpec.maxValue}"
-                             converterMessage="The field 'Max value' must contain only numbers (separator '.')" style="margin-left: 6px !important;">
+                             converterMessage="The field 'Max value' must contain only numbers (separator '.')">
                     <f:validateDoubleRange/>
                     <p:clientValidator/>
                 </p:inputText>
@@ -142,7 +142,7 @@
         </p:panel>
         <p:ajax event="close" listener="#{metricSpecsBean.setMode(false)}"/>
     </p:dialog>
-    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move '#{metricSpecsBean.editedTableEntity.name}' to another catalog" position="center">
+    <p:dialog id="moveDlg" widgetVar="moveDialog" resizable="false" header="Move to" position="center">
         <p:panel>
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <h:outputLabel value="Parent catalog:" styleClass="dialog-output"/>
