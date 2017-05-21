@@ -19,7 +19,10 @@
             <p:inplace editor="true" style="#{profileBean.params[key] == 'Type here' ? 'color:Grey;' : 'color:Black;'}">
                 <p:ajax event="save" listener="#{profileBean.editPersonalData}"/>
                 <p:inputText value="#{profileBean.params[key]}"
-                             label="text"/>
+                             label="text" rendered="#{key!='Phone number'}"/>
+                <p:inputMask value="#{profileBean.params['Phone number']}"
+                             mask="+79999999999"
+                             rendered="#{key eq 'Phone number'}"/>
             </p:inplace>
         </c:forEach>
         <h:outputText styleClass="profile-param-item"
