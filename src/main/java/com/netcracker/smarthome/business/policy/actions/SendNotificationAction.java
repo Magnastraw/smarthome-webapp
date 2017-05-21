@@ -10,11 +10,13 @@ import com.netcracker.smarthome.model.entities.MetricSpec;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-
 import java.util.Map;
 
 public class SendNotificationAction implements PolicyAction {
+    private static final Logger LOG = LoggerFactory.getLogger(SendNotificationAction.class);
     private String message;
     private Channel preferredChannel;
 
@@ -37,10 +39,14 @@ public class SendNotificationAction implements PolicyAction {
 
     public void execute(PolicyEvent causalEvent) {
         String messageToSend = String.format("%s\n--\nCausal event description:\n%s", message, causalEvent.toString());
-        if (preferredChannel != null)
-            notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), preferredChannel, getNotificationObject(causalEvent));
-        else
-            notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), getNotificationObject(causalEvent));
+        try {
+            if (preferredChannel != null)
+                notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), preferredChannel, getNotificationObject(causalEvent));
+            else
+                notificationService.sendNotification(messageToSend, causalEvent.getObject().getSmartHome(), getNotificationObject(causalEvent));
+        } catch(Exception e) {
+            LOG.info("Error during notification sending");
+        }
     }
 
     private NotificationObject getNotificationObject(PolicyEvent event) {

@@ -110,12 +110,12 @@
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              filteredValue="#{notificationBean.filteredNotifications}"
                              emptyMessage="No objects found with given criteria">
-                    <p:column style="width: 21%" filterBy="#{notification.notificationName}"
+                    <p:column style="width: 30%" filterBy="#{notification.notificationName}"
                               filterMatchMode="contains"
                               sortBy="#{notification.notificationName}"
                               styleClass="column-name notification-text">
                         <f:facet name="header">
-                            <h:outputLabel value="Text" title="Text"/>
+                            <h:outputLabel value="Description" title="Description"/>
                         </f:facet>
                         <f:facet name="filter">
                             <p:inputText styleClass="filter" onkeyup="PF('notificationsTable').filter()"/>
@@ -141,7 +141,7 @@
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{cookie.timezoneCookie.value}"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width: 20%" filterBy="#{notification.notificationObject}"
+                    <p:column filterBy="#{notification.notificationObject}"
                               filterMatchMode="startsWith"
                               sortBy="#{notification.notificationObject}"
                               styleClass="column">
@@ -153,19 +153,7 @@
                         </f:facet>
                         <h:outputText value="#{notification.notificationObject}"/>
                     </p:column>
-                    <p:column style="width: 20%" filterBy="#{notification.smartHome}"
-                              filterMatchMode="startsWith"
-                              sortBy="#{notification.smartHome}"
-                              styleClass="column">
-                        <f:facet name="header">
-                            <h:outputLabel value="Home" title="Home"/>
-                        </f:facet>
-                        <f:facet name="filter">
-                            <p:inputText styleClass="filter" onkeyup="PF('notificationsTable').filter()"/>
-                        </f:facet>
-                        <h:outputText value="#{notification.smartHome}"/>
-                    </p:column>
-                    <p:column style="width: 12%" filterBy="#{notification.channel}" filterMatchMode="exact"
+                    <p:column style="width: 15%" filterBy="#{notification.channel}" filterMatchMode="exact"
                               sortBy="#{notification.channel}"
                               styleClass="column">
                         <f:facet name="header">
@@ -179,7 +167,7 @@
                         </f:facet>
                         <h:outputText value="#{notification.channel}"/>
                     </p:column>
-                    <p:column style="width: 12%" filterBy="#{notification.notificationStatus}" filterMatchMode="exact"
+                    <p:column style="width: 15%" filterBy="#{notification.notificationStatus}" filterMatchMode="exact"
                               sortBy="#{notification.notificationStatus}"
                               styleClass="column">
                         <f:facet name="header">

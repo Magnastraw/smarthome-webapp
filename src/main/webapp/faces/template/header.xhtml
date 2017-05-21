@@ -11,9 +11,6 @@
                 <p:menuitem value="#{home.name}" update="centerForm,header,menu" ajax="true" actionListener="#{currentUserHomesBean.switchHome(home)}"/>
             </c:forEach>
         </p:submenu>
-        <p:submenu label="Help" icon="fa fa-question">
-            <p:menuitem value="Contents" url="#"/>
-        </p:submenu>
         <p:submenu label="Profile" style="float: right" icon="fa fa-user">
             <p:menuitem value="Settings"
                         action="#{navigationBean.setPageName('profile')}"

@@ -164,7 +164,7 @@ public class PolicyRepository extends EntityRepository<Policy> {
     }
 
     public List<Rule> gitRules(long policyId) {
-        Query query = getManager().createQuery("select distinct r from Rule r where r.policy.policyId=:id");
+        Query query = getManager().createQuery("select distinct r from Rule r where r.policy.policyId=:id order by r.ruleId");
         query.setParameter("id", policyId);
         return query.getResultList();
     }

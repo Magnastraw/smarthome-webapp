@@ -22,17 +22,32 @@ public class NotificationRepository extends EntityRepository<Notification> {
         List<NotificationForView> notificationsForView = new ArrayList<NotificationForView>();
         for (Notification notification : notifications) {
             if (notification.getAlarm() != null) {
+                String notificationObject = "Alarm on object " + notification.getAlarm().getObject().getName();
+                if (notification.getAlarm().getSubobject() != null)
+                    notificationObject += ": " + notification.getAlarm().getSubobject().getName();
                 notificationsForView.add(new NotificationForView(notification.getNotificationName(),
                         notification.getNotificationStatus(), notification.getTime(), notification.getChannel(),
-                        notification.getSmartHome().getName(), "Alarm with id " + notification.getAlarm().getAlarmId()));
+                        notification.getSmartHome().getName(),
+                        notificationObject));
+                        //"Alarm with id " + notification.getAlarm().getAlarmId()));
             } else if (notification.getEvent() != null) {
+                String notificationObject = "Event on object " + notification.getEvent().getObject().getName();
+                if (notification.getEvent().getSubobject() != null)
+                    notificationObject += ": " + notification.getEvent().getSubobject().getName();
                 notificationsForView.add(new NotificationForView(notification.getNotificationName(),
                         notification.getNotificationStatus(), notification.getTime(), notification.getChannel(),
-                        notification.getSmartHome().getName(), "Event with id " + notification.getEvent().getEventId()));
+                        notification.getSmartHome().getName(),
+                        notificationObject));
+                        //"Event with id " + notification.getEvent().getEventId()));
             } else if (notification.getMetric() != null) {
+                String notificationObject = "Event on object " + notification.getMetric().getObject().getName();
+                if (notification.getMetric().getSubobject() != null)
+                    notificationObject += ": " + notification.getMetric().getSubobject().getName();
                 notificationsForView.add(new NotificationForView(notification.getNotificationName(),
                         notification.getNotificationStatus(), notification.getTime(), notification.getChannel(),
-                        notification.getSmartHome().getName(), "Metric with id " + notification.getMetric().getMetricId()));
+                        notification.getSmartHome().getName(),
+                        notificationObject));
+                        //"Metric with id " + notification.getMetric().getMetricId()));
             } else {
                 notificationsForView.add(new NotificationForView(notification.getNotificationName(),
                         notification.getNotificationStatus(), notification.getTime(), notification.getChannel(),
