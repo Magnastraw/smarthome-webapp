@@ -10,8 +10,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import org.springframework.stereotype.Component;
 
-public class Email implements NotificationSender {
+@Component
+public class Email implements INotificationSender {
 
     public void sendNotification(Notification notification) {
         Properties props = new Properties();
@@ -38,9 +40,5 @@ public class Email implements NotificationSender {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String getStatus() {
-        return null;
     }
 }

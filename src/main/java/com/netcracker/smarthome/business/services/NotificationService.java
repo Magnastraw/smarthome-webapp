@@ -2,29 +2,40 @@ package com.netcracker.smarthome.business.services;
 
 import com.netcracker.smarthome.business.endpoints.TaskManager;
 import com.netcracker.smarthome.business.notification.Email;
-import com.netcracker.smarthome.business.notification.NotificationSender;
 import com.netcracker.smarthome.dal.repositories.NotificationRepository;
+import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import com.netcracker.smarthome.model.entities.*;
 import com.netcracker.smarthome.model.enums.Channel;
 import com.netcracker.smarthome.model.enums.NotificationStatus;
-import com.netcracker.smarthome.model.interfaces.NotificationObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
+import org.springframework.stereotype.Service;
 
-@Component
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.util.Map;
+import org.springframework.context.ApplicationContext;
+import com.netcracker.smarthome.business.notification.INotificationSender;
+import com.netcracker.smarthome.dal.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Service
 public class NotificationService {
 
-    private NotificationSender notificationSender;
+    private INotificationSender notificationSender;
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private NotificationRepository notificationRepository;
     @Autowired
     private TaskManager taskManager;
+    @Autowired
+    private ApplicationContext appContext;
 
     private Notification createNotification(String notificationText, SmartHome home, Channel preferenceChannel,
-                                            NotificationObject notificationObject) {
+            NotificationObject notificationObject) {
         Notification notification;
         if (notificationObject != null) {
             String typeNotificationObject = notificationObject.getClass().getSimpleName();
@@ -52,24 +63,30 @@ public class NotificationService {
 
     public void sendNotification(String notificationText, SmartHome smartHome, NotificationObject notificationObject) {
         Notification notification = createNotification(notificationText, smartHome, Channel.Email, notificationObject);
-        try {
-            notificationSender = new Email();
-        } catch (Exception e) {
-            e.printStackTrace();
+        User user = smartHome.getUser();
+        Map<String, INotificationSender> senders = appContext.getBeansOfType(INotificationSender.class);
+        for (String channel : senders.keySet()) {
+            if (channel.equals(user.getPreferChannel().toString().toLowerCase())) {
+                notificationSender = senders.get(channel);
+            }
         }
         notificationSender.sendNotification(notification);
     }
 
     public void sendNotification(String notificationText, SmartHome smartHome, Channel preferenceChannel,
-                                 NotificationObject notificationObject) {
+            NotificationObject notificationObject) {
         Notification notification = createNotification(notificationText, smartHome, preferenceChannel, notificationObject);
-        try {
-            notificationSender = (NotificationSender) Class.forName("com.netcracker.smarthome.business.notification."
-                    + preferenceChannel.toString()).newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        Map<String, INotificationSender> senders = appContext.getBeansOfType(INotificationSender.class);
+        for (String channel : senders.keySet()) {
+            if (channel.equals(preferenceChannel.toString().toLowerCase())) {
+                notificationSender = senders.get(channel);
+            }
         }
-        notificationSender.sendNotification(notification);
-        taskManager.addUpdateEvent(smartHome.getSmartHomeId(), "updateEvent");
+        if (notificationSender != null) {
+            notificationSender.sendNotification(notification);
+            taskManager.addUpdateEvent(smartHome.getSmartHomeId(), "updateEvent");
+        } else {
+            logger.error("Error in channel");
+        }
     }
 }
