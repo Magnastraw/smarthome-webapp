@@ -60,6 +60,11 @@ public class GoogleClient implements SocialServiceClient {
         return profileInfo;
     }
 
+    @Override
+    public AuthService getIdentifier() {
+        return AuthService.GOOGLE;
+    }
+
     private String getAccessToken(HttpClient httpClient, String code, String callbackUrl) throws Exception {
         HttpResponse response = httpClient.execute(buildAccessTokenRequest(code, callbackUrl));
         StatusLine statusLine = response.getStatusLine();
@@ -109,7 +114,6 @@ public class GoogleClient implements SocialServiceClient {
         profileInfo.setFirstName((String) ((JSONObject) obj.get("name")).get("givenName"));
         profileInfo.setLastName((String) ((JSONObject) obj.get("name")).get("familyName"));
         profileInfo.setSocialId(obj.get("id").toString());
-        profileInfo.setService(AuthService.GOOGLE);
         return profileInfo;
     }
 }

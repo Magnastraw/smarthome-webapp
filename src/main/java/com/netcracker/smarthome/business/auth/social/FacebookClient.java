@@ -56,6 +56,11 @@ public class FacebookClient implements SocialServiceClient {
         return profileInfo;
     }
 
+    @Override
+    public AuthService getIdentifier() {
+        return AuthService.FACEBOOK;
+    }
+
     private String getAccessToken(HttpClient httpClient, String code, String callbackUrl) throws Exception {
         HttpResponse response = httpClient.execute(buildAccessTokenRequest(code, callbackUrl));
         StatusLine statusLine = response.getStatusLine();
@@ -103,7 +108,6 @@ public class FacebookClient implements SocialServiceClient {
         profileInfo.setLastName((String) obj.get("last_name"));
         profileInfo.setEmail((String) obj.get("email"));
         profileInfo.setSocialId(obj.get("id").toString());
-        profileInfo.setService(AuthService.FACEBOOK);
         return profileInfo;
     }
 }

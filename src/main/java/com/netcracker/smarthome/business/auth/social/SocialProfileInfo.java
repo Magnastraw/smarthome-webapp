@@ -1,21 +1,10 @@
 package com.netcracker.smarthome.business.auth.social;
 
-import com.netcracker.smarthome.model.enums.AuthService;
-
 public class SocialProfileInfo {
-    private AuthService service;
     private String socialId;
     private String email;
     private String firstName;
     private String lastName;
-
-    public AuthService getService() {
-        return service;
-    }
-
-    public void setService(AuthService service) {
-        this.service = service;
-    }
 
     public String getSocialId() {
         return socialId;

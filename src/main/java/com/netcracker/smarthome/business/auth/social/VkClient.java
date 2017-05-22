@@ -58,6 +58,11 @@ public class VkClient implements SocialServiceClient {
         return profileInfo;
     }
 
+    @Override
+    public AuthService getIdentifier() {
+        return AuthService.VK;
+    }
+
     private HashMap<String, String> getAccessToken(HttpClient httpClient, String code, String callbackUrl) throws Exception {
         HttpResponse response = httpClient.execute(buildAccessTokenRequest(code, callbackUrl));
         StatusLine statusLine = response.getStatusLine();
@@ -111,7 +116,6 @@ public class VkClient implements SocialServiceClient {
         profileInfo.setLastName(obj.get("last_name").toString());
         profileInfo.setFirstName(obj.get("first_name").toString());
         profileInfo.setSocialId(obj.get("id").toString());
-        profileInfo.setService(AuthService.VK);
         return profileInfo;
     }
 }

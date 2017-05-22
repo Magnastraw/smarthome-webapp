@@ -1,5 +1,7 @@
 package com.netcracker.smarthome.business.auth.social;
 
+import com.netcracker.smarthome.model.enums.AuthService;
+
 /**
  * Defines methods to get user social profile information via OAuth using Authorization Code Flow scheme.
  */
@@ -21,4 +23,6 @@ public interface SocialServiceClient {
      * @return user social profile information
      */
     SocialProfileInfo retrieveUserProfileInfo(String code, String callbackUrl) throws OAuthProcessingException;
+
+    AuthService getIdentifier();
 }
