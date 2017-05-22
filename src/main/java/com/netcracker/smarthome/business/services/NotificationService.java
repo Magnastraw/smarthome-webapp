@@ -70,7 +70,12 @@ public class NotificationService {
                 notificationSender = senders.get(channel);
             }
         }
-        notificationSender.sendNotification(notification);
+        if (notificationSender != null) {
+            notificationSender.sendNotification(notification);
+            taskManager.addUpdateEvent(smartHome.getSmartHomeId(), "updateEvent");
+        } else {
+            logger.error("Error in channel");
+        }
     }
 
     public void sendNotification(String notificationText, SmartHome smartHome, Channel preferenceChannel,
