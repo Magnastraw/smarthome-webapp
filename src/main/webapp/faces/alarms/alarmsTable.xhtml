@@ -20,23 +20,23 @@
                 <f:setPropertyActionListener value="#{alarm}" target="#{alarmBean.selectedAlarm}"/>
             </p:commandLink>
         </p:column>
-        <p:column sortBy="#{alarm.alarmName}" filterBy="#{alarm.alarmName}"
-                  filterMatchMode="startsWith">
-            <f:facet name="header">
-                <h:outputLabel value="Name" title="Name"/>
-            </f:facet>
-            <f:facet name="filter">
-                <p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>
-            </f:facet>
-            <p:commandLink rendered="#{alarm.subAlarms.size() != 0}" styleClass="fa table-name arrow expanded"
-                           title="#{alarm.alarmName}"
-                           value="#{alarm.alarmName}" action="#{alarmListBean.onSelectAlarm(alarm)}"
-                           update=":centerForm"/>
-            <p:commandLink rendered="#{alarm.subAlarms.size() == 0}"
-                           styleClass="fa table-name"
-                           value="#{alarm.alarmName}"
-                           title="#{alarm.alarmName}"/>
-        </p:column>
+        <!--<p:column sortBy="#{alarm.alarmName}" filterBy="#{alarm.alarmName}"-->
+                  <!--filterMatchMode="startsWith">-->
+            <!--<f:facet name="header">-->
+                <!--<h:outputLabel value="Name" title="Name"/>-->
+            <!--</f:facet>-->
+            <!--<f:facet name="filter">-->
+                <!--<p:inputText styleClass="filter" onkeyup="PF('alarmsTable').filter()"/>-->
+            <!--</f:facet>-->
+            <!--<p:commandLink rendered="#{alarm.subAlarms.size() != 0}" styleClass="fa table-name arrow expanded"-->
+                           <!--title="#{alarm.alarmName}"-->
+                           <!--value="#{alarm.alarmName}" action="#{alarmListBean.onSelectAlarm(alarm)}"-->
+                           <!--update=":centerForm"/>-->
+            <!--<p:commandLink rendered="#{alarm.subAlarms.size() == 0}"-->
+                           <!--styleClass="fa table-name"-->
+                           <!--value="#{alarm.alarmName}"-->
+                           <!--title="#{alarm.alarmName}"/>-->
+        <!--</p:column>-->
         <p:column styleClass="column" sortBy="#{alarm.alarmSpec.specName}"
                   filterBy="#{alarm.alarmSpec.specName}" filterMatchMode="startsWith">
             <f:facet name="header">
