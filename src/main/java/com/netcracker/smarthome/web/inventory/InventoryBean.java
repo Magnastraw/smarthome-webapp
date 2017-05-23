@@ -75,6 +75,7 @@ public class InventoryBean implements Serializable {
             rootNode = new DefaultOrganigramNode("rootcontroller", rootObject, null);
             rootNode.setCollapsible(false);
             rootNode.setSelectable(true);
+            rootNode.setDraggable(false);
             addSubobjects(rootNode);
 
             setRootCatalog(catalogService.getRootCatalog("objectsRootCatalog", getHome().getSmartHomeId()));
@@ -112,8 +113,8 @@ public class InventoryBean implements Serializable {
         if(subobjects.size() != 0) {
             for (SmartObject subobject : subobjects) {
                 OrganigramNode objectNode = new DefaultOrganigramNode(subobject.getObjectType().getName().toLowerCase(), subobject, parent);
-                objectNode.setDroppable(true);
-                objectNode.setDraggable(true);
+                objectNode.setDroppable(false);
+                objectNode.setDraggable(false);
                 objectNode.setSelectable(true);
                 addSubobjects(objectNode);
             }
