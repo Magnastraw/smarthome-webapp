@@ -34,11 +34,7 @@ public class MultiChartConfig extends DefaultChartConfig {
             for (MetricSpec metricSpec : chartService.getMetricsSpecByObjectId(smartObject.getSmartObjectId())) {
                 SeriesConfig seriesConfig = new SeriesConfig();
                 seriesConfig.setData("");
-                if (isChild(smartObject)) {
-                    seriesConfig.setName(smartObject.getParentObject().getName());
-                } else {
-                    seriesConfig.setName(smartObject.getName());
-                }
+                seriesConfig.setName(smartObject.getName());
                 seriesConfig.setType(super.getChartType());
                 for (YAxisNumber yAxisNumber : yAxisNumbers) {
                     if (yAxisNumber.getSpecId() == metricSpec.getSpecId()) {
