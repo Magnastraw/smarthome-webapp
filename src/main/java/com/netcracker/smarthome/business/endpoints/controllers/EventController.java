@@ -85,6 +85,7 @@ public class EventController {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         }
+        taskManager.addUpdateEvent(home.getSmartHomeId(),"updateEvent");
         return new ResponseEntity(HttpStatus.OK);
     }
 

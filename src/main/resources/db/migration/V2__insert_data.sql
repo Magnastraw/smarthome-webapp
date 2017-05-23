@@ -9,8 +9,8 @@ INSERT INTO public.data_types
           (DEFAULT, 'Link', 1);
 
 INSERT INTO public.smart_homes
-VALUES (DEFAULT, 'Apartment in the center', 'TO DO', 1),
-  (DEFAULT, 'Apartment', 'TO DO', 1)
+VALUES (DEFAULT, 'Apartment in the center','In this house I live with my family', 1),
+  (DEFAULT, 'Apartment', ' ', 1)
 ;
 
 INSERT INTO public.home_params
@@ -57,14 +57,14 @@ VALUES
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('My metric catalog', 1, 1),
-  ('My metric catalog', 5, 2)
+  ('Metric catalog', 1, 1),
+  ('Metric catalog', 5, 2)
 ;
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
 VALUES
-  ('Metric subcatalog', 9, 1),
-  ('Metric subcatalog', 10, 2)
+  ('Current', 9, 1),
+  ('Current', 10, 2)
 ;
 
 INSERT INTO public.catalogs (catalog_name, parent_catalog_id, smart_home_id)
@@ -98,16 +98,16 @@ VALUES
   ('Cubic metre', 1, 'm³'),
   ('Kilowatt-hour', 1000, 'kWh');
 
-INSERT INTO public.metric_specs (spec_name, unit_id, metric_type, catalog_id)
+INSERT INTO public.metric_specs (spec_name, unit_id, metric_type, catalog_id,min_value,max_value)
 VALUES
-  ('Temperature', 1, 'common', 11),
-  ('Humidity', 2, 'common', 11),
-  ('WaterFlow', 3, 'common', 11),
-  ('Power', 4, 'common', 11),
-  ('Temperature', 1, 'common', 12),
-  ('Humidity', 2, 'common', 12),
-  ('WaterFlow', 3, 'common', 12),
-  ('Power', 4, 'common', 12)
+  ('Temperature', 1, 'common', 11,0,35),
+  ('Humidity', 2, 'common', 11,0,100),
+  ('WaterFlow', 3, 'common', 11,0,null),
+  ('Power', 4, 'common', 11,0,null),
+  ('Temperature', 1, 'common', 12,0,35),
+  ('Humidity', 2, 'common', 12,0,100),
+  ('WaterFlow', 3, 'common', 12,0,null),
+  ('Power', 4, 'common', 12,0,null)
 ;
 
 INSERT INTO public.alarm_specs (spec_name, object_type, catalog_id)

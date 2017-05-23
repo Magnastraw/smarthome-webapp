@@ -20,15 +20,18 @@ public class ChartTransformator implements ITransformator<HighchartConfig, Chart
     private ObjectMapper objectMapper;
     private VelocityContext vc;
     private Map<String,String> templateMap;
+    private String velocityTemplatePath = "velocityTemplates/default.vm";
+    private String velocityPropertyPath = "/velocity.properties";
+
     private static final Logger LOG = LoggerFactory.getLogger(ChartTransformator.class);
 
     public ChartTransformator() {
         this.objectMapper = new ObjectMapper();
         this.templateMap = new HashMap<String, String>();
-        templateMap.put("area","velocityTemplates/default.vm");
-        templateMap.put("line","velocityTemplates/default.vm");
-        templateMap.put("column","velocityTemplates/default.vm");
-        Velocity.init(this.getClass().getClassLoader().getResource("/velocity.properties").getPath());
+        templateMap.put("area",velocityTemplatePath);
+        templateMap.put("line",velocityTemplatePath);
+        templateMap.put("column",velocityTemplatePath);
+        Velocity.init(this.getClass().getClassLoader().getResource(velocityPropertyPath).getPath());
         vc = new VelocityContext();
     }
 

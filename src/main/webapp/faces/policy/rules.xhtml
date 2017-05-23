@@ -26,7 +26,7 @@
         </c:forEach>
         <p:separator rendered="#{not rulesBean.rules.isEmpty()}" style="margin-bottom: 5px;"/>
         <p:menuitem value="Add rule" icon="fa fa-plus"/>
-        <p:menuitem value="Remove selected" icon="fa fa-remove" rendered="#{not rulesBean.rules.isEmpty()}"/>
+        <p:menuitem value="Remove" icon="fa fa-remove" rendered="#{not rulesBean.rules.isEmpty()}"/>
     </p:menu>
     <p:outputPanel styleClass="rule-options" rendered="#{not rulesBean.rules.isEmpty()}">
         <p:outputPanel styleClass="rule-part">
